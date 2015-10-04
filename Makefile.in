@@ -1,0 +1,17 @@
+all: ezvm ezas
+
+ezvm ezas: libezvm
+
+ezvm ezas libezvm:
+	$(MAKE) -C src/$@
+
+clean:
+	$(MAKE) -C src/ezvm $@
+	$(MAKE) -C src/libezvm $@
+	$(MAKE) -C src/ezas $@
+
+distclean:
+	$(MAKE) -C src/ezvm $@
+	$(MAKE) -C src/libezvm $@
+	$(MAKE) -C src/ezas $@
+	rm -f Makefile

@@ -1,0 +1,18 @@
+LIBRARY=libezvm.so.0.0.1
+LINK_MAJOR=libezvm.so.0
+LINK=libezvm.so
+OBJS=vm.o
+
+all: $(LINK) $(LINK_MAJOR)
+
+$(LINK) $(LINK_MAJOR): $(LIBRARY)
+	ln -s $< $@
+
+$(LIBRARY): $(OBJS)
+	$(CXX) -shared -o $@ $^
+
+clean:
+	rm -f $(LIBRARY) $(LINK_MAJOR) $(LINK) $(OBJS)
+
+distclean: clean
+	rm -f Makefile

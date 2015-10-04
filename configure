@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function mk_make() {
+	cp $1.in $1
+}
+
+mk_make src/ezas/Makefile
+mk_make src/ezvm/Makefile
+mk_make src/libezvm/Makefile
+mk_make Makefile

@@ -1,0 +1,13 @@
+PROGRAM=ezvm
+OBJS=ezvm.o
+
+all: $(PROGRAM)
+
+$(PROGRAM): $(OBJS)
+	$(CXX) -o $@ $^
+
+clean:
+	rm -f $(PROGRAM) $(OBJS)
+
+distclean: clean
+	rm -f Makefile
