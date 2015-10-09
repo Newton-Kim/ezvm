@@ -1,0 +1,13 @@
+LIBRARY=libezutil.a
+OBJS=ezlog.o ezarg.o
+
+all: $(LIBRARY)
+
+$(LIBRARY): $(OBJS)
+	ar rcu $@ $^
+
+clean:
+	rm -f $(LIBRARY) $(OBJS)
+
+distclean: clean
+	rm -f Makefile

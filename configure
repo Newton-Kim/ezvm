@@ -7,4 +7,5 @@ function mk_make() {
 mk_make src/ezas/Makefile
 mk_make src/ezvm/Makefile
 mk_make src/libezvm/Makefile
+mk_make src/libezutil/Makefile
 mk_make Makefile
