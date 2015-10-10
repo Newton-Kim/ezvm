@@ -1,10 +1,13 @@
 PROGRAM=ezas
 OBJS=ezas.o
+CXXFLAGS=-g -O2 -I../../include
+LDFLAGS=-L../libezvm
+LIBS=-lezvm
 
 all: $(PROGRAM)
 
 $(PROGRAM): $(OBJS)
-	$(CXX) -o $@ $^
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f $(PROGRAM) $(OBJS)

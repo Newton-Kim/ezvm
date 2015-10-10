@@ -1,7 +1,8 @@
 LIBRARY=libezvm.so.0.0.1
 LINK_MAJOR=libezvm.so.0
 LINK=libezvm.so
-OBJS=vm.o utility/ezfile.o utility/ezarg.o
+OBJS=vm.o ezlog.o
+CXXFLAGS=-g -O2 -I../../include
 
 all: $(LINK) $(LINK_MAJOR)
 
