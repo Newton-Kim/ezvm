@@ -1,16 +1,22 @@
 PROGRAM=ezas
-OBJS=ezas.o
+OBJS=ezas.o lex.yy.o ezas.tab.o
 CXXFLAGS=-g -O2 -I../../include
 LDFLAGS=-L../libezvm
-LIBS=-lezvm
+LIBS=-lezvm -lfl
 
 all: $(PROGRAM)
+
+lex.yy.cc: ezas.l
+	flex $< -o$@ --header-file=$@.h
+
+ezas.tab.cc: ezas.y
+	bison $< -o $@ --defines=$@.h
 
 $(PROGRAM): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 clean:
-	rm -f $(PROGRAM) $(OBJS)
+	rm -f $(PROGRAM) $(OBJS) lex.yy.cc ezas.tab.cc ezas.tab.cc.h
 
 distclean: clean
 	rm -f Makefile
