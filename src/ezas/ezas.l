@@ -1,8 +1,5 @@
 %{
-extern "C" {
-	int yylex();
-	int yyerror();
-}
+#include "ezas.tab.cc.h"
 %}
 %%
 %%

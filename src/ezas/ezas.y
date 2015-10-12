@@ -1,5 +1,10 @@
 %{
+extern "C" {
+	int yylex();
+	void yyerror (char const *s);
+}
 #include <iostream>
+using namespace std;
 %}
 
 %token PROC ENTRY CALL SYMBOL STRING NEWLINE INTEGER
@@ -25,3 +30,6 @@ vars :
 
 var : STRING | SYMBOL | INTEGER
 %%
+void yyerror (char const *s) {
+	cout << s << endl;
+}
