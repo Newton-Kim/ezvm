@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ROOT_DIR=$(dirname "$0")
+LIB_DIR=$ROOT_DIR/../lib
+export LD_LIBRARY_PATH=$LIB_DIR:$LD_LIBRARY_PATH
+$LIB_DIR/ezvm $@

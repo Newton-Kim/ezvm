@@ -15,6 +15,27 @@ $(LINK) $(LINK_MAJOR): $(LIBRARY)
 $(LIBRARY): $(OBJS)
 	$(CXX) -shared -o $@ $^
 
+local: ../../lib ../../lib/$(LIBRARY) ../../lib/$(LINK_MAJOR) ../../lib/$(LINK)
+../../lib/$(LIBRARY):
+	cp $(LIBRARY) $@
+	
+../../lib/$(LINK_MAJOR) ../../lib/$(LINK):
+	ln -s $(LIBRARY) $@
+
+../../lib:
+	mkdir $@
+
+install: $(INST_DIR)/lib $(INST_DIR)/lib/$(LIBRARY) $(INST_DIR)/lib/$(LINK_MAJOR) $(INST_DIR)/lib/$(LINK)
+
+$(INST_DIR)/lib:
+	install -d $@
+
+$(INST_DIR)/lib/$(LIBRARY):
+	install -s $(LIBRARY) $$(dirname "$@")
+
+$(INST_DIR)/lib/$(LINK_MAJOR) $(INST_DIR)/lib/$(LINK):
+	ln -s $(LIBRARY) $@
+
 clean:
 	rm -f $(LIBRARY) $(LINK_MAJOR) $(LINK) $(OBJS)
 

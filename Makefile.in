@@ -5,13 +5,20 @@ ezvm ezas: libezvm
 ezvm ezas libezvm:
 	$(MAKE) -C src/$@
 
+local install:
+	$(MAKE) -C src/ezvm $@
+	$(MAKE) -C src/libezvm $@
+	$(MAKE) -C src/ezas $@
+
 clean:
 	$(MAKE) -C src/ezvm $@
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
+	rm -rf bin lib
 
 distclean:
 	$(MAKE) -C src/ezvm $@
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
-	rm -f Makefile
+	rm -rf bin lib
+	rm -f Makefile 

@@ -6,6 +6,26 @@ all: $(PROGRAM)
 $(PROGRAM): $(OBJS)
 	$(CXX) -o $@ $^
 
+local: ../../lib/$(PROGRAM) ../../bin/$(PROGRAM)
+
+../../lib/$(PROGRAM): ../../lib
+	cp $(PROGRAM) ../../lib
+
+../../bin/$(PROGRAM): ../../bin
+	cp $(PROGRAM).in ../../bin/$(PROGRAM)
+	chmod a+x ../../bin/$(PROGRAM)
+
+../../lib ../../bin:
+	mkdir $@
+
+install: $(INST_DIR)/bin/$(PROGRAM)
+
+$(INST_DIR)/bin:
+	install -d $(INST_DIR)/bin
+
+$(INST_DIR)/bin/$(PROGRAM): $(INST_DIR)/bin
+	install -s $(PROGRAM) $(INST_DIR)/bin
+
 clean:
 	rm -f $(PROGRAM) $(OBJS)
 
