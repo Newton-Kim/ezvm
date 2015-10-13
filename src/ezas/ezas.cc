@@ -1,8 +1,11 @@
 #include "ezvm/ezlog.h"
+#include "ezas.tab.cc.h"
 #include <getopt.h>
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <cerrno>
+#include <cstdio>
 
 using namespace std;
 #define VERSION "1.0.0"
@@ -76,5 +79,11 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 	}
+	FILE* fd = fopen(source.c_str(), "rb");
+	if(!fd) {
+		cerr << "error: " << strerror(errno) << endl;
+		return 1;
+	}
+	yyparse();
 	return 0;
 }
