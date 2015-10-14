@@ -10,26 +10,29 @@ using namespace std;
 %token PROC ENTRY CALL SYMBOL STRING NEWLINE INTEGER
 
 %%
-program : entry procs;
+program : entry procs { cout << "pass!" << endl;};
 
-entry : ENTRY':' SYMBOL;
+entry : ENTRY':' SYMBOL NEWLINE { cout << "entry!" << endl;};
 
 procs : proc | procs proc;
 
-proc : PROC STRING '(' INTEGER ')' ',' INTEGER ':' NEWLINE codes
+proc : PROC STRING '(' INTEGER ')' ',' INTEGER ':' NEWLINE codes;
 
-codes :
-	| codes call
+codes : NEWLINE
+	| codes line;
 
+line : call;
 call : CALL STRING '(' vars ')'
-	| CALL STRING '(' vars ')' ',' vars
+	| CALL STRING '(' vars ')' ',' vars;
 
 vars :
 	| var
-	| var ',' vars
+	| var ',' vars;
 
-var : STRING | SYMBOL | INTEGER
+var : STRING | SYMBOL | INTEGER;
 %%
 void yyerror (char const *s) {
-	cout << s << endl;
+	extern int yylineno;
+	cout << "error (" << yylineno << ") " << s << endl;
 }
+

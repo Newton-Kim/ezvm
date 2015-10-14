@@ -1,5 +1,5 @@
 PROGRAM=ezas
-OBJS=ezas.o ezas.tab.o lex.yy.o
+OBJS=ezas.tab.o lex.yy.o ezas.o
 CFLAGS=-g -O2 -I../../include
 CXXFLAGS=-g -O2 -I../../include
 LDFLAGS=-L../libezvm

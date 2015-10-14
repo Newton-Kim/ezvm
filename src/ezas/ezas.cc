@@ -10,6 +10,8 @@
 using namespace std;
 #define VERSION "1.0.0"
 
+extern FILE * yyin;
+
 void show_help(const char* name) {
 	cout << name << " version " << VERSION << endl;
 	cout << "Usage: " << name << " [option]... asm_file" << endl;
@@ -84,6 +86,8 @@ int main(int argc, char* argv[]) {
 		cerr << "error: " << strerror(errno) << endl;
 		return 1;
 	}
+	yyin = fd;
 	yyparse();
+	fclose(fd);
 	return 0;
 }
