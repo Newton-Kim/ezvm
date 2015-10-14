@@ -22,3 +22,6 @@ distclean:
 	$(MAKE) -C src/ezas $@
 	rm -rf bin lib
 	rm -f Makefile 
+
+test:
+	bin/ezas share/ezvm/hello.ezas

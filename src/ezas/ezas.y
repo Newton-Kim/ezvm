@@ -4,22 +4,31 @@ extern "C" {
 	void yyerror (char const *s);
 }
 #include <iostream>
+#define YYDEBUG 1
 using namespace std;
 %}
 
 %token PROC ENTRY CALL SYMBOL STRING NEWLINE INTEGER
 
+%union {
+    char* s_value;
+    int i_value;
+    double f_value;
+}
+
+%start program
+
 %%
 program : entry procs { cout << "pass!" << endl;};
 
-entry : ENTRY':' SYMBOL NEWLINE { cout << "entry!" << endl;};
+entry : ENTRY SYMBOL NEWLINE;
 
-procs : proc | procs proc;
+procs : proc  { cout << "pass" << endl; }| procs proc;
 
 proc : PROC STRING '(' INTEGER ')' ',' INTEGER ':' NEWLINE codes;
 
-codes : NEWLINE
-	| codes line;
+codes : 
+	| codes line NEWLINE;
 
 line : call;
 call : CALL STRING '(' vars ')'
