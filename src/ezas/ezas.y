@@ -33,11 +33,12 @@ codes : line NEWLINE
 	| codes line NEWLINE;
 
 line : call;
-call : CALL STRING '(' ')'
-	| CALL STRING '(' ')' ',' vars
-	| CALL STRING '(' vars ')'
-	| CALL STRING '(' vars ')' ',' vars;
 
+call : CALL STRING '(' args ')' returns;
+
+returns : | ',' vars;
+
+args : | vars;
 vars : var | vars ',' var;
 
 var : STRING | SYMBOL | INTEGER;
