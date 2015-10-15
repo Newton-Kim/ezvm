@@ -12,6 +12,7 @@ using namespace std;
 
 %union {
     char* s_value;
+    char c_value;
     int i_value;
     double f_value;
 }
@@ -23,20 +24,21 @@ program : entry procs { cout << "pass!" << endl;};
 
 entry : ENTRY SYMBOL NEWLINE;
 
-procs : proc  { cout << "pass" << endl; }| procs proc;
+procs : proc
+	| procs proc;
 
-proc : PROC STRING '(' INTEGER ')' ',' INTEGER ':' NEWLINE codes;
+proc : PROC SYMBOL '(' INTEGER ')' ',' INTEGER ':' NEWLINE codes;
 
-codes : 
+codes : line NEWLINE
 	| codes line NEWLINE;
 
 line : call;
-call : CALL STRING '(' vars ')'
+call : CALL STRING '(' ')'
+	| CALL STRING '(' ')' ',' vars
+	| CALL STRING '(' vars ')'
 	| CALL STRING '(' vars ')' ',' vars;
 
-vars :
-	| var
-	| var ',' vars;
+vars : var | vars ',' var;
 
 var : STRING | SYMBOL | INTEGER;
 %%

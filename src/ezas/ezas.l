@@ -18,4 +18,5 @@ newline [\n\r]
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
 {symbol} {yylval.s_value = strdup(yytext); return SYMBOL; }
 {newline} return NEWLINE;
+"("|")"|":"|"," { yylval.c_value = yytext[0]; return yytext[0];}
 %%
