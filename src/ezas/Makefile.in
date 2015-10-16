@@ -18,11 +18,11 @@ $(PROGRAM): $(OBJS)
 
 local: ../../lib ../../lib/$(PROGRAM) ../../bin ../../bin/$(PROGRAM)
 
-../../lib/$(PROGRAM):
-	cp $(PROGRAM) $@
+../../lib/$(PROGRAM): $(PROGRAM)
+	cp $< $@
 
-../../bin/$(PROGRAM):
-	cp $(PROGRAM).in $@
+../../bin/$(PROGRAM): $(PROGRAM).in
+	cp $< $@
 	chmod a+x $@
 
 ../../lib ../../bin:
@@ -33,8 +33,8 @@ install: $(INST_DIR)/bin $(INST_DIR)/bin/$(PROGRAM)
 $(INST_DIR)/bin:
 	install -d $@
 
-$(INST_DIR)/bin/$(PROGRAM):
-	install -s $(PROGRAM) $$(dirname "$@")
+$(INST_DIR)/bin/$(PROGRAM): $(PROGRAM)
+	install -s $< $$(dirname "$@")
 
 clean:
 	rm -f $(PROGRAM) $(OBJS) lex.yy.c ezas.tab.cc ezas.tab.cc.h

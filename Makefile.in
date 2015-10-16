@@ -25,3 +25,4 @@ distclean:
 
 test:
 	bin/ezas share/ezvm/hello.ezas
+	bin/ezas share/ezvm/hello2.ezas
