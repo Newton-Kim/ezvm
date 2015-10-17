@@ -2,6 +2,8 @@ LIBRARY=libezvm.so.0.0.1
 LINK_MAJOR=libezvm.so.0
 LINK=libezvm.so
 OBJS=vm.o \
+	ezasm.o \
+	ezarchive.o \
 	utility/ezfile.o \
 	utility/ezlog.o
 

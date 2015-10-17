@@ -1,3 +1,4 @@
+#include "ezvm/ezvm.h"
 #include "ezvm/ezlog.h"
 #include "ezas.tab.cc.h"
 #include <getopt.h>
@@ -10,7 +11,7 @@
 using namespace std;
 #define VERSION "1.0.0"
 
-extern FILE * yyin;
+extern void ezparse(FILE* fd, const string target);
 
 void show_help(const char* name) {
 	cout << name << " version " << VERSION << endl;
@@ -81,13 +82,12 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 	}
-	yyin = fopen(source.c_str(), "rb");
-	if(!yyin) {
+	FILE* fd = fopen(source.c_str(), "rb");
+	if(!fd) {
 		cerr << "error: " << strerror(errno) << endl;
 		return 1;
 	}
-	yyparse();
-	fclose(yyin);
-	yyin = NULL;
+	ezparse(fd, target);
+	fclose(fd);
 	return 0;
 }
