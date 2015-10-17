@@ -50,7 +50,11 @@ line : | call
 	| mv
 	| ld;
 
-mv : MV ADDRESS var;
+mv : MV mvaddrs ',' mvvars;
+
+mvaddrs : ADDRESS | mvaddrs ADDRESS;
+
+mvvars : var | mvvars var;
 
 ld : LD ADDRESS var var;
 

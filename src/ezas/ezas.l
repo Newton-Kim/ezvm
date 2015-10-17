@@ -39,6 +39,6 @@ sp [ \t]
 }
 
 {newline} return NEWLINE;
-"("|")"|":" { yylval.c_value = yytext[0]; return yytext[0];}
+"("|")"|":"|"," { yylval.c_value = yytext[0]; return yytext[0];}
 {sp} {}
 %%
