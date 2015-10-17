@@ -36,9 +36,9 @@ int main(int argc, char* argv[]) {
 	};
 	while(1) {
 		c = getopt_long(argc, argv, "hvc:l:", long_options, &option_index);
-		if(optarg) cout << "optarg:" << optarg << endl;
+//		if(optarg) cout << "optarg:" << optarg << endl;
 		if(c == -1) break;
-		cout << "c:" << (char)c << endl;
+//		cout << "c:" << (char)c << endl;
 		switch(c) {
 			case 0:
 				if (!strcmp("verbose", long_options[option_index].name)) {
@@ -81,13 +81,13 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 	}
-	FILE* fd = fopen(source.c_str(), "rb");
-	if(!fd) {
+	yyin = fopen(source.c_str(), "rb");
+	if(!yyin) {
 		cerr << "error: " << strerror(errno) << endl;
 		return 1;
 	}
-	yyin = fd;
 	yyparse();
-	fclose(fd);
+	fclose(yyin);
+	yyin = NULL;
 	return 0;
 }

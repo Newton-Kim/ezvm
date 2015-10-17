@@ -5,19 +5,19 @@ OBJS=vm.o \
 	utility/ezfile.o \
 	utility/ezlog.o
 
-CXXFLAGS=-g -O2 -I../../include
+CXXFLAGS=-g -fPIC -O2 -I../../include
 
-all: $(LINK) $(LINK_MAJOR)
+all: $(LIBRARY) $(LINK) $(LINK_MAJOR)
 
-$(LINK) $(LINK_MAJOR): $(LIBRARY)
-	ln -s $< $@
+$(LINK) $(LINK_MAJOR):
+	ln -s $(LIBRARY) $@
 
 $(LIBRARY): $(OBJS)
 	$(CXX) -shared -o $@ $^
 
 local: ../../lib ../../lib/$(LIBRARY) ../../lib/$(LINK_MAJOR) ../../lib/$(LINK)
-../../lib/$(LIBRARY):
-	cp $(LIBRARY) $@
+../../lib/$(LIBRARY): $(LIBRARY)
+	cp $< $@
 	
 ../../lib/$(LINK_MAJOR) ../../lib/$(LINK):
 	ln -s $(LIBRARY) $@
@@ -30,8 +30,8 @@ install: $(INST_DIR)/lib $(INST_DIR)/lib/$(LIBRARY) $(INST_DIR)/lib/$(LINK_MAJOR
 $(INST_DIR)/lib:
 	install -d $@
 
-$(INST_DIR)/lib/$(LIBRARY):
-	install -s $(LIBRARY) $$(dirname "$@")
+$(INST_DIR)/lib/$(LIBRARY): $(LIBRARY)
+	install -s $< $$(dirname "$@")
 
 $(INST_DIR)/lib/$(LINK_MAJOR) $(INST_DIR)/lib/$(LINK):
 	ln -s $(LIBRARY) $@

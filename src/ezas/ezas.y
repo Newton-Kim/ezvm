@@ -3,6 +3,7 @@ extern "C" {
 	int yylex();
 	void yyerror (char const *s);
 }
+#include "ezvm/ezlog.h"
 #include <iostream>
 #define YYDEBUG 1
 using namespace std;
@@ -25,7 +26,7 @@ using namespace std;
 %start program
 
 %%
-program : entry procs { cout << "pass!" << endl;};
+program : entry procs { ezLog::logger().print("pass!");};
 
 entry : ENTRY SYMBOL NEWLINE;
 
