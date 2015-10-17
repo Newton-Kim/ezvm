@@ -15,6 +15,11 @@ using namespace std;
     char c_value;
     int i_value;
     double f_value;
+    struct {
+        char* segment;
+        char* symbolic_offset;
+        unsigned int numeric_offset;
+    } a_value;
 };
 
 %start program

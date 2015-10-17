@@ -22,8 +22,22 @@ sp [ \t]
 {string} {yylval.s_value = strndup(yytext + 1, strlen(yytext) - 2); return STRING;}
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
 {symbol} {yylval.s_value = strdup(yytext); return SYMBOL; }
-{address} {yylval.s_value = strdup(yytext); return ADDRESS; }
-{symbolic_address} {yylval.s_value = strdup(yytext); return ADDRESS; }
+{address} {
+	char* str = strtok(yytext, ":");
+	yylval.a_value.segment = strdup(str);
+	str = strtok(NULL, ":");
+	yylval.a_value.numeric_offset = atoi(str);
+	yylval.a_value.symbolic_offset= NULL;
+	return ADDRESS;
+}
+{symbolic_address} {
+	char* str = strtok(yytext, ":");
+	yylval.a_value.segment = strdup(str);
+	str = strtok(NULL, ":");
+	yylval.a_value.symbolic_offset= strdup(str);
+	return ADDRESS;
+}
+
 {newline} return NEWLINE;
 "("|")"|":" { yylval.c_value = yytext[0]; return yytext[0];}
 {sp} {}
