@@ -2,7 +2,8 @@
 #include "ezvm/ezvm.h"
 #include "ezvm/ezlog.h"
 #include <iostream>
-#include <stack>
+#include <map>
+#include <vector>
 #define YYDEBUG 1
 extern "C" {
 	int yylex();
@@ -10,14 +11,18 @@ extern "C" {
 }
 using namespace std;
 static ezVM s_vm;
-ezAsmProcedure* s_proc_current = NULL;
+static ezAsmProcedure* s_proc_current = NULL;
+static unsigned int s_global_index = 4;
+static map<string, unsigned int> s_global;
+static vector<ezAddress> s_args1;
+static vector<ezAddress> s_args2;
 %}
 
-%token PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE INTEGER ADDRESS
+%token PROC ENTRY IMPORT CALL LD MV SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE
 %type <i_value> INTEGER
-%type <a_value> ADDRESS
+%type <a_value> ADDRESS fname
 
 %union {
     char* s_value;
@@ -25,16 +30,17 @@ ezAsmProcedure* s_proc_current = NULL;
     int i_value;
     double f_value;
     struct {
-        char* segment;
-        char* symbolic_offset;
-        unsigned int numeric_offset;
+        char segment;
+        unsigned int offset;
     } a_value;
 };
 
 %start program
 
 %%
-program : entry procs { ezLog::logger().print("pass!"); };
+program : import entry procs { ezLog::logger().print("pass!"); };
+
+import : | IMPORT SYMBOL NEWLINE {s_global[$2] = s_global_index++;};
 
 entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 
@@ -52,15 +58,16 @@ line : | call
 
 mv : MV mvaddrs ',' mvvars;
 
-mvaddrs : ADDRESS | mvaddrs ADDRESS;
+mvaddrs : ADDRESS | SYMBOLIC_ADDRESS | mvaddrs ADDRESS | mvaddrs SYMBOLIC_ADDRESS;
 
 mvvars : var | mvvars var;
 
-ld : LD ADDRESS var var;
+ld : LD ADDRESS ',' var var;
 
 call : CALL fname '(' vars ')' addrs;
 
-fname : SYMBOL | ADDRESS;
+fname : SYMBOL {$$.segment = 'g'; $$.offset = s_global[$1];}
+	| ADDRESS {$$ = $1;}
 
 addrs : | addrs ADDRESS;
 

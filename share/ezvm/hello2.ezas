@@ -1,6 +1,7 @@
+.import os
 .entry main
 .proc print (3) 0:
-	mv l:4 , os:print
+	ld l:4 , os print
 	call l:4 (l:0 l:1 l:2)
 
 .proc main (0) 0:
