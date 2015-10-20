@@ -23,6 +23,7 @@ static vector<ezAddress> s_args2;
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE
 %type <i_value> INTEGER
 %type <a_value> ADDRESS fname
+%type <sa_value> SYMBOLIC_ADDRESS
 
 %union {
     char* s_value;
@@ -33,6 +34,10 @@ static vector<ezAddress> s_args2;
         char segment;
         unsigned int offset;
     } a_value;
+    struct {
+        char* segment;
+        char* offset;
+    } sa_value;
 };
 
 %start program
@@ -40,7 +45,7 @@ static vector<ezAddress> s_args2;
 %%
 program : import entry procs { ezLog::logger().print("pass!"); };
 
-import : | IMPORT SYMBOL NEWLINE {s_global[$2] = s_global_index++;};
+import : | IMPORT SYMBOL NEWLINE { s_vm.assembler().import($2); };
 
 entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 
@@ -58,7 +63,7 @@ line : | call
 
 mv : MV mvaddrs ',' mvvars;
 
-mvaddrs : ADDRESS | SYMBOLIC_ADDRESS | mvaddrs ADDRESS | mvaddrs SYMBOLIC_ADDRESS;
+mvaddrs : ADDRESS | mvaddrs ADDRESS;
 
 mvvars : var | mvvars var;
 
@@ -66,8 +71,9 @@ ld : LD ADDRESS ',' var var;
 
 call : CALL fname '(' vars ')' addrs;
 
-fname : SYMBOL {$$.segment = 'g'; $$.offset = s_global[$1];}
+fname : SYMBOL {$$.segment = 'g'; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
 	| ADDRESS {$$ = $1;}
+	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment);; $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
 
 addrs : | addrs ADDRESS;
 

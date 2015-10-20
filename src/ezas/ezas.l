@@ -10,6 +10,7 @@ string \".*\"
 symbol [a-zA-Z_][a-zA-Z_0-9]*
 newline [\n\r]
 address [cglp]:[0-9]+
+symbolic_address [a-zA-Z_][a-zA-Z_0-9]*:[a-zA-Z_][a-zA-Z_0-9]*
 sp [ \t]
 %%
 
@@ -26,6 +27,11 @@ sp [ \t]
 	yylval.a_value.segment = yytext[0];
 	yylval.a_value.offset = atoi(yytext + 2);
 	return ADDRESS;
+}
+{symbolic_address} {
+	yylval.sa_value.segment = strtok(yytext, ":");
+	yylval.sa_value.offset = strtok(NULL, ":");
+	return SYMBOLIC_ADDRESS;
 }
 {newline} return NEWLINE;
 "("|")"|":"|"," { yylval.c_value = yytext[0]; return yytext[0];}

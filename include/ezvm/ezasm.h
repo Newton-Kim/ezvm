@@ -30,6 +30,10 @@ class ezAsmProcedure {
 
 class ezASM {
 	public:
+		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);
+		size_t offset(const size_t segment, const string value);
+		size_t offset(const string segment, const string name);
+		size_t segment(const string segment);
 };
