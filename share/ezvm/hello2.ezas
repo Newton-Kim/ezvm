@@ -1,4 +1,4 @@
-.import os
+.import io
 .entry main
 .proc print (3) 0:
 	call os:print (l:0 l:1 l:2)

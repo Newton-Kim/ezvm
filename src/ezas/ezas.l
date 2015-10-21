@@ -1,4 +1,5 @@
 %{
+#include "ezvm/ezaddr.h"
 #include "ezas.tab.cc.h"
 %}
 
@@ -24,7 +25,23 @@ sp [ \t]
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
 {symbol} {yylval.s_value = strdup(yytext); return SYMBOL; }
 {address} {
-	yylval.a_value.segment = yytext[0];
+	switch(yytext[0]){
+		case 'g':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_GLOBAL;
+			break;
+		case 'c':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_CONSTANT;
+			break;
+		case 'l':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_LOCAL;
+			break;
+		case 'p':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_PARENT;
+			break;
+		default:
+			fprintf(stderr, "error (%d): invalid segment %c\n", yylineno, yytext[0]);
+			break;
+	}
 	yylval.a_value.offset = atoi(yytext + 2);
 	return ADDRESS;
 }

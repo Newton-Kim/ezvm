@@ -5,24 +5,24 @@
 #include <map>
 #include <vector>
 #define YYDEBUG 1
-extern "C" {
-	int yylex();
-	void yyerror (char const *s);
-}
+
+int yylex();
+void yyerror (char const *s);
+
 using namespace std;
 static ezVM s_vm;
 static ezAsmProcedure* s_proc_current = NULL;
 static unsigned int s_global_index = 4;
 static map<string, unsigned int> s_global;
-static vector<ezAddress> s_args1;
-static vector<ezAddress> s_args2;
+static vector<ezAddress> s_args_addr;
+static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT CALL LD MV SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE
 %type <i_value> INTEGER
-%type <a_value> ADDRESS fname
+%type <a_value> ADDRESS fname var
 %type <sa_value> SYMBOLIC_ADDRESS
 
 %union {
@@ -31,8 +31,8 @@ static vector<ezAddress> s_args2;
     int i_value;
     double f_value;
     struct {
-        char segment;
-        unsigned int offset;
+        size_t segment;
+        size_t offset;
     } a_value;
     struct {
         char* segment;
@@ -43,7 +43,7 @@ static vector<ezAddress> s_args2;
 %start program
 
 %%
-program : import entry procs { ezLog::logger().print("pass!"); };
+program : import entry procs { ezLog::logger().print("pass!"); s_vm.run(); };
 
 import : | IMPORT SYMBOL NEWLINE { s_vm.assembler().import($2); };
 
@@ -61,25 +61,24 @@ line : | call
 	| mv
 	| ld;
 
-mv : MV mvaddrs ',' mvvars;
+mv : MV addrs ',' vars {s_proc_current->mv(s_args_addr, s_args_var);};
 
-mvaddrs : ADDRESS | mvaddrs ADDRESS;
+ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
 
-mvvars : var | mvvars var;
+call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_addr, s_args_var);};
 
-ld : LD ADDRESS ',' var var;
-
-call : CALL fname '(' vars ')' addrs;
-
-fname : SYMBOL {$$.segment = 'g'; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
+fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
 	| ADDRESS {$$ = $1;}
 	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment);; $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
 
-addrs : | addrs ADDRESS;
+addrs : | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
 
-vars : | vars var;
+vars : | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
-var : STRING | SYMBOL | INTEGER | ADDRESS;
+var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_CONSTANT, $1);}
+	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
+	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_CONSTANT, $1);}
+	| ADDRESS {$$ = $1;};
 %%
 
 extern FILE * yyin;

@@ -7,8 +7,9 @@ LIBS=-lezvm -lfl
 
 all: $(PROGRAM)
 
-lex.yy.c: ezas.l
-	flex $<
+lex.yy.cc: ezas.l
+	touch $@
+	flex -o $@ $<
 
 ezas.tab.cc: ezas.y
 	bison $< -o $@ --defines=$@.h
@@ -37,7 +38,7 @@ $(INST_DIR)/bin/$(PROGRAM): $(PROGRAM)
 	install -s $< $$(dirname "$@")
 
 clean:
-	rm -f $(PROGRAM) $(OBJS) lex.yy.c ezas.tab.cc ezas.tab.cc.h
+	rm -f $(PROGRAM) $(OBJS) lex.yy.cc ezas.tab.cc ezas.tab.cc.h
 
 distclean: clean
 	rm -f Makefile
