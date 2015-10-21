@@ -12,14 +12,17 @@ void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src){
 void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj, const ezAddress offset){
 }
 
-ezASM::ezASM(string& entry):m_entry(entry) {
+ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezAddress> >& globals):
+	m_entry(entry),
+	m_constants(constants),
+	m_globals(globals) {
 }
 
 void ezASM::import(const string entry) {
 }
 
 void ezASM::entry(const string entry) {
-	m_entry = entry;
+	m_entry_string = entry;
 }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {

@@ -1,9 +1,11 @@
 #pragma once
 
 #include "ezaddr.h"
+#include "ezval.h"
 #include <cstddef>
 #include <vector>
 #include <string>
+#include <map>
 
 using namespace std;
 
@@ -16,9 +18,14 @@ class ezAsmProcedure {
 
 class ezASM {
 	private:
-		string& m_entry;
+		ezAddress& m_entry;
+		string m_entry_string;
+		vector<ezValue*>& m_constants;
+		vector< vector<ezAddress> >& m_globals;
+		map<string, size_t> m_seg_symtab;
+		vector< map<string, size_t> > m_offset_symtab;
 	public:
-		ezASM(string& entry);
+		ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezAddress> >& globals);
 		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);

@@ -13,11 +13,10 @@ ezVM::~ezVM() {
 }
 
 void ezVM::run(void){
-	if(m_entry.empty()) throw runtime_error("error : no entry point has been defined.");
 }
 
 ezASM& ezVM::assembler(void) {
-	if(!m_pasm) m_pasm = new ezASM(m_entry);
+	if(!m_pasm) m_pasm = new ezASM(m_entry, m_constants, m_globals);
 	return *m_pasm;
 }
 

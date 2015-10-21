@@ -8,9 +8,9 @@ using namespace std;
 
 class ezVM {
 	private:
-		string m_entry;
+		ezAddress m_entry;
 		vector<ezValue*> m_constants;
-		vector<ezAddress*> m_globals;
+		vector< vector<ezAddress> > m_globals;
 		ezASM* m_pasm;
 		ezArchive* m_parchive;
 	public:
