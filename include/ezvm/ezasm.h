@@ -15,7 +15,10 @@ class ezAsmProcedure {
 };
 
 class ezASM {
+	private:
+		string& m_entry;
 	public:
+		ezASM(string& entry);
 		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);
