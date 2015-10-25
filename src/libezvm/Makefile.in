@@ -4,10 +4,11 @@ LINK=libezvm.so
 OBJS=vm.o \
 	ezasm.o \
 	ezarchive.o \
+	intrinsic/ezintrinsic.o \
 	utility/ezfile.o \
 	utility/ezlog.o
 
-CXXFLAGS=-g -fPIC -O2 -I../../include
+CXXFLAGS=-g -fPIC -O2 -I../../include -I.
 
 all: $(LIBRARY) $(LINK) $(LINK_MAJOR)
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 enum ezValueType {
 	EZ_VALUE_TYPE_INTEGER,

@@ -45,7 +45,10 @@ static vector<ezAddress> s_args_var;
 %%
 program : import entry procs { ezLog::logger().print("pass!"); s_vm.run(); };
 
-import : | IMPORT SYMBOL NEWLINE { s_vm.assembler().import($2); };
+import : | IMPORT SYMBOL NEWLINE {
+		//TODO:load a script ($2+'.ezas')
+		s_vm.assembler().import($2);
+	};
 
 entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 

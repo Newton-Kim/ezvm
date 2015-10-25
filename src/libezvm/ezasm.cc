@@ -1,4 +1,5 @@
 #include "ezvm/ezasm.h"
+#include "intrinsic/ezintrinsic.h"
 #include <iostream>
 
 using namespace std;
@@ -19,6 +20,28 @@ ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezAdd
 }
 
 void ezASM::import(const string entry) {
+	char** symtab = NULL;
+	ezValue** constants = NULL;
+	//TODO:load a shared object ('lib'+entry+'.so')
+	{}
+	//TODO:load the intrinsic library
+	{}
+	ezIntrinsic::load(entry, &symtab, &constants);
+	if(!symtab || !constants) return;
+	size_t segment = m_globals.size();
+	vector<ezAddress> offsets;
+	map<string, size_t> offset_symtab;
+	for(size_t i = 0 ; constants[i] && symtab[i] ; i++) {
+		ezValue* constant = constants[i];
+		const char* symbol = symtab[i];
+		size_t offset = m_constants.size();
+		offsets.push_back(ezAddress(segment, offset));
+		m_constants.push_back(constant);
+		offset_symtab[symbol] = offset;
+	}
+	if(!offsets.size()) return;
+	m_seg_symtab[entry] = segment;
+	m_globals.push_back(offsets);
 }
 
 void ezASM::entry(const string entry) {
