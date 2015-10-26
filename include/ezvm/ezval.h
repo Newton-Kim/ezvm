@@ -24,7 +24,7 @@ class ezValue {
 		void release(void) { m_reference--; }
 };
 
-class ezInteger : ezValue {
+class ezInteger : public ezValue {
 	private:
 		const int m_value;
 	public:
@@ -32,7 +32,7 @@ class ezInteger : ezValue {
 		const int value(void);
 };
 
-class ezString : ezValue {
+class ezString : public ezValue {
 	private:
 		const string m_value;
 	public:
@@ -41,17 +41,17 @@ class ezString : ezValue {
 };
 
 typedef unsigned int ezInstruction;
-class ezCarousel : ezValue {
+class ezCarousel : public ezValue {
 	private:
 		vector<ezInstruction> m_instruction;
 	public:
 		ezCarousel();
 };
 
-class ezNativeCarousel : ezValue {
+class ezNativeCarousel : public ezValue {
 	private:
 	public:
-		ezNativeCarousel();
-		void run(vector<ezValue*>& args, vector<ezValue*>& rets);
+		ezNativeCarousel(): ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {};
+		virtual void run(vector<ezValue*>& args, vector<ezValue*>& rets) = 0;
 		
 };

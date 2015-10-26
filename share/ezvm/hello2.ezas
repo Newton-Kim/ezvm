@@ -1,7 +1,7 @@
 .import io
 .entry main
-.proc print (3) 0:
-	call os:print (l:0 l:1 l:2)
+.proc print (2) 0:
+	call os:print (l:0 l:1)
 
 .proc main (0) 0:
-	call print (stdout "hello world" 0)
+	call print (stdout "hello world")
