@@ -28,7 +28,7 @@ class ezInteger : public ezValue {
 	private:
 		const int m_value;
 	public:
-		ezInteger(int val);
+		ezInteger(int val): ezValue(EZ_VALUE_TYPE_INTEGER) {};
 		const int value(void);
 };
 
@@ -36,7 +36,7 @@ class ezString : public ezValue {
 	private:
 		const string m_value;
 	public:
-		ezString(const string val);
+		ezString(const string val): ezValue(EZ_VALUE_TYPE_STRING) {};
 		const string value(void);
 };
 
