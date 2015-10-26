@@ -52,10 +52,13 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 	return NULL;
 }
 
-size_t ezASM::offset(const size_t segment, const string value) {
+size_t ezASM::global(const string value) {
 }
 
-size_t ezASM::offset(const size_t segment, const int value) {
+size_t ezASM::constant(const string value) {
+}
+
+size_t ezASM::constant(const int value) {
 }
 
 size_t ezASM::offset(const string segment, const string value) {

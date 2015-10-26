@@ -29,8 +29,9 @@ class ezASM {
 		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);
-		size_t offset(const size_t segment, const string value);
-		size_t offset(const size_t segment, const int value);
+		size_t global(const string value);
+		size_t constant(const string value);
+		size_t constant(const int value);
 		size_t offset(const string segment, const string value);
 		size_t segment(const string segment);
 };

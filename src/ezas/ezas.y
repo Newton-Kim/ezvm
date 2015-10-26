@@ -70,7 +70,7 @@ ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset)
 
 call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_addr, s_args_var);};
 
-fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
+fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}
 	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment);; $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
 
@@ -78,9 +78,9 @@ addrs : | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset))
 
 vars : | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
-var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_CONSTANT, $1);}
-	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_GLOBAL, $1);}
-	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().offset(EZ_ASM_SEGMENT_CONSTANT, $1);}
+var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
+	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| ADDRESS {$$ = $1;};
 %%
 
