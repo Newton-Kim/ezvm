@@ -18,17 +18,17 @@ class ezValue {
 		size_t m_reference;
 	public:
 		const ezValueType type;
-		ezValue(ezValueType tp): type(tp) {};
-		virtual ~ezValue(){};
-		void reference(void) { m_reference++; }
-		void release(void) { m_reference--; }
+		ezValue(ezValueType tp);
+		virtual ~ezValue();
+		void reference(void);
+		void release(void);
 };
 
 class ezInteger : public ezValue {
 	private:
 		const int m_value;
 	public:
-		ezInteger(int val): ezValue(EZ_VALUE_TYPE_INTEGER) {};
+		ezInteger(int val);
 		const int value(void);
 };
 
@@ -36,7 +36,7 @@ class ezString : public ezValue {
 	private:
 		const string m_value;
 	public:
-		ezString(const string val): ezValue(EZ_VALUE_TYPE_STRING) {};
+		ezString(const string val);
 		const string value(void);
 };
 
@@ -51,7 +51,7 @@ class ezCarousel : public ezValue {
 class ezNativeCarousel : public ezValue {
 	private:
 	public:
-		ezNativeCarousel(): ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {};
+		ezNativeCarousel();
 		virtual void run(vector<ezValue*>& args, vector<ezValue*>& rets) = 0;
 		
 };

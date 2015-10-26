@@ -62,5 +62,8 @@ size_t ezASM::offset(const string segment, const string value) {
 }
 
 size_t ezASM::segment(const string value) {
+	map<string, size_t>::iterator it = m_seg_symtab.find(value);
+	if(it == m_seg_symtab.end()) throw runtime_error(value + " not found");
+	return it->second;
 }
 
