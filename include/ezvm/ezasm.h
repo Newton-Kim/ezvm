@@ -10,7 +10,10 @@
 using namespace std;
 
 class ezAsmProcedure {
+	private:
+		const ezCarousel* m_carousel;
 	public:
+		ezAsmProcedure(const ezCarousel* carousel);
 		void call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets);
 		void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
 		void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
@@ -21,11 +24,11 @@ class ezASM {
 		ezAddress& m_entry;
 		string m_entry_string;
 		vector<ezValue*>& m_constants;
-		vector< vector<ezAddress> >& m_globals;
+		vector< vector<size_t> >& m_globals;
 		map<string, size_t> m_seg_symtab;
 		vector< map<string, size_t> > m_offset_symtab;
 	public:
-		ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezAddress> >& globals);
+		ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<size_t> >& globals);
 		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);

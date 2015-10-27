@@ -3,4 +3,22 @@
 ROOT_DIR=$(dirname "$0")
 LIB_DIR=$ROOT_DIR/../lib
 export LD_LIBRARY_PATH=$LIB_DIR:$LD_LIBRARY_PATH
-$LIB_DIR/ezvm $@
+
+for ARG in $@
+do
+	case $ARG in
+		--debug | -g)
+			PREFIX="gdb --args" 
+			;;
+		--help | -h)
+			HELP="  --debug, -g  runs ezas in debug mode"
+			;;
+		*)
+			PARAM+=" $ARG"
+			;;
+	esac
+done
+$PREFIX $LIB_DIR/ezvm $PARAM
+RET=$?
+test -n "$HELP" && echo $HELP
+exit $RET

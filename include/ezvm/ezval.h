@@ -18,7 +18,8 @@ class ezValue {
 		size_t m_reference;
 	public:
 		const ezValueType type;
-		ezValue(ezValueType tp);
+		const bool dynamic;
+		ezValue(const ezValueType tp, const bool dyn);
 		virtual ~ezValue();
 		void reference(void);
 		void release(void);
@@ -28,7 +29,7 @@ class ezInteger : public ezValue {
 	private:
 		const int m_value;
 	public:
-		ezInteger(int val);
+		ezInteger(int val, const bool dynamic = true);
 		const int value(void);
 };
 
@@ -36,22 +37,21 @@ class ezString : public ezValue {
 	private:
 		const string m_value;
 	public:
-		ezString(const string val);
+		ezString(const string val, const bool dynamic = true);
 		const string value(void);
 };
 
 typedef unsigned int ezInstruction;
 class ezCarousel : public ezValue {
-	private:
-		vector<ezInstruction> m_instruction;
 	public:
-		ezCarousel();
+		ezCarousel(const bool dynamic = true);
+		vector<ezInstruction> instruction;
 };
 
 class ezNativeCarousel : public ezValue {
 	private:
 	public:
-		ezNativeCarousel();
+		ezNativeCarousel(const bool dynamic = true);
 		virtual void run(vector<ezValue*>& args, vector<ezValue*>& rets) = 0;
 		
 };

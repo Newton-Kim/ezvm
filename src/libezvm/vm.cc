@@ -3,13 +3,16 @@
 
 using namespace std;
 
-ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {}
+ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
+	vector<ezAddress> dummy;
+	m_globals.push_back(dummy);
+}
 
 ezVM::~ezVM() {
 	if(m_pasm) delete m_pasm;
 	if(m_parchive) delete m_parchive;
 	for(vector<ezValue*>::iterator it = m_constants.begin() ; it != m_constants.end() ; it++)
-		delete *it;
+		if((*it)->dynamic) delete *it;
 }
 
 void ezVM::run(void){

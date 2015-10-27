@@ -1,14 +1,15 @@
 #include "ezvm/ezval.h"
 
-ezValue::ezValue(ezValueType tp): type(tp) {};
+ezValue::ezValue(const ezValueType tp, const bool dyn): type(tp), dynamic(dyn) {};
 ezValue::~ezValue(){};
 void ezValue::reference(void) { m_reference++; }
 void ezValue::release(void) { m_reference--; }
 
-ezInteger::ezInteger(int val): m_value(val), ezValue(EZ_VALUE_TYPE_INTEGER) {};
+ezInteger::ezInteger(int val, const bool dynamic): m_value(val), ezValue(EZ_VALUE_TYPE_INTEGER, dynamic) {};
 const int ezInteger::value(void) { return m_value; }
 
-ezString::ezString(const string val): m_value(val), ezValue(EZ_VALUE_TYPE_STRING) {};
+ezString::ezString(const string val, const bool dynamic): m_value(val), ezValue(EZ_VALUE_TYPE_STRING, dynamic) {};
 const string ezString::value(void){ return m_value; }
 
-ezNativeCarousel::ezNativeCarousel(): ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {};
+ezCarousel::ezCarousel(const bool dynamic): ezValue(EZ_VALUE_TYPE_CAROUSEL, dynamic) {};
+ezNativeCarousel::ezNativeCarousel(const bool dynamic): ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL, dynamic) {};
