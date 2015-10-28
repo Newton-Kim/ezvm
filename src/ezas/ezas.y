@@ -43,7 +43,7 @@ static vector<ezAddress> s_args_var;
 %start program
 
 %%
-program : import entry procs { ezLog::logger().print("pass!"); s_vm.run(); };
+program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::logger().print("pass!"); s_vm.run(); };
 
 import : | IMPORT SYMBOL NEWLINE {
 		//TODO:load a script ($2+'.ezas')
@@ -55,7 +55,7 @@ entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 procs : proc
 	| proc procs;
 
-proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' {s_proc_current = s_vm.assembler().new_proc($2, $4, $6);}
+proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6);}
 		NEWLINE codes {s_proc_current = NULL;};
 
 codes : line NEWLINE | codes line NEWLINE;

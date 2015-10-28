@@ -1,6 +1,7 @@
 #include "ezvm/ezasm.h"
 #include "ezvm/ezlog.h"
 #include "intrinsic/ezintrinsic.h"
+#include "ezinstruction.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -9,12 +10,29 @@ using namespace std;
 ezAsmProcedure::ezAsmProcedure(const ezCarousel* carousel): m_carousel(carousel) {}
 
 void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_CALL, args.size(), rets.size());
+	for(vector<ezAddress>::iterator it = args.begin() ; it != args.end() ; it++)
+		instruction.argument(*it);
+	for(vector<ezAddress>::iterator it = rets.begin() ; it != rets.end() ; it++)
+		instruction.argument(*it);
 }
 
 void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_MV, dest.size(), src.size());
+	for(vector<ezAddress>::iterator it = dest.begin() ; it != dest.end() ; it++)
+		instruction.argument(*it);
+	for(vector<ezAddress>::iterator it = src.begin() ; it != src.end() ; it++)
+		instruction.argument(*it);
 }
 
 void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj, const ezAddress offset){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_LD, 1, 1, 1);
+	instruction.argument(dest);
+	instruction.argument(obj);
+	instruction.argument(offset);
 }
 
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<size_t> >& globals):
@@ -101,7 +119,9 @@ size_t ezASM::offset(const string segment, const string value) {
 	map<string, size_t>::iterator sit = m_seg_symtab.find(segment);
 	if(sit == m_seg_symtab.end()) throw runtime_error("a segment of " + segment + " is not found");
 	size_t seg = sit->second;
+	if(! (m_globals.size() > seg)) throw runtime_error("invalid segment id for globals : " + seg);
 	vector<size_t>& offset = m_globals[seg];
+	if(! (m_offset_symtab.size() > seg)) throw runtime_error("invalid segment id for offset table : " + seg);
 	map<string, size_t>& offset_symtab = m_offset_symtab[seg];
 	map<string, size_t>::iterator it = offset_symtab.find(value);
 	if(it == offset_symtab.end()) throw runtime_error("an offset of " + segment + ":" + value + " is not found");

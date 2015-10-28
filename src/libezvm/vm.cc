@@ -4,7 +4,7 @@
 using namespace std;
 
 ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
-	vector<ezAddress> dummy;
+	vector<size_t> dummy;
 	m_globals.push_back(dummy);
 }
 

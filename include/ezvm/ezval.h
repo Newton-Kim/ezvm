@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ class ezString : public ezValue {
 		const string value(void);
 };
 
-typedef unsigned int ezInstruction;
+typedef uint32_t ezInstruction;
 class ezCarousel : public ezValue {
 	public:
 		ezCarousel(const bool dynamic = true);

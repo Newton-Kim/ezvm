@@ -5,12 +5,13 @@ OBJS=vm.o \
 	ezasm.o \
 	ezarchive.o \
 	ezval.o \
+	ezinstruction.o \
 	intrinsic/ezintrinsic.o \
 	intrinsic/ezio.o \
 	utility/ezfile.o \
 	utility/ezlog.o
 
-CXXFLAGS=-g -fPIC -O2 -I../../include -I.
+CXXFLAGS=-g -fPIC -O2 -std=gnu++11 -I../../include -I.
 
 all: $(LIBRARY) $(LINK) $(LINK_MAJOR)
 
