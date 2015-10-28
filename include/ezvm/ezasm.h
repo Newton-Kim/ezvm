@@ -24,11 +24,12 @@ class ezASM {
 		ezAddress& m_entry;
 		string m_entry_string;
 		vector<ezValue*>& m_constants;
-		vector< vector<size_t> >& m_globals;
+		vector< vector<size_t>* >& m_globals;
 		map<string, size_t> m_seg_symtab;
-		vector< map<string, size_t> > m_offset_symtab;
+		vector< map<string, size_t>* > m_offset_symtab;
 	public:
-		ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<size_t> >& globals);
+		ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<size_t>* >& globals);
+		~ezASM();
 		void import(const string name);
 		void entry(const string name);
 		ezAsmProcedure* new_proc(const string name, int argc, int retc);
