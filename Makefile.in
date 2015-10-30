@@ -21,6 +21,7 @@ distclean:
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
 	rm -rf bin lib
+	find . -name *~ -exec rm {} \;
 	rm -f Makefile 
 
 test:

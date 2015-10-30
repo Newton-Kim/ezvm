@@ -7,7 +7,7 @@
 
 using namespace std;
 
-ezAsmProcedure::ezAsmProcedure(const ezCarousel* carousel): m_carousel(carousel) {}
+ezAsmProcedure::ezAsmProcedure(ezCarousel* carousel): m_carousel(carousel) {}
 
 void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets){
 	ezInstEncoder instruction(m_carousel->instruction);

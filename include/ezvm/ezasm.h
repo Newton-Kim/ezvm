@@ -11,9 +11,9 @@ using namespace std;
 
 class ezAsmProcedure {
 	private:
-		const ezCarousel* m_carousel;
+		ezCarousel* m_carousel;
 	public:
-		ezAsmProcedure(const ezCarousel* carousel);
+		ezAsmProcedure(ezCarousel* carousel);
 		void call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets);
 		void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
 		void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);

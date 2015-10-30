@@ -1,6 +1,7 @@
 #include "ezio.h"
 #include "ezvm/ezval.h"
 #include <iostream>
+#include <sstream>
 
 class ezIoPrint : public ezNativeCarousel {
 	public:
@@ -12,20 +13,35 @@ ezIoPrint::ezIoPrint() : ezNativeCarousel(false) { }
 
 void ezIoPrint::run(vector<ezValue*>& args, vector<ezValue*>& rets) {
 	rets.clear();
-	for(vector<ezValue*>::iterator it = args.begin() ; it != args.end() ; it++) {
-		ezValue* v = *it;
+	stringstream ss;
+	size_t len = args.size();
+	if (args[0]->type != EZ_VALUE_TYPE_INTEGER) throw runtime_error("argument 1 is not a number");
+	size_t ioidx = ((ezInteger*)args[0])->value();
+	for(size_t i = 1 ; i < len ; i++) {
+		ezValue* v = args[i];
 		switch(v->type) {
 			case EZ_VALUE_TYPE_INTEGER:
-				cout << ((ezInteger*)v)->value();
+				ss << ((ezInteger*)v)->value();
 				break;
 			case EZ_VALUE_TYPE_STRING:
-				cout << ((ezString*)v)->value();
+				ss << ((ezString*)v)->value();
 				break;
 			default:
-				cout << hex << (void*)v << dec;
+				ss << hex << (void*)v << dec;
 		}
 	}
-	cout << endl;
+	ss << endl;
+	switch(ioidx) {
+		case 1:
+			cout << ss.str();
+			break;
+		case 2:
+			cerr << ss.str();
+			break;
+		default:
+			throw runtime_error("invalid IO index");
+			break;
+	}
 }
 
 void ezIO::load(char*** symtab, ezValue*** constants){

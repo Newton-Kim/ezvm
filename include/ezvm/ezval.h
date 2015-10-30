@@ -42,7 +42,8 @@ class ezString : public ezValue {
 		const string value(void);
 };
 
-typedef uint32_t ezInstruction;
+typedef	uint32_t ezInstruction;
+
 class ezCarousel : public ezValue {
 	public:
 		ezCarousel(const bool dynamic = true);
