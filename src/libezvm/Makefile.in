@@ -2,6 +2,7 @@ LIBRARY=libezvm.so.0.0.1
 LINK_MAJOR=libezvm.so.0
 LINK=libezvm.so
 OBJS=vm.o \
+	thread.o \
 	ezasm.o \
 	ezarchive.o \
 	ezval.o \

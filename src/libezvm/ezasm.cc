@@ -90,6 +90,10 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 	m_constants.push_back(carousel);
 	offset->push_back(addr);
 	(*offset_symtab)[name] = addr;
+	if(name == m_entry_string) {
+		m_entry.segment = EZ_ASM_SEGMENT_CONSTANT;
+		m_entry.offset = addr;
+	}
 	return new ezAsmProcedure(carousel);
 }
 

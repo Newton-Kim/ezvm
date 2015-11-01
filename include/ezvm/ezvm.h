@@ -2,6 +2,7 @@
 #include "ezasm.h"
 #include "ezarchive.h"
 #include "ezval.h"
+#include "ezthread.h"
 #include <string>
 
 using namespace std;
@@ -13,6 +14,7 @@ class ezVM {
 		vector< vector<size_t>* > m_globals;
 		ezASM* m_pasm;
 		ezArchive* m_parchive;
+		vector<ezThread*> m_threads;
 	public:
 		ezVM();
 		~ezVM();
