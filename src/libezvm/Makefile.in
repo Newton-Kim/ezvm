@@ -3,6 +3,7 @@ LINK_MAJOR=libezvm.so.0
 LINK=libezvm.so
 OBJS=vm.o \
 	thread.o \
+	stack.o \
 	ezasm.o \
 	ezarchive.o \
 	ezval.o \

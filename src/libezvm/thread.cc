@@ -7,6 +7,6 @@ ezThread::ezThread(ezAddress entry, vector< vector<size_t>* > globals, vector<ez
 {
 }
 
-ezThreadState ezThread::step(void) {
-	return EZ_THREAD_DONE;
+ezStepState ezThread::step(void) {
+	return EZ_STEP_DONE;
 }

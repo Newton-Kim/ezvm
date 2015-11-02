@@ -2,23 +2,20 @@
 
 #include "ezaddr.h"
 #include "ezval.h"
+#include "ezstack.h"
 #include <cstddef>
 #include <vector>
 
 using namespace std;
-
-enum ezThreadState {
-	EZ_THREAD_CONTINUE,
-	EZ_THREAD_DONE
-};
 
 class ezThread {
 	private:
 		ezAddress m_entry;
 		vector<ezValue*>& m_constants;
 		vector< vector<size_t>* >& m_globals;
+		stack<ezStackFrame*> m_stack;
 
 	public:
 		ezThread(ezAddress entry, vector< vector<size_t>* > globals, vector<ezValue*> constants);
-		ezThreadState step(void);
+		ezStepState step(void);
 };
