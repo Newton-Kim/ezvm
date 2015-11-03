@@ -48,6 +48,7 @@ ezASM::~ezASM() {
 }
 
 void ezASM::import(const string entry) {
+	ezFile& log = ezLog::logger();
 	char** symtab = NULL;
 	ezValue** constants = NULL;
 	//TODO:load a shared object ('lib'+entry+'.so')
@@ -66,9 +67,10 @@ void ezASM::import(const string entry) {
 		offsets->push_back(offset);
 		m_constants.push_back(constant);
 		(*offset_symtab)[symbol] = offset;
+		log.print("constant[%lu] = %s", offset, symbol);
 	}
 	if(!offsets->size()) {
-		ezLog::logger().print("no content is found in %s", entry.c_str());
+		log.print("no content is found in %s", entry.c_str());
 		return;
 	}
 	m_seg_symtab[entry] = segment;
@@ -94,6 +96,7 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 		m_entry.segment = EZ_ASM_SEGMENT_CONSTANT;
 		m_entry.offset = addr;
 	}
+	ezLog::logger().print("constant[%lu] = %s", addr, name.c_str());
 	return new ezAsmProcedure(carousel);
 }
 

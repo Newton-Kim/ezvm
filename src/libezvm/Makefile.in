@@ -13,7 +13,7 @@ OBJS=vm.o \
 	utility/ezfile.o \
 	utility/ezlog.o
 
-CXXFLAGS=-g -fPIC -O2 -std=gnu++11 -I../../include -I.
+CXXFLAGS=-g -fPIC -O2 -Wall -std=gnu++11 -I../../include -I.
 
 all: $(LIBRARY) $(LINK) $(LINK_MAJOR)
 

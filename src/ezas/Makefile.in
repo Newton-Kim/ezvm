@@ -1,7 +1,7 @@
 PROGRAM=ezas
 OBJS=ezas.tab.o lex.yy.o ezas.o
-CFLAGS=-g -O2 -std=gnu++11 -I../../include
-CXXFLAGS=-g -O2 -std=gnu++11 -I../../include
+CFLAGS=-g -O2 -Wall -std=gnu++11 -I../../include
+CXXFLAGS=-g -O2 -Wall -std=gnu++11 -I../../include
 LDFLAGS=-L../libezvm
 LIBS=-lezvm -lfl
 

@@ -16,8 +16,8 @@ class ezStackFrame {
 		size_t m_pc;
 		vector<ezValue*> m_local;
 		ezCarousel* m_carousel;
-		ezNativeCarousel* m_native_carould;
-		vector<ezValue*> m_args;
+		ezNativeCarousel* m_native_carousel;
+		vector<ezValue*>& m_args;
 		vector<ezValue*>& m_rets;
 	public:
 		ezStackFrame(ezCarousel* carousel, vector<ezValue*>& args, vector<ezValue*>& rets);

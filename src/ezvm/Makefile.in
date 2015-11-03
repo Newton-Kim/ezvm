@@ -1,6 +1,6 @@
 PROGRAM=ezvm
 OBJS=ezvm.o
-CXXFLAGS=-g -O2 -std=gnu++11
+CXXFLAGS=-g -O2 -Wall -std=gnu++11
 
 all: $(PROGRAM)
 
