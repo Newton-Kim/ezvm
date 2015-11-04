@@ -21,4 +21,7 @@ class ezThread {
 		ezThread(ezAddress entry, vector< vector<size_t>* >& globals, vector<ezValue*>& constants);
 		~ezThread();
 		ezStepState step(void);
+		void mv(size_t arg1, size_t arg2, size_t arg3);
+		void ld(size_t arg1, size_t arg2, size_t arg3);
+		void call(size_t arg1, size_t arg2, size_t arg3);
 };
