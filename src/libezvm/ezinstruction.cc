@@ -9,7 +9,7 @@ struct ezOperation{
 	uint8_t arg3;
 };
 struct ezArgument{
-	uint8_t segment;
+	int8_t segment;
 	unsigned int offset:24;
 };
 

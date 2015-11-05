@@ -16,12 +16,13 @@ class ezThread {
 		vector<ezValue*> m_rets;
 		vector< vector<size_t>* >& m_globals;
 		stack<ezStackFrame*> m_stack;
+		ezValue* addr2val(ezAddress addr);
 
 	public:
 		ezThread(ezAddress entry, vector< vector<size_t>* >& globals, vector<ezValue*>& constants);
 		~ezThread();
 		ezStepState step(void);
-		void mv(size_t arg1, size_t arg2, size_t arg3);
-		void ld(size_t arg1, size_t arg2, size_t arg3);
-		void call(size_t arg1, size_t arg2, size_t arg3);
+		void mv(uint8_t arg1, uint8_t arg2, uint8_t arg3);
+		void ld(uint8_t arg1, uint8_t arg2, uint8_t arg3);
+		void call(uint8_t arg1, uint8_t arg2, uint8_t arg3);
 };

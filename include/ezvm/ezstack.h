@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ezval.h"
+#include "ezaddr.h"
 #include <vector>
 #include <stack>
 
@@ -11,20 +12,10 @@ enum ezStepState {
 	EZ_STEP_DONE
 };
 
-class ezStackFrame {
-	private:
-		size_t m_pc;
-		vector<ezValue*> m_local;
-		ezCarousel* m_carousel;
-		ezNativeCarousel* m_native_carousel;
-		vector<ezValue*>& m_args;
-		vector<ezValue*>& m_rets;
-	public:
-		ezStackFrame(ezCarousel* carousel, vector<ezValue*>& args, vector<ezValue*>& rets);
-		ezStackFrame(ezNativeCarousel* carousel, vector<ezValue*>& args, vector<ezValue*>& rets);
-		ezStepState step(void);
-		void mv(uint8_t arg1, uint8_t arg2, uint8_t arg3);
-		void ld(uint8_t arg1, uint8_t arg2, uint8_t arg3);
-		void call(uint8_t arg1, uint8_t arg2, uint8_t arg3);
+struct ezStackFrame {
+	size_t pc;
+	vector<ezValue*> local;
+	ezCarousel* carousel;
+	ezStackFrame(ezCarousel* crsl);
 };
 

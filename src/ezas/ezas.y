@@ -12,7 +12,6 @@ void yyerror (char const *s);
 using namespace std;
 static ezVM s_vm;
 static ezAsmProcedure* s_proc_current = NULL;
-static unsigned int s_global_index = 4;
 static map<string, unsigned int> s_global;
 static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
