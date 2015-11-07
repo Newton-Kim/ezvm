@@ -35,7 +35,7 @@ void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj, const ezAddre
 	instruction.argument(offset);
 }
 
-ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<size_t>* >& globals):
+ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals):
 		m_entry(entry),
 		m_constants(constants),
 		m_globals(globals) {
@@ -58,13 +58,13 @@ void ezASM::import(const string entry) {
 	ezIntrinsic::load(entry, &symtab, &constants);
 	if(!symtab || !constants) throw runtime_error(entry + " is not found");
 	size_t segment = m_globals.size();
-	vector<size_t>* offsets = new vector<size_t>;
+	vector<ezValue*>* offsets = new vector<ezValue*>;
 	map<string, size_t>* offset_symtab = new map<string, size_t>;
 	for(size_t i = 0 ; constants[i] && symtab[i] ; i++) {
 		ezValue* constant = constants[i];
 		const char* symbol = symtab[i];
 		size_t offset = m_constants.size();
-		offsets->push_back(offset);
+		offsets->push_back(constant);
 		m_constants.push_back(constant);
 		(*offset_symtab)[symbol] = offset;
 		log.print("constant[%lu] = %s", offset, symbol);
@@ -83,14 +83,14 @@ void ezASM::entry(const string entry) {
 }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
-	vector<size_t>* offset = m_globals[0];
+	vector<ezValue*>* offset = m_globals[0];
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(name);
 	if(it != offset_symtab->end()) throw runtime_error("global symbol " + name + " already exists");
 	ezCarousel* carousel = new ezCarousel();
 	size_t addr = m_constants.size();
 	m_constants.push_back(carousel);
-	offset->push_back(addr);
+	offset->push_back(carousel);
 	(*offset_symtab)[name] = addr;
 	if(name == m_entry_string) {
 		m_entry.segment = EZ_ASM_SEGMENT_CONSTANT;
@@ -101,11 +101,11 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 }
 
 size_t ezASM::global(const string value) {
-	vector<size_t>* offset = m_globals[0];
+//	vector<ezValue*>* offset = m_globals[0];
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(value);
 	if(it == offset_symtab->end()) throw runtime_error("global symbol " + value + " is not found");
-	return (*offset)[it->second];
+	return it->second;
 }
 
 size_t ezASM::constant(const string value) {
@@ -134,7 +134,7 @@ size_t ezASM::offset(const string segment, const string value) {
 	if(sit == m_seg_symtab.end()) throw runtime_error("a segment of " + segment + " is not found");
 	size_t seg = sit->second;
 	if(! (m_globals.size() > seg)) throw runtime_error("invalid segment id for globals : " + seg);
-	vector<size_t>* offset = m_globals[seg];
+//	vector<ezValue*>* offset = m_globals[seg];
 	if(! (m_offset_symtab.size() > seg)) throw runtime_error("invalid segment id for offset table : " + seg);
 	map<string, size_t>* offset_symtab = m_offset_symtab[seg];
 	map<string, size_t>::iterator it = offset_symtab->find(value);

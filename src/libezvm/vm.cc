@@ -5,7 +5,7 @@
 using namespace std;
 
 ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
-	vector<size_t>* dummy = new vector<size_t>;
+	vector<ezValue*>* dummy = new vector<ezValue*>;
 	m_globals.push_back(dummy);
 }
 
@@ -14,8 +14,12 @@ ezVM::~ezVM() {
 	if(m_parchive) delete m_parchive;
 	for(vector<ezValue*>::iterator it = m_constants.begin() ; it != m_constants.end() ; it++)
 		if((*it)->dynamic) delete *it;
-	for(vector< vector<size_t>* >::iterator it = m_globals.begin() ; it != m_globals.end() ; it++)
+	for(vector< vector<ezValue*>* >::iterator it = m_globals.begin() ; it != m_globals.end() ; it++) {
+		vector<ezValue*>* vct = *it;
+		for(vector<ezValue*>::iterator subit = vct->begin() ; subit != vct->end() ; subit++)
+			if((*subit)->dynamic) delete *subit;
 		if(*it) delete *it;
+	}
 	for(vector<ezThread*>::iterator it = m_threads.begin() ; it != m_threads.end() ; it++)
 		if(*it) delete *it;
 }

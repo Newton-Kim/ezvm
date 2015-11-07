@@ -24,7 +24,7 @@ RUNFUNC s_run[] = {
 };
 
 
-ezThread::ezThread(ezAddress entry, vector< vector<size_t>* >& globals, vector<ezValue*>& constants):
+ezThread::ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector<ezValue*>& constants):
 		m_entry(entry),
 		m_constants(constants),
 		m_globals(globals)
@@ -84,7 +84,7 @@ ezValue* ezThread::addr2val(ezAddress addr){
 	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
 		throw runtime_error("parent segment has not been implemented");
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-		v = m_constants[m_globals[addr.segment]->operator[](addr.offset)];
+		v = m_globals[addr.segment]->operator[](addr.offset);
 	}
 	return v;
 }
