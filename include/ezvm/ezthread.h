@@ -22,7 +22,7 @@ class ezThread {
 		ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector<ezValue*>& constants);
 		~ezThread();
 		ezStepState step(void);
-		void mv(uint8_t arg1, uint8_t arg2, uint8_t arg3);
-		void ld(uint8_t arg1, uint8_t arg2, uint8_t arg3);
-		void call(uint8_t arg1, uint8_t arg2, uint8_t arg3);
+		void mv(uint8_t ndsts, uint8_t nsrcs);
+		void ld(void);
+		void call(uint8_t nargs, uint8_t nrets);
 };

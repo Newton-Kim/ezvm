@@ -6,15 +6,15 @@
 typedef void (*RUNFUNC)(ezThread&, uint8_t , uint8_t , uint8_t );
 
 void run_mv(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-	thd.mv(arg1, arg2, arg3);
+	thd.mv(arg1, arg2);
 }
 
 void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-	thd.ld(arg1, arg2, arg3);
+	thd.ld();
 }
 
 void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-	thd.call(arg1, arg2, arg3);
+	thd.call(arg1, arg2);
 }
 
 RUNFUNC s_run[] = {
@@ -59,19 +59,34 @@ ezStepState ezThread::step(void) {
 	ezInstDecoder decoder;
 	ezOpCode op;
 	uint8_t arg1, arg2, arg3;
-	decoder.opcode(sf->carousel->instruction[sf->pc], op, arg1, arg2, arg3);
+	decoder.opcode(sf->carousel->instruction[sf->pc++], op, arg1, arg2, arg3);
 	s_run[op](*this, arg1, arg2, arg3);
 	if(sf->pc >= sf->carousel->instruction.size()) return EZ_STEP_DONE;
 	return (m_stack.empty()) ? EZ_STEP_DONE : EZ_STEP_CONTINUE;
 }
 
-void ezThread::mv(uint8_t arg1, uint8_t arg2, uint8_t arg3){
+void ezThread::mv(uint8_t ndests, uint8_t nsrcs){
+	//TODO it can be done via a macro
+	if(m_stack.empty()) throw runtime_error("stack underrun");
+	ezStackFrame* sf = m_stack.top();
+	sf->pc += ndests;
+	sf->pc += nsrcs;
 }
 
-void ezThread::ld(uint8_t arg1, uint8_t arg2, uint8_t arg3){
+void ezThread::ld(void){
+	//TODO it can be done via a macro
+	if(m_stack.empty()) throw runtime_error("stack underrun");
+	ezStackFrame* sf = m_stack.top();
+	sf->pc += 3;
 }
 
-void ezThread::call(uint8_t arg1, uint8_t arg2, uint8_t arg3){
+void ezThread::call(uint8_t nargs, uint8_t nrets){
+	//TODO it can be done via a macro
+	if(m_stack.empty()) throw runtime_error("stack underrun");
+	ezStackFrame* sf = m_stack.top();
+	sf->pc ++;
+	sf->pc += nargs;
+	sf->pc += nrets;
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){
