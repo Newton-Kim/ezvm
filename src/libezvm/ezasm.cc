@@ -90,11 +90,13 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 	ezCarousel* carousel = new ezCarousel();
 	size_t addr = m_constants.size();
 	m_constants.push_back(carousel);
+	carousel->reference();
 	offset->push_back(carousel);
+	ezLog::logger().print("global[0][%lu] = %s", offset->size() - 1, name.c_str());
 	(*offset_symtab)[name] = addr;
 	if(name == m_entry_string) {
-		m_entry.segment = EZ_ASM_SEGMENT_CONSTANT;
-		m_entry.offset = addr;
+		m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
+		m_entry.offset = offset->size() - 1;
 	}
 	ezLog::logger().print("constant[%lu] = %s", addr, name.c_str());
 	return new ezAsmProcedure(carousel);

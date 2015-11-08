@@ -29,7 +29,7 @@ ezThread::ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector
 		m_constants(constants),
 		m_globals(globals)
 {
-	ezLog::logger().print("entry=%lu:%lu", entry.segment, entry.offset);
+	ezLog::logger().print("entry=%d:%lu", entry.segment, entry.offset);
 	ezValue* v = addr2val(entry);
 	ezLog::logger().print("entry v->type is %d", v->type);
 	switch (v->type) {
@@ -92,14 +92,17 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 ezValue* ezThread::addr2val(ezAddress addr){
 	ezValue* v = NULL;
 	if(addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
+		if(addr.offset >= m_constants.size()) throw runtime_error("memory access violation");
 		v = m_constants[addr.offset];
 	} else if(addr.segment == EZ_ASM_SEGMENT_LOCAL) {
 		ezStackFrame* sf = m_stack.top();
+		if(addr.offset >= sf->local.size()) throw runtime_error("memory access violation");
 		v = sf->local[addr.offset];
 	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
 		throw runtime_error("parent segment has not been implemented");
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-		v = m_globals[addr.segment]->operator[](addr.offset);
+		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("memory access violation");
+		v = (*m_globals[addr.segment])[addr.offset];
 	}
 	return v;
 }

@@ -22,8 +22,8 @@ class ezValue {
 		const bool dynamic;
 		ezValue(const ezValueType tp, const bool dyn);
 		virtual ~ezValue();
-		void reference(void);
-		void release(void);
+		size_t reference(void);
+		size_t release(void);
 };
 
 class ezInteger : public ezValue {
@@ -47,6 +47,7 @@ typedef	uint32_t ezInstruction;
 class ezCarousel : public ezValue {
 	public:
 		ezCarousel(const bool dynamic = true);
+		~ezCarousel();
 		vector<ezInstruction> instruction;
 };
 
