@@ -25,4 +25,5 @@ class ezInstEncoder {
 class ezInstDecoder {
 	public:
 		void opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1, uint8_t& arg2, uint8_t& arg3);
+		void argument(ezInstruction inst, ezAddress& addr);
 };

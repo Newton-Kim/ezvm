@@ -7,6 +7,8 @@
 using namespace std;
 
 enum ezValueType {
+	EZ_VALUE_TYPE_NULL,
+	EZ_VALUE_TYPE_BOOL,
 	EZ_VALUE_TYPE_INTEGER,
 	EZ_VALUE_TYPE_STRING,
 	EZ_VALUE_TYPE_CAROUSEL,
@@ -24,6 +26,20 @@ class ezValue {
 		virtual ~ezValue();
 		size_t reference(void);
 		size_t release(void);
+};
+
+class ezNull: public ezValue {
+	public:
+		ezNull();
+		static ezNull* instance(void);
+};
+
+class ezBool: public ezValue {
+	private:
+		const bool m_value;
+	public:
+		ezBool(bool val, const bool dynamic = true);
+		const bool value(void);
 };
 
 class ezInteger : public ezValue {

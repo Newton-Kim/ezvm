@@ -41,3 +41,9 @@ void ezInstDecoder::opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1, uint
 	arg2 = operation.arg2;
 	arg3 = operation.arg3;
 }
+
+void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr){
+	ezArgument arg = *((ezArgument*)&inst);
+	addr.segment = arg.segment;
+	addr.offset = arg.offset;
+}

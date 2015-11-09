@@ -69,8 +69,26 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs){
 	//TODO it can be done via a macro
 	if(m_stack.empty()) throw runtime_error("stack underrun");
 	ezStackFrame* sf = m_stack.top();
-	sf->pc += ndests;
-	sf->pc += nsrcs;
+	size_t cnt = (ndests > nsrcs) ? nsrcs : ndests;
+	ezInstDecoder decoder;
+	ezAddress src_addr;
+	ezAddress dest_addr;
+	ezValue* v = NULL;
+	size_t i = 0;
+	for(i = 0 ; i < cnt ; i++){
+		decoder.argument(sf->carousel->instruction[sf->pc + i], dest_addr);
+		decoder.argument(sf->carousel->instruction[sf->pc + i + ndests], src_addr);
+		v = addr2val(src_addr);
+		v->reference();
+		val2addr(dest_addr, v);
+	}
+	if(ndests > nsrcs) {
+		for(i = cnt ; i < ndests ; i++) {
+			decoder.argument(sf->carousel->instruction[sf->pc + cnt + i], dest_addr);
+			val2addr(dest_addr, ezNull::instance());
+		}
+	}
+	sf->pc += (ndests + nsrcs);
 }
 
 void ezThread::ld(void){
@@ -84,7 +102,11 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 	//TODO it can be done via a macro
 	if(m_stack.empty()) throw runtime_error("stack underrun");
 	ezStackFrame* sf = m_stack.top();
-	sf->pc ++;
+	ezInstDecoder decoder;
+	ezAddress addr;
+	sf->pc++;
+	decoder.argument(sf->carousel->instruction[sf->pc], addr);
+	ezValue* func = addr2val(addr);
 	sf->pc += nargs;
 	sf->pc += nrets;
 }
@@ -103,6 +125,22 @@ ezValue* ezThread::addr2val(ezAddress addr){
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
 		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("memory access violation");
 		v = (*m_globals[addr.segment])[addr.offset];
+	}
+	return v;
+}
+
+ezValue* ezThread::val2addr(ezAddress addr, ezValue* v){
+	if(addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
+		throw runtime_error("cannot write to constant");
+	} else if(addr.segment == EZ_ASM_SEGMENT_LOCAL) {
+		ezStackFrame* sf = m_stack.top();
+		if(addr.offset >= sf->local.size()) throw runtime_error("memory access violation");
+		sf->local[addr.offset] = v;
+	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
+		throw runtime_error("parent segment has not been implemented");
+	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
+		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("memory access violation");
+		(*m_globals[addr.segment])[addr.offset] = v; 
 	}
 	return v;
 }
