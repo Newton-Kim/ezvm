@@ -18,6 +18,7 @@ class ezThread {
 		stack<ezStackFrame*> m_stack;
 		ezValue* addr2val(ezAddress addr);
 		ezValue* val2addr(ezAddress addr, ezValue* v);
+		void val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals);
 
 	public:
 		ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector<ezValue*>& constants);

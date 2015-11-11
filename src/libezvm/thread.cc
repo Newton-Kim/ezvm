@@ -1,7 +1,7 @@
 #include "ezvm/ezlog.h"
 #include "ezvm/ezthread.h"
-#include <stdexcept>
 #include "ezinstruction.h"
+#include <stdexcept>
 
 typedef void (*RUNFUNC)(ezThread&, uint8_t , uint8_t , uint8_t );
 
@@ -14,6 +14,7 @@ void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	ezLog::logger().print("call (%d %d %d)", arg1, arg2, arg3);
 	thd.call(arg1, arg2);
 }
 
@@ -104,11 +105,45 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;
 	ezAddress addr;
-	sf->pc++;
-	decoder.argument(sf->carousel->instruction[sf->pc], addr);
+	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 	ezValue* func = addr2val(addr);
-	sf->pc += nargs;
-	sf->pc += nrets;
+	vector<ezValue*>* pargs = new vector<ezValue*>;
+	for(size_t i = 0 ; i < nargs ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		ezValue* v = addr2val(addr);
+		v->reference();
+		pargs->push_back(v);
+	}
+	vector<ezAddress>* pret_dest = new vector<ezAddress>;
+	for(size_t i = 0 ; i < nrets ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		pret_dest->push_back(addr);
+	}
+	vector<ezValue*>* prets = new vector<ezValue*>;
+	switch(func->type) {
+		case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
+			{
+				((ezNativeCarousel*)func)->run(*pargs, *prets);
+				for(vector<ezValue*>::iterator it = pargs->begin() ; it != pargs->end() ; it++) 
+					(*it)->release();
+				val2addr(*pret_dest, *prets);
+				delete prets;
+				delete pret_dest;
+			}
+			break;
+		case EZ_VALUE_TYPE_CAROUSEL:
+			{
+//				m_stack.push(new ezStackFrame((ezCarousel*)v));
+			}
+			break;
+		default:
+			delete pargs;
+			delete prets;
+			delete pret_dest;
+			throw runtime_error("function is not executable");
+			break;
+	}
+	delete pargs;
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){
@@ -127,6 +162,19 @@ ezValue* ezThread::addr2val(ezAddress addr){
 		v = (*m_globals[addr.segment])[addr.offset];
 	}
 	return v;
+}
+
+void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
+	size_t addr_sz = addr.size(), vals_sz = vals.size();
+	size_t gcv = (addr_sz > vals_sz) ? vals_sz : addr_sz;
+	for(size_t i = 0 ; i < gcv ; i++) {
+		ezValue* v = vals[i];
+		v->reference();
+		val2addr(addr[i], v);
+	}
+	if(addr_sz > vals_sz) {
+		for(size_t i = gcv ; i < addr_sz ; i++) val2addr(addr[i], ezNull::instance());
+	}
 }
 
 ezValue* ezThread::val2addr(ezAddress addr, ezValue* v){

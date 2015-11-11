@@ -67,11 +67,11 @@ mv : MV addrs ',' vars {s_proc_current->mv(s_args_addr, s_args_var);};
 
 ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
 
-call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_addr, s_args_var);};
+call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr);};
 
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}
-	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment);; $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
+	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment); $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
 
 addrs : | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
 

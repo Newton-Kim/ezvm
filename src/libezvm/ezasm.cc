@@ -12,6 +12,7 @@ ezAsmProcedure::ezAsmProcedure(ezCarousel* carousel): m_carousel(carousel) {}
 void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets){
 	ezInstEncoder instruction(m_carousel->instruction);
 	instruction.opcode(EZ_OP_CALL, args.size(), rets.size());
+	instruction.argument(func);
 	for(vector<ezAddress>::iterator it = args.begin() ; it != args.end() ; it++)
 		instruction.argument(*it);
 	for(vector<ezAddress>::iterator it = rets.begin() ; it != rets.end() ; it++)

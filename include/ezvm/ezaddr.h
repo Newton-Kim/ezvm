@@ -4,7 +4,7 @@
 #define EZ_ASM_SEGMENT_CONSTANT	(-1)
 #define EZ_ASM_SEGMENT_LOCAL	(-2)
 #define EZ_ASM_SEGMENT_PARENT	(-3)
-#define EZ_ASM_SEGMENT_GLOBAL	0
+#define EZ_ASM_SEGMENT_GLOBAL	(0)
 
 class ezAddress {
 	public:
