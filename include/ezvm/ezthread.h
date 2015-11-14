@@ -19,6 +19,8 @@ class ezThread {
 		ezValue* addr2val(ezAddress addr);
 		ezValue* val2addr(ezAddress addr, ezValue* v);
 		void val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals);
+		void call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets);
+		void call(ezCarousel* func, uint8_t nargs, uint8_t nrets);
 
 	public:
 		ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector<ezValue*>& constants);

@@ -107,43 +107,40 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 	ezAddress addr;
 	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 	ezValue* func = addr2val(addr);
-	vector<ezValue*>* pargs = new vector<ezValue*>;
-	for(size_t i = 0 ; i < nargs ; i++, sf->pc++) {
-		decoder.argument(sf->carousel->instruction[sf->pc], addr);
-		ezValue* v = addr2val(addr);
-		v->reference();
-		pargs->push_back(v);
-	}
-	vector<ezAddress>* pret_dest = new vector<ezAddress>;
-	for(size_t i = 0 ; i < nrets ; i++, sf->pc++) {
-		decoder.argument(sf->carousel->instruction[sf->pc], addr);
-		pret_dest->push_back(addr);
-	}
-	vector<ezValue*>* prets = new vector<ezValue*>;
 	switch(func->type) {
 		case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-			{
-				((ezNativeCarousel*)func)->run(*pargs, *prets);
-				for(vector<ezValue*>::iterator it = pargs->begin() ; it != pargs->end() ; it++) 
-					(*it)->release();
-				val2addr(*pret_dest, *prets);
-				delete prets;
-				delete pret_dest;
-			}
+			call((ezNativeCarousel*)func, nargs, nrets);
 			break;
 		case EZ_VALUE_TYPE_CAROUSEL:
-			{
-//				m_stack.push(new ezStackFrame((ezCarousel*)v));
-			}
+			call((ezCarousel*)func, nargs, nrets);
 			break;
 		default:
-			delete pargs;
-			delete prets;
-			delete pret_dest;
 			throw runtime_error("function is not executable");
 			break;
 	}
-	delete pargs;
+}
+
+void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
+	ezStackFrame* sf = m_stack.top();
+	ezInstDecoder decoder;
+	vector<ezValue*> args;
+	ezAddress addr;
+	for(size_t i = 0 ; i < nargs ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		ezValue* v = addr2val(addr);
+		args.push_back(v);
+	}
+	vector<ezAddress> ret_dest;
+	for(size_t i = 0 ; i < nrets ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		ret_dest.push_back(addr);
+	}
+	vector<ezValue*> rets;
+	((ezNativeCarousel*)func)->run(args, rets);
+	if(rets.size()) val2addr(ret_dest, rets);
+}
+
+void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){
