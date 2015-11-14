@@ -20,6 +20,8 @@ const int ezInteger::value(void) { return m_value; }
 ezString::ezString(const string val, const bool dynamic):ezValue(EZ_VALUE_TYPE_STRING, dynamic), m_value(val) {}
 const string ezString::value(void){ return m_value; }
 
-ezCarousel::ezCarousel(const bool dynamic): ezValue(EZ_VALUE_TYPE_CAROUSEL, dynamic) {}
+ezCarousel::ezCarousel(uint8_t args, uint8_t rets, const bool dynamic):
+	ezValue(EZ_VALUE_TYPE_CAROUSEL, dynamic),
+	nargs(args), nrets(rets){}
 ezCarousel::~ezCarousel(){}
 ezNativeCarousel::ezNativeCarousel(const bool dynamic): ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL, dynamic) {}

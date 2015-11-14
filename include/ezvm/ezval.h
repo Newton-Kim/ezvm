@@ -62,7 +62,9 @@ typedef	uint32_t ezInstruction;
 
 class ezCarousel : public ezValue {
 	public:
-		ezCarousel(const bool dynamic = true);
+		uint8_t nargs;
+		uint8_t nrets;
+		ezCarousel(uint8_t args, uint8_t rets, const bool dynamic = true);
 		~ezCarousel();
 		vector<ezInstruction> instruction;
 };
