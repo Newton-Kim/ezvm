@@ -15,6 +15,8 @@ enum ezStepState {
 struct ezStackFrame {
 	size_t pc;
 	vector<ezValue*> local;
+	vector<ezValue*> retruns;
+	vector<ezAddress> return_dest;
 	ezCarousel* carousel;
 	ezStackFrame(ezCarousel* crsl);
 };

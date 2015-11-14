@@ -136,11 +136,33 @@ void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
 		ret_dest.push_back(addr);
 	}
 	vector<ezValue*> rets;
-	((ezNativeCarousel*)func)->run(args, rets);
+	func->run(args, rets);
 	if(rets.size()) val2addr(ret_dest, rets);
 }
 
 void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
+	ezStackFrame* nsf = new ezStackFrame(func);
+	ezStackFrame* sf = m_stack.top();
+	ezInstDecoder decoder;
+	vector<ezValue*> args;
+	ezAddress addr;
+	size_t min_args = (func->nargs > nargs) ? nargs : func->nargs;
+	for(size_t i = 0 ; i < min_args ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		ezValue* v = addr2val(addr);
+		nsf->local.push_back(v);
+	}
+	if(func->nargs > nargs) {
+		for(size_t i = min_args ; i < func->nargs ; i++, sf->pc++) {
+			nsf->local.push_back(ezNull::instance());
+		}
+	}
+	vector<ezAddress> ret_dest;
+	for(size_t i = 0 ; i < nrets ; i++, sf->pc++) {
+		decoder.argument(sf->carousel->instruction[sf->pc], addr);
+		nsf->return_dest.push_back(addr);
+	}
+	m_stack.push(nsf);
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){
