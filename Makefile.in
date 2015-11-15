@@ -1,9 +1,13 @@
+CORE=$(shell cat /proc/cpuinfo | grep 'processor' | wc -l)
 all: ezvm ezas
 
 ezvm ezas: libezvm
 
-ezvm ezas libezvm:
+ezvm ezas:
 	$(MAKE) -C src/$@
+
+libezvm:
+	$(MAKE) -C src/$@ -j$(CORE)
 
 local install:
 	$(MAKE) -C src/ezvm $@
