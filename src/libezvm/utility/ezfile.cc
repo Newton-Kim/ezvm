@@ -23,11 +23,19 @@ ezFile::~ezFile() {
 	fclose(m_fd);
 }
 
-void ezFile::print(const char* fmt, ...){
+void ezFile::println(const char* fmt, ...){
 	if(!m_fd) return;
 	va_list ap;
 	va_start(ap, fmt);
 	vfprintf(m_fd, fmt, ap);
 	va_end(ap);
 	fprintf(m_fd, "\n");
+}
+
+void ezFile::print(const char* fmt, ...){
+	if(!m_fd) return;
+	va_list ap;
+	va_start(ap, fmt);
+	vfprintf(m_fd, fmt, ap);
+	va_end(ap);
 }

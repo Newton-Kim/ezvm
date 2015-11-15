@@ -12,4 +12,5 @@ class ezFile {
 		ezFile(const string path, const string mode);
 		~ezFile();
 		void print(const char* fmt, ...);
+		void println(const char* fmt, ...);
 };
