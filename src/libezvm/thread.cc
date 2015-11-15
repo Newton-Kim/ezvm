@@ -107,6 +107,7 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 	ezInstDecoder decoder;
 	ezAddress addr;
 	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+	ezLog::instance().debug("func=%d:%u", addr.segment, addr.offset);
 	ezValue* func = addr2val(addr);
 	switch(func->type) {
 		case EZ_VALUE_TYPE_NATIVE_CAROUSEL:

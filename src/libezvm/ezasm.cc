@@ -7,9 +7,10 @@
 
 using namespace std;
 
-ezAsmProcedure::ezAsmProcedure(ezCarousel* carousel): m_carousel(carousel) {}
+ezAsmProcedure::ezAsmProcedure(ezCarousel* carousel): m_carousel(carousel) { }
 
 void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets){
+	ezLog::instance().verbose("call %d:%u %d %d", func.segment, func.offset, args.size(), rets.size());
 	ezInstEncoder instruction(m_carousel->instruction);
 	instruction.opcode(EZ_OP_CALL, args.size(), rets.size());
 	instruction.argument(func);
@@ -66,6 +67,7 @@ void ezASM::import(const string entry) {
 		const char* symbol = symtab[i];
 		size_t offset = m_constants.size();
 		offsets->push_back(constant);
+		ezLog::instance().debug("global[%lu][%lu] = %s", m_globals.size(), offsets->size() - 1, symbol);
 		m_constants.push_back(constant);
 		(*offset_symtab)[symbol] = offset;
 		log.debug("constant[%lu] = %s", offset, symbol);
@@ -76,6 +78,7 @@ void ezASM::import(const string entry) {
 	}
 	m_seg_symtab[entry] = segment;
 	m_offset_symtab.push_back(offset_symtab);
+	log.debug("global[%lu] = %s", m_globals.size(), entry.c_str());
 	m_globals.push_back(offsets);
 }
 
@@ -84,6 +87,7 @@ void ezASM::entry(const string entry) {
 }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
+	ezLog::instance().verbose(".proc %s (%d) %d", name.c_str(), argc, retc);
 	vector<ezValue*>* offset = m_globals[0];
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(name);
