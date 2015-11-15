@@ -14,7 +14,7 @@ void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-	ezLog::logger().print("call (%d %d %d)", arg1, arg2, arg3);
+	ezLog::instance().verbose("call (%d %d %d)", arg1, arg2, arg3);
 	thd.call(arg1, arg2);
 }
 
@@ -30,9 +30,9 @@ ezThread::ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector
 		m_constants(constants),
 		m_globals(globals)
 {
-	ezLog::logger().print("entry=%d:%lu", entry.segment, entry.offset);
+	ezLog::instance().verbose("entry=%d:%lu", entry.segment, entry.offset);
 	ezValue* v = addr2val(entry);
-	ezLog::logger().print("entry v->type is %d", v->type);
+	ezLog::instance().debug("entry v->type is %d", v->type);
 	switch (v->type) {
 		case EZ_VALUE_TYPE_CAROUSEL:
 			m_stack.push(new ezStackFrame((ezCarousel*)v));

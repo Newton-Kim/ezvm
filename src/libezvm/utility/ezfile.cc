@@ -32,10 +32,20 @@ void ezFile::println(const char* fmt, ...){
 	fprintf(m_fd, "\n");
 }
 
-void ezFile::print(const char* fmt, ...){
+void ezFile::vprintln(const char* fmt, va_list ap) { 
+	vfprintf(m_fd, fmt, ap);
+	fprintf(m_fd, "\n");
+}
+
+void ezFile::print(const char* fmt, ...) {
 	if(!m_fd) return;
 	va_list ap;
 	va_start(ap, fmt);
 	vfprintf(m_fd, fmt, ap);
 	va_end(ap);
 }
+
+void ezFile::vprint(const char* fmt, va_list ap) { 
+	vfprintf(m_fd, fmt, ap);
+}
+

@@ -42,7 +42,7 @@ static vector<ezAddress> s_args_var;
 %start program
 
 %%
-program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::logger().print("pass!"); };
+program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::instance().debug("pass!"); };
 
 import : | IMPORT SYMBOL NEWLINE {
 		//TODO:load a script ($2+'.ezas')

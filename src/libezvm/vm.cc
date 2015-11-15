@@ -36,15 +36,15 @@ ezVM::~ezVM() {
 }
 
 void ezVM::run(void){
-	ezFile& log = ezLog::logger();
-	log.print("%s", __PRETTY_FUNCTION__);
+	ezLog& log = ezLog::instance();
+	log.verbose("%s", __PRETTY_FUNCTION__);
 	ezThread* thread = new ezThread(m_entry, m_globals, m_constants);
 	m_threads.push_back(thread);
-	log.print("m_threads is %lu", m_threads.size());
+	log.debug("m_threads is %lu", m_threads.size());
 	while(!m_threads.empty() && m_threads[0]) {
 		size_t idx = 0, sz = m_threads.size();
 		for (idx = 0 ; idx < sz ; idx++) {
-			log.print("m_thread[%lu](%p) gets turn", idx, m_threads[idx]);
+			log.debug("m_thread[%lu](%p) gets turn", idx, m_threads[idx]);
 			ezThread* thd = m_threads[idx];
 			if(thd == NULL) break;
 			switch(thd->step()) {
@@ -52,7 +52,7 @@ void ezVM::run(void){
 					delete thd;
 					m_threads[idx] = NULL;
 					for(size_t i = idx + 1 ; i < sz ; i++) {
-						log.print("m_threads[%lu] <- m_threads[%lu]", i - 1, i);
+						log.debug("m_threads[%lu] <- m_threads[%lu]", i - 1, i);
 						if(!m_threads[i]) break;
 						m_threads[i] = m_threads[i + 1];
 					}

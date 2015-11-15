@@ -3,6 +3,6 @@
 #include "ezinstruction.h"
 
 ezStackFrame::ezStackFrame(ezCarousel* crsl): pc(0), carousel(crsl) {
-	ezLog::logger().print("%s", __PRETTY_FUNCTION__);
+	ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
 }
 

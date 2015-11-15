@@ -49,7 +49,7 @@ ezASM::~ezASM() {
 }
 
 void ezASM::import(const string entry) {
-	ezFile& log = ezLog::logger();
+	ezLog& log = ezLog::instance();
 	char** symtab = NULL;
 	ezValue** constants = NULL;
 	//TODO:load a shared object ('lib'+entry+'.so')
@@ -68,10 +68,10 @@ void ezASM::import(const string entry) {
 		offsets->push_back(constant);
 		m_constants.push_back(constant);
 		(*offset_symtab)[symbol] = offset;
-		log.print("constant[%lu] = %s", offset, symbol);
+		log.debug("constant[%lu] = %s", offset, symbol);
 	}
 	if(!offsets->size()) {
-		log.print("no content is found in %s", entry.c_str());
+		log.debug("no content is found in %s", entry.c_str());
 		return;
 	}
 	m_seg_symtab[entry] = segment;
@@ -93,13 +93,13 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 	m_constants.push_back(carousel);
 	carousel->reference();
 	offset->push_back(carousel);
-	ezLog::logger().print("global[0][%lu] = %s", offset->size() - 1, name.c_str());
+	ezLog::instance().debug("global[0][%lu] = %s", offset->size() - 1, name.c_str());
 	(*offset_symtab)[name] = addr;
 	if(name == m_entry_string) {
 		m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
 		m_entry.offset = offset->size() - 1;
 	}
-	ezLog::logger().print("constant[%lu] = %s", addr, name.c_str());
+	ezLog::instance().debug("constant[%lu] = %s", addr, name.c_str());
 	return new ezAsmProcedure(carousel);
 }
 
@@ -132,7 +132,7 @@ size_t ezASM::constant(const int value) {
 }
 
 size_t ezASM::offset(const string segment, const string value) {
-	ezLog::logger().print("%s (%s, %s)", __PRETTY_FUNCTION__, segment.c_str(), value.c_str());
+	ezLog::instance().verbose("%s (%s, %s)", __PRETTY_FUNCTION__, segment.c_str(), value.c_str());
 	map<string, size_t>::iterator sit = m_seg_symtab.find(segment);
 	if(sit == m_seg_symtab.end()) throw runtime_error("a segment of " + segment + " is not found");
 	size_t seg = sit->second;
