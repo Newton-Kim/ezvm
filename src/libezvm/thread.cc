@@ -57,6 +57,7 @@ ezThread::~ezThread() {
 ezStepState ezThread::step(void) {
 	if(m_stack.empty()) return EZ_STEP_DONE;
 	ezStackFrame* sf = m_stack.top();
+	ezLog::instance().verbose("stack %p has turn", sf);
 	ezInstDecoder decoder;
 	ezOpCode op;
 	uint8_t arg1, arg2, arg3;
@@ -121,6 +122,7 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 }
 
 void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
+	ezLog::instance().verbose("%s (%p, %u, %u)", __PRETTY_FUNCTION__, func, nargs, nrets);
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;
 	vector<ezValue*> args;
@@ -141,6 +143,7 @@ void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
 }
 
 void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
+	ezLog::instance().verbose("%s (%p, %u, %u)", __PRETTY_FUNCTION__, func, nargs, nrets);
 	ezStackFrame* nsf = new ezStackFrame(func);
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;

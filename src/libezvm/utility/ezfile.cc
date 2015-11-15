@@ -33,6 +33,7 @@ void ezFile::println(const char* fmt, ...){
 }
 
 void ezFile::vprintln(const char* fmt, va_list ap) { 
+	if(!m_fd) return;
 	vfprintf(m_fd, fmt, ap);
 	fprintf(m_fd, "\n");
 }
@@ -46,6 +47,7 @@ void ezFile::print(const char* fmt, ...) {
 }
 
 void ezFile::vprint(const char* fmt, va_list ap) { 
+	if(!m_fd) return;
 	vfprintf(m_fd, fmt, ap);
 }
 

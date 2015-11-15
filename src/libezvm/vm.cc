@@ -44,7 +44,7 @@ void ezVM::run(void){
 	while(!m_threads.empty() && m_threads[0]) {
 		size_t idx = 0, sz = m_threads.size();
 		for (idx = 0 ; idx < sz ; idx++) {
-			log.debug("m_thread[%lu](%p) gets turn", idx, m_threads[idx]);
+			log.verbose("m_thread[%lu](%p) gets turn", idx, m_threads[idx]);
 			ezThread* thd = m_threads[idx];
 			if(thd == NULL) break;
 			switch(thd->step()) {
