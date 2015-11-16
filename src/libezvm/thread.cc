@@ -57,13 +57,18 @@ ezThread::~ezThread() {
 ezStepState ezThread::step(void) {
 	if(m_stack.empty()) return EZ_STEP_DONE;
 	ezStackFrame* sf = m_stack.top();
-	ezLog::instance().verbose("stack %p has turn", sf);
+	ezLog& log = ezLog::instance();
+	log.verbose("stack %p has turn", sf);
 	ezInstDecoder decoder;
 	ezOpCode op;
 	uint8_t arg1, arg2, arg3;
 	decoder.opcode(sf->carousel->instruction[sf->pc++], op, arg1, arg2, arg3);
 	s_run[op](*this, arg1, arg2, arg3);
-	if(sf->pc >= sf->carousel->instruction.size()) return EZ_STEP_DONE;
+	sf = m_stack.top();
+	if(sf->pc >= sf->carousel->instruction.size()) {
+		log.verbose("stack %p has poped out", sf);
+		m_stack.pop();
+	}
 	return (m_stack.empty()) ? EZ_STEP_DONE : EZ_STEP_CONTINUE;
 }
 
