@@ -98,7 +98,7 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
 	carousel->reference();
 	offset->push_back(carousel);
 	ezLog::instance().debug("global[0][%lu] = %s", offset->size() - 1, name.c_str());
-	(*offset_symtab)[name] = addr;
+	(*offset_symtab)[name] = offset->size() - 1;
 	if(name == m_entry_string) {
 		m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
 		m_entry.offset = offset->size() - 1;
@@ -112,6 +112,7 @@ size_t ezASM::global(const string value) {
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(value);
 	if(it == offset_symtab->end()) throw runtime_error("global symbol " + value + " is not found");
+	ezLog::instance().verbose("global[%s]->%d", value.c_str(), it->second);
 	return it->second;
 }
 
