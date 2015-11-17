@@ -55,21 +55,22 @@ ezThread::~ezThread() {
 }
 
 ezStepState ezThread::step(void) {
+	//It needs 3 steps to finalize a thread
 	if(m_stack.empty()) return EZ_STEP_DONE;
 	ezStackFrame* sf = m_stack.top();
 	ezLog& log = ezLog::instance();
+	if(sf->pc >= sf->carousel->instruction.size()) {
+		log.verbose("stack %p has poped out", sf);
+		m_stack.pop();
+		return EZ_STEP_CONTINUE;
+	}
 	log.verbose("stack %p has turn", sf);
 	ezInstDecoder decoder;
 	ezOpCode op;
 	uint8_t arg1, arg2, arg3;
 	decoder.opcode(sf->carousel->instruction[sf->pc++], op, arg1, arg2, arg3);
 	s_run[op](*this, arg1, arg2, arg3);
-	sf = m_stack.top();
-	if(sf->pc >= sf->carousel->instruction.size()) {
-		log.verbose("stack %p has poped out", sf);
-		m_stack.pop();
-	}
-	return (m_stack.empty()) ? EZ_STEP_DONE : EZ_STEP_CONTINUE;
+	return EZ_STEP_CONTINUE;
 }
 
 void ezThread::mv(uint8_t ndests, uint8_t nsrcs){
