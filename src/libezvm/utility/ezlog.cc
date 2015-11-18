@@ -2,26 +2,25 @@
 #include <stdexcept>
 
 static ezLog* s_plog = NULL;
-void ezLog::initialize(const string target) {
+void ezLog::initialize(const string logsink, const string dumpsink) {
 	if(s_plog) delete s_plog;
-	s_plog = new ezLog(target);
+	s_plog = new ezLog(logsink, dumpsink);
 }
 
 ezLog& ezLog::instance(void) {
-	if (!s_plog) s_plog = new ezLog();
+	if (!s_plog) s_plog = new ezLog("", "");
 	return *s_plog;
 }
 
-ezLog::ezLog() {}
-
-ezLog::ezLog(const string target): m_file(target, "wb") {}
+ezLog::ezLog(const string logsink, const string dumpsink): m_log(logsink, "wb"), m_dump(dumpsink, "wb") {}
 
 void ezLog::print(const char* level, const char* fmt, va_list ap){
-	m_file.print(level);
-	m_file.vprintln(fmt, ap);
+	m_log.print(level);
+	m_log.vprintln(fmt, ap);
 }
 
 void ezLog::debug(const char* fmt, ...){
+	if(m_log.isnil()) return;
 	va_list ap;
 	va_start(ap, fmt);
 	print("D:", fmt, ap);
@@ -29,6 +28,7 @@ void ezLog::debug(const char* fmt, ...){
 }
 
 void ezLog::info(const char* fmt, ...){
+	if(m_log.isnil()) return;
 	va_list ap;
 	va_start(ap, fmt);
 	print("I:", fmt, ap);
@@ -36,9 +36,18 @@ void ezLog::info(const char* fmt, ...){
 }
 
 void ezLog::verbose(const char* fmt, ...){
+	if(m_log.isnil()) return;
 	va_list ap;
 	va_start(ap, fmt);
 	print("V:", fmt, ap);
+	va_end(ap);
+}
+
+void ezLog::dump(const char* fmt, ...){
+	if(m_dump.isnil()) return;
+	va_list ap;
+	va_start(ap, fmt);
+	m_dump.vprintln(fmt, ap);
 	va_end(ap);
 }
 

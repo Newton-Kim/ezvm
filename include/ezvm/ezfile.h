@@ -16,4 +16,5 @@ class ezFile {
 		void vprint(const char* fmt, va_list ap);
 		void println(const char* fmt, ...);
 		void vprintln(const char* fmt, va_list ap);
+		bool isnil(void) {return (m_fd) ? false : true;}
 };
