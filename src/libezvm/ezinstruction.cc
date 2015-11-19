@@ -44,3 +44,13 @@ void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr){
 	addr.segment = arg.segment;
 	addr.offset = arg.offset;
 }
+
+const char* ezInstDecoder::opstr(ezOpCode op){
+	switch (op) {
+		case EZ_OP_MV: return "mv";
+		case EZ_OP_LD: return "ld";
+		case EZ_OP_CALL: return "call";
+	}
+	return "unknown";
+}
+

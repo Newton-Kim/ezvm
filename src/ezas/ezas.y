@@ -84,10 +84,12 @@ var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler()
 %%
 
 extern FILE * yyin;
-void ezparse(FILE* fd, const string target) {
+void ezparse(FILE* fd, const string target, const string dump) {
 	yyin = fd;
 	yyparse();
 	yyin = NULL;
+	if(!dump.empty()) 
+		s_vm.dump().dump(dump);
 	if(target.empty()) s_vm.run();
 	else s_vm.archive().save(target);
 }

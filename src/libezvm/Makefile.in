@@ -6,6 +6,7 @@ OBJS=vm.o \
 	stack.o \
 	ezasm.o \
 	ezarchive.o \
+	ezdump.o \
 	ezval.o \
 	ezinstruction.o \
 	intrinsic/ezintrinsic.o \

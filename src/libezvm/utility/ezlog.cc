@@ -2,17 +2,18 @@
 #include <stdexcept>
 
 static ezLog* s_plog = NULL;
-void ezLog::initialize(const string logsink, const string dumpsink) {
+void ezLog::initialize(const string logsink) {
 	if(s_plog) delete s_plog;
-	s_plog = new ezLog(logsink, dumpsink);
+	s_plog = new ezLog(logsink);
 }
 
 ezLog& ezLog::instance(void) {
-	if (!s_plog) s_plog = new ezLog("", "");
+	if (!s_plog) s_plog = new ezLog();
 	return *s_plog;
 }
 
-ezLog::ezLog(const string logsink, const string dumpsink): m_log(logsink, "wb"), m_dump(dumpsink, "wb") {}
+ezLog::ezLog() {}
+ezLog::ezLog(const string logsink): m_log(logsink, "wb") {}
 
 void ezLog::print(const char* level, const char* fmt, va_list ap){
 	m_log.print(level);
@@ -40,14 +41,6 @@ void ezLog::verbose(const char* fmt, ...){
 	va_list ap;
 	va_start(ap, fmt);
 	print("V:", fmt, ap);
-	va_end(ap);
-}
-
-void ezLog::dump(const char* fmt, ...){
-	if(m_dump.isnil()) return;
-	va_list ap;
-	va_start(ap, fmt);
-	m_dump.vprintln(fmt, ap);
 	va_end(ap);
 }
 

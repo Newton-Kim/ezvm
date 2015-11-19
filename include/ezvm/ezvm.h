@@ -1,6 +1,7 @@
 #pragma once
 #include "ezasm.h"
 #include "ezarchive.h"
+#include "ezdump.h"
 #include "ezval.h"
 #include "ezthread.h"
 #include <string>
@@ -14,6 +15,7 @@ class ezVM {
 		vector< vector<ezValue*>* > m_globals;
 		ezASM* m_pasm;
 		ezArchive* m_parchive;
+		ezDump* m_pdump;
 		vector<ezThread*> m_threads;
 	public:
 		ezVM();
@@ -21,4 +23,5 @@ class ezVM {
 		void run(void);
 		ezASM& assembler(void);
 		ezArchive& archive(void);
+		ezDump& dump(void);
 };

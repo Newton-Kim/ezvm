@@ -14,7 +14,6 @@ void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-	ezLog::instance().verbose("call (%d %d %d)", arg1, arg2, arg3);
 	thd.call(arg1, arg2);
 }
 
@@ -30,9 +29,7 @@ ezThread::ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector
 		m_constants(constants),
 		m_globals(globals)
 {
-	ezLog::instance().verbose("entry=%d:%lu", entry.segment, entry.offset);
 	ezValue* v = addr2val(entry);
-	ezLog::instance().debug("entry v->type is %d", v->type);
 	switch (v->type) {
 		case EZ_VALUE_TYPE_CAROUSEL:
 			m_stack.push(new ezStackFrame((ezCarousel*)v));
@@ -113,7 +110,6 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 	ezInstDecoder decoder;
 	ezAddress addr;
 	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-	ezLog::instance().debug("func=%d:%u", addr.segment, addr.offset);
 	ezValue* func = addr2val(addr);
 	switch(func->type) {
 		case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -129,7 +125,6 @@ void ezThread::call(uint8_t nargs, uint8_t nrets){
 }
 
 void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
-	ezLog::instance().verbose("%s (%p, %u, %u)", __PRETTY_FUNCTION__, func, nargs, nrets);
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;
 	vector<ezValue*> args;
@@ -150,7 +145,6 @@ void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets){
 }
 
 void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
-	ezLog::instance().verbose("%s (%p, %u, %u)", __PRETTY_FUNCTION__, func, nargs, nrets);
 	ezStackFrame* nsf = new ezStackFrame(func);
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;

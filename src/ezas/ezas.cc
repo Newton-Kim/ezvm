@@ -11,7 +11,7 @@
 using namespace std;
 #define VERSION "1.0.0"
 
-extern void ezparse(FILE* fd, const string target);
+extern void ezparse(FILE* fd, const string target, const string dump);
 
 void show_help(const char* name) {
 	cout << name << " version " << VERSION << endl;
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 	int c, option_index;
 	bool help_flag = false, version_flag = false, verbose_flag = false;
 	string source, target, logger;
-	string logsink, dumpsink;
+	string dumpsink;
 	struct option long_options[] = {
 		{"help", no_argument, 0, 'h'},
 		{"version", no_argument, 0, 'v'},
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 					cerr << "error: logging target is missing" << endl;
 					return 0;
 				}
-				logsink = optarg;
+				ezLog::initialize(optarg);
 				break;
 			case 'd':
 				if(!optarg) {
@@ -82,9 +82,6 @@ int main(int argc, char* argv[]) {
 				return 1;
 				break;
 		}
-	}
-	if(!logsink.empty() || !dumpsink.empty()) {
-		ezLog::initialize(logsink, dumpsink);
 	}
 	if(help_flag) show_help(argv[0]);
 	if(version_flag) cout << VERSION << endl;
@@ -100,7 +97,7 @@ int main(int argc, char* argv[]) {
 		cerr << "error: " << strerror(errno) << endl;
 		return 1;
 	}
-	ezparse(fd, target);
+	ezparse(fd, target, dumpsink);
 	fclose(fd);
 	return 0;
 }
