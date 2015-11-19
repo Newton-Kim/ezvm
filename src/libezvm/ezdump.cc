@@ -85,8 +85,13 @@ void ezDump::dump(const string path) {
 		sink.print("  segment %lu:\n", i);
 		vector<ezValue*>* global = m_globals[i];
 		for(size_t j = 0 ; j < global->size() ; j++) {
-			sink.print("    [%lu]", j);
+			sink.print("    [%lu]:", j);
 			dump(sink, (*global)[j]);
 		}
+	}
+	sink.print(".constant:\n");
+	for(size_t i = 0 ; i < m_constants.size() ; i++) {
+		sink.print("  [%lu]:", i);
+		dump(sink, m_constants[i]);
 	}
 }
