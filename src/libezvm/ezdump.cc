@@ -3,10 +3,11 @@
 
 using namespace std;
 
-ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals):
+ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals, ezASM* pasm):
 		m_entry(entry),
 		m_constants(constants),
-		m_globals(globals) {
+		m_globals(globals),
+		m_asm(pasm) {
 }
 
 void ezDump::dump(ezFile& sink, const ezValue* v) {
@@ -95,4 +96,5 @@ void ezDump::dump(const string path) {
 		sink.print("  [%lu]=", i);
 		dump(sink, m_constants[i]);
 	}
+	if(m_asm) m_asm->dump(sink);
 }

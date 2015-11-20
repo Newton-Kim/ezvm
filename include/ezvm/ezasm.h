@@ -2,6 +2,7 @@
 
 #include "ezaddr.h"
 #include "ezval.h"
+#include "ezfile.h"
 #include <cstddef>
 #include <vector>
 #include <string>
@@ -38,4 +39,5 @@ class ezASM {
 		size_t constant(const int value);
 		size_t offset(const string segment, const string value);
 		size_t segment(const string segment);
+		void dump(ezFile& sink);
 };

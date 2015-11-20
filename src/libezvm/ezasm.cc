@@ -150,3 +150,16 @@ size_t ezASM::segment(const string value) {
 	return it->second;
 }
 
+void ezASM::dump(ezFile& sink) {
+	sink.print(".symtab:\n");
+	sink.print("  segments:\n");
+	for(map<string, size_t>::iterator it = m_seg_symtab.begin() ; it != m_seg_symtab.end() ; it++)
+		sink.print("    %s->%lu\n", it->first.c_str(), it->second);
+	sink.print("  offsets\n");
+	for(size_t i = 0 ; i < m_offset_symtab.size() ; i++){
+		sink.print("    [%lu]:\n", i);
+		map<string, size_t>* offset = m_offset_symtab[i];
+		for(map<string, size_t>::iterator it = offset->begin() ; it != offset->end() ; it++)
+			sink.print("      %s->%lu\n", it->first.c_str(), it->second);
+	}
+}
