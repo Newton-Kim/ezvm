@@ -10,7 +10,6 @@ using namespace std;
 ezAsmProcedure::ezAsmProcedure(ezCarousel* carousel): m_carousel(carousel) { }
 
 void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets){
-	ezLog::instance().verbose("call %d:%u %d %d", func.segment, func.offset, args.size(), rets.size());
 	ezInstEncoder instruction(m_carousel->instruction);
 	instruction.opcode(EZ_OP_CALL, args.size(), rets.size());
 	instruction.argument(func);
@@ -87,7 +86,6 @@ void ezASM::entry(const string entry) {
 }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc, int mems) {
-	ezLog::instance().verbose(".proc %s (%d) %d", name.c_str(), argc, retc);
 	vector<ezValue*>* offset = m_globals[0];
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(name);
@@ -97,13 +95,11 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc, int mems)
 	m_constants.push_back(carousel);
 	carousel->reference();
 	offset->push_back(carousel);
-	ezLog::instance().debug("global[0][%lu] = %s", offset->size() - 1, name.c_str());
 	(*offset_symtab)[name] = offset->size() - 1;
 	if(name == m_entry_string) {
 		m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
 		m_entry.offset = offset->size() - 1;
 	}
-	ezLog::instance().debug("constant[%lu] = %s", addr, name.c_str());
 	return new ezAsmProcedure(carousel);
 }
 
@@ -112,7 +108,6 @@ size_t ezASM::global(const string value) {
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(value);
 	if(it == offset_symtab->end()) throw runtime_error("global symbol " + value + " is not found");
-	ezLog::instance().verbose("global[%s]->%d", value.c_str(), it->second);
 	return it->second;
 }
 
@@ -137,7 +132,6 @@ size_t ezASM::constant(const int value) {
 }
 
 size_t ezASM::offset(const string segment, const string value) {
-	ezLog::instance().verbose("%s (%s, %s)", __PRETTY_FUNCTION__, segment.c_str(), value.c_str());
 	map<string, size_t>::iterator sit = m_seg_symtab.find(segment);
 	if(sit == m_seg_symtab.end()) throw runtime_error("a segment of " + segment + " is not found");
 	size_t seg = sit->second;
