@@ -21,6 +21,7 @@ sp [ \t]
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
+".memories" return MEMORIES;
 "stdout" { yylval.i_value = 1; return INTEGER; }
 "stderr" { yylval.i_value = 2; return INTEGER; }
 {string} {yylval.s_value = strndup(yytext + 1, strlen(yytext) - 2); return STRING;}

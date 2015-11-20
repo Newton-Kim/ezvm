@@ -64,7 +64,8 @@ class ezCarousel : public ezValue {
 	public:
 		uint8_t nargs;
 		uint8_t nrets;
-		ezCarousel(uint8_t args, uint8_t rets, const bool dynamic = true);
+		size_t nmems;
+		ezCarousel(uint8_t args, uint8_t rets, size_t mems, const bool dynamic = true);
 		~ezCarousel();
 		vector<ezInstruction> instruction;
 };

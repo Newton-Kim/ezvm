@@ -1,7 +1,8 @@
 .import io
 .entry main
 .proc main (0) 0:
+	.memories 2
 	mv l:0 l:1 , 1 2
-	call io:print (stdout l:0 l:1)
+	call io:print (stdout l:0 "," l:1)
 	mv l:0 l:1 , l:1 l:0
-	call io:print (stdout l:0 l:1)
+	call io:print (stdout l:0 "," l:1)

@@ -86,13 +86,13 @@ void ezASM::entry(const string entry) {
 	m_entry_string = entry;
 }
 
-ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc) {
+ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc, int mems) {
 	ezLog::instance().verbose(".proc %s (%d) %d", name.c_str(), argc, retc);
 	vector<ezValue*>* offset = m_globals[0];
 	map<string, size_t>* offset_symtab = m_offset_symtab[0];
 	map<string, size_t>::iterator it = offset_symtab->find(name);
 	if(it != offset_symtab->end()) throw runtime_error("global symbol " + name + " already exists");
-	ezCarousel* carousel = new ezCarousel(argc, retc);
+	ezCarousel* carousel = new ezCarousel(argc, retc, mems);
 	size_t addr = m_constants.size();
 	m_constants.push_back(carousel);
 	carousel->reference();

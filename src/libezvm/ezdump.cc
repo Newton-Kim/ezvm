@@ -28,6 +28,7 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
 			{
 				ezCarousel* crsl = (ezCarousel*)v;
 				sink.print("(%d) %d\n", crsl->nargs, crsl->nrets);
+				sink.print("      .memsize: %lu\n", crsl->nmems);
 				ezInstDecoder decoder;
 				ezAddress addr;
 				ezOpCode op;
@@ -60,7 +61,7 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
 								case EZ_ASM_SEGMENT_GLOBAL:
 									sink.print(" g");
 									break;
-								defaul:
+								default:
 									sink.print(" %d", addr.segment);
 							}
 							sink.print(":%u", addr.offset);
@@ -85,13 +86,13 @@ void ezDump::dump(const string path) {
 		sink.print("  segment %lu:\n", i);
 		vector<ezValue*>* global = m_globals[i];
 		for(size_t j = 0 ; j < global->size() ; j++) {
-			sink.print("    [%lu]:", j);
+			sink.print("    [%lu]=", j);
 			dump(sink, (*global)[j]);
 		}
 	}
 	sink.print(".constant:\n");
 	for(size_t i = 0 ; i < m_constants.size() ; i++) {
-		sink.print("  [%lu]:", i);
+		sink.print("  [%lu]=", i);
 		dump(sink, m_constants[i]);
 	}
 }

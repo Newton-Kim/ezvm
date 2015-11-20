@@ -31,3 +31,4 @@ distclean:
 test:
 	bin/ezas share/ezvm/hello.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/hello2.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/swap.ezas -l stderr -d stderr

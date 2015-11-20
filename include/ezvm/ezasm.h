@@ -32,7 +32,7 @@ class ezASM {
 		~ezASM();
 		void import(const string name);
 		void entry(const string name);
-		ezAsmProcedure* new_proc(const string name, int argc, int retc);
+		ezAsmProcedure* new_proc(const string name, int argc, int retc, int mems);
 		size_t global(const string value);
 		size_t constant(const string value);
 		size_t constant(const int value);

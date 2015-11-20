@@ -32,7 +32,12 @@ ezThread::ezThread(ezAddress entry, vector< vector<ezValue*>* >& globals, vector
 	ezValue* v = addr2val(entry);
 	switch (v->type) {
 		case EZ_VALUE_TYPE_CAROUSEL:
-			m_stack.push(new ezStackFrame((ezCarousel*)v));
+			{
+				ezCarousel* crsl = (ezCarousel*)v;
+				ezStackFrame* sf = new ezStackFrame(crsl);
+				for(size_t i = 0 ; i < crsl->nmems ; i++) sf->local.push_back(ezNull::instance());
+				m_stack.push(sf);
+			}
 			break;
 		case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
 			((ezNativeCarousel*)v)->run(m_args, m_rets);
@@ -80,10 +85,17 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs){
 	ezAddress dest_addr;
 	ezValue* v = NULL;
 	size_t i = 0;
+	vector<ezValue*> q;
 	for(i = 0 ; i < cnt ; i++){
-		decoder.argument(sf->carousel->instruction[sf->pc + i], dest_addr);
 		decoder.argument(sf->carousel->instruction[sf->pc + i + ndests], src_addr);
 		v = addr2val(src_addr);
+		q.push_back(v);
+	}
+	for(i = 0 ; i < cnt ; i++){
+		decoder.argument(sf->carousel->instruction[sf->pc + i], dest_addr);
+		v = addr2val(dest_addr);
+		v->release();
+		v = q[i];
 		v->reference();
 		val2addr(dest_addr, v);
 	}
@@ -161,6 +173,7 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 			nsf->local.push_back(ezNull::instance());
 		}
 	}
+	for(size_t i = 0 ; i < func->nmems ; i++) nsf->local.push_back(ezNull::instance());
 	vector<ezAddress> ret_dest;
 	for(size_t i = 0 ; i < nrets ; i++, sf->pc++) {
 		decoder.argument(sf->carousel->instruction[sf->pc], addr);
@@ -172,17 +185,20 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 ezValue* ezThread::addr2val(ezAddress addr){
 	ezValue* v = NULL;
 	if(addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
-		if(addr.offset >= m_constants.size()) throw runtime_error("memory access violation");
+		if(addr.offset >= m_constants.size()) throw runtime_error("constant memory access violation");
 		v = m_constants[addr.offset];
 	} else if(addr.segment == EZ_ASM_SEGMENT_LOCAL) {
 		ezStackFrame* sf = m_stack.top();
-		if(addr.offset >= sf->local.size()) throw runtime_error("memory access violation");
+		if(addr.offset >= sf->local.size()) throw runtime_error("local memory access violation");
 		v = sf->local[addr.offset];
 	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
 		throw runtime_error("parent segment has not been implemented");
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("memory access violation");
+		if(addr.segment >= m_globals.size()) throw runtime_error("invalid segment");
+		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("global memory access violation");
 		v = (*m_globals[addr.segment])[addr.offset];
+	} else {
+		throw runtime_error("out of segment boundary");
 	}
 	return v;
 }
@@ -205,13 +221,17 @@ ezValue* ezThread::val2addr(ezAddress addr, ezValue* v){
 		throw runtime_error("cannot write to constant");
 	} else if(addr.segment == EZ_ASM_SEGMENT_LOCAL) {
 		ezStackFrame* sf = m_stack.top();
-		if(addr.offset >= sf->local.size()) throw runtime_error("memory access violation");
+		if(addr.offset >= sf->local.size()) throw runtime_error("local memory access violation");
 		sf->local[addr.offset] = v;
 	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
 		throw runtime_error("parent segment has not been implemented");
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("memory access violation");
+		if(addr.segment >= m_globals.size()) throw runtime_error("invalid segment");
+		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("global memory access violation");
 		(*m_globals[addr.segment])[addr.offset] = v; 
+	} else {
+		throw runtime_error("out of segment boundary");
 	}
+
 	return v;
 }

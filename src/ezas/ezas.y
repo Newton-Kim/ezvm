@@ -17,10 +17,10 @@ static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 %}
 
-%token PROC ENTRY IMPORT CALL LD MV SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS
+%token PROC ENTRY IMPORT CALL LD MV SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE
-%type <i_value> INTEGER
+%type <i_value> INTEGER proc_meta
 %type <a_value> ADDRESS fname var
 %type <sa_value> SYMBOLIC_ADDRESS
 
@@ -54,8 +54,10 @@ entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 procs : proc
 	| proc procs;
 
-proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6);}
-		NEWLINE codes {s_proc_current = NULL;};
+proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $9);}
+		codes {s_proc_current = NULL;};
+
+proc_meta : {$$ = 0;} | MEMORIES INTEGER NEWLINE {$$ = $2;};
 
 codes : line NEWLINE | codes line NEWLINE;
 
