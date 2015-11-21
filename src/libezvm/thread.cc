@@ -62,9 +62,17 @@ ezStepState ezThread::step(void) {
 	ezStackFrame* sf = m_stack.top();
 	ezLog& log = ezLog::instance();
 	if(sf->pc >= sf->carousel->instruction.size()) {
-		delete sf;
 		log.verbose("stack %p has poped out", sf);
 		m_stack.pop();
+		size_t rets = sf->returns.size();
+		size_t dests = sf->return_dest.size();
+		size_t cnt = (rets > dests) ? dests : rets;
+		for(size_t i = 0 ; i < cnt ; i++) val2addr(sf->return_dest[i], sf->returns[i]);
+		if(dests > rets) {
+			for(size_t i = cnt ; i < dests ; i++)
+				val2addr(sf->return_dest[i], ezNull::instance());
+		}
+		delete sf;
 		return EZ_STEP_CONTINUE;
 	}
 	log.verbose("stack %p has turn", sf);
