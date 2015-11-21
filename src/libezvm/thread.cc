@@ -62,6 +62,7 @@ ezStepState ezThread::step(void) {
 	ezStackFrame* sf = m_stack.top();
 	ezLog& log = ezLog::instance();
 	if(sf->pc >= sf->carousel->instruction.size()) {
+		delete sf;
 		log.verbose("stack %p has poped out", sf);
 		m_stack.pop();
 		return EZ_STEP_CONTINUE;
@@ -94,9 +95,7 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs){
 	for(i = 0 ; i < cnt ; i++){
 		decoder.argument(sf->carousel->instruction[sf->pc + i], dest_addr);
 		v = addr2val(dest_addr);
-		v->release();
 		v = q[i];
-		v->reference();
 		val2addr(dest_addr, v);
 	}
 	if(ndests > nsrcs) {
@@ -166,6 +165,7 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 	for(size_t i = 0 ; i < min_args ; i++, sf->pc++) {
 		decoder.argument(sf->carousel->instruction[sf->pc], addr);
 		ezValue* v = addr2val(addr);
+		v->reference();
 		nsf->local.push_back(v);
 	}
 	if(func->nargs > nargs) {
@@ -208,7 +208,6 @@ void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
 	size_t gcv = (addr_sz > vals_sz) ? vals_sz : addr_sz;
 	for(size_t i = 0 ; i < gcv ; i++) {
 		ezValue* v = vals[i];
-		v->reference();
 		val2addr(addr[i], v);
 	}
 	if(addr_sz > vals_sz) {
@@ -222,12 +221,16 @@ ezValue* ezThread::val2addr(ezAddress addr, ezValue* v){
 	} else if(addr.segment == EZ_ASM_SEGMENT_LOCAL) {
 		ezStackFrame* sf = m_stack.top();
 		if(addr.offset >= sf->local.size()) throw runtime_error("local memory access violation");
+		v->reference();
+		sf->local[addr.offset]->release();
 		sf->local[addr.offset] = v;
 	} else if(addr.segment == EZ_ASM_SEGMENT_PARENT) {
 		throw runtime_error("parent segment has not been implemented");
 	} else if(addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
 		if(addr.segment >= m_globals.size()) throw runtime_error("invalid segment");
 		if(addr.offset >= m_globals[addr.segment]->size()) throw runtime_error("global memory access violation");
+		v->reference();
+		(*m_globals[addr.segment])[addr.offset]->release(); 
 		(*m_globals[addr.segment])[addr.offset] = v; 
 	} else {
 		throw runtime_error("out of segment boundary");

@@ -19,5 +19,6 @@ struct ezStackFrame {
 	vector<ezAddress> return_dest;
 	ezCarousel* carousel;
 	ezStackFrame(ezCarousel* crsl);
+	~ezStackFrame();
 };
 

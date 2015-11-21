@@ -7,7 +7,7 @@
 using namespace std;
 
 enum ezValueType {
-	EZ_VALUE_TYPE_NULL,
+	EZ_VALUE_TYPE_NULL = 0,
 	EZ_VALUE_TYPE_BOOL,
 	EZ_VALUE_TYPE_INTEGER,
 	EZ_VALUE_TYPE_STRING,

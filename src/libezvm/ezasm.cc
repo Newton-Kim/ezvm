@@ -92,6 +92,7 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc, int mems)
 	if(it != offset_symtab->end()) throw runtime_error("global symbol " + name + " already exists");
 	ezCarousel* carousel = new ezCarousel(argc, retc, mems);
 	size_t addr = m_constants.size();
+	carousel->reference();
 	m_constants.push_back(carousel);
 	carousel->reference();
 	offset->push_back(carousel);
@@ -117,7 +118,9 @@ size_t ezASM::constant(const string value) {
 		if(v->type == EZ_VALUE_TYPE_STRING && ((ezString*)v)->value() == value) return i;
 	}
 	size_t idx = m_constants.size();
-	m_constants.push_back(new ezString(value));
+	ezValue* v = new ezString(value);
+	v->reference();
+	m_constants.push_back(v);
 	return idx;
 }
 
@@ -127,7 +130,9 @@ size_t ezASM::constant(const int value) {
 		if(v->type == EZ_VALUE_TYPE_INTEGER && ((ezInteger*)v)->value() == value) return i;
 	}
 	size_t idx = m_constants.size();
-	m_constants.push_back(new ezInteger(value));
+	ezValue* v = new ezInteger(value);
+	v->reference();
+	m_constants.push_back(v);
 	return idx;
 }
 

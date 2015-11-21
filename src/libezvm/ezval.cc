@@ -1,9 +1,9 @@
 #include "ezvm/ezval.h"
 
-ezValue::ezValue(const ezValueType tp, const bool dyn): type(tp), dynamic(dyn) {}
+ezValue::ezValue(const ezValueType tp, const bool dyn): m_reference(0), type(tp), dynamic(dyn) {}
 ezValue::~ezValue(){}
 size_t ezValue::reference(void) { m_reference++; return m_reference; }
-size_t ezValue::release(void) { m_reference--; return m_reference; }
+size_t ezValue::release(void) { if(m_reference > 0) m_reference--; return m_reference; }
 
 ezNull::ezNull():ezValue(EZ_VALUE_TYPE_NULL, false) {}
 ezNull* ezNull::instance() {
