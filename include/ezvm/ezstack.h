@@ -13,6 +13,8 @@ enum ezStepState {
 };
 
 struct ezStackFrame {
+	bool eq;
+	bool lt;
 	size_t pc;
 	vector<ezValue*> local;
 	vector<ezValue*> returns;

@@ -36,6 +36,14 @@ void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj, const ezAddre
 	instruction.argument(offset);
 }
 
+void ezAsmProcedure::add(const ezAddress dest, vector<ezAddress>& src){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_ADD, 1, src.size());
+	instruction.argument(dest);
+	for(vector<ezAddress>::iterator it = src.begin() ; it != src.end() ; it++)
+		instruction.argument(*it);
+}
+
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals):
 		m_entry(entry),
 		m_constants(constants),

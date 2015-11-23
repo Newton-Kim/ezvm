@@ -18,6 +18,7 @@ class ezAsmProcedure {
 		void call(const ezAddress& func, vector<ezAddress>& args, vector<ezAddress>& rets);
 		void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
 		void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+		void add(const ezAddress dest, vector<ezAddress>& src);
 };
 
 class ezASM {

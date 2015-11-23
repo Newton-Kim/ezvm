@@ -29,4 +29,5 @@ class ezThread {
 		void mv(uint8_t ndsts, uint8_t nsrcs);
 		void ld(void);
 		void call(uint8_t nargs, uint8_t nrets);
+		void add(uint8_t ndests, uint8_t nsrcs);
 };

@@ -17,10 +17,15 @@ void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.call(arg1, arg2);
 }
 
+void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	thd.add(arg1, arg2);
+}
+
 RUNFUNC s_run[] = {
 	run_mv,
 	run_ld,
-	run_call
+	run_call,
+	run_add
 };
 
 
@@ -188,6 +193,18 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 		nsf->return_dest.push_back(addr);
 	}
 	m_stack.push(nsf);
+}
+
+void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
+	ezInstDecoder decoder;
+	ezAddress dest, addr;
+	decoder.argument(sf->carousel->instruction[sf->pc++], dest);
+	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+	ezValue* v = addr2val(addr);
+	ezValue* rst = v->duplicate();
+	for(size_t i = 1 ; < nsrcs ; i++) {
+	}
+	val2addr(dest, rst);
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){

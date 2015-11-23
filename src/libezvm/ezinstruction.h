@@ -10,7 +10,8 @@ using namespace std;
 enum ezOpCode {
 	EZ_OP_MV = 0,
 	EZ_OP_LD,
-	EZ_OP_CALL
+	EZ_OP_CALL,
+	EZ_OP_ADD
 };
 
 class ezInstEncoder {
