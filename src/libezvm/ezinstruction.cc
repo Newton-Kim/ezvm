@@ -50,7 +50,7 @@ const char* ezInstDecoder::opstr(ezOpCode op){
 		case EZ_OP_MV: return "mv";
 		case EZ_OP_LD: return "ld";
 		case EZ_OP_CALL: return "call";
-		case EZ_OP_ADD: return "call";
+		case EZ_OP_ADD: return "add";
 	}
 	return "unknown";
 }

@@ -196,13 +196,14 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 }
 
 void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
+	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;
 	ezAddress dest, addr;
 	decoder.argument(sf->carousel->instruction[sf->pc++], dest);
 	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 	ezValue* v = addr2val(addr);
 	ezValue* rst = v->duplicate();
-	for(size_t i = 1 ; < nsrcs ; i++) {
+	for(size_t i = 1 ; i < nsrcs ; i++) {
 	}
 	val2addr(dest, rst);
 }

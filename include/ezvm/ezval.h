@@ -26,6 +26,8 @@ class ezValue {
 		virtual ~ezValue();
 		size_t reference(void);
 		size_t release(void);
+		virtual ezValue* duplicate(void);
+		virtual void add(ezValue* v);
 };
 
 class ezNull: public ezValue {
@@ -36,7 +38,7 @@ class ezNull: public ezValue {
 
 class ezBool: public ezValue {
 	private:
-		const bool m_value;
+		bool m_value;
 	public:
 		ezBool(bool val, const bool dynamic = true);
 		const bool value(void);
@@ -44,18 +46,22 @@ class ezBool: public ezValue {
 
 class ezInteger : public ezValue {
 	private:
-		const int m_value;
+		int m_value;
 	public:
 		ezInteger(int val, const bool dynamic = true);
 		const int value(void);
+		ezValue* duplicate(void);
+		void add(ezValue* v);
 };
 
 class ezString : public ezValue {
 	private:
-		const string m_value;
+		string m_value;
 	public:
 		ezString(const string val, const bool dynamic = true);
 		const string value(void);
+		ezValue* duplicate(void);
+		void add(ezValue* v);
 };
 
 typedef	uint32_t ezInstruction;

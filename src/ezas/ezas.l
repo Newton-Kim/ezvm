@@ -18,6 +18,7 @@ sp [ \t]
 "call" return CALL;
 "ld" return LD;
 "mv" return MV;
+"add" return ADD;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
