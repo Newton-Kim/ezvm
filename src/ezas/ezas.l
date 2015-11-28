@@ -7,7 +7,7 @@
 
 comment #.*
 integer [0-9]+
-string \".*\"
+string \"[^"]*\"
 symbol [a-zA-Z_][a-zA-Z_0-9]*
 newline [\n\r]
 address [cglp]:[0-9]+
