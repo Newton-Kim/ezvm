@@ -2,6 +2,7 @@
 #include "ezvm/ezval.h"
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 class ezIoPrint : public ezNativeCarousel {
 	public:

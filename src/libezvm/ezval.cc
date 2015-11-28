@@ -30,7 +30,7 @@ ezString::ezString(const string val, const bool dynamic):ezValue(EZ_VALUE_TYPE_S
 const string ezString::value(void){ return m_value; }
 ezValue* ezString::duplicate(void) { return new ezString(m_value);}
 void ezString::add(ezValue* v) {
-	if(v->type == EZ_VALUE_TYPE_INTEGER) m_value += ((ezString*)v)->value();
+	if(v->type == EZ_VALUE_TYPE_STRING) m_value += ((ezString*)v)->value();
 	else throw runtime_error("unable to cast to string");
 }
 

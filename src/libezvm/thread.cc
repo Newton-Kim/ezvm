@@ -204,6 +204,9 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
 	ezValue* v = addr2val(addr);
 	ezValue* rst = v->duplicate();
 	for(size_t i = 1 ; i < nsrcs ; i++) {
+		decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+		v = addr2val(addr);
+		rst->add(v);
 	}
 	val2addr(dest, rst);
 }

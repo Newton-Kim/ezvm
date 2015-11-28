@@ -3,7 +3,7 @@
 .proc main (0) 0:
 	.memories 8
 	mv l:0 l:1, 1 2
-	add l:2, l:1 l:2
+	add l:2, l:0 l:1
 	call io:print (stdout l:2 "=" l:0 "+" l:1)
 	add l:3, 1 2 3 4
 	call io:print (stdout l:3 "=1+2+3+4")
@@ -11,4 +11,4 @@
 	add l:6, l:4 l:5
 	call io:print (stdout l:6 "=" l:4 "+" l:5)
 	add l:7, "I " "am " "Sam"
-	call io:print (stdout l:6)
+	call io:print (stdout l:7)
