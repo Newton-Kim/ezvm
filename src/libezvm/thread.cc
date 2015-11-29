@@ -21,11 +21,21 @@ void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.add(arg1, arg2);
 }
 
+void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	thd.beq(arg1);
+}
+
+void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	thd.bra(arg1);
+}
+
 RUNFUNC s_run[] = {
 	run_mv,
 	run_ld,
 	run_call,
-	run_add
+	run_add,
+	run_beq,
+	run_bra
 };
 
 
@@ -221,6 +231,22 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
 	val2addr(dest, rst);
 	if(ndests == 2) 
 		val2addr(cond, rst->condition());
+}
+
+void ezThread::beq(uint8_t index) {
+	ezStackFrame* sf = m_stack.top();
+	ezInstDecoder decoder;
+	ezAddress addr;
+	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+	ezValue* cond = addr2val(addr);
+	if(cond->type != EZ_VALUE_TYPE_CONDITION) throw runtime_error("beq doesn't see condition");
+	if(((ezCondition*)cond)->zero == false) bra(index);
+}
+
+void ezThread::bra(uint8_t index) {
+	ezStackFrame* sf = m_stack.top();
+	if(sf->carousel->jmptbl.size() <= index) throw runtime_error("tried to jump to an invalid label");
+	sf->pc = sf->carousel->jmptbl[index];
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){

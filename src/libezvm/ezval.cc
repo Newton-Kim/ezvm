@@ -8,7 +8,7 @@ size_t ezValue::release(void) { if(m_reference > 0) m_reference--; return m_refe
 ezValue* ezValue::duplicate(void) { throw runtime_error("unable to duplicate");}
 void ezValue::add(ezValue* v) { throw runtime_error("unable to add");}
 ezValue* ezValue::condition(void) {throw runtime_error("not subject to a condition");}
-ezCondition::ezCondition(const bool zero, const bool negative, const bool overflow, const bool carry, const bool dynamic) : ezValue(EZ_VALUE_TYPE_CONDITION, dynamic), m_zero(zero), m_negative(negative), m_overflow(overflow), m_carry(carry) {}
+ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry, const bool dynamic) : ezValue(EZ_VALUE_TYPE_CONDITION, dynamic), zero(zr), negative(neg), overflow(ovf), carry(cry) {}
 
 ezNull::ezNull():ezValue(EZ_VALUE_TYPE_NULL, false) {}
 ezNull* ezNull::instance() {

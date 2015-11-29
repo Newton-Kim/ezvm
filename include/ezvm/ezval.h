@@ -33,13 +33,12 @@ class ezValue {
 };
 
 class ezCondition: public ezValue {
-	private:
-		bool m_zero;
-		bool m_negative;
-		bool m_overflow;
-		bool m_carry;
 	public:
-		ezCondition(const bool zero, const bool negative, const bool overflow, const bool carry, const bool dynamic = true);
+		const bool zero;
+		const bool negative;
+		const bool overflow;
+		const bool carry;
+		ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry, const bool dynamic = true);
 };
 
 class ezNull: public ezValue {
@@ -89,6 +88,7 @@ class ezCarousel : public ezValue {
 		ezCarousel(uint8_t args, uint8_t rets, size_t mems, const bool dynamic = true);
 		~ezCarousel();
 		vector<ezInstruction> instruction;
+		vector<ezInstruction> jmptbl;
 };
 
 class ezNativeCarousel : public ezValue {

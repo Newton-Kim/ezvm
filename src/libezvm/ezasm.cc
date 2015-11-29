@@ -54,9 +54,18 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond, vector<ezAd
 }
 
 void ezAsmProcedure::beq(const ezAddress cond, string label) {
+	ezInstEncoder instruction(m_carousel->instruction);
+	uint8_t index = 0;
+	//TODO:find an index from the label
+	instruction.opcode(EZ_OP_BEQ, index);
+	instruction.argument(cond);
 }
 
 void ezAsmProcedure::bra(string label) {
+	ezInstEncoder instruction(m_carousel->instruction);
+	uint8_t index = 0;
+	//TODO:find an index from the label
+	instruction.opcode(EZ_OP_BRA, index);
 }
 
 void ezAsmProcedure::label(string name) {
