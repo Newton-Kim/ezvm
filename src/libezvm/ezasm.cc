@@ -53,6 +53,15 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond, vector<ezAd
 		instruction.argument(*it);
 }
 
+void ezAsmProcedure::beq(const ezAddress cond, string label) {
+}
+
+void ezAsmProcedure::bra(string label) {
+}
+
+void ezAsmProcedure::label(string name) {
+}
+
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals):
 		m_entry(entry),
 		m_constants(constants),
@@ -185,3 +194,4 @@ void ezASM::dump(ezFile& sink) {
 			sink.print("      %s->%lu\n", it->first.c_str(), it->second);
 	}
 }
+

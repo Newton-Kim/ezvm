@@ -19,6 +19,8 @@ sp [ \t]
 "ld" return LD;
 "mv" return MV;
 "add" return ADD;
+"bra" return BRA;
+"beq" return BEQ;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;

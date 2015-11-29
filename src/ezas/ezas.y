@@ -17,9 +17,9 @@ static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 %}
 
-%token PROC ENTRY IMPORT CALL LD MV ADD SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES
+%token PROC ENTRY IMPORT CALL LD MV ADD BRA BEQ SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
 
-%type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE
+%type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
 %type <a_value> ADDRESS fname var
 %type <sa_value> SYMBOLIC_ADDRESS
@@ -64,16 +64,25 @@ codes : line NEWLINE | codes line NEWLINE;
 line : | call
 	| mv
 	| ld
-	| add;
+	| add
+	| beq
+	| bra
+	| label;
 
 mv : MV addrs ',' vars {s_proc_current->mv(s_args_addr, s_args_var); s_args_addr.clear(); s_args_var.clear();};
 
 ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
 
+call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+
 add : ADD var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| ADD var var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
-	
-call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+
+beq : BEQ var SYMBOL {s_proc_current->beq(ezAddress($2.segment, $2.offset), $3);}
+
+bra : BRA SYMBOL {s_proc_current->bra($2);}
+
+label : ':' SYMBOL {s_proc_current->label($2);}
 
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}

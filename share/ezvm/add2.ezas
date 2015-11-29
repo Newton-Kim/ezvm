@@ -5,6 +5,12 @@
 	mv l:0 l:1, 1 2
 	add l:2 l:3, l:0 l:1
 	call io:print (stdout l:2 "=" l:0 "+" l:1)
+	beq l:3 int_zero
+	call io:print (stdout l:2 "is non-zero value")
+	bra int_end
+	:int_zero
+	call io:print (stdout l:2 "is zero value")
+	:int_end
 	add l:4 l:5, 1 2 3 4
 	call io:print (stdout l:4 "=1+2+3+4")
 	mv l:6 l:7, "hello" "world"
@@ -12,3 +18,10 @@
 	call io:print (stdout l:8 "=" l:4 "+" l:5)
 	add l:10 l:11, "I " "am " "Sam"
 	call io:print (stdout l:10)
+	beq l:11 str_zero
+	call io:print (stdout l:10 "is non-zero string")
+	bra str_end
+	:str_zero
+	call io:print (stdout l:2 "is null string")
+	:str_end
+
