@@ -1,0 +1,14 @@
+.import io
+.entry main
+.proc main (0) 0:
+	.memories 12
+	mv l:0 l:1, 1 2
+	add l:2 l:3, l:0 l:1
+	call io:print (stdout l:2 "=" l:0 "+" l:1)
+	add l:4 l:5, 1 2 3 4
+	call io:print (stdout l:4 "=1+2+3+4")
+	mv l:6 l:7, "hello" "world"
+	add l:8 l:9, l:6 l:7
+	call io:print (stdout l:8 "=" l:4 "+" l:5)
+	add l:10 l:11, "I " "am " "Sam"
+	call io:print (stdout l:10)

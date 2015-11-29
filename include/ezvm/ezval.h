@@ -8,6 +8,7 @@ using namespace std;
 
 enum ezValueType {
 	EZ_VALUE_TYPE_NULL = 0,
+	EZ_VALUE_TYPE_CONDITION,
 	EZ_VALUE_TYPE_BOOL,
 	EZ_VALUE_TYPE_INTEGER,
 	EZ_VALUE_TYPE_STRING,
@@ -28,6 +29,17 @@ class ezValue {
 		size_t release(void);
 		virtual ezValue* duplicate(void);
 		virtual void add(ezValue* v);
+		virtual ezValue* condition(void);
+};
+
+class ezCondition: public ezValue {
+	private:
+		bool m_zero;
+		bool m_negative;
+		bool m_overflow;
+		bool m_carry;
+	public:
+		ezCondition(const bool zero, const bool negative, const bool overflow, const bool carry, const bool dynamic = true);
 };
 
 class ezNull: public ezValue {
@@ -42,6 +54,7 @@ class ezBool: public ezValue {
 	public:
 		ezBool(bool val, const bool dynamic = true);
 		const bool value(void);
+		ezValue* condition(void);
 };
 
 class ezInteger : public ezValue {
@@ -52,6 +65,7 @@ class ezInteger : public ezValue {
 		const int value(void);
 		ezValue* duplicate(void);
 		void add(ezValue* v);
+		ezValue* condition(void);
 };
 
 class ezString : public ezValue {
@@ -62,6 +76,7 @@ class ezString : public ezValue {
 		const string value(void);
 		ezValue* duplicate(void);
 		void add(ezValue* v);
+		ezValue* condition(void);
 };
 
 typedef	uint32_t ezInstruction;

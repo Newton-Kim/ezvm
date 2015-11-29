@@ -198,17 +198,29 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets){
 void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
 	ezStackFrame* sf = m_stack.top();
 	ezInstDecoder decoder;
-	ezAddress dest, addr;
+	ezAddress dest, addr, cond;
 	decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-	ezValue* v = addr2val(addr);
-	ezValue* rst = v->duplicate();
+	ezValue* v = NULL, *rst = NULL;
+	switch(ndests) {
+		case 2:
+			decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+		case 1:
+			decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+			v = addr2val(addr);
+			rst = v->duplicate();
+		break;
+		default:
+			throw runtime_error("the destination of ADD must be 1 or 2");
+			break;
+	}
 	for(size_t i = 1 ; i < nsrcs ; i++) {
 		decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 		v = addr2val(addr);
 		rst->add(v);
 	}
 	val2addr(dest, rst);
+	if(ndests == 2) 
+		val2addr(cond, rst->condition());
 }
 
 ezValue* ezThread::addr2val(ezAddress addr){

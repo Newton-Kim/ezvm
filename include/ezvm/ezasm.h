@@ -19,6 +19,7 @@ class ezAsmProcedure {
 		void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
 		void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
 		void add(const ezAddress dest, vector<ezAddress>& src);
+		void add(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 };
 
 class ezASM {

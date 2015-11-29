@@ -7,6 +7,8 @@ size_t ezValue::reference(void) { m_reference++; return m_reference; }
 size_t ezValue::release(void) { if(m_reference > 0) m_reference--; return m_reference; }
 ezValue* ezValue::duplicate(void) { throw runtime_error("unable to duplicate");}
 void ezValue::add(ezValue* v) { throw runtime_error("unable to add");}
+ezValue* ezValue::condition(void) {throw runtime_error("not subject to a condition");}
+ezCondition::ezCondition(const bool zero, const bool negative, const bool overflow, const bool carry, const bool dynamic) : ezValue(EZ_VALUE_TYPE_CONDITION, dynamic), m_zero(zero), m_negative(negative), m_overflow(overflow), m_carry(carry) {}
 
 ezNull::ezNull():ezValue(EZ_VALUE_TYPE_NULL, false) {}
 ezNull* ezNull::instance() {
@@ -16,6 +18,7 @@ ezNull* ezNull::instance() {
 
 ezBool::ezBool(bool val, const bool dynamic):ezValue(EZ_VALUE_TYPE_BOOL, dynamic), m_value(val) {}
 const bool ezBool::value(void) { return m_value; }
+ezValue* ezBool::condition(void) {return new ezCondition(!m_value, false, false, false);}
 
 ezInteger::ezInteger(int val, const bool dynamic):ezValue(EZ_VALUE_TYPE_INTEGER, dynamic), m_value(val) {}
 const int ezInteger::value(void) { return m_value; }
@@ -24,6 +27,7 @@ void ezInteger::add(ezValue* v) {
 	if(v->type == EZ_VALUE_TYPE_INTEGER) m_value += ((ezInteger*)v)->value();
 	else throw runtime_error("unable to cast to integer");
 }
+ezValue* ezInteger::condition(void) {return new ezCondition((m_value) ? false : true, (m_value < 0) ? true : false, false, false);}
 
 
 ezString::ezString(const string val, const bool dynamic):ezValue(EZ_VALUE_TYPE_STRING, dynamic), m_value(val) {}
@@ -33,6 +37,7 @@ void ezString::add(ezValue* v) {
 	if(v->type == EZ_VALUE_TYPE_STRING) m_value += ((ezString*)v)->value();
 	else throw runtime_error("unable to cast to string");
 }
+ezValue* ezString::condition(void) {return new ezCondition((m_value.empty()) ? false : true, false, false, false);}
 
 ezCarousel::ezCarousel(uint8_t args, uint8_t rets, size_t mems, const bool dynamic):
 	ezValue(EZ_VALUE_TYPE_CAROUSEL, dynamic),
