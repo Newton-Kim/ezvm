@@ -240,7 +240,7 @@ void ezThread::beq(uint8_t index) {
 	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 	ezValue* cond = addr2val(addr);
 	if(cond->type != EZ_VALUE_TYPE_CONDITION) throw runtime_error("beq doesn't see condition");
-	if(((ezCondition*)cond)->zero == false) bra(index);
+	if(((ezCondition*)cond)->zero) bra(index);
 }
 
 void ezThread::bra(uint8_t index) {

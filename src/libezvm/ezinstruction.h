@@ -11,7 +11,9 @@ enum ezOpCode {
 	EZ_OP_MV = 0,
 	EZ_OP_LD,
 	EZ_OP_CALL,
-	EZ_OP_ADD
+	EZ_OP_ADD,
+	EZ_OP_BEQ,
+	EZ_OP_BRA
 };
 
 class ezInstEncoder {

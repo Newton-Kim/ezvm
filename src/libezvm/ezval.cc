@@ -37,7 +37,7 @@ void ezString::add(ezValue* v) {
 	if(v->type == EZ_VALUE_TYPE_STRING) m_value += ((ezString*)v)->value();
 	else throw runtime_error("unable to cast to string");
 }
-ezValue* ezString::condition(void) {return new ezCondition((m_value.empty()) ? false : true, false, false, false);}
+ezValue* ezString::condition(void) {return new ezCondition((m_value.empty()) ? true : false, false, false, false);}
 
 ezCarousel::ezCarousel(uint8_t args, uint8_t rets, size_t mems, const bool dynamic):
 	ezValue(EZ_VALUE_TYPE_CAROUSEL, dynamic),

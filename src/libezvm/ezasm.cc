@@ -53,22 +53,30 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond, vector<ezAd
 		instruction.argument(*it);
 }
 
+size_t ezAsmProcedure::label2index(string label) {
+	if(m_carousel->symtab.find(label) == m_carousel->symtab.end()) {
+		m_carousel->symtab[label] = m_carousel->jmptbl.size();
+		m_carousel->jmptbl.push_back(0);
+	}
+	return m_carousel->symtab[label];
+}
+
 void ezAsmProcedure::beq(const ezAddress cond, string label) {
 	ezInstEncoder instruction(m_carousel->instruction);
-	uint8_t index = 0;
-	//TODO:find an index from the label
+	size_t index = label2index(label);
 	instruction.opcode(EZ_OP_BEQ, index);
 	instruction.argument(cond);
 }
 
 void ezAsmProcedure::bra(string label) {
 	ezInstEncoder instruction(m_carousel->instruction);
-	uint8_t index = 0;
-	//TODO:find an index from the label
+	size_t index = label2index(label);
 	instruction.opcode(EZ_OP_BRA, index);
 }
 
 void ezAsmProcedure::label(string name) {
+	size_t index = label2index(name);
+	m_carousel->jmptbl[index] = m_carousel->instruction.size();
 }
 
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants, vector< vector<ezValue*>* >& globals):

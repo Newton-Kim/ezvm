@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include <map>
 #include <cstdint>
 
 using namespace std;
@@ -89,6 +90,7 @@ class ezCarousel : public ezValue {
 		~ezCarousel();
 		vector<ezInstruction> instruction;
 		vector<ezInstruction> jmptbl;
+		map<string, size_t> symtab;
 };
 
 class ezNativeCarousel : public ezValue {

@@ -12,6 +12,7 @@ using namespace std;
 
 class ezAsmProcedure {
 	private:
+		size_t label2index(string label);
 		ezCarousel* m_carousel;
 	public:
 		ezAsmProcedure(ezCarousel* carousel);
