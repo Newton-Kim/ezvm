@@ -30,6 +30,12 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
 				ezCarousel* crsl = (ezCarousel*)v;
 				sink.print("(%d) %d\n", crsl->nargs, crsl->nrets);
 				sink.print("      .memsize: %lu\n", crsl->nmems);
+				sink.print("      .jump table:\n");
+				for(size_t i = 0 ; i < crsl->jmptbl.size() ; i++)
+					sink.print("        [%lu]:%lu\n", i, crsl->jmptbl[i]);
+				sink.print("      .jump symbol table:\n");
+				for(map<string, size_t>::iterator it = crsl->symtab.begin() ; it != crsl->symtab.end() ; it++)
+					sink.print("        %s->%lu\n", it->first.c_str(), it->second);
 				ezInstDecoder decoder;
 				ezAddress addr;
 				ezOpCode op;
