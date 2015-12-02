@@ -53,6 +53,23 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond, vector<ezAd
 		instruction.argument(*it);
 }
 
+void ezAsmProcedure::sub(const ezAddress dest, vector<ezAddress>& src){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_SUB, 1, src.size());
+	instruction.argument(dest);
+	for(vector<ezAddress>::iterator it = src.begin() ; it != src.end() ; it++)
+		instruction.argument(*it);
+}
+
+void ezAsmProcedure::sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src){
+	ezInstEncoder instruction(m_carousel->instruction);
+	instruction.opcode(EZ_OP_SUB, 2, src.size());
+	instruction.argument(dest);
+	instruction.argument(cond);
+	for(vector<ezAddress>::iterator it = src.begin() ; it != src.end() ; it++)
+		instruction.argument(*it);
+}
+
 size_t ezAsmProcedure::label2index(string label) {
 	if(m_carousel->symtab.find(label) == m_carousel->symtab.end()) {
 		m_carousel->symtab[label] = m_carousel->jmptbl.size();

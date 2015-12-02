@@ -7,6 +7,7 @@ size_t ezValue::reference(void) { m_reference++; return m_reference; }
 size_t ezValue::release(void) { if(m_reference > 0) m_reference--; return m_reference; }
 ezValue* ezValue::duplicate(void) { throw runtime_error("unable to duplicate");}
 void ezValue::add(ezValue* v) { throw runtime_error("unable to add");}
+void ezValue::sub(ezValue* v) { throw runtime_error("unable to substract");}
 ezValue* ezValue::condition(void) {throw runtime_error("not subject to a condition");}
 ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry, const bool dynamic) : ezValue(EZ_VALUE_TYPE_CONDITION, dynamic), zero(zr), negative(neg), overflow(ovf), carry(cry) {}
 
@@ -25,6 +26,10 @@ const int ezInteger::value(void) { return m_value; }
 ezValue* ezInteger::duplicate(void) { return new ezInteger(m_value);}
 void ezInteger::add(ezValue* v) {
 	if(v->type == EZ_VALUE_TYPE_INTEGER) m_value += ((ezInteger*)v)->value();
+	else throw runtime_error("unable to cast to integer");
+}
+void ezInteger::sub(ezValue* v) {
+	if(v->type == EZ_VALUE_TYPE_INTEGER) m_value -= ((ezInteger*)v)->value();
 	else throw runtime_error("unable to cast to integer");
 }
 ezValue* ezInteger::condition(void) {return new ezCondition((m_value) ? false : true, (m_value < 0) ? true : false, false, false);}

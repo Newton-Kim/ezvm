@@ -30,6 +30,7 @@ class ezValue {
 		size_t release(void);
 		virtual ezValue* duplicate(void);
 		virtual void add(ezValue* v);
+		virtual void sub(ezValue* v);
 		virtual ezValue* condition(void);
 };
 
@@ -65,6 +66,7 @@ class ezInteger : public ezValue {
 		const int value(void);
 		ezValue* duplicate(void);
 		void add(ezValue* v);
+		void sub(ezValue* v);
 		ezValue* condition(void);
 };
 

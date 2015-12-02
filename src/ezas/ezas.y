@@ -17,7 +17,7 @@ static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 %}
 
-%token PROC ENTRY IMPORT CALL LD MV ADD BRA BEQ SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
+%token PROC ENTRY IMPORT CALL LD MV ADD SUB BRA BEQ SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
@@ -65,6 +65,7 @@ line : | call
 	| mv
 	| ld
 	| add
+	| sub 
 	| beq
 	| bra
 	| label;
@@ -77,6 +78,9 @@ call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment,
 
 add : ADD var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| ADD var var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+
+sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+	| SUB var var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 beq : BEQ var SYMBOL {s_proc_current->beq(ezAddress($2.segment, $2.offset), $3);}
 

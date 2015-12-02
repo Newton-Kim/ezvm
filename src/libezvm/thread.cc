@@ -21,6 +21,10 @@ void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.add(arg1, arg2);
 }
 
+void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	thd.sub(arg1, arg2);
+}
+
 void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.beq(arg1);
 }
@@ -34,6 +38,7 @@ RUNFUNC s_run[] = {
 	run_ld,
 	run_call,
 	run_add,
+	run_sub,
 	run_beq,
 	run_bra
 };
@@ -227,6 +232,34 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
 		decoder.argument(sf->carousel->instruction[sf->pc++], addr);
 		v = addr2val(addr);
 		rst->add(v);
+	}
+	val2addr(dest, rst);
+	if(ndests == 2) 
+		val2addr(cond, rst->condition());
+}
+
+void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
+	ezStackFrame* sf = m_stack.top();
+	ezInstDecoder decoder;
+	ezAddress dest, addr, cond;
+	decoder.argument(sf->carousel->instruction[sf->pc++], dest);
+	ezValue* v = NULL, *rst = NULL;
+	switch(ndests) {
+		case 2:
+			decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+		case 1:
+			decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+			v = addr2val(addr);
+			rst = v->duplicate();
+		break;
+		default:
+			throw runtime_error("the destination of ADD must be 1 or 2");
+			break;
+	}
+	for(size_t i = 1 ; i < nsrcs ; i++) {
+		decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+		v = addr2val(addr);
+		rst->sub(v);
 	}
 	val2addr(dest, rst);
 	if(ndests == 2) 

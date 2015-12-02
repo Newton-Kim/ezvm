@@ -19,6 +19,7 @@ sp [ \t]
 "ld" return LD;
 "mv" return MV;
 "add" return ADD;
+"sub" return SUB;
 "bra" return BRA;
 "beq" return BEQ;
 ".import" return IMPORT;
