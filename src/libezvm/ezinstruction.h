@@ -14,6 +14,7 @@ enum ezOpCode {
 	EZ_OP_ADD,
 	EZ_OP_SUB,
 	EZ_OP_BEQ,
+	EZ_OP_BLT,
 	EZ_OP_BRA
 };
 

@@ -22,6 +22,7 @@ sp [ \t]
 "sub" return SUB;
 "bra" return BRA;
 "beq" return BEQ;
+"blt" return BLT;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;

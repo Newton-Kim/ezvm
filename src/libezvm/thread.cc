@@ -29,6 +29,10 @@ void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.beq(arg1);
 }
 
+void run_blt(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+	thd.blt(arg1);
+}
+
 void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 	thd.bra(arg1);
 }
@@ -40,6 +44,7 @@ RUNFUNC s_run[] = {
 	run_add,
 	run_sub,
 	run_beq,
+	run_blt,
 	run_bra
 };
 
@@ -274,6 +279,16 @@ void ezThread::beq(uint8_t index) {
 	ezValue* cond = addr2val(addr);
 	if(cond->type != EZ_VALUE_TYPE_CONDITION) throw runtime_error("beq doesn't see condition");
 	if(((ezCondition*)cond)->zero) bra(index);
+}
+
+void ezThread::blt(uint8_t index) {
+	ezStackFrame* sf = m_stack.top();
+	ezInstDecoder decoder;
+	ezAddress addr;
+	decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+	ezValue* cond = addr2val(addr);
+	if(cond->type != EZ_VALUE_TYPE_CONDITION) throw runtime_error("blt doesn't see condition");
+	if(((ezCondition*)cond)->negative) bra(index);
 }
 
 void ezThread::bra(uint8_t index) {

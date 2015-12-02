@@ -17,7 +17,7 @@ static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 %}
 
-%token PROC ENTRY IMPORT CALL LD MV ADD SUB BRA BEQ SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
+%token PROC ENTRY IMPORT CALL LD MV ADD SUB BRA BEQ BLT SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
@@ -67,6 +67,7 @@ line : | call
 	| add
 	| sub 
 	| beq
+	| blt
 	| bra
 	| label;
 
@@ -83,6 +84,8 @@ sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_
 	| SUB var var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 beq : BEQ var SYMBOL {s_proc_current->beq(ezAddress($2.segment, $2.offset), $3);}
+
+blt : BLT var SYMBOL {s_proc_current->blt(ezAddress($2.segment, $2.offset), $3);}
 
 bra : BRA SYMBOL {s_proc_current->bra($2);}
 

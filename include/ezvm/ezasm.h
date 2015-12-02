@@ -24,6 +24,7 @@ class ezAsmProcedure {
 		void sub(const ezAddress dest, vector<ezAddress>& src);
 		void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 		void beq(const ezAddress cond, string label);
+		void blt(const ezAddress cond, string label);
 		void bra(string label);
 		void label(string name);
 };

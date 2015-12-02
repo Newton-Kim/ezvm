@@ -85,6 +85,13 @@ void ezAsmProcedure::beq(const ezAddress cond, string label) {
 	instruction.argument(cond);
 }
 
+void ezAsmProcedure::blt(const ezAddress cond, string label) {
+	ezInstEncoder instruction(m_carousel->instruction);
+	size_t index = label2index(label);
+	instruction.opcode(EZ_OP_BLT, index);
+	instruction.argument(cond);
+}
+
 void ezAsmProcedure::bra(string label) {
 	ezInstEncoder instruction(m_carousel->instruction);
 	size_t index = label2index(label);
