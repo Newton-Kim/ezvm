@@ -1,0 +1,20 @@
+all:
+
+local: ../../share ../../share/ezvm
+
+../../share:
+	mkdir -p $@
+
+../../share/ezvm: ../../share
+	cp -R ezvm $<
+
+install: $(INST_DIR)/share/ezvm
+
+$(INST_DIR)/share/ezvm:
+	install -d $@
+	install ezvm/* $@
+
+clean:
+
+distclean:
+	rm -f Makefile

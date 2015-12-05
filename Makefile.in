@@ -13,18 +13,21 @@ local install:
 	$(MAKE) -C src/ezvm $@
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
+	$(MAKE) -C src/share $@
 
 clean:
 	$(MAKE) -C src/ezvm $@
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
+	$(MAKE) -C src/share $@
 	rm -rf bin lib
 
 distclean:
 	$(MAKE) -C src/ezvm $@
 	$(MAKE) -C src/libezvm $@
 	$(MAKE) -C src/ezas $@
-	rm -rf bin lib
+	$(MAKE) -C src/share $@
+	rm -rf bin lib share
 	find . -name *~ -exec rm {} \;
 	rm -f Makefile 
 
