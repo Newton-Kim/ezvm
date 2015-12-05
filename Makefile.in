@@ -1,9 +1,9 @@
 CORE=$(shell cat /proc/cpuinfo | grep 'processor' | wc -l)
-all: ezvm ezas
+all: ezvm ezas share
 
 ezvm ezas: libezvm
 
-ezvm ezas:
+ezvm ezas share:
 	$(MAKE) -C src/$@
 
 libezvm:

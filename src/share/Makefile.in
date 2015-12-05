@@ -1,12 +1,13 @@
-all:
+all: ../../share/doc/ezvm
+	cd ../.. && doxygen
 
-local: ../../share ../../share/ezvm
-
-../../share:
-	mkdir -p $@
+local: ../../share/ezvm
 
 ../../share/ezvm: ../../share
 	cp -R ezvm $<
+
+../../share ../../share/doc/ezvm:
+	mkdir -p $@
 
 install: $(INST_DIR)/share/ezvm
 
