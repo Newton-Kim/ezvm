@@ -30,8 +30,23 @@
 #include <vector>
 #define YYDEBUG 1
 
-/** \page ezAssembler
+/** \page ezas
+ * \section Brief
  * ezAssembler is an assembler language which is dedicated to ezVM.
+ * \section Document
+ * \subsection .import
+ * \subsection .entry
+ * \subsection .proc
+ * \subsection .memories
+ * \section Address
+ * \section Instructions
+ * \subsection add
+ * \subsection beq
+ * \subsection blt
+ * \subsection bra
+ * \subsection call
+ * \subsection mv
+ * \subsection sub
  */
 
 int yylex();

@@ -26,17 +26,54 @@
 #include <cstddef>
 #include <cstdint>
 
+/**
+* @brief Constant segment: A value is set on compiling and cannot be altered.
+*/
 #define EZ_ASM_SEGMENT_CONSTANT ((int8_t) - 1)
+/**
+* @brief Local segment: A value which is accessible within a procedure only.
+*/
 #define EZ_ASM_SEGMENT_LOCAL ((int8_t) - 2)
+/**
+* @brief Parent segment: A value which on the scope of a caller.
+*/
 #define EZ_ASM_SEGMENT_PARENT ((int8_t) - 3)
+/**
+* @brief Global segment: A value can be altered and is accessible from all
+* scope.
+*/
 #define EZ_ASM_SEGMENT_GLOBAL ((int8_t) 0)
 
+/**
+* @brief ezAddress is a class that describes an address of ezVM.
+*/
 class ezAddress {
  public:
+  /**
+  * @brief A default constructor: It points the first slot of the constant
+  * segment.
+  */
   ezAddress() : segment(EZ_ASM_SEGMENT_CONSTANT), offset(0) {}
+  /**
+  * @brief A copy constructor.
+  *
+  * @param addr is an adress descriptor.
+  */
   ezAddress(const ezAddress& addr)
       : segment(addr.segment), offset(addr.offset) {}
+  /**
+  * @brief A constructor
+  *
+  * @param seg is a segment index.
+  * @param off is an offset in the segment.
+  */
   ezAddress(int8_t seg, size_t off) : segment(seg), offset(off) {}
+  /**
+  * @brief A segment.
+  */
   int8_t segment;
+  /**
+  * @brief An offset of the segment.
+  */
   size_t offset;
 };

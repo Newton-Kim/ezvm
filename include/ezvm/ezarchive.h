@@ -27,8 +27,23 @@
 
 using namespace std;
 
+/**
+* @brief ezArchive serializes the state of ezVM to a binary form and deserialize
+* vice versa.
+*/
 class ezArchive {
  public:
+  /**
+  * @brief serializes the state of ezVM instance to a binary file presented by a
+  * path.
+  *
+  * @param path is a path of the file which the state is serialized to.
+  */
   void save(const string path);
+  /**
+  * @brief deserializes the binary file to the state of ezVM instance.
+  *
+  * @param path is a path of the file which the binary file is deserialized.
+  */
   void load(const string path);
 };
