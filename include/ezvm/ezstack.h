@@ -32,17 +32,16 @@
 using namespace std;
 
 enum ezStepState {
-	EZ_STEP_CONTINUE,
-	EZ_STEP_DONE
+  EZ_STEP_CONTINUE,
+  EZ_STEP_DONE
 };
 
 struct ezStackFrame {
-	size_t pc;
-	vector<ezValue*> local;
-	vector<ezValue*> returns;
-	vector<ezAddress> return_dest;
-	ezCarousel* carousel;
-	ezStackFrame(ezCarousel* crsl);
-	~ezStackFrame();
+  size_t pc;
+  vector<ezValue*> local;
+  vector<ezValue*> returns;
+  vector<ezAddress> return_dest;
+  ezCarousel* carousel;
+  ezStackFrame(ezCarousel* crsl);
+  ~ezStackFrame();
 };
-

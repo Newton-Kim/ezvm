@@ -29,6 +29,6 @@
 using namespace std;
 
 class ezIntrinsic {
-	public:
-		static void load(const string name, char*** symtab, ezValue*** constants);
+ public:
+  static void load(const string name, char*** symtab, ezValue*** constants);
 };
