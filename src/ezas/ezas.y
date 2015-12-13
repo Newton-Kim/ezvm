@@ -40,13 +40,85 @@
  * \subsection .memories
  * \section Address
  * \section Instructions
+ * The instructions are inspired by triVM instruction set. See 'TriVM intermediate language reference manual' by Neil Jonson.
  * \subsection add
+ * Syntax\n
+ * add rD [rC]?, [rS]+\n
+ * Operation\n
+ * rD = sum(rS)\n
+ * rC = condition(sum(rS))\n
+ * Description\n
+ * The add instruction adds together the contents of rSs, placing the result in rD. Optionally, the condition codes of the esult can be placed in rC.\n
+ * Notes\n
+ * This instructions applied to both signed and unsigned values.\n
+ * Example\n
+ * add l:2, l:0 l:1\n
+ * add l:3, 1 2 3 4
  * \subsection beq
+ * Syntax\n
+ * beq rS , label\n
+ * Operation\n
+ * if rS == EQU AL then goto label\n
+ * Description\n
+ * The beq instruction branches to the given label if the condition in rS is equal.\n
+ * Notes\n
+ * This instruction is applicable to both integer and floading-point comparisons.\n
+ * Example\n
+ * beq l:3 int_zero
  * \subsection blt
+ * Syntax\n
+ * blt rS, label\n
+ * Operation\n
+ * if rS == LESS-THAN then goto label\n
+ * Description\n
+ * The blt instruction branches to the given label if the condition in rS is less-than.\n
+ * Notes\n
+ * The unsigned equivalent is bbl. This instruction is also appplicable to floating point operations.
+ * Example\n
+ * blt l:3 int_neg
  * \subsection bra
+ * Syntax\n
+ * bra label\n
+ * Operation\n
+ * goto label\n
+ * Description\n
+ * Th bra instruction branches to ghe label identified either by the given label name.\n
+ * Notes\n
+ * Example\n
+ * bra int_end
  * \subsection call
+ * Syntax\n
+ * call rS ( [rA]* ) [rR]*\n
+ * Operation\n
+ * call rS\n
+ * Description\n
+ * The call instruction calls the procedure identified by rS. Arguments, rA, are passed to the callee. On return (see the et instruction) results are assigned to the rRs.
+ * Notes\n
+ * The target address pointed to by rS must be the biginning of a procedure identified by a visibile procedure identifier.\n
+ * Example\n
+ * call io:print (stdout l:2 "=" l:0 "+" l:1)\n
  * \subsection mv
+ * Syntax\n
+ * mv [rD]+, [rS]+\n
+ * Operation\n
+ * rD = rS\n
+ * Description\n
+ * The mv instruction moves the value in rS into rD.
+ * Notes\n
+ * Example\n
+ * mv l:0 l:1, 1 2
  * \subsection sub
+ * Syntax\n
+ * sub rD [rC]?, [rS]+\n
+ * Operation\n
+ * rD = rS[i] - rS[i+1] in {rS}\n
+ * rC = condition(rS[i] - rS[i+1])\n
+ * Description\n
+ * The sub instruction subtacts the contents of rSs, placing the result in rD. Optionally, the condition codes of the result can be placed in rC.
+ * Notes\n
+ * Example\n
+ * sub l:2, l:0 l:1\n
+ * sub l:2 l:3, l:0 l:1
  */
 
 int yylex();
