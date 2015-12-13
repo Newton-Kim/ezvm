@@ -1,18 +1,18 @@
 /* Copyright (C) 2015 Newton Kim
-* 
-* 
+*
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 * copies of the Software, and to permit persons to whom the Software is
 * furnished to do so, subject to the following conditiong:
-* 
-* 
+*
+*
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
-* 
-* 
+*
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
-* 
+*
 */
 #include "ezvm/ezlog.h"
 #include "ezvm/ezthread.h"
@@ -61,8 +61,8 @@ void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bra(arg1);
 }
 
-RUNFUNC s_run[] = { run_mv, run_ld, run_call, run_add, run_sub, run_beq,
-                    run_blt, run_bra };
+RUNFUNC s_run[] = {run_mv,  run_ld,  run_call, run_add,
+                   run_sub, run_beq, run_blt,  run_bra};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -94,7 +94,7 @@ ezThread::~ezThread() {
 }
 
 ezStepState ezThread::step(void) {
-  //It needs 3 steps to finalize a thread
+  // It needs 3 steps to finalize a thread
   if (m_stack.empty()) return EZ_STEP_DONE;
   ezStackFrame* sf = m_stack.top();
   ezLog& log = ezLog::instance();
@@ -123,7 +123,7 @@ ezStepState ezThread::step(void) {
 }
 
 void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
-  //TODO it can be done via a macro
+  // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
   ezStackFrame* sf = m_stack.top();
   size_t cnt = (ndests > nsrcs) ? nsrcs : ndests;
@@ -154,14 +154,14 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezThread::ld(void) {
-  //TODO it can be done via a macro
+  // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
   ezStackFrame* sf = m_stack.top();
   sf->pc += 3;
 }
 
 void ezThread::call(uint8_t nargs, uint8_t nrets) {
-  //TODO it can be done via a macro
+  // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
@@ -350,7 +350,7 @@ void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
   }
 }
 
-ezValue* ezThread::val2addr(ezAddress addr, ezValue* v) {
+void ezThread::val2addr(ezAddress addr, ezValue* v) {
   if (addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
     throw runtime_error("cannot write to constant");
   } else if (addr.segment == EZ_ASM_SEGMENT_LOCAL) {
@@ -373,6 +373,4 @@ ezValue* ezThread::val2addr(ezAddress addr, ezValue* v) {
   } else {
     throw runtime_error("out of segment boundary");
   }
-
-  return v;
 }

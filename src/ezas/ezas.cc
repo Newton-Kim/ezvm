@@ -1,18 +1,18 @@
 /* Copyright (C) 2015 Newton Kim
-* 
-* 
+*
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 * copies of the Software, and to permit persons to whom the Software is
 * furnished to do so, subject to the following conditiong:
-* 
-* 
+*
+*
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
-* 
-* 
+*
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
-* 
+*
 */
 #include "ezvm/ezvm.h"
 #include "ezvm/ezlog.h"
@@ -55,12 +55,13 @@ int main(int argc, char* argv[]) {
   bool help_flag = false, version_flag = false, verbose_flag = false;
   string source, target, logger;
   string dumpsink;
-  struct option long_options[] = {
-    { "help", no_argument, 0, 'h' }, { "version", no_argument, 0, 'v' },
-    { "verbose", no_argument, 0, 0 }, { "compile", required_argument, 0, 'c' },
-    { "log", required_argument, 0, 'l' }, { "dump", required_argument, 0, 'd' },
-    { 0, 0, 0, 0 }
-  };
+  struct option long_options[] = {{"help", no_argument, 0, 'h'},
+                                  {"version", no_argument, 0, 'v'},
+                                  {"verbose", no_argument, 0, 0},
+                                  {"compile", required_argument, 0, 'c'},
+                                  {"log", required_argument, 0, 'l'},
+                                  {"dump", required_argument, 0, 'd'},
+                                  {0, 0, 0, 0}};
   while (1) {
     c = getopt_long(argc, argv, "hvc:l:d:", long_options, &option_index);
     //		if(optarg) cout << "optarg:" << optarg << endl;
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
         dumpsink = optarg;
         break;
       default:
-        cerr << "invalid argument" << (char) c << endl;
+        cerr << "invalid argument" << (char)c << endl;
         return 1;
         break;
     }
