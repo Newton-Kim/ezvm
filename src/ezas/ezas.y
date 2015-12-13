@@ -35,10 +35,39 @@
  * ezAssembler is an assembler language which is dedicated to ezVM.
  * \section Document
  * \subsection .import
+ * Syntax\n
+ * Operation\n
+ * Description\n
+ * Notes\n
+ * Example\n
  * \subsection .entry
+ * Syntax\n
+ * Operation\n
+ * Description\n
+ * Notes\n
+ * Example\n
  * \subsection .proc
+ * Syntax\n
+ * Operation\n
+ * Description\n
+ * Notes\n
+ * Example\n
  * \subsection .memories
+ * Syntax\n
+ * Operation\n
+ * Description\n
+ * Notes\n
+ * Example\n
  * \section Address
+ * Syntax\n
+ * [g|c|l|p|string]+:[0-9|string]+\n
+ * Operation\n
+ * Description\n
+ * Address is described by segment and offset. 'g' stands for a global segment, 'c' stands for a constant segment, 'l' stands for a local segment, and 'p' stands for a parent local segment on the scope. 'string' comes from the name of .import.
+ * Notes\n
+ * Example\n
+ * l:2\n
+ * io:print\n
  * \section Instructions
  * The instructions are inspired by triVM instruction set. See 'TriVM intermediate language reference manual' by Neil Jonson.
  * \subsection add
