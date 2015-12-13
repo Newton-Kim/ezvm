@@ -34,7 +34,7 @@ ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
   m_globals.push_back(dummy);
 }
 
-/** \page Threading model
+/** \page thread-model Threading model
 * TBD
 */
 

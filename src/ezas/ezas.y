@@ -30,122 +30,122 @@
 #include <vector>
 #define YYDEBUG 1
 
-/** \page ezas
- * \section Brief
+/** \page ezas ezas
+ * \section ezas-brief Brief
  * ezAssembler is an assembler language which is dedicated to ezVM.
- * \section Document
- * \subsection .import
- * Syntax\n
- * Operation\n
- * Description\n
- * Notes\n
- * Example\n
- * \subsection .entry
- * Syntax\n
- * Operation\n
- * Description\n
- * Notes\n
- * Example\n
- * \subsection .proc
- * Syntax\n
- * Operation\n
- * Description\n
- * Notes\n
- * Example\n
- * \subsection .memories
- * Syntax\n
- * Operation\n
- * Description\n
- * Notes\n
- * Example\n
- * \section Address
- * Syntax\n
+ * \section ezas-doc Document
+ * \subsection ezas-import .import
+ * \subsubsection ezas-import-syntax Syntax
+ * \subsubsection ezas-import-operation Operation
+ * \subsubsection ezas-import-description Description
+ * \subsubsection ezas-import-notes Notes
+ * \subsubsection ezas-import-example Example
+ * \subsection ezas-entry .entry
+ * \subsubsection ezas-entry-syntax Syntax
+ * \subsubsection ezas-entry-operation Operation
+ * \subsubsection ezas-entry-description Description
+ * \subsubsection ezas-entry-notes Notes
+ * \subsubsection ezas-entry-example Example
+ * \subsection ezas-proc .proc
+ * \subsubsection ezas-proc-syntax Syntax
+ * \subsubsection ezas-proc-operation Operation
+ * \subsubsection ezas-proc-description Description
+ * \subsubsection ezas-proc-notes Notes
+ * \subsubsection ezas-proc-example Example
+ * \subsection ezas-memory .memories
+ * \subsubsection ezas-memory-syntax Syntax
+ * \subsubsection ezas-memory-operation Operation
+ * \subsubsection ezas-memory-description Description
+ * \subsubsection ezas-memory-notes Notes
+ * \subsubsection ezas-memory-example Example
+ * \section ezas-address Address
+ * \subsection ezas-address-syntax Syntax
  * [g|c|l|p|string]+:[0-9|string]+\n
- * Operation\n
- * Description\n
+ * \subsection ezas-address-operation Operation
+ * \subsection ezas-address-description Description
  * Address is described by segment and offset. 'g' stands for a global segment, 'c' stands for a constant segment, 'l' stands for a local segment, and 'p' stands for a parent local segment on the scope. 'string' comes from the name of .import.
- * Notes\n
- * Example\n
+ * \subsection ezas-address-notes Notes
+ * \subsection ezas-address-example Example
  * l:2\n
  * io:print\n
  * \section Instructions
  * The instructions are inspired by triVM instruction set. See 'TriVM intermediate language reference manual' by Neil Jonson.
- * \subsection add
- * Syntax\n
+ * \subsection ezas-add add
+ * \subsubsection ezas-add-syntax Syntax
  * add rD [rC]?, [rS]+\n
- * Operation\n
+ * \subsubsection ezas-add-operation Operation
  * rD = sum(rS)\n
  * rC = condition(sum(rS))\n
- * Description\n
+ * \subsubsection ezas-add-description Description
  * The add instruction adds together the contents of rSs, placing the result in rD. Optionally, the condition codes of the esult can be placed in rC.\n
- * Notes\n
+ * \subsubsection ezas-add-notes Notes
  * This instructions applied to both signed and unsigned values.\n
- * Example\n
+ * \subsubsection ezas-add-example Example
  * add l:2, l:0 l:1\n
  * add l:3, 1 2 3 4
- * \subsection beq
- * Syntax\n
+ * \subsection ezas-beq beq
+ * \subsubsection ezas-beq-syntax Syntax
  * beq rS , label\n
- * Operation\n
+ * \subsubsection ezas-beq-operation Operation
  * if rS == EQU AL then goto label\n
- * Description\n
+ * \subsubsection ezas-beq-description Description
  * The beq instruction branches to the given label if the condition in rS is equal.\n
- * Notes\n
+ * \subsubsection ezas-beq-notes Notes
  * This instruction is applicable to both integer and floading-point comparisons.\n
- * Example\n
+ * \subsubsection ezas-beq-example Example
  * beq l:3 int_zero
- * \subsection blt
- * Syntax\n
+ * \subsection ezas-blt blt
+ * \subsubsection ezas-blt-syntax Syntax
  * blt rS, label\n
- * Operation\n
+ * \subsubsection ezas-blt-operation Operation
  * if rS == LESS-THAN then goto label\n
- * Description\n
+ * \subsubsection ezas-blt-description Description
  * The blt instruction branches to the given label if the condition in rS is less-than.\n
- * Notes\n
+ * \subsubsection ezas-blt-notes Notes
  * The unsigned equivalent is bbl. This instruction is also appplicable to floating point operations.
- * Example\n
+ * \subsubsection ezas-blt-example Example
  * blt l:3 int_neg
- * \subsection bra
- * Syntax\n
+ * \subsection ezas-bra bra
+ * \subsubsection ezas-bra-syntax Syntax
  * bra label\n
- * Operation\n
+ * \subsubsection ezas-bra-operation Operation
  * goto label\n
- * Description\n
+ * \subsubsection ezas-bra-description Description
  * Th bra instruction branches to ghe label identified either by the given label name.\n
- * Notes\n
- * Example\n
+ * \subsubsection ezas-bra-notes Notes
+ * \subsubsection ezas-bra-example Example
  * bra int_end
- * \subsection call
- * Syntax\n
+ * \subsection ezas-call call
+ * \subsubsection ezas-call-syntax Syntax
  * call rS ( [rA]* ) [rR]*\n
- * Operation\n
+ * \subsubsection ezas-call-operation Operation
  * call rS\n
- * Description\n
+ * \subsubsection ezas-call-description Description
  * The call instruction calls the procedure identified by rS. Arguments, rA, are passed to the callee. On return (see the et instruction) results are assigned to the rRs.
- * Notes\n
+ * \subsubsection ezas-call-notes Notes
  * The target address pointed to by rS must be the biginning of a procedure identified by a visibile procedure identifier.\n
- * Example\n
+ * \subsubsection ezas-call-example Example
  * call io:print (stdout l:2 "=" l:0 "+" l:1)\n
- * \subsection mv
- * Syntax\n
+ * \subsection ezas-mv mv
+ * \subsubsection ezas-mv-syntax Syntax
  * mv [rD]+, [rS]+\n
- * Operation\n
+ * \subsubsection ezas-mv-operation Operation
  * rD = rS\n
- * Description\n
+ * \subsubsection ezas-mv-description Description
  * The mv instruction moves the value in rS into rD.
- * Notes\n
- * Example\n
+ * \subsubsection ezas-mv-notes Notes
+ * \subsubsection ezas-mv-example Example
  * mv l:0 l:1, 1 2
- * \subsection sub
- * Syntax\n
+ * \subsection ezas-sub sub
+ * \subsubsection ezas-sub-syntax Syntax
  * sub rD [rC]?, [rS]+\n
- * Operation\n
+ * \subsubsection ezas-sub-operation Operation
  * rD = rS[i] - rS[i+1] in {rS}\n
  * rC = condition(rS[i] - rS[i+1])\n
- * Description\n
+ * \subsubsection ezas-sub-description Description
  * The sub instruction subtacts the contents of rSs, placing the result in rD. Optionally, the condition codes of the result can be placed in rC.
- * Notes\n
- * Example\n
+ * \subsubsection ezas-sub-notes Notes
+ * \subsubsection ezas-sub-example Example
  * sub l:2, l:0 l:1\n
  * sub l:2 l:3, l:0 l:1
  */
