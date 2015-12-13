@@ -32,16 +32,50 @@
 
 using namespace std;
 
+/**
+* @brief ezDump dumps the state of ezVM to a file system.
+*/
 class ezDump {
  private:
+  /**
+  * @brief A reference to a procedure entry point
+  */
   ezAddress& m_entry;
+  /**
+  * @brief A reference to a constant segment
+  */
   vector<ezValue*>& m_constants;
+  /**
+  * @brief A reference to a global segment
+  */
   vector<vector<ezValue*>*>& m_globals;
+/**
+* @brief A reference to ezASM insance
+*/
   ezASM* m_asm;
+/**
+* @brief dumps the content of v to sink.
+*
+* @param sink is a file stream.
+* @param v is a value.
+*/
   void dump(ezFile& sink, const ezValue* v);
 
  public:
+/**
+* @brief is a constructor.
+*
+  * @param entry is a reference to an entry point.
+  * @param constants is a reference to a constant memory.
+  * @param globals is a reference to a global memory.
+* @param pasm is a pointer to an ezASM instance.
+*/
   ezDump(ezAddress& entry, vector<ezValue*>& constants,
          vector<vector<ezValue*>*>& globals, ezASM* pasm);
+/**
+* @brief dumps the state of ezVM to a file of path.
+*
+* @param path is file name.
+*/
   void dump(const string path);
 };
