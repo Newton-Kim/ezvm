@@ -1,0 +1,15 @@
+.import io
+.entry main
+.proc main (0) 0:
+	.memories 4
+	mv l:0 l:1 , 1 2
+	and l:2, l:0 l:1
+	call io.print (stdout l:0 " and " l:1 " == " l:2)
+	mv 1:0 l:1 , 3 4
+	and l:2 l:3 , l:0 l:1
+	beq l:3 logical_zero
+	call io.print (stdout l:0 " and " l:1 " is not zero.")
+	bra logical_end
+	:logical_zero
+	call io.print (stdout l:0 " and " l:1 " is zero.")
+	:logical_end
