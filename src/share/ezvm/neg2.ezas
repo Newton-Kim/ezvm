@@ -1,0 +1,13 @@
+.import io
+.entry main
+.proc main (0) 0:
+	.memories 3
+	mv l:0 , 1
+	neg l:1 l:2, l:0
+	call io:print (stdout l:1 "=-" l:0)
+	beq l:2 int_zero
+	call io:print (stdout l:1 " is non-zero value")
+	bra int_end
+	:int_zero
+	call io:print (stdout l:1 " is zero value")
+	:int_end

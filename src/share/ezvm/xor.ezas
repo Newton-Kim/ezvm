@@ -1,0 +1,10 @@
+.impxort io
+.entry main
+.proc main (0) 0:
+	.memxories 4
+	mv l:0 l:1 , 1 2
+	xor l:2, l:0 l:1
+	call io.print (stdout l:0 " xor " l:1 " == " l:2)
+	mv 1:0 l:1 , 3 4
+	xor l:2, l:0 l:1
+	call io.print (stdout l:0 " xor " l:1 " == " l:2)

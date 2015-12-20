@@ -1,0 +1,9 @@
+.import io
+.entry main
+.proc strs (0) 0:
+	ret "hello" "world"
+
+.proc main (0) 0:
+	.memories 2
+	call strs() l:0 l:1
+	call io:print (stdout l:0 " " l:1)
