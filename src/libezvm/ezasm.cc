@@ -80,7 +80,8 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond,
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress larg, const ezAddress rarg){
+void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress larg,
+                                 const ezAddress rarg) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_AND, 1, 2);
   instruction.argument(dest);
@@ -88,7 +89,8 @@ void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress larg, con
   instruction.argument(rarg);
 }
 
-void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress larg, const ezAddress rarg){
+void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond,
+                                 const ezAddress larg, const ezAddress rarg) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_AND, 2, 2);
   instruction.argument(dest);
@@ -230,7 +232,7 @@ size_t ezASM::constant(const char* arg) {
   string value = arg;
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue* v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_STRING && ((ezString*)v)->value() == value)
+    if (v->type == EZ_VALUE_TYPE_STRING && ((ezString*)v)->to_string() == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -243,7 +245,8 @@ size_t ezASM::constant(const char* arg) {
 size_t ezASM::constant(const int value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue* v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_INTEGER && ((ezInteger*)v)->value() == value)
+    if (v->type == EZ_VALUE_TYPE_INTEGER &&
+        ((ezInteger*)v)->to_integer() == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -256,7 +259,7 @@ size_t ezASM::constant(const int value) {
 size_t ezASM::constant(const bool value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue* v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool*)v)->value() == value)
+    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool*)v)->to_bool() == value)
       return i;
   }
   size_t idx = m_constants.size();

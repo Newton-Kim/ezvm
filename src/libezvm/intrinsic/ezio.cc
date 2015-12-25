@@ -42,18 +42,18 @@ void ezIoPrint::run(vector<ezValue*>& args, vector<ezValue*>& rets) {
   size_t len = args.size();
   if (args[0]->type != EZ_VALUE_TYPE_INTEGER)
     throw runtime_error("argument 1 is not a number");
-  size_t ioidx = ((ezInteger*)args[0])->value();
+  size_t ioidx = ((ezInteger*)args[0])->to_integer();
   for (size_t i = 1; i < len; i++) {
     ezValue* v = args[i];
     switch (v->type) {
       case EZ_VALUE_TYPE_INTEGER:
-        ss << ((ezInteger*)v)->value();
+        ss << ((ezInteger*)v)->to_integer();
         break;
       case EZ_VALUE_TYPE_STRING:
-        ss << ((ezString*)v)->value();
+        ss << ((ezString*)v)->to_string();
         break;
       case EZ_VALUE_TYPE_BOOL:
-        ss << (((ezBool*)v)->value() ? "true" : "false");
+        ss << (((ezBool*)v)->to_bool() ? "true" : "false");
         break;
       default:
         ss << hex << (void*)v << dec;

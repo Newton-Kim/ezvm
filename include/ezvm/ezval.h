@@ -53,10 +53,9 @@ class ezValue {
   virtual ~ezValue();
   size_t reference(void);
   size_t release(void);
-  virtual ezValue* duplicate(void);
-  virtual void add(ezValue* v);
-  virtual void bitwise_and(ezValue* v);
-  virtual void sub(ezValue* v);
+  virtual bool to_bool(void);
+  virtual int to_integer(void);
+  virtual string to_string(void);
   virtual ezValue* condition(void);
 };
 
@@ -82,9 +81,9 @@ class ezBool : public ezValue {
 
  public:
   ezBool(bool val, const bool dynamic = true);
-  const bool value(void);
-  ezValue* duplicate(void);
-  void bitwise_and(ezValue* v);
+  bool to_bool(void);
+  int to_integer(void);
+  string to_string(void);
   ezValue* condition(void);
 };
 
@@ -94,11 +93,9 @@ class ezInteger : public ezValue {
 
  public:
   ezInteger(int val, const bool dynamic = true);
-  const int value(void);
-  ezValue* duplicate(void);
-  void add(ezValue* v);
-  void bitwise_and(ezValue* v);
-  void sub(ezValue* v);
+  bool to_bool(void);
+  int to_integer(void);
+  string to_string(void);
   ezValue* condition(void);
 };
 
@@ -108,9 +105,9 @@ class ezString : public ezValue {
 
  public:
   ezString(const string val, const bool dynamic = true);
-  const string value(void);
-  ezValue* duplicate(void);
-  void add(ezValue* v);
+  bool to_bool(void);
+  int to_integer(void);
+  string to_string(void);
   ezValue* condition(void);
 };
 

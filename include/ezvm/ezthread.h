@@ -27,6 +27,7 @@
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezstack.h"
+#include "ezalu.h"
 #include <cstddef>
 #include <vector>
 
@@ -61,6 +62,10 @@ class ezThread {
   * @brief A stack of stack frames
   */
   stack<ezStackFrame*> m_stack;
+  /**
+  * @brief An arithematic logic unit
+  */
+  ezALU m_alu;
   /**
   * @brief fetches a value from an address.
   *

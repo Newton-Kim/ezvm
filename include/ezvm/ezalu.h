@@ -24,53 +24,36 @@
 */
 #pragma once
 
-#include "ezvm/ezaddr.h"
-#include "ezvm/ezval.h"
+#include "ezval.h"
 #include <vector>
-#include <cstdint>
 
 using namespace std;
 
-enum ezOpCode {
-  EZ_OP_ADD = 0,
-  EZ_OP_AND,
-  //  EZ_OP_BGE,
-  EZ_OP_BEQ,
-  //  EZ_OP_BNE,
-  EZ_OP_BLT,
-  EZ_OP_BRA,
-  EZ_OP_CALL,
-  //  EZ_OP_CMP,
-  //  EZ_OP_DIV,
-  EZ_OP_LD,
-  //  EZ_OP_LSL,
-  //  EZ_OP_LSR,
-  //  EZ_OP_MOD,
-  //  EZ_OP_MUL,
-  EZ_OP_MV,
-  //  EZ_OP_NEG,
-  //  EZ_OP_NOT,
-  //  EZ_OP_OR,
-  //  EZ_OP_RET,
-  EZ_OP_SUB,
-  //  EZ_OP_XOR
+enum ezCoercOperation {
+  EZ_COERC_OPERATION_ADDITION = 0,
+  EZ_COERC_OPERATION_SUBTRACTION,
+  EZ_COERC_OPERATION_MULTIPLICATION,
+  EZ_COERC_OPERATION_DIVISION,
+  EZ_COERC_OPERATION_AND,
+  EZ_COERC_OPERATION_OR,
+  EZ_COERC_OPERATION_XOR,
+  EZ_COERC_OPERATION_MAX
 };
 
-class ezInstEncoder {
+typedef ezValueType ezCoercTable[EZ_COERC_OPERATION_MAX][EZ_VALUE_TYPE_MAX][EZ_VALUE_TYPE_MAX];
+class ezALU {
  private:
-  vector<ezInstruction>& m_instruction;
+  ezCoercTable& m_pCoercTable;
 
  public:
-  ezInstEncoder(vector<ezInstruction>& instr);
-  void opcode(ezOpCode op, uint8_t arg1 = 0, uint8_t arg2 = 0,
-              uint8_t arg3 = 0);
-  void argument(ezAddress addr);
-};
-
-class ezInstDecoder {
- public:
-  void opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1, uint8_t& arg2,
-              uint8_t& arg3);
-  void argument(ezInstruction inst, ezAddress& addr);
-  const char* opstr(ezOpCode op);
+  ezALU();
+  ezALU(ezCoercTable& coercTable);
+  ezValue* add(vector<ezValue*>& args);
+  ezValue* sub(vector<ezValue*>& args);
+  ezValue* mul(vector<ezValue*>& args);
+  ezValue* div(vector<ezValue*>& args);
+  ezValue* bitwise_and(ezValue* larg, ezValue* rarg);
+  ezValue* bitwise_or(ezValue* larg, ezValue* rarg);
+  ezValue* bitwise_not(ezValue* arg);
+  ezValue* bitwise_xor(ezValue* larg, ezValue* rarg);
 };

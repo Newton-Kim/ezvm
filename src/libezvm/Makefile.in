@@ -4,6 +4,7 @@ LINK=libezvm.so
 OBJS=vm.o \
 	thread.o \
 	stack.o \
+	ezalu.o \
 	ezasm.o \
 	ezarchive.o \
 	ezdump.o \

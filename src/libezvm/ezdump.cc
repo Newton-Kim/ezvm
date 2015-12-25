@@ -37,16 +37,16 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
       sink.print("(nil)");
       break;
     case EZ_VALUE_TYPE_BOOL:
-      if (((ezBool*)v)->value() == true)
+      if (((ezBool*)v)->to_bool() == true)
         sink.print("true");
       else
         sink.print("false");
       break;
     case EZ_VALUE_TYPE_INTEGER:
-      sink.print("%d", ((ezInteger*)v)->value());
+      sink.print("%d", ((ezInteger*)v)->to_integer());
       break;
     case EZ_VALUE_TYPE_STRING:
-      sink.print("\"%s\"", ((ezString*)v)->value().c_str());
+      sink.print("\"%s\"", ((ezString*)v)->to_string().c_str());
       break;
     case EZ_VALUE_TYPE_CAROUSEL: {
       ezCarousel* crsl = (ezCarousel*)v;

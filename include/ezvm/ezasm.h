@@ -101,23 +101,26 @@ class ezAsmProcedure {
   * @param src Addresses of addends.
   */
   void add(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
-/**
-* @brief creates a bitwise and instruction. See and of ezas.
-*
-* @param dest An address which the result is stored.
-* @param larg A left argument.
-* @param rarg A right argument.
-*/
-  void bitwise_and(const ezAddress dest, const ezAddress larg, const ezAddress rarg);
-/**
-* @brief creates a bitwise and instruction. The instruction stores a condition at the address of cond. See and of ezas.
-*
-* @param dest An address which the result is stored.
-* @param cond An address which the condition is stored.
-* @param larg A left argument.
-* @param rarg A right argument.
-*/
-  void bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress larg, const ezAddress rarg);
+  /**
+  * @brief creates a bitwise and instruction. See and of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_and(const ezAddress dest, const ezAddress larg,
+                   const ezAddress rarg);
+  /**
+  * @brief creates a bitwise and instruction. The instruction stores a condition
+  *at the address of cond. See and of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param cond An address which the condition is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_and(const ezAddress dest, const ezAddress cond,
+                   const ezAddress larg, const ezAddress rarg);
   /**
   * @brief creates an subtration instruction. See sub of ezas.
   *

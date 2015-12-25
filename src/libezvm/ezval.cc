@@ -24,6 +24,7 @@
 */
 #include "ezvm/ezval.h"
 #include <stdexcept>
+#include <sstream>
 
 ezValue::ezValue(const ezValueType tp, const bool dyn)
     : m_reference(0), type(tp), dynamic(dyn) {}
@@ -36,15 +37,17 @@ size_t ezValue::release(void) {
   if (m_reference > 0) m_reference--;
   return m_reference;
 }
-ezValue* ezValue::duplicate(void) {
-  throw runtime_error("unable to duplicate");
+bool ezValue::to_bool(void) { throw runtime_error("unable to cast to bool"); }
+int ezValue::to_integer(void) {
+  throw runtime_error("unable to cast to integer");
 }
-void ezValue::add(ezValue* v) { throw runtime_error("unable to add"); }
-void ezValue::bitwise_and(ezValue* v) { throw runtime_error("unable to and"); }
-void ezValue::sub(ezValue* v) { throw runtime_error("unable to substract"); }
+string ezValue::to_string(void) {
+  throw runtime_error("unable to cast to string");
+}
 ezValue* ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
+
 ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
                          const bool cry, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_CONDITION, dynamic),
@@ -61,39 +64,24 @@ ezNull* ezNull::instance() {
 
 ezBool::ezBool(bool val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_BOOL, dynamic), m_value(val) {}
-const bool ezBool::value(void) { return m_value; }
+bool ezBool::to_bool(void) { return m_value; }
+int ezBool::to_integer(void) { return m_value ? 1 : 0; }
+string ezBool::to_string(void) {
+  string str;
+  str = m_value ? "true" : "false";
+}
 ezValue* ezBool::condition(void) {
   return new ezCondition(!m_value, false, false, false);
-}
-ezValue* ezBool::duplicate(void) { return new ezBool(m_value); }
-void ezBool::bitwise_and(ezValue* v) {
-  if (v->type == EZ_VALUE_TYPE_BOOL)
-    m_value &= ((ezBool*)v)->value();
-  else
-    throw runtime_error("unable to cast to bool");
 }
 
 ezInteger::ezInteger(int val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_INTEGER, dynamic), m_value(val) {}
-const int ezInteger::value(void) { return m_value; }
-ezValue* ezInteger::duplicate(void) { return new ezInteger(m_value); }
-void ezInteger::add(ezValue* v) {
-  if (v->type == EZ_VALUE_TYPE_INTEGER)
-    m_value += ((ezInteger*)v)->value();
-  else
-    throw runtime_error("unable to cast to integer");
-}
-void ezInteger::bitwise_and(ezValue* v) {
-  if (v->type == EZ_VALUE_TYPE_INTEGER)
-    m_value &= ((ezInteger*)v)->value();
-  else
-    throw runtime_error("unable to cast to integer");
-}
-void ezInteger::sub(ezValue* v) {
-  if (v->type == EZ_VALUE_TYPE_INTEGER)
-    m_value -= ((ezInteger*)v)->value();
-  else
-    throw runtime_error("unable to cast to integer");
+bool ezInteger::to_bool(void) { return m_value ? true : false; }
+int ezInteger::to_integer(void) { return m_value; }
+string ezInteger::to_string(void) {
+  stringstream ss;
+  ss << m_value;
+  return ss.str();
 }
 ezValue* ezInteger::condition(void) {
   return new ezCondition((m_value) ? false : true, (m_value < 0) ? true : false,
@@ -102,14 +90,17 @@ ezValue* ezInteger::condition(void) {
 
 ezString::ezString(const string val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_STRING, dynamic), m_value(val) {}
-const string ezString::value(void) { return m_value; }
-ezValue* ezString::duplicate(void) { return new ezString(m_value); }
-void ezString::add(ezValue* v) {
-  if (v->type == EZ_VALUE_TYPE_STRING)
-    m_value += ((ezString*)v)->value();
+bool ezString::to_bool(void) {
+  bool ret;
+  if (m_value == "true")
+    ret = true;
+  else if (m_value == "false")
+    ret = false;
   else
-    throw runtime_error("unable to cast to string");
+    throw runtime_error("unable to cast from string to bool");
 }
+int ezString::to_integer(void) { return m_value.size() ? 1 : 0; }
+string ezString::to_string(void) { return m_value; }
 ezValue* ezString::condition(void) {
   return new ezCondition((m_value.empty()) ? true : false, false, false, false);
 }

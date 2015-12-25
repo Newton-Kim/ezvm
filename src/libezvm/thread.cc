@@ -65,7 +65,8 @@ void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bra(arg1);
 }
 
-RUNFUNC s_run[] = {run_add, run_and, run_beq, run_blt,  run_bra,  run_call, run_ld,  run_mv, run_sub};
+RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
+                   run_call, run_ld,  run_mv,  run_sub};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -242,19 +243,18 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
     case 2:
       decoder.argument(sf->carousel->instruction[sf->pc++], cond);
     case 1:
-      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-      v = addr2val(addr);
-      rst = v->duplicate();
       break;
     default:
       throw runtime_error("the destination of ADD must be 1 or 2");
       break;
   }
-  for (size_t i = 1; i < nsrcs; i++) {
+  vector<ezValue*> args;
+  for (size_t i = 0; i < nsrcs; i++) {
     decoder.argument(sf->carousel->instruction[sf->pc++], addr);
     v = addr2val(addr);
-    rst->add(v);
+    args.push_back(v);
   }
+  rst = m_alu.add(args);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }
@@ -264,24 +264,22 @@ void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* v = NULL, *rst = NULL;
+  ezValue* vr = NULL, *vl = NULL, *rst = NULL;
   switch (ndests) {
     case 2:
       decoder.argument(sf->carousel->instruction[sf->pc++], cond);
     case 1:
-      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-      v = addr2val(addr);
-      rst = v->duplicate();
       break;
     default:
       throw runtime_error("the destination of ADD must be 1 or 2");
       break;
   }
-  for (size_t i = 1; i < nsrcs; i++) {
-    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-    v = addr2val(addr);
-    rst->bitwise_and(v);
-  }
+  if (nsrcs != 2) throw runtime_error("the operands of AND must be 2");
+  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+  vl = addr2val(addr);
+  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+  vr = addr2val(addr);
+  rst = m_alu.bitwise_and(vl, vr);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }
@@ -296,19 +294,18 @@ void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
     case 2:
       decoder.argument(sf->carousel->instruction[sf->pc++], cond);
     case 1:
-      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-      v = addr2val(addr);
-      rst = v->duplicate();
       break;
     default:
       throw runtime_error("the destination of ADD must be 1 or 2");
       break;
   }
-  for (size_t i = 1; i < nsrcs; i++) {
+  vector<ezValue*> args;
+  for (size_t i = 0; i < nsrcs; i++) {
     decoder.argument(sf->carousel->instruction[sf->pc++], addr);
     v = addr2val(addr);
-    rst->sub(v);
+    args.push_back(v);
   }
+  rst = m_alu.sub(args);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }
