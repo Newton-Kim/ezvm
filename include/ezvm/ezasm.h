@@ -93,13 +93,31 @@ class ezAsmProcedure {
   */
   void add(const ezAddress dest, vector<ezAddress>& src);
   /**
-  * @brief creates an add instruction. The instruction stores condition at the
+  * @brief creates an add instruction. The instruction stores a condition at the
   * address of cond. See add of ezas.
   *
   * @param dest An address which the sum is stored.
+  * @param cond An address which the condition is stored.
   * @param src Addresses of addends.
   */
   void add(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+/**
+* @brief creates a bitwise and instruction. See and of ezas.
+*
+* @param dest An address which the result is stored.
+* @param larg A left argument.
+* @param rarg A right argument.
+*/
+  void bitwise_and(const ezAddress dest, const ezAddress larg, const ezAddress rarg);
+/**
+* @brief creates a bitwise and instruction. The instruction stores a condition at the address of cond. See and of ezas.
+*
+* @param dest An address which the result is stored.
+* @param cond An address which the condition is stored.
+* @param larg A left argument.
+* @param rarg A right argument.
+*/
+  void bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress larg, const ezAddress rarg);
   /**
   * @brief creates an subtration instruction. See sub of ezas.
   *
@@ -108,7 +126,7 @@ class ezAsmProcedure {
   */
   void sub(const ezAddress dest, vector<ezAddress>& src);
   /**
-  * @brief creates an subtration instruction. The instruction stores condition
+  * @brief creates an subtration instruction. The instruction stores a condition
   * at the address of cond. See sub of ezas.
   *
   * @param dest An address which the difference is stored.
@@ -227,7 +245,7 @@ class ezASM {
   *
   * @return is an offset in a constant segment.
   */
-  size_t constant(const string value);
+  size_t constant(const char* value);
   /**
   * @brief adds a constant integer number.
   *
@@ -236,6 +254,14 @@ class ezASM {
   * @return is an offset in a constant segment.
   */
   size_t constant(const int value);
+  /**
+  * @brief adds a constant boolean.
+  *
+  * @param value is a boolean.
+  *
+  * @return is an offset in a constant segment.
+  */
+  size_t constant(const bool value);
   /**
   * @brief finds the offset of a segment segment whose name is value.
   *

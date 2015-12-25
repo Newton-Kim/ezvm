@@ -11,3 +11,12 @@
 	:int_zero
 	call io:print (stdout l:2 " is zero value")
 	:int_end
+	mv l:0 l:1 , true false
+	and l:2, l:0 l:1
+	beq l:3 bool_zero
+	call io:print (stdout l:2 " is true")
+	bra bool_end
+	:bool_zero
+	call io:print (stdout l:2 " is false")
+	:bool_end
+

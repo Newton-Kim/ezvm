@@ -80,6 +80,23 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond,
     instruction.argument(*it);
 }
 
+void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress larg, const ezAddress rarg){
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_AND, 1, 2);
+  instruction.argument(dest);
+  instruction.argument(larg);
+  instruction.argument(rarg);
+}
+
+void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress larg, const ezAddress rarg){
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_AND, 2, 2);
+  instruction.argument(dest);
+  instruction.argument(cond);
+  instruction.argument(larg);
+  instruction.argument(rarg);
+}
+
 void ezAsmProcedure::sub(const ezAddress dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_SUB, 1, src.size());
@@ -209,7 +226,8 @@ size_t ezASM::global(const string value) {
   return it->second;
 }
 
-size_t ezASM::constant(const string value) {
+size_t ezASM::constant(const char* arg) {
+  string value = arg;
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue* v = m_constants[i];
     if (v->type == EZ_VALUE_TYPE_STRING && ((ezString*)v)->value() == value)
@@ -230,6 +248,19 @@ size_t ezASM::constant(const int value) {
   }
   size_t idx = m_constants.size();
   ezValue* v = new ezInteger(value);
+  v->reference();
+  m_constants.push_back(v);
+  return idx;
+}
+
+size_t ezASM::constant(const bool value) {
+  for (size_t i = 0; i < m_constants.size(); i++) {
+    ezValue* v = m_constants[i];
+    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool*)v)->value() == value)
+      return i;
+  }
+  size_t idx = m_constants.size();
+  ezValue* v = new ezBool(value);
   v->reference();
   m_constants.push_back(v);
   return idx;

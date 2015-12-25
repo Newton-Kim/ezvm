@@ -40,6 +40,7 @@ ezValue* ezValue::duplicate(void) {
   throw runtime_error("unable to duplicate");
 }
 void ezValue::add(ezValue* v) { throw runtime_error("unable to add"); }
+void ezValue::bitwise_and(ezValue* v) { throw runtime_error("unable to and"); }
 void ezValue::sub(ezValue* v) { throw runtime_error("unable to substract"); }
 ezValue* ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
@@ -64,6 +65,13 @@ const bool ezBool::value(void) { return m_value; }
 ezValue* ezBool::condition(void) {
   return new ezCondition(!m_value, false, false, false);
 }
+ezValue* ezBool::duplicate(void) { return new ezBool(m_value); }
+void ezBool::bitwise_and(ezValue* v) {
+  if (v->type == EZ_VALUE_TYPE_BOOL)
+    m_value &= ((ezBool*)v)->value();
+  else
+    throw runtime_error("unable to cast to bool");
+}
 
 ezInteger::ezInteger(int val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_INTEGER, dynamic), m_value(val) {}
@@ -72,6 +80,12 @@ ezValue* ezInteger::duplicate(void) { return new ezInteger(m_value); }
 void ezInteger::add(ezValue* v) {
   if (v->type == EZ_VALUE_TYPE_INTEGER)
     m_value += ((ezInteger*)v)->value();
+  else
+    throw runtime_error("unable to cast to integer");
+}
+void ezInteger::bitwise_and(ezValue* v) {
+  if (v->type == EZ_VALUE_TYPE_INTEGER)
+    m_value &= ((ezInteger*)v)->value();
   else
     throw runtime_error("unable to cast to integer");
 }

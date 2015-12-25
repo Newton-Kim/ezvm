@@ -52,6 +52,9 @@ void ezIoPrint::run(vector<ezValue*>& args, vector<ezValue*>& rets) {
       case EZ_VALUE_TYPE_STRING:
         ss << ((ezString*)v)->value();
         break;
+      case EZ_VALUE_TYPE_BOOL:
+        ss << (((ezBool*)v)->value() ? "true" : "false");
+        break;
       default:
         ss << hex << (void*)v << dec;
     }

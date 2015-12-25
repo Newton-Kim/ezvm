@@ -161,14 +161,16 @@ static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 %}
 
-%token PROC ENTRY IMPORT CALL LD MV ADD SUB BRA BEQ BLT SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL
+%token PROC ENTRY IMPORT CALL LD MV ADD AND SUB BRA BEQ BLT SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
 %type <a_value> ADDRESS fname var
 %type <sa_value> SYMBOLIC_ADDRESS
+%type <b_value> BOOLEAN
 
 %union {
+    bool b_value;
     char* s_value;
     char c_value;
     int i_value;
@@ -209,6 +211,7 @@ line : | call
 	| mv
 	| ld
 	| add
+	| and
 	| sub 
 	| beq
 	| blt
@@ -223,6 +226,9 @@ call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment,
 
 add : ADD var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| ADD var var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+
+and : AND var ',' var var {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));}
+	| AND var var ',' var var {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));}
 
 sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| SUB var var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
@@ -246,18 +252,21 @@ vars : | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| ADDRESS {$$ = $1;};
 %%
 
 extern FILE * yyin;
-void ezparse(FILE* fd, const string target, const string dump) {
+int ezparse(FILE* fd, const string target, const string dump) {
 	yyin = fd;
-	yyparse();
+	int ret = yyparse();
+	if(ret) return ret;
 	yyin = NULL;
 	if(!dump.empty()) 
 		s_vm.dump().dump(dump);
 	if(target.empty()) s_vm.run();
 	else s_vm.archive().save(target);
+	return ret;
 }
 
 void yyerror (char const *s) {

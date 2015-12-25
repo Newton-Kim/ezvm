@@ -35,7 +35,7 @@
 using namespace std;
 #define VERSION "1.0.0"
 
-extern void ezparse(FILE* fd, const string target, const string dump);
+extern int ezparse(FILE* fd, const string target, const string dump);
 
 void show_help(const char* name) {
   cout << name << " version " << VERSION << endl;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
     cerr << "error: " << strerror(errno) << endl;
     return 1;
   }
-  ezparse(fd, target, dumpsink);
+  int ret = ezparse(fd, target, dumpsink);
   fclose(fd);
-  return 0;
+  return ret;
 }

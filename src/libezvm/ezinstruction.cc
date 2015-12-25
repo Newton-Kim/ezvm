@@ -81,6 +81,8 @@ const char* ezInstDecoder::opstr(ezOpCode op) {
       return "call";
     case EZ_OP_ADD:
       return "add";
+    case EZ_OP_AND:
+      return "add";
     case EZ_OP_SUB:
       return "add";
     case EZ_OP_BEQ:

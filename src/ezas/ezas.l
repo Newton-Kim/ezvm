@@ -39,10 +39,13 @@ symbolic_address [a-zA-Z_][a-zA-Z_0-9]*:[a-zA-Z_][a-zA-Z_0-9]*
 sp [ \t]
 %%
 
+"true" {yylval.b_value = true; return BOOLEAN;}
+"false" {yylval.b_value = false; return BOOLEAN;}
 "call" return CALL;
 "ld" return LD;
 "mv" return MV;
 "add" return ADD;
+"and" return AND;
 "sub" return SUB;
 "bra" return BRA;
 "beq" return BEQ;

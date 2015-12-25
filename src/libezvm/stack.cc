@@ -33,7 +33,9 @@ ezStackFrame::ezStackFrame(ezCarousel* crsl) : pc(0), carousel(crsl) {
 ezStackFrame::~ezStackFrame() {
   for (vector<ezValue*>::iterator it = local.begin(); it != local.end(); it++) {
     ezValue* v = *it;
-    size_t ref = v->release();
-    if (!ref) delete v;
+    if (v->dynamic) {
+      size_t ref = v->release();
+      if (!ref) delete v;
+    }
   }
 }

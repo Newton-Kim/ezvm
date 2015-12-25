@@ -4,7 +4,20 @@
 	.memories 4
 	mv l:0 l:1 , 1 2
 	and l:2, l:0 l:1
-	call io.print (stdout l:0 " and " l:1 " == " l:2)
-	mv 1:0 l:1 , 3 4
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+	mv l:0 l:1 , 3 4
 	and l:2, l:0 l:1
-	call io.print (stdout l:0 " and " l:1 " == " l:2)
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+	mv l:0 l:1 , true false
+	and l:2, l:0 l:1
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+	mv l:0 l:1 , false true
+	and l:2, l:0 l:1
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+	mv l:0 l:1 , false false
+	and l:2, l:0 l:1
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+	mv l:0 l:1 , true true
+	and l:2, l:0 l:1
+	call io:print (stdout l:0 " and " l:1 " == " l:2)
+
