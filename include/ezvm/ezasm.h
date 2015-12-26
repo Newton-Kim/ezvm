@@ -164,6 +164,22 @@ class ezAsmProcedure {
   * @param name is a symbol of the address.
   */
   void label(string name);
+  /**
+  * @brief creates an mul instruction. See add of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param src Addresses of addends.
+  */
+  void mul(const ezAddress dest, vector<ezAddress>& src);
+  /**
+  * @brief creates an mul instruction. The instruction stores a condition at the
+  * address of cond. See add of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param src Addresses of addends.
+  */
+  void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 };
 
 /**

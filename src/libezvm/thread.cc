@@ -49,6 +49,10 @@ void run_and(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_and(arg1, arg2);
 }
 
+void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.mul(arg1, arg2);
+}
+
 void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.sub(arg1, arg2);
 }
@@ -66,7 +70,7 @@ void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
-                   run_call, run_ld,  run_mv,  run_sub};
+                   run_call, run_ld,  run_mul, run_mv,  run_sub};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -280,6 +284,32 @@ void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   vr = addr2val(addr);
   rst = m_alu.bitwise_and(vl, vr);
+  val2addr(dest, rst);
+  if (ndests == 2) val2addr(cond, rst->condition());
+}
+
+void ezThread::mul(uint8_t ndests, uint8_t nsrcs) {
+  ezStackFrame* sf = m_stack.top();
+  ezInstDecoder decoder;
+  ezAddress dest, addr, cond;
+  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
+  ezValue* v = NULL, *rst = NULL;
+  switch (ndests) {
+    case 2:
+      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+    case 1:
+      break;
+    default:
+      throw runtime_error("the destination of ADD must be 1 or 2");
+      break;
+  }
+  vector<ezValue*> args;
+  for (size_t i = 0; i < nsrcs; i++) {
+    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+    v = addr2val(addr);
+    args.push_back(v);
+  }
+  rst = m_alu.mul(args);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }

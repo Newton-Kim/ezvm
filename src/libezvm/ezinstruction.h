@@ -46,7 +46,7 @@ enum ezOpCode {
   //  EZ_OP_LSL,
   //  EZ_OP_LSR,
   //  EZ_OP_MOD,
-  //  EZ_OP_MUL,
+  EZ_OP_MUL,
   EZ_OP_MV,
   //  EZ_OP_NEG,
   //  EZ_OP_NOT,

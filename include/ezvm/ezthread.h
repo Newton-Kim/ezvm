@@ -135,4 +135,5 @@ class ezThread {
   void beq(uint8_t index);
   void blt(uint8_t index);
   void bra(uint8_t index);
+  void mul(uint8_t ndests, uint8_t nsrcs);
 };

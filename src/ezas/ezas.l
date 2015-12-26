@@ -41,15 +41,16 @@ sp [ \t]
 
 "true" {yylval.b_value = true; return BOOLEAN;}
 "false" {yylval.b_value = false; return BOOLEAN;}
-"call" return CALL;
-"ld" return LD;
-"mv" return MV;
 "add" return ADD;
 "and" return AND;
-"sub" return SUB;
-"bra" return BRA;
 "beq" return BEQ;
 "blt" return BLT;
+"bra" return BRA;
+"call" return CALL;
+"ld" return LD;
+"mul" return MUL;
+"mv" return MV;
+"sub" return SUB;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
