@@ -162,7 +162,7 @@ static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BLT BRA CALL LD MUL MV SUB
+%token ADD AND BEQ BLT BRA CALL DIV LD MUL MV SUB
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
@@ -215,6 +215,7 @@ line : | add
 	| blt
 	| bra
 	| call
+	| div
 	| ld
 	| mul
 	| mv
@@ -234,6 +235,9 @@ blt : BLT var SYMBOL {s_proc_current->blt(ezAddress($2.segment, $2.offset), $3);
 bra : BRA SYMBOL {s_proc_current->bra($2);}
 
 call : CALL fname '(' vars ')' addrs {s_proc_current->call(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+
+div : DIV var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+	| DIV var var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
 

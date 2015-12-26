@@ -131,6 +131,7 @@ class ezThread {
   void call(uint8_t nargs, uint8_t nrets);
   void add(uint8_t ndests, uint8_t nsrcs);
   void bitwise_and(uint8_t ndests, uint8_t nsrcs);
+  void div(uint8_t ndests, uint8_t nsrcs);
   void sub(uint8_t ndests, uint8_t nsrcs);
   void beq(uint8_t index);
   void blt(uint8_t index);

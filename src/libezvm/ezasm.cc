@@ -99,6 +99,24 @@ void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond,
   instruction.argument(rarg);
 }
 
+void ezAsmProcedure::div(const ezAddress dest, vector<ezAddress>& src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_DIV, 1, src.size());
+  instruction.argument(dest);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
+}
+
+void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
+                         vector<ezAddress>& src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_DIV, 2, src.size());
+  instruction.argument(dest);
+  instruction.argument(cond);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
+}
+
 void ezAsmProcedure::mul(const ezAddress dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_MUL, 1, src.size());

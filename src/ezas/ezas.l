@@ -47,6 +47,7 @@ sp [ \t]
 "blt" return BLT;
 "bra" return BRA;
 "call" return CALL;
+"div" return DIV;
 "ld" return LD;
 "mul" return MUL;
 "mv" return MV;

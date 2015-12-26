@@ -122,21 +122,6 @@ class ezAsmProcedure {
   void bitwise_and(const ezAddress dest, const ezAddress cond,
                    const ezAddress larg, const ezAddress rarg);
   /**
-  * @brief creates an subtration instruction. See sub of ezas.
-  *
-  * @param dest An address which the difference is stored.
-  * @param src Addresses of minuend and subtrahend.
-  */
-  void sub(const ezAddress dest, vector<ezAddress>& src);
-  /**
-  * @brief creates an subtration instruction. The instruction stores a condition
-  * at the address of cond. See sub of ezas.
-  *
-  * @param dest An address which the difference is stored.
-  * @param src Addresses of minuend and subtrahend.
-  */
-  void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
-  /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
   * @param cond is a condition left by respective instruction.
@@ -159,13 +144,29 @@ class ezAsmProcedure {
   */
   void bra(string label);
   /**
+  * @brief creates an div instruction. See div of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param src Addresses of addends.
+  */
+  void div(const ezAddress dest, vector<ezAddress>& src);
+  /**
+  * @brief creates an mul instruction. The instruction stores a condition at the
+  * address of cond. See div of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param src Addresses of addends.
+  */
+  void div(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  /**
   * @brief tags the address with the name.
   *
   * @param name is a symbol of the address.
   */
   void label(string name);
   /**
-  * @brief creates an mul instruction. See add of ezas.
+  * @brief creates an mul instruction. See mul of ezas.
   *
   * @param dest An address which the product is stored.
   * @param src Addresses of addends.
@@ -173,13 +174,28 @@ class ezAsmProcedure {
   void mul(const ezAddress dest, vector<ezAddress>& src);
   /**
   * @brief creates an mul instruction. The instruction stores a condition at the
-  * address of cond. See add of ezas.
+  * address of cond. See mul of ezas.
   *
   * @param dest An address which the product is stored.
   * @param cond An address which the condition is stored.
   * @param src Addresses of addends.
   */
   void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  /**
+  * @brief creates an subtration instruction. See sub of ezas.
+  *
+  * @param dest An address which the difference is stored.
+  * @param src Addresses of minuend and subtrahend.
+  */
+  void sub(const ezAddress dest, vector<ezAddress>& src);
+  /**
+  * @brief creates an subtration instruction. The instruction stores a condition
+  * at the address of cond. See sub of ezas.
+  *
+  * @param dest An address which the difference is stored.
+  * @param src Addresses of minuend and subtrahend.
+  */
+  void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 };
 
 /**

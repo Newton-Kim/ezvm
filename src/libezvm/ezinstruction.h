@@ -41,7 +41,7 @@ enum ezOpCode {
   EZ_OP_BRA,
   EZ_OP_CALL,
   //  EZ_OP_CMP,
-  //  EZ_OP_DIV,
+  EZ_OP_DIV,
   EZ_OP_LD,
   //  EZ_OP_LSL,
   //  EZ_OP_LSR,
