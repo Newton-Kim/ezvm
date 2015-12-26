@@ -142,7 +142,8 @@ void ezAsmProcedure::neg(const ezAddress dest, const ezAddress org) {
   instruction.argument(org);
 }
 
-void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond, const ezAddress org) {
+void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond,
+                         const ezAddress org) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_NEG, 2, 1);
   instruction.argument(dest);
@@ -151,7 +152,7 @@ void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond, const ezAdd
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress larg,
-                                 const ezAddress rarg) {
+                                const ezAddress rarg) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_OR, 1, 2);
   instruction.argument(dest);
@@ -160,7 +161,7 @@ void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress larg,
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress cond,
-                                 const ezAddress larg, const ezAddress rarg) {
+                                const ezAddress larg, const ezAddress rarg) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_OR, 2, 2);
   instruction.argument(dest);

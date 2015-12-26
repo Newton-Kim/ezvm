@@ -181,20 +181,21 @@ class ezAsmProcedure {
   * @param src Addresses of addends.
   */
   void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
-/**
-* @brief creates a neg instruction. See neg of ezas.
-*
-  * @param dest An address which the negate is stored.
-* @param src An address of the original value.
-*/
+  /**
+  * @brief creates a neg instruction. See neg of ezas.
+  *
+    * @param dest An address which the negate is stored.
+  * @param src An address of the original value.
+  */
   void neg(const ezAddress dest, ezAddress src);
-/**
-* @brief creates a neg instruction. The instruction stores a condition at the address of cond. See neg of ezas.
-*
-* @param dest An address which the negate is stored.
-  * @param cond An address which the condition is stored.
-* @param src An address of the original value.
-*/
+  /**
+  * @brief creates a neg instruction. The instruction stores a condition at the
+  *address of cond. See neg of ezas.
+  *
+  * @param dest An address which the negate is stored.
+    * @param cond An address which the condition is stored.
+  * @param src An address of the original value.
+  */
   void neg(const ezAddress dest, const ezAddress cond, ezAddress src);
   /**
   * @brief creates a bitwise OR instruction. See and of ezas.
@@ -204,7 +205,7 @@ class ezAsmProcedure {
   * @param rarg A right argument.
   */
   void bitwise_or(const ezAddress dest, const ezAddress larg,
-                   const ezAddress rarg);
+                  const ezAddress rarg);
   /**
   * @brief creates a bitwise OR instruction. The instruction stores a condition
   *at the address of cond. See or of ezas.
@@ -215,7 +216,7 @@ class ezAsmProcedure {
   * @param rarg A right argument.
   */
   void bitwise_or(const ezAddress dest, const ezAddress cond,
-                   const ezAddress larg, const ezAddress rarg);
+                  const ezAddress larg, const ezAddress rarg);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *
