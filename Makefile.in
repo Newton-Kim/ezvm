@@ -32,6 +32,26 @@ distclean:
 	rm -f Makefile 
 
 test:
+	bin/ezas share/ezvm/hello.ezas 
+	bin/ezas share/ezvm/hello2.ezas 
+	bin/ezas share/ezvm/swap.ezas 
+	bin/ezas share/ezvm/add.ezas 
+	bin/ezas share/ezvm/add2.ezas 
+	bin/ezas share/ezvm/and.ezas 
+	bin/ezas share/ezvm/and2.ezas 
+	bin/ezas share/ezvm/div.ezas 
+	bin/ezas share/ezvm/div2.ezas 
+	bin/ezas share/ezvm/mul.ezas 
+	bin/ezas share/ezvm/mul2.ezas 
+	bin/ezas share/ezvm/neg.ezas 
+	bin/ezas share/ezvm/neg2.ezas 
+	bin/ezas share/ezvm/or.ezas 
+	bin/ezas share/ezvm/or2.ezas 
+	bin/ezas share/ezvm/sub.ezas 
+	bin/ezas share/ezvm/sub2.ezas 
+	bin/ezas share/ezvm/xor.ezas 
+	bin/ezas share/ezvm/xor2.ezas 
+testg:
 	bin/ezas share/ezvm/hello.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/hello2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/swap.ezas -l stderr -d stderr
