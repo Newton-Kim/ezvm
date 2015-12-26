@@ -43,6 +43,8 @@ test:
 	bin/ezas share/ezvm/div2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/mul.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/mul2.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/neg.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/neg2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/or.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/or2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/sub.ezas -l stderr -d stderr

@@ -137,6 +137,7 @@ class ezThread {
   void blt(uint8_t index);
   void bra(uint8_t index);
   void mul(uint8_t ndests, uint8_t nsrcs);
+  void neg(uint8_t ndests, uint8_t nsrcs);
   void bitwise_or(uint8_t ndests, uint8_t nsrcs);
   void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
 };

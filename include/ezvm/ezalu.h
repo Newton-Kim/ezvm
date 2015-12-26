@@ -52,6 +52,7 @@ class ezALU {
   ezValue* sub(vector<ezValue*>& args);
   ezValue* mul(vector<ezValue*>& args);
   ezValue* div(vector<ezValue*>& args);
+  ezValue* neg(ezValue* arg);
   ezValue* bitwise_and(ezValue* larg, ezValue* rarg);
   ezValue* bitwise_or(ezValue* larg, ezValue* rarg);
   ezValue* bitwise_not(ezValue* arg);

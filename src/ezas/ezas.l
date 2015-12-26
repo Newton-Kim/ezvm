@@ -30,7 +30,7 @@
 %option yylineno
 
 comment #.*
-integer [0-9]+
+integer [+-]?[0-9]+
 string \"[^"]*\"
 symbol [a-zA-Z_][a-zA-Z_0-9]*
 newline [\n\r]
@@ -51,6 +51,7 @@ sp [ \t]
 "ld" return LD;
 "mul" return MUL;
 "mv" return MV;
+"neg" return NEG;
 "or" return OR;
 "sub" return SUB;
 "xor" return XOR;

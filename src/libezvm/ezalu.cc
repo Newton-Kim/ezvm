@@ -302,6 +302,20 @@ ezValue* ezALU::div(vector<ezValue*>& args) {
   return ret;
 }
 
+ezValue* ezALU::neg(ezValue* arg) {
+	ezValue* ret = NULL;
+	int ival = arg->to_integer();
+	switch(arg->type) {
+		case EZ_VALUE_TYPE_INTEGER:
+			ret = new ezInteger(-ival);
+			break;
+		default:
+			throw runtime_error("unable to negate");
+			break;
+	}
+	return ret;
+}
+
 ezValue* ezALU::bitwise_and(ezValue* larg, ezValue* rarg) {
   ezValueType type =
       m_pCoercTable[EZ_COERC_OPERATION_AND][larg->type][rarg->type];

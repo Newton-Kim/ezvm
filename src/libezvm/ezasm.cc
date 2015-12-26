@@ -135,6 +135,21 @@ void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
     instruction.argument(*it);
 }
 
+void ezAsmProcedure::neg(const ezAddress dest, const ezAddress org) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_NEG, 1, 1);
+  instruction.argument(dest);
+  instruction.argument(org);
+}
+
+void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond, const ezAddress org) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_NEG, 2, 1);
+  instruction.argument(dest);
+  instruction.argument(cond);
+  instruction.argument(org);
+}
+
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress larg,
                                  const ezAddress rarg) {
   ezInstEncoder instruction(m_carousel->instruction);

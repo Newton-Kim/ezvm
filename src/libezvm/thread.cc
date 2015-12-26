@@ -57,6 +57,10 @@ void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.mul(arg1, arg2);
 }
 
+void run_neg(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.neg(arg1, arg2);
+}
+
 void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_or(arg1, arg2);
 }
@@ -82,7 +86,7 @@ void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
-                   run_call, run_div, run_ld,  run_mul, run_mv, run_or,  run_sub, run_xor};
+                   run_call, run_div, run_ld,  run_mul, run_mv, run_neg, run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -296,6 +300,29 @@ void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   vr = addr2val(addr);
   rst = m_alu.bitwise_and(vl, vr);
+  val2addr(dest, rst);
+  if (ndests == 2) val2addr(cond, rst->condition());
+}
+
+void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
+  ezStackFrame* sf = m_stack.top();
+  ezInstDecoder decoder;
+  ezAddress dest, addr, cond;
+  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
+  ezValue* v = NULL, *rst = NULL;
+  switch (ndests) {
+    case 2:
+      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+    case 1:
+      break;
+    default:
+      throw runtime_error("the destination of neg must be 1 or 2");
+      break;
+  }
+  if (nsrcs != 1) throw runtime_error("the operands of neg must be 1");
+  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+  v = addr2val(addr);
+  rst = m_alu.neg(v);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }
