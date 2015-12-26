@@ -86,7 +86,8 @@ void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
-                   run_call, run_div, run_ld,  run_mul, run_mv, run_neg, run_or,  run_sub, run_xor};
+                   run_call, run_div, run_ld,  run_mul, run_mv,
+                   run_neg,  run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -258,7 +259,7 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* v = NULL, *rst = NULL;
+  ezValue* rst = NULL;
   switch (ndests) {
     case 2:
       decoder.argument(sf->carousel->instruction[sf->pc++], cond);
@@ -268,13 +269,29 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
       throw runtime_error("the destination of ADD must be 1 or 2");
       break;
   }
-  vector<ezValue*> args;
-  for (size_t i = 0; i < nsrcs; i++) {
-    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-    v = addr2val(addr);
-    args.push_back(v);
+  switch (nsrcs) {
+    case 1:
+      throw runtime_error("the number of ADD operands must be 2 or more");
+      break;
+    case 2: {
+      ezValue* vr = NULL, *vl = NULL;
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      vl = addr2val(addr);
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      vr = addr2val(addr);
+      rst = m_alu.add(vl, vr);
+    } break;
+    default: {
+      ezValue* v = NULL;
+      vector<ezValue*> args;
+      for (size_t i = 0; i < nsrcs; i++) {
+        decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+        v = addr2val(addr);
+        args.push_back(v);
+      }
+      rst = m_alu.add(args);
+    } break;
   }
-  rst = m_alu.add(args);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
 }

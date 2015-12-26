@@ -40,7 +40,8 @@ enum ezCoercOperation {
   EZ_COERC_OPERATION_MAX
 };
 
-typedef ezValueType ezCoercTable[EZ_COERC_OPERATION_MAX][EZ_VALUE_TYPE_MAX][EZ_VALUE_TYPE_MAX];
+typedef ezValueType ezCoercTable[EZ_COERC_OPERATION_MAX][EZ_VALUE_TYPE_MAX]
+                                [EZ_VALUE_TYPE_MAX];
 class ezALU {
  private:
   ezCoercTable& m_pCoercTable;
@@ -49,6 +50,7 @@ class ezALU {
   ezALU();
   ezALU(ezCoercTable& coercTable);
   ezValue* add(vector<ezValue*>& args);
+  ezValue* add(ezValue* larg, ezValue* rarg);
   ezValue* sub(vector<ezValue*>& args);
   ezValue* mul(vector<ezValue*>& args);
   ezValue* div(vector<ezValue*>& args);
