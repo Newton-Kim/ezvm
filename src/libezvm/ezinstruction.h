@@ -50,10 +50,10 @@ enum ezOpCode {
   EZ_OP_MV,
   //  EZ_OP_NEG,
   //  EZ_OP_NOT,
-  //  EZ_OP_OR,
+  EZ_OP_OR,
   //  EZ_OP_RET,
   EZ_OP_SUB,
-  //  EZ_OP_XOR
+  EZ_OP_XOR
 };
 
 class ezInstEncoder {

@@ -102,7 +102,7 @@ class ezAsmProcedure {
   */
   void add(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   /**
-  * @brief creates a bitwise and instruction. See and of ezas.
+  * @brief creates a bitwise AND instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
   * @param larg A left argument.
@@ -111,7 +111,7 @@ class ezAsmProcedure {
   void bitwise_and(const ezAddress dest, const ezAddress larg,
                    const ezAddress rarg);
   /**
-  * @brief creates a bitwise and instruction. The instruction stores a condition
+  * @brief creates a bitwise AND instruction. The instruction stores a condition
   *at the address of cond. See and of ezas.
   *
   * @param dest An address which the result is stored.
@@ -182,7 +182,27 @@ class ezAsmProcedure {
   */
   void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   /**
-  * @brief creates an subtration instruction. See sub of ezas.
+  * @brief creates a bitwise OR instruction. See and of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_or(const ezAddress dest, const ezAddress larg,
+                   const ezAddress rarg);
+  /**
+  * @brief creates a bitwise OR instruction. The instruction stores a condition
+  *at the address of cond. See or of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param cond An address which the condition is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_or(const ezAddress dest, const ezAddress cond,
+                   const ezAddress larg, const ezAddress rarg);
+  /**
+  * @brief creates a subtraction instruction. See sub of ezas.
   *
   * @param dest An address which the difference is stored.
   * @param src Addresses of minuend and subtrahend.
@@ -196,6 +216,26 @@ class ezAsmProcedure {
   * @param src Addresses of minuend and subtrahend.
   */
   void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  /**
+  * @brief creates a bitwise XOR instruction. See xor of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_xor(const ezAddress dest, const ezAddress larg,
+                   const ezAddress rarg);
+  /**
+  * @brief creates a bitwise XOR instruction. The instruction stores a condition
+  *at the address of cond. See xor of ezas.
+  *
+  * @param dest An address which the result is stored.
+  * @param cond An address which the condition is stored.
+  * @param larg A left argument.
+  * @param rarg A right argument.
+  */
+  void bitwise_xor(const ezAddress dest, const ezAddress cond,
+                   const ezAddress larg, const ezAddress rarg);
 };
 
 /**

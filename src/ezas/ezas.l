@@ -51,7 +51,9 @@ sp [ \t]
 "ld" return LD;
 "mul" return MUL;
 "mv" return MV;
+"or" return OR;
 "sub" return SUB;
+"xor" return XOR;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
