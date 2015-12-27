@@ -30,6 +30,7 @@
 #include "ezalu.h"
 #include <cstddef>
 #include <vector>
+#include <functional>
 
 using namespace std;
 
@@ -104,7 +105,8 @@ class ezThread {
   * @param nrets is a number of return addresses which follows the arguments.
   */
   void call(ezCarousel* func, uint8_t nargs, uint8_t nrets);
-
+  void binary_operation(uint8_t nargs, uint8_t nsrcs, function<ezValue*(ezValue*,ezValue*)> binary_func, function<ezValue*(vector<ezValue*>&)> multi_func);
+  void unary_operation(uint8_t nargs, uint8_t nsrcs, function<ezValue*(ezValue*)> unary_func);
  public:
   /**
   * @brief constructs a thread with an entry point, a global memory, and a

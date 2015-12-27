@@ -254,7 +254,7 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets) {
   m_stack.push(nsf);
 }
 
-void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
+void ezThread::binary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*,ezValue*)> binary_func, function<ezValue*(vector<ezValue*>&)> multi_func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -279,7 +279,7 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
       vl = addr2val(addr);
       decoder.argument(sf->carousel->instruction[sf->pc++], addr);
       vr = addr2val(addr);
-      rst = m_alu.add(vl, vr);
+      rst = binary_func(vl, vr);
     } break;
     default: {
       ezValue* v = NULL;
@@ -289,11 +289,15 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
         v = addr2val(addr);
         args.push_back(v);
       }
-      rst = m_alu.add(args);
+      rst = multi_func(args);
     } break;
   }
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
+}
+
+void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.add(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.add(args);});
 }
 
 void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
@@ -321,7 +325,7 @@ void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
   if (ndests == 2) val2addr(cond, rst->condition());
 }
 
-void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
+void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*)> unary_func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -339,9 +343,13 @@ void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
   if (nsrcs != 1) throw runtime_error("the operands of neg must be 1");
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   v = addr2val(addr);
-  rst = m_alu.neg(v);
+  rst = unary_func(v);
   val2addr(dest, rst);
   if (ndests == 2) val2addr(cond, rst->condition());
+}
+
+void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
+  unary_operation(ndests, nsrcs, [&](ezValue* v) {return m_alu.neg(v);});
 }
 
 void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
