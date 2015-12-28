@@ -301,28 +301,7 @@ void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* vr = NULL, *vl = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  if (nsrcs != 2) throw runtime_error("the operands of AND must be 2");
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vl = addr2val(addr);
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vr = addr2val(addr);
-  rst = m_alu.bitwise_and(vl, vr);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_and(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_and(args);});
 }
 
 void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*)> unary_func) {
@@ -353,131 +332,23 @@ void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* vr = NULL, *vl = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  if (nsrcs != 2) throw runtime_error("the operands of AND must be 2");
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vl = addr2val(addr);
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vr = addr2val(addr);
-  rst = m_alu.bitwise_or(vl, vr);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_or(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_or(args);});
 }
 
 void ezThread::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* vr = NULL, *vl = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  if (nsrcs != 2) throw runtime_error("the operands of AND must be 2");
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vl = addr2val(addr);
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  vr = addr2val(addr);
-  rst = m_alu.bitwise_xor(vl, vr);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_xor(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_xor(args);});
 }
 
 void ezThread::div(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* v = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  vector<ezValue*> args;
-  for (size_t i = 0; i < nsrcs; i++) {
-    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-    v = addr2val(addr);
-    args.push_back(v);
-  }
-  rst = m_alu.div(args);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.div(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.div(args);});
 }
 
 void ezThread::mul(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* v = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  vector<ezValue*> args;
-  for (size_t i = 0; i < nsrcs; i++) {
-    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-    v = addr2val(addr);
-    args.push_back(v);
-  }
-  rst = m_alu.mul(args);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.mul(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.mul(args);});
 }
 
 void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* v = NULL, *rst = NULL;
-  switch (ndests) {
-    case 2:
-      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
-    case 1:
-      break;
-    default:
-      throw runtime_error("the destination of ADD must be 1 or 2");
-      break;
-  }
-  vector<ezValue*> args;
-  for (size_t i = 0; i < nsrcs; i++) {
-    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-    v = addr2val(addr);
-    args.push_back(v);
-  }
-  rst = m_alu.sub(args);
-  val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.sub(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.sub(args);});
 }
 
 void ezThread::beq(uint8_t index) {
