@@ -29,63 +29,63 @@
 
 typedef void (*RUNFUNC)(ezThread&, uint8_t, uint8_t, uint8_t);
 
-void run_mv(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_mv(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.mv(arg1, arg2);
 }
 
-void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.ld();
 }
 
-void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.call(arg1, arg2);
 }
 
-void run_div(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_div(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.div(arg1, arg2);
 }
 
-void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.add(arg1, arg2);
 }
 
-void run_and(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_and(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_and(arg1, arg2);
 }
 
-void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.mul(arg1, arg2);
 }
 
-void run_neg(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_neg(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.neg(arg1, arg2);
 }
 
-void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_or(arg1, arg2);
 }
 
-void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.sub(arg1, arg2);
 }
 
-void run_xor(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_xor(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_xor(arg1, arg2);
 }
 
-void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.beq(arg1);
 }
 
-void run_blt(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_blt(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.blt(arg1);
 }
 
-void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bra(arg1);
 }
 
-RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
+static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
                    run_call, run_div, run_ld,  run_mul, run_mv,
                    run_neg,  run_or,  run_sub, run_xor};
 
@@ -351,7 +351,7 @@ void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.sub(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.sub(args);});
 }
 
-void ezThread::beq(uint8_t index) {
+void ezThread::conditional_bra(uint8_t index, function<bool(ezCondition*)>func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress addr;
@@ -359,18 +359,15 @@ void ezThread::beq(uint8_t index) {
   ezValue* cond = addr2val(addr);
   if (cond->type != EZ_VALUE_TYPE_CONDITION)
     throw runtime_error("beq doesn't see condition");
-  if (((ezCondition*)cond)->zero) bra(index);
+  if (func((ezCondition*)cond)) bra(index);
+}
+
+void ezThread::beq(uint8_t index) {
+  conditional_bra(index, [](ezCondition* cond) {return cond->zero;});
 }
 
 void ezThread::blt(uint8_t index) {
-  ezStackFrame* sf = m_stack.top();
-  ezInstDecoder decoder;
-  ezAddress addr;
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  ezValue* cond = addr2val(addr);
-  if (cond->type != EZ_VALUE_TYPE_CONDITION)
-    throw runtime_error("blt doesn't see condition");
-  if (((ezCondition*)cond)->negative) bra(index);
+  conditional_bra(index, [](ezCondition* cond) {return cond->negative;});
 }
 
 void ezThread::bra(uint8_t index) {
