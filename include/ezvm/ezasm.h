@@ -166,6 +166,22 @@ class ezAsmProcedure {
   */
   void label(string name);
   /**
+  * @brief creates a mod instruction. See mod of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param src Addresses of arguments.
+  */
+  void mod(const ezAddress dest, vector<ezAddress>& src);
+  /**
+  * @brief creates a mod instruction. The instruction stores a condition at the
+  * address of cond. See mod of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param src Addresses of arguments.
+  */
+  void mod(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  /**
   * @brief creates a mul instruction. See mul of ezas.
   *
   * @param dest An address which the product is stored.

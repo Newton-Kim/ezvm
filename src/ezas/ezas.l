@@ -49,6 +49,7 @@ sp [ \t]
 "call" return CALL;
 "div" return DIV;
 "ld" return LD;
+"mod" return MOD;
 "mul" return MUL;
 "mv" return MV;
 "neg" return NEG;

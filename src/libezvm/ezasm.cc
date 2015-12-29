@@ -53,6 +53,7 @@ void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src) {
     instruction.argument(*it);
 }
 
+//TODO:refactoring is needed
 void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj,
                         const ezAddress offset) {
   ezInstEncoder instruction(m_carousel->instruction);
@@ -111,6 +112,24 @@ void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
                          vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_DIV, 2, src.size());
+  instruction.argument(dest);
+  instruction.argument(cond);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
+}
+
+void ezAsmProcedure::mod(const ezAddress dest, vector<ezAddress>& src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_MOD, 1, src.size());
+  instruction.argument(dest);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
+}
+
+void ezAsmProcedure::mod(const ezAddress dest, const ezAddress cond,
+                         vector<ezAddress>& src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_MOD, 2, src.size());
   instruction.argument(dest);
   instruction.argument(cond);
   for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)

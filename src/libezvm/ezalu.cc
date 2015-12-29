@@ -134,6 +134,33 @@ static ezValueType defaultCoercTable
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
+        // EZ_COERC_OPERATION_MODULATION,
+        {
+            // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+        },
         // EZ_COERC_OPERATION_AND,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
@@ -343,6 +370,62 @@ ezValue* ezALU::sub(ezValue* larg, ezValue* rarg) {
       m_pCoercTable[EZ_COERC_OPERATION_SUBTRACTION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do subtraction");
   return subd[type](larg, rarg);
+}
+
+static ezValue* modv_default(vector<ezValue*>& args) {
+  throw runtime_error("invalid type for modulation");
+  return NULL;
+}
+
+static ezValue* modv_integer(vector<ezValue*>& args) {
+  int iret = args[0]->to_integer();
+  for (size_t i = 1; i < args.size(); i++) iret %= args[i]->to_integer();
+  return new ezInteger(iret);
+}
+
+ARITHEMATIC_V modv[EZ_VALUE_TYPE_MAX] = {
+    modv_default,  // EZ_VALUE_TYPE_NULL = 0,
+    modv_default,  // EZ_VALUE_TYPE_CONDITION,
+    modv_default,  // EZ_VALUE_TYPE_BOOL,
+    modv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    modv_default,  // EZ_VALUE_TYPE_STRING,
+    modv_default,  // EZ_VALUE_TYPE_CAROUSEL,
+    modv_default  // EZ_VALUE_TYPE_NATIVE_CAROUSEL
+};
+
+ezValue* ezALU::mod(vector<ezValue*>& args) {
+  ezValueType type = args[0]->type;
+  for (size_t i = 1; i < args.size(); i++) {
+    type = m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][type][args[i]->type];
+    if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do modulation");
+  }
+  return modv[type](args);
+}
+
+static ezValue* modd_default(ezValue* larg, ezValue* rarg) {
+  throw runtime_error("invalid type for modulation");
+  return NULL;
+}
+
+static ezValue* modd_integer(ezValue* larg, ezValue* rarg) {
+  return new ezInteger(larg->to_integer() % rarg->to_integer());
+}
+
+ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
+    modd_default,  // EZ_VALUE_TYPE_NULL = 0,
+    modd_default,  // EZ_VALUE_TYPE_CONDITION,
+    modd_default,  // EZ_VALUE_TYPE_BOOL,
+    modd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    modd_default,  // EZ_VALUE_TYPE_STRING,
+    modd_default,  // EZ_VALUE_TYPE_CAROUSEL,
+    modd_default  // EZ_VALUE_TYPE_NATIVE_CAROUSEL
+};
+
+ezValue* ezALU::mod(ezValue* larg, ezValue* rarg) {
+  ezValueType type =
+      m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][larg->type][rarg->type];
+  if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do modulation");
+  return modd[type](larg, rarg);
 }
 
 static ezValue* mulv_default(vector<ezValue*>& args) {

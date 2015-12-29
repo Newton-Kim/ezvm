@@ -34,6 +34,7 @@ enum ezCoercOperation {
   EZ_COERC_OPERATION_SUBTRACTION,
   EZ_COERC_OPERATION_MULTIPLICATION,
   EZ_COERC_OPERATION_DIVISION,
+  EZ_COERC_OPERATION_MODULATION,
   EZ_COERC_OPERATION_AND,
   EZ_COERC_OPERATION_OR,
   EZ_COERC_OPERATION_XOR,
@@ -53,6 +54,8 @@ class ezALU {
   ezValue* add(ezValue* larg, ezValue* rarg);
   ezValue* sub(vector<ezValue*>& args);
   ezValue* sub(ezValue* larg, ezValue* rarg);
+  ezValue* mod(vector<ezValue*>& args);
+  ezValue* mod(ezValue* larg, ezValue* rarg);
   ezValue* mul(vector<ezValue*>& args);
   ezValue* mul(ezValue* larg, ezValue* rarg);
   ezValue* div(vector<ezValue*>& args);

@@ -162,7 +162,7 @@ static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BLT BRA CALL DIV LD MUL MV NEG OR SUB XOR
+%token ADD AND BEQ BLT BRA CALL DIV LD MOD MUL MV NEG OR SUB XOR
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
@@ -217,6 +217,7 @@ line : | add
 	| call
 	| div
 	| ld
+	| mod
 	| mul
 	| mv
 	| neg
@@ -243,6 +244,9 @@ div : DIV var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), s_
 	| DIV var var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
+
+mod : MOD var ',' vars {s_proc_current->mod(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+	| MOD var var ',' vars {s_proc_current->mod(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 mul : MUL var ',' vars {s_proc_current->mul(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| MUL var var ',' vars {s_proc_current->mul(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}

@@ -53,6 +53,10 @@ static void run_and(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_and(arg1, arg2);
 }
 
+static void run_mod(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.mod(arg1, arg2);
+}
+
 static void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.mul(arg1, arg2);
 }
@@ -86,7 +90,7 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
-                   run_call, run_div, run_ld,  run_mul, run_mv,
+                   run_call, run_div, run_ld, run_mod, run_mul, run_mv,
                    run_neg,  run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
@@ -341,6 +345,10 @@ void ezThread::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
 
 void ezThread::div(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.div(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.div(args);});
+}
+
+void ezThread::mod(uint8_t ndests, uint8_t nsrcs) {
+  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.mod(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.mod(args);});
 }
 
 void ezThread::mul(uint8_t ndests, uint8_t nsrcs) {
