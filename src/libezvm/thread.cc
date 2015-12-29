@@ -24,7 +24,7 @@
 */
 #include "ezvm/ezlog.h"
 #include "ezvm/ezthread.h"
-#include "ezinstruction.h"
+#include "ezvm/ezinstruction.h"
 #include <stdexcept>
 
 typedef void (*RUNFUNC)(ezThread&, uint8_t, uint8_t, uint8_t);

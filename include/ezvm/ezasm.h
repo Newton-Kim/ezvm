@@ -27,6 +27,7 @@
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezfile.h"
+#include "ezinstruction.h"
 #include <cstddef>
 #include <vector>
 #include <string>
@@ -53,6 +54,8 @@ class ezAsmProcedure {
   * @brief is an instance of a carousel.
   */
   ezCarousel* m_carousel;
+  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, vector<ezAddress>& src);
+  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 
  public:
   /**

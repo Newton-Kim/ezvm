@@ -22,7 +22,7 @@
 * THE SOFTWARE.
 *
 */
-#include "ezinstruction.h"
+#include "ezvm/ezinstruction.h"
 #include <stdexcept>
 
 struct ezOperation {
@@ -73,6 +73,8 @@ void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr) {
 
 const char* ezInstDecoder::opstr(ezOpCode op) {
   switch (op) {
+    case EZ_OP_MOD:
+      return "mod";
     case EZ_OP_MV:
       return "mv";
     case EZ_OP_LD:
@@ -83,6 +85,10 @@ const char* ezInstDecoder::opstr(ezOpCode op) {
       return "add";
     case EZ_OP_AND:
       return "add";
+    case EZ_OP_OR:
+      return "or";
+    case EZ_OP_XOR:
+      return "xor";
     case EZ_OP_SUB:
       return "add";
     case EZ_OP_BEQ:

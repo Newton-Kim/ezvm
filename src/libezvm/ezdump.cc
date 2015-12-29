@@ -23,7 +23,7 @@
 *
 */
 #include "ezvm/ezdump.h"
-#include "ezinstruction.h"
+#include "ezvm/ezinstruction.h"
 
 using namespace std;
 
