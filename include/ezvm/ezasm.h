@@ -105,22 +105,18 @@ class ezAsmProcedure {
   * @brief creates a bitwise AND instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress larg,
-                   const ezAddress rarg);
+  void bitwise_and(const ezAddress dest, vector<ezAddress>& src);
   /**
   * @brief creates a bitwise AND instruction. The instruction stores a condition
   *at the address of cond. See and of ezas.
   *
   * @param dest An address which the result is stored.
   * @param cond An address which the condition is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress cond,
-                   const ezAddress larg, const ezAddress rarg);
+  void bitwise_and(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
@@ -217,22 +213,18 @@ class ezAsmProcedure {
   * @brief creates a bitwise OR instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress larg,
-                  const ezAddress rarg);
+  void bitwise_or(const ezAddress dest, vector<ezAddress>& src);
   /**
   * @brief creates a bitwise OR instruction. The instruction stores a condition
   *at the address of cond. See or of ezas.
   *
   * @param dest An address which the result is stored.
   * @param cond An address which the condition is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress cond,
-                  const ezAddress larg, const ezAddress rarg);
+  void bitwise_or(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *
@@ -252,22 +244,18 @@ class ezAsmProcedure {
   * @brief creates a bitwise XOR instruction. See xor of ezas.
   *
   * @param dest An address which the result is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress larg,
-                   const ezAddress rarg);
+  void bitwise_xor(const ezAddress dest, vector<ezAddress>& src);
   /**
   * @brief creates a bitwise XOR instruction. The instruction stores a condition
   *at the address of cond. See xor of ezas.
   *
   * @param dest An address which the result is stored.
   * @param cond An address which the condition is stored.
-  * @param larg A left argument.
-  * @param rarg A right argument.
+  * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress cond,
-                   const ezAddress larg, const ezAddress rarg);
+  void bitwise_xor(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
 };
 
 /**

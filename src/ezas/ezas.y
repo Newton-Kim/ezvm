@@ -229,8 +229,8 @@ line : | add
 add : ADD var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| ADD var var ',' vars {s_proc_current->add(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
-and : AND var ',' var var {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));}
-	| AND var var ',' var var {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));}
+and : AND var ',' vars {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), s_args_var); s_args_var.clear(); s_args_var.clear();}
+	| AND var var ',' vars {s_proc_current->bitwise_and(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 beq : BEQ var SYMBOL {s_proc_current->beq(ezAddress($2.segment, $2.offset), $3);}
 
@@ -256,14 +256,14 @@ mv : MV addrs ',' vars {s_proc_current->mv(s_args_addr, s_args_var); s_args_addr
 neg : NEG var ',' var {s_proc_current->neg(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset));}
 	| NEG var var ',' var {s_proc_current->neg(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset));}
 
-or : OR var ',' var var {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));}
-	| OR var var ',' var var {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));}
+or : OR var ',' vars {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+	| OR var var ',' vars {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| SUB var var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
-xor : XOR var ',' var var {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));}
-	| XOR var var ',' var var {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));}
+xor : XOR var ',' vars {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+	| XOR var var ',' vars {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
 label : ':' SYMBOL {s_proc_current->label($2);}
 

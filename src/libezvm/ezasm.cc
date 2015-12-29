@@ -81,23 +81,22 @@ void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond,
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress larg,
-                                 const ezAddress rarg) {
+void ezAsmProcedure::bitwise_and(const ezAddress dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_AND, 1, 2);
+  instruction.opcode(EZ_OP_AND, 1, src.size());
   instruction.argument(dest);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond,
-                                 const ezAddress larg, const ezAddress rarg) {
+                         vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_AND, 2, 2);
+  instruction.opcode(EZ_OP_AND, 2, src.size());
   instruction.argument(dest);
   instruction.argument(cond);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 void ezAsmProcedure::div(const ezAddress dest, vector<ezAddress>& src) {
@@ -170,23 +169,22 @@ void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond,
   instruction.argument(org);
 }
 
-void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress larg,
-                                const ezAddress rarg) {
+void ezAsmProcedure::bitwise_or(const ezAddress dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_OR, 1, 2);
+  instruction.opcode(EZ_OP_OR, 1, src.size());
   instruction.argument(dest);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress cond,
-                                const ezAddress larg, const ezAddress rarg) {
+                         vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_OR, 2, 2);
+  instruction.opcode(EZ_OP_OR, 2, src.size());
   instruction.argument(dest);
   instruction.argument(cond);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 void ezAsmProcedure::sub(const ezAddress dest, vector<ezAddress>& src) {
@@ -207,23 +205,22 @@ void ezAsmProcedure::sub(const ezAddress dest, const ezAddress cond,
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress larg,
-                                 const ezAddress rarg) {
+void ezAsmProcedure::bitwise_xor(const ezAddress dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_XOR, 1, 2);
+  instruction.opcode(EZ_OP_XOR, 1, src.size());
   instruction.argument(dest);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
-                                 const ezAddress larg, const ezAddress rarg) {
+                         vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_XOR, 2, 2);
+  instruction.opcode(EZ_OP_XOR, 2, src.size());
   instruction.argument(dest);
   instruction.argument(cond);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
 }
 
 size_t ezAsmProcedure::label2index(string label) {
