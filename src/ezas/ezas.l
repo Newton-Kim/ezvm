@@ -53,6 +53,7 @@ sp [ \t]
 "mul" return MUL;
 "mv" return MV;
 "neg" return NEG;
+"not" return NOT;
 "or" return OR;
 "sub" return SUB;
 "xor" return XOR;

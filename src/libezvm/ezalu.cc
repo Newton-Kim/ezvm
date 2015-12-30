@@ -249,6 +249,7 @@ ezALU::ezALU(ezCoercTable& coercTable) : m_pCoercTable(coercTable) {}
 
 typedef ezValue* (*ARITHEMATIC_V)(vector<ezValue*>& args);
 typedef ezValue* (*ARITHEMATIC_DUO)(ezValue* larg, ezValue* rarg);
+typedef ezValue* (*ARITHEMATIC_UNI)(ezValue* arg);
 
 static ezValue* addv_default(vector<ezValue*>& args) {
   throw runtime_error("invalid type for addition");
@@ -554,6 +555,34 @@ ezValue* ezALU::neg(ezValue* arg) {
   return ret;
 }
 
+static ezValue* not_default(ezValue* arg) {
+  throw runtime_error("invalid type for NOT");
+  return NULL;
+}
+
+static ezValue* not_bool(ezValue* arg) {
+  return new ezBool(!arg->to_bool());
+}
+
+static ezValue* not_integer(ezValue* arg) {
+  return new ezInteger(~arg->to_integer());
+}
+
+ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
+    not_default,  // EZ_VALUE_TYPE_NULL = 0,
+    not_default,  // EZ_VALUE_TYPE_CONDITION,
+    not_bool,  // EZ_VALUE_TYPE_BOOL,
+    not_integer,  // EZ_VALUE_TYPE_INTEGER,
+    not_default,  // EZ_VALUE_TYPE_STRING,
+    not_default,  // EZ_VALUE_TYPE_CAROUSEL,
+    not_default  // EZ_VALUE_TYPE_NATIVE_CAROUSEL
+};
+
+
+ezValue* ezALU::bitwise_not(ezValue* arg) {
+  return notf[arg->type](arg);
+}
+
 static ezValue* andv_default(vector<ezValue*>& args) {
   throw runtime_error("invalid type for AND");
   return NULL;
@@ -684,19 +713,6 @@ ezValue* ezALU::bitwise_or(ezValue* larg, ezValue* rarg) {
       m_pCoercTable[EZ_COERC_OPERATION_OR][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do OR");
   return ord[type](larg, rarg);
-}
-
-ezValue* ezALU::bitwise_not(ezValue* arg) {
-  ezValue* ret = NULL;
-  switch (arg->type) {
-    case EZ_VALUE_TYPE_BOOL:
-      ret = new ezBool(!arg->to_bool());
-      break;
-    case EZ_VALUE_TYPE_INTEGER:
-      ret = new ezInteger(~arg->to_integer());
-      break;
-  }
-  return ret;
 }
 
 static ezValue* xorv_default(vector<ezValue*>& args) {

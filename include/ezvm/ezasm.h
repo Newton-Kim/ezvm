@@ -56,6 +56,8 @@ class ezAsmProcedure {
   ezCarousel* m_carousel;
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, vector<ezAddress>& src);
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress src);
+  void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress src);
 
  public:
   /**
@@ -212,6 +214,22 @@ class ezAsmProcedure {
   * @param src An address of the original value.
   */
   void neg(const ezAddress dest, const ezAddress cond, ezAddress src);
+  /**
+  * @brief creates a bitwise NOT instruction. See not of ezas.
+  *
+    * @param dest An address which the product is stored.
+  * @param src An address of the original value.
+  */
+  void bitwise_not(const ezAddress dest, ezAddress src);
+  /**
+  * @brief creates a bitwise NOT instruction. The instruction stores a condition at the
+  *address of cond. See not of ezas.
+  *
+  * @param dest An address which the product is stored.
+    * @param cond An address which the condition is stored.
+  * @param src An address of the original value.
+  */
+  void bitwise_not(const ezAddress dest, const ezAddress cond, ezAddress src);
   /**
   * @brief creates a bitwise OR instruction. See and of ezas.
   *

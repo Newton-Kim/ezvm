@@ -124,20 +124,38 @@ void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_MUL, dest, cond, src);
 }
 
-void ezAsmProcedure::neg(const ezAddress dest, const ezAddress org) {
+void ezAsmProcedure::instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress org) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_NEG, 1, 1);
+  instruction.opcode(op, 1, 1);
   instruction.argument(dest);
   instruction.argument(org);
 }
 
-void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond,
+void ezAsmProcedure::instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond,
                          const ezAddress org) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_NEG, 2, 1);
+  instruction.opcode(op, 2, 1);
   instruction.argument(dest);
   instruction.argument(cond);
   instruction.argument(org);
+}
+
+void ezAsmProcedure::neg(const ezAddress dest, const ezAddress org) {
+  instruction_with_an_argument(EZ_OP_NEG, dest, org);
+}
+
+void ezAsmProcedure::neg(const ezAddress dest, const ezAddress cond,
+                         const ezAddress org) {
+  instruction_with_an_argument(EZ_OP_NEG, dest, cond, org);
+}
+
+void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress org) {
+  instruction_with_an_argument(EZ_OP_NOT, dest, org);
+}
+
+void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress cond,
+                         const ezAddress org) {
+  instruction_with_an_argument(EZ_OP_NOT, dest, cond, org);
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, vector<ezAddress>& src) {

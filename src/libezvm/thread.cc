@@ -65,6 +65,10 @@ static void run_neg(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.neg(arg1, arg2);
 }
 
+static void run_not(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.bitwise_not(arg1, arg2);
+}
+
 static void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_or(arg1, arg2);
 }
@@ -91,7 +95,7 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 
 static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
                    run_call, run_div, run_ld, run_mod, run_mul, run_mv,
-                   run_neg,  run_or,  run_sub, run_xor};
+                   run_neg,  run_not, run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -320,10 +324,10 @@ void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(
     case 1:
       break;
     default:
-      throw runtime_error("the destination of neg must be 1 or 2");
+      throw runtime_error("the destination of the operation must be 1 or 2");
       break;
   }
-  if (nsrcs != 1) throw runtime_error("the operands of neg must be 1");
+  if (nsrcs != 1) throw runtime_error("the operands of the operation must be 1");
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   v = addr2val(addr);
   rst = unary_func(v);
@@ -333,6 +337,10 @@ void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(
 
 void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
   unary_operation(ndests, nsrcs, [&](ezValue* v) {return m_alu.neg(v);});
+}
+
+void ezThread::bitwise_not(uint8_t ndests, uint8_t nsrcs) {
+  unary_operation(ndests, nsrcs, [&](ezValue* v) {return m_alu.bitwise_not(v);});
 }
 
 void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {

@@ -93,6 +93,10 @@ const char* ezInstDecoder::opstr(ezOpCode op) {
       return "add";
     case EZ_OP_BEQ:
       return "beq";
+    case EZ_OP_NEG:
+      return "neg";
+    case EZ_OP_NOT:
+      return "not";
     case EZ_OP_BLT:
       return "blt";
     case EZ_OP_BRA:

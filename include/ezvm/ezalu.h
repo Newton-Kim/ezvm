@@ -61,11 +61,11 @@ class ezALU {
   ezValue* div(vector<ezValue*>& args);
   ezValue* div(ezValue* larg, ezValue* rarg);
   ezValue* neg(ezValue* arg);
+  ezValue* bitwise_not(ezValue* arg);
   ezValue* bitwise_and(ezValue* larg, ezValue* rarg);
   ezValue* bitwise_and(vector<ezValue*>& args);
   ezValue* bitwise_or(ezValue* larg, ezValue* rarg);
   ezValue* bitwise_or(vector<ezValue*>& args);
-  ezValue* bitwise_not(ezValue* arg);
   ezValue* bitwise_xor(ezValue* larg, ezValue* rarg);
   ezValue* bitwise_xor(vector<ezValue*>& args);
 };
