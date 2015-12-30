@@ -137,7 +137,9 @@ class ezThread {
   void div(uint8_t ndests, uint8_t nsrcs);
   void sub(uint8_t ndests, uint8_t nsrcs);
   void beq(uint8_t index);
+  void bge(uint8_t index);
   void blt(uint8_t index);
+  void bne(uint8_t index);
   void bra(uint8_t index);
   void mod(uint8_t ndests, uint8_t nsrcs);
   void mul(uint8_t ndests, uint8_t nsrcs);

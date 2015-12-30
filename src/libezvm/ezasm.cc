@@ -193,18 +193,27 @@ size_t ezAsmProcedure::label2index(string label) {
   return m_carousel->symtab[label];
 }
 
-void ezAsmProcedure::beq(const ezAddress cond, string label) {
+void ezAsmProcedure::branch_instruction(ezOpCode op, const ezAddress cond, string label) {
   ezInstEncoder instruction(m_carousel->instruction);
   size_t index = label2index(label);
-  instruction.opcode(EZ_OP_BEQ, index);
+  instruction.opcode(op, index);
   instruction.argument(cond);
 }
 
+void ezAsmProcedure::beq(const ezAddress cond, string label) {
+  branch_instruction(EZ_OP_BEQ, cond, label);
+}
+
+void ezAsmProcedure::bge(const ezAddress cond, string label) {
+  branch_instruction(EZ_OP_BGE, cond, label);
+}
+
 void ezAsmProcedure::blt(const ezAddress cond, string label) {
-  ezInstEncoder instruction(m_carousel->instruction);
-  size_t index = label2index(label);
-  instruction.opcode(EZ_OP_BLT, index);
-  instruction.argument(cond);
+  branch_instruction(EZ_OP_BLT, cond, label);
+}
+
+void ezAsmProcedure::bne(const ezAddress cond, string label) {
+  branch_instruction(EZ_OP_BNE, cond, label);
 }
 
 void ezAsmProcedure::bra(string label) {

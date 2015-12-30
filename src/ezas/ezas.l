@@ -44,7 +44,9 @@ sp [ \t]
 "add" return ADD;
 "and" return AND;
 "beq" return BEQ;
+"bge" return BGE;
 "blt" return BLT;
+"bne" return BGE;
 "bra" return BRA;
 "call" return CALL;
 "div" return DIV;

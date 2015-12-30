@@ -162,7 +162,7 @@ static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BLT BRA CALL DIV LD MOD MUL MV NEG NOT OR SUB XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL DIV LD MOD MUL MV NEG NOT OR SUB XOR
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
@@ -212,7 +212,9 @@ codes : line NEWLINE | codes line NEWLINE;
 line : | add
 	| and
 	| beq
+	| bge
 	| blt
+	| bne
 	| bra
 	| call
 	| div
@@ -235,7 +237,11 @@ and : AND var ',' vars {s_proc_current->bitwise_and(ezAddress($2.segment, $2.off
 
 beq : BEQ var SYMBOL {s_proc_current->beq(ezAddress($2.segment, $2.offset), $3);}
 
+bge : BGE var SYMBOL {s_proc_current->bge(ezAddress($2.segment, $2.offset), $3);}
+
 blt : BLT var SYMBOL {s_proc_current->blt(ezAddress($2.segment, $2.offset), $3);}
+
+bne : BNE var SYMBOL {s_proc_current->bne(ezAddress($2.segment, $2.offset), $3);}
 
 bra : BRA SYMBOL {s_proc_current->bra($2);}
 

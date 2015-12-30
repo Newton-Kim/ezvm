@@ -58,6 +58,7 @@ class ezAsmProcedure {
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress src);
+  void branch_instruction(ezOpCode op, const ezAddress cond, string label);
 
  public:
   /**
@@ -131,6 +132,14 @@ class ezAsmProcedure {
   */
   void beq(const ezAddress cond, string label);
   /**
+  * @brief creates an conditional branching instruction. See bge of ezas.
+  *
+  * @param cond is a condition left by respective instruction.
+  * @param label is a tag which the process count jumps when cond meets
+  * greather or equal-condition.
+  */
+  void bge(const ezAddress cond, string label);
+  /**
   * @brief creates an conditional branching instruction. See blt of ezas.
   *
   * @param cond is a condition left by respective instruction.
@@ -138,6 +147,14 @@ class ezAsmProcedure {
   * negative-condition.
   */
   void blt(const ezAddress cond, string label);
+  /**
+  * @brief creates an conditional branching instruction. See bne of ezas.
+  *
+  * @param cond is a condition left by respective instruction.
+  * @param label is a tag which the process count jumps when cond meets
+  * non-zero-condition.
+  */
+  void bne(const ezAddress cond, string label);
   /**
   * @brief creates an unconditional branching instruction. See bra of ezas.
   *

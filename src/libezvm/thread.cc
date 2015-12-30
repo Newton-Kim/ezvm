@@ -85,15 +85,23 @@ static void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.beq(arg1);
 }
 
+static void run_bge(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.bge(arg1);
+}
+
 static void run_blt(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.blt(arg1);
+}
+
+static void run_bne(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.bne(arg1);
 }
 
 static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bra(arg1);
 }
 
-static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_blt, run_bra,
+static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_bge, run_blt, run_bne, run_bra,
                    run_call, run_div, run_ld, run_mod, run_mul, run_mv,
                    run_neg,  run_not, run_or,  run_sub, run_xor};
 
@@ -374,7 +382,7 @@ void ezThread::conditional_bra(uint8_t index, function<bool(ezCondition*)>func) 
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   ezValue* cond = addr2val(addr);
   if (cond->type != EZ_VALUE_TYPE_CONDITION)
-    throw runtime_error("beq doesn't see condition");
+    throw runtime_error("The operation doesn't see condition");
   if (func((ezCondition*)cond)) bra(index);
 }
 
@@ -382,8 +390,16 @@ void ezThread::beq(uint8_t index) {
   conditional_bra(index, [](ezCondition* cond) {return cond->zero;});
 }
 
+void ezThread::bge(uint8_t index) {
+  conditional_bra(index, [](ezCondition* cond) {return (cond->zero || !cond->negative);});
+}
+
 void ezThread::blt(uint8_t index) {
   conditional_bra(index, [](ezCondition* cond) {return cond->negative;});
+}
+
+void ezThread::bne(uint8_t index) {
+  conditional_bra(index, [](ezCondition* cond) {return !cond->zero;});
 }
 
 void ezThread::bra(uint8_t index) {

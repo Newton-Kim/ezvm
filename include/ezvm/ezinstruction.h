@@ -34,9 +34,9 @@ using namespace std;
 enum ezOpCode {
   EZ_OP_ADD = 0,
   EZ_OP_AND,
-  //  EZ_OP_BGE,
+  EZ_OP_BGE,
   EZ_OP_BEQ,
-  //  EZ_OP_BNE,
+  EZ_OP_BNE,
   EZ_OP_BLT,
   EZ_OP_BRA,
   EZ_OP_CALL,
