@@ -43,6 +43,14 @@ void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args,
     instruction.argument(*it);
 }
 
+void ezAsmProcedure::cmp(const ezAddress& cond, const ezAddress& larg, const ezAddress& rarg) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_CMP, 1, 2);
+  instruction.argument(cond);
+  instruction.argument(larg);
+  instruction.argument(rarg);
+}
+
 void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_MV, dest.size(), src.size());
@@ -283,7 +291,6 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc,
   if (it != offset_symtab->end())
     throw runtime_error("global symbol " + name + " already exists");
   ezCarousel* carousel = new ezCarousel(argc, retc, mems);
-  size_t addr = m_constants.size();
   carousel->reference();
   m_constants.push_back(carousel);
   carousel->reference();

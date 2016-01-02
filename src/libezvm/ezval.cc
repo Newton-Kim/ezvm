@@ -69,6 +69,7 @@ int ezBool::to_integer(void) { return m_value ? 1 : 0; }
 string ezBool::to_string(void) {
   string str;
   str = m_value ? "true" : "false";
+  return str;
 }
 ezValue* ezBool::condition(void) {
   return new ezCondition(!m_value, false, false, false);
@@ -84,7 +85,7 @@ string ezInteger::to_string(void) {
   return ss.str();
 }
 ezValue* ezInteger::condition(void) {
-  return new ezCondition((m_value) ? false : true, (m_value < 0) ? true : false,
+  return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
 }
 
@@ -98,11 +99,12 @@ bool ezString::to_bool(void) {
     ret = false;
   else
     throw runtime_error("unable to cast from string to bool");
+  return ret;
 }
 int ezString::to_integer(void) { return m_value.size() ? 1 : 0; }
 string ezString::to_string(void) { return m_value; }
 ezValue* ezString::condition(void) {
-  return new ezCondition((m_value.empty()) ? true : false, false, false, false);
+  return new ezCondition(m_value.empty(), false, false, false);
 }
 
 ezCarousel::ezCarousel(uint8_t args, uint8_t rets, size_t mems,

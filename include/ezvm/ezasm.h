@@ -76,6 +76,7 @@ class ezAsmProcedure {
   */
   void call(const ezAddress& func, vector<ezAddress>& args,
             vector<ezAddress>& rets);
+  void cmp(const ezAddress& cond, const ezAddress& larg, const ezAddress& rarg);
   /**
   * @brief creates a mv instruction. See mv of ezas.
   *

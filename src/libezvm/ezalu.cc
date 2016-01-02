@@ -53,6 +53,33 @@ static ezValueType defaultCoercTable
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
+        // EZ_COERC_OPERATION_COMPARISON,
+        {
+            // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,    EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_STRING, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+        },
         // EZ_COERC_OPERATION_SUBTRACTION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
@@ -315,6 +342,43 @@ ezValue* ezALU::add(ezValue* larg, ezValue* rarg) {
       m_pCoercTable[EZ_COERC_OPERATION_ADDITION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do addition");
   return addd[type](larg, rarg);
+}
+
+static ezValue* cmp_default(ezValue* larg, ezValue* rarg) {
+  throw runtime_error("invalid type for comparison");
+  return NULL;
+}
+
+static ezValue* cmp_bool(ezValue* larg, ezValue* rarg) {
+  return new ezCondition(!(larg->to_bool() ^ rarg->to_bool()), false, false, false);
+}
+
+static ezValue* cmp_integer(ezValue* larg, ezValue* rarg) {
+  int v = larg->to_integer() - rarg->to_integer();
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false, false);
+}
+
+static ezValue* cmp_string(ezValue* larg, ezValue* rarg) {
+  bool eq = (larg->to_string() == rarg->to_string()); 
+  int sz = larg->to_string().size() - rarg->to_string().size();
+  return new ezCondition(eq, ((sz < 0) ? true : false), false, false);
+}
+
+ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
+    cmp_default,  // EZ_VALUE_TYPE_NULL = 0,
+    cmp_default,  // EZ_VALUE_TYPE_CONDITION,
+    cmp_bool,  // EZ_VALUE_TYPE_BOOL,
+    cmp_integer,  // EZ_VALUE_TYPE_INTEGER,
+    cmp_string,  // EZ_VALUE_TYPE_STRING,
+    cmp_default,  // EZ_VALUE_TYPE_CAROUSEL,
+    cmp_default  // EZ_VALUE_TYPE_NATIVE_CAROUSEL
+};
+
+ezValue* ezALU::cmp(ezValue* larg, ezValue* rarg) {
+  ezValueType type =
+      m_pCoercTable[EZ_COERC_OPERATION_COMPARISON][larg->type][rarg->type];
+  if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to compare");
+  return cmpf[type](larg, rarg);
 }
 
 static ezValue* subv_default(vector<ezValue*>& args) {

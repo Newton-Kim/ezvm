@@ -73,34 +73,44 @@ void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr) {
 
 const char* ezInstDecoder::opstr(ezOpCode op) {
   switch (op) {
-    case EZ_OP_MOD:
-      return "mod";
-    case EZ_OP_MV:
-      return "mv";
-    case EZ_OP_LD:
-      return "ld";
-    case EZ_OP_CALL:
-      return "call";
     case EZ_OP_ADD:
       return "add";
     case EZ_OP_AND:
       return "add";
-    case EZ_OP_OR:
-      return "or";
-    case EZ_OP_XOR:
-      return "xor";
-    case EZ_OP_SUB:
-      return "add";
     case EZ_OP_BEQ:
       return "beq";
+    case EZ_OP_BGE:
+      return "bge";
+    case EZ_OP_BLT:
+      return "blt";
+    case EZ_OP_BNE:
+      return "bne";
+    case EZ_OP_BRA:
+      return "bra";
+    case EZ_OP_CALL:
+      return "call";
+    case EZ_OP_CMP:
+      return "cmp";
+    case EZ_OP_DIV:
+      return "div";
+    case EZ_OP_LD:
+      return "ld";
+    case EZ_OP_MOD:
+      return "mod";
+    case EZ_OP_MUL:
+      return "mul";
+    case EZ_OP_MV:
+      return "mv";
     case EZ_OP_NEG:
       return "neg";
     case EZ_OP_NOT:
       return "not";
-    case EZ_OP_BLT:
-      return "blt";
-    case EZ_OP_BRA:
-      return "bra";
+    case EZ_OP_OR:
+      return "or";
+    case EZ_OP_SUB:
+      return "sub";
+    case EZ_OP_XOR:
+      return "xor";
   }
   return "unknown";
 }

@@ -31,6 +31,7 @@ using namespace std;
 
 enum ezCoercOperation {
   EZ_COERC_OPERATION_ADDITION = 0,
+  EZ_COERC_OPERATION_COMPARISON,
   EZ_COERC_OPERATION_SUBTRACTION,
   EZ_COERC_OPERATION_MULTIPLICATION,
   EZ_COERC_OPERATION_DIVISION,
@@ -52,6 +53,7 @@ class ezALU {
   ezALU(ezCoercTable& coercTable);
   ezValue* add(vector<ezValue*>& args);
   ezValue* add(ezValue* larg, ezValue* rarg);
+  ezValue* cmp(ezValue* larg, ezValue* rarg);
   ezValue* sub(vector<ezValue*>& args);
   ezValue* sub(ezValue* larg, ezValue* rarg);
   ezValue* mod(vector<ezValue*>& args);

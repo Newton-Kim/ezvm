@@ -41,6 +41,10 @@ static void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.call(arg1, arg2);
 }
 
+static void run_cmp(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.cmp(arg1, arg2);
+}
+
 static void run_div(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.div(arg1, arg2);
 }
@@ -102,7 +106,7 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_bge, run_blt, run_bne, run_bra,
-                   run_call, run_div, run_ld, run_mod, run_mul, run_mv,
+                   run_call, run_cmp, run_div, run_ld, run_mod, run_mul, run_mv,
                    run_neg,  run_not, run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
@@ -268,6 +272,36 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets) {
     nsf->return_dest.push_back(addr);
   }
   m_stack.push(nsf);
+}
+
+void ezThread::cmp(uint8_t ndests, uint8_t nsrcs) {
+  ezStackFrame* sf = m_stack.top();
+  ezInstDecoder decoder;
+  ezAddress addr, cond;
+  ezValue* rst = NULL;
+  switch (ndests) {
+    case 1:
+      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+      break;
+    default:
+      throw runtime_error("the destination of CMP must be 1");
+      break;
+  }
+  switch (nsrcs) {
+    case 1:
+      break;
+    case 2: {
+      ezValue* vr = NULL, *vl = NULL;
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      vl = addr2val(addr);
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      vr = addr2val(addr);
+      rst = m_alu.cmp(vl, vr);
+    } break;
+      throw runtime_error("the number of ADD operands must be 2 or more");
+      break;
+  }
+  val2addr(cond, rst);
 }
 
 void ezThread::binary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*,ezValue*)> binary_func, function<ezValue*(vector<ezValue*>&)> multi_func) {

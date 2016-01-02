@@ -46,9 +46,10 @@ sp [ \t]
 "beq" return BEQ;
 "bge" return BGE;
 "blt" return BLT;
-"bne" return BGE;
+"bne" return BNE;
 "bra" return BRA;
 "call" return CALL;
+"cmp" return CMP;
 "div" return DIV;
 "ld" return LD;
 "mod" return MOD;

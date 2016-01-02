@@ -4,7 +4,7 @@
 	.memories 8
 	mv l:0 l:1, 1 2
 	cmp l:2 , l:0 l:1
-	blt l:2, label_blt1
+	blt l:2 label_blt1
 	call io:print (stdout l:0 " >= " l:1)
 	bra label_end1
 	:label_blt1
@@ -12,17 +12,17 @@
 	:label_end1
 	mv l:0 l:1, 2 2
 	cmp l:2 , l:0 l:1
-	blt l:2, label_blt2
-	call io:print (stdout l:0 " >= " l:1)
+	blt l:2 label_blt2
+	call io:print (stdout l:0 " >= " l:1 " , it make sense.")
 	bra label_end2
 	:label_blt2
-	call io:print (stdout l:0 " < " l:1 " , it make sense.")
+	call io:print (stdout l:0 " < " l:1)
 	:label_end2
 	mv l:0 l:1, 3 2
 	cmp l:2 , l:0 l:1
-	blt l:2, label_blt3
-	call io:print (stdout l:0 " >= " l:1 ")
+	blt l:2 label_blt3
+	call io:print (stdout l:0 " >= " l:1 " , it make sense.")
 	bra label_end3
 	:label_blt3
-	call io:print (stdout l:0 " < " l:1 " , it make sense.")
+	call io:print (stdout l:0 " < " l:1)
 	:label_end3
