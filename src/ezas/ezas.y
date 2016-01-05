@@ -162,10 +162,10 @@ static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD MOD MUL MV NEG NOT OR SUB XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR SUB XOR
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
-%type <s_value> PROC ENTRY CALL LD MV SYMBOL STRING NEWLINE LABEL
+%type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
 %type <a_value> ADDRESS fname var
 %type <sa_value> SYMBOLIC_ADDRESS
@@ -220,6 +220,8 @@ line : | add
 	| cmp
 	| div
 	| ld
+	| lsl
+	| lsr
 	| mod
 	| mul
 	| mv
@@ -253,7 +255,13 @@ cmp : CMP var ',' var var {s_proc_current->cmp(ezAddress($2.segment, $2.offset),
 div : DIV var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| DIV var var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
-ld : LD ADDRESS ',' var var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));};
+ld : LD ADDRESS ',' var ',' var {s_proc_current->ld(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($6.segment, $6.offset));}
+
+lsl : LSL var ',' var ',' var {s_proc_current->lsl(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($6.segment, $6.offset));}
+	| LSL var var ',' var ',' var {s_proc_current->lsl(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($7.segment, $7.offset));};
+
+lsr : LSR var ',' var ',' var {s_proc_current->lsr(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($6.segment, $6.offset));}
+	| LSR var var ',' var ',' var {s_proc_current->lsr(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($7.segment, $7.offset));};
 
 mod : MOD var ',' vars {s_proc_current->mod(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| MOD var var ',' vars {s_proc_current->mod(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}

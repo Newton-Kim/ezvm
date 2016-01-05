@@ -95,6 +95,10 @@ const char* ezInstDecoder::opstr(ezOpCode op) {
       return "div";
     case EZ_OP_LD:
       return "ld";
+    case EZ_OP_LSL:
+      return "lsl";
+    case EZ_OP_LSR:
+      return "lsr";
     case EZ_OP_MOD:
       return "mod";
     case EZ_OP_MUL:

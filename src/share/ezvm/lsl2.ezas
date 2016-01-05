@@ -3,7 +3,7 @@
 .proc main (0) 0:
 	.memories 12
 	mv l:0 l:1, 1 2
-	lsl l:2 l:3, l:0 l:1
+	lsl l:2 l:3, l:0, l:1
 	call io:print (stdout l:2 "=" l:0 "<<" l:1)
 	beq l:3 int_zero
 	call io:print (stdout l:2 " is non-zero value")

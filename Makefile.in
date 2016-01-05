@@ -44,6 +44,10 @@ test:
 	bin/ezas share/ezvm/bne.ezas 
 	bin/ezas share/ezvm/div.ezas 
 	bin/ezas share/ezvm/div2.ezas 
+	bin/ezas share/ezvm/lsl.ezas 
+	bin/ezas share/ezvm/lsl2.ezas 
+	bin/ezas share/ezvm/lsr.ezas 
+	bin/ezas share/ezvm/lsr2.ezas 
 	bin/ezas share/ezvm/mod.ezas 
 	bin/ezas share/ezvm/mod2.ezas 
 	bin/ezas share/ezvm/mul.ezas 
@@ -71,6 +75,10 @@ testg:
 	bin/ezas share/ezvm/bne.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/div.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/div2.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/lsl.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/lsl2.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/lsr.ezas -l stderr -d stderr
+	bin/ezas share/ezvm/lsr2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/mod.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/mod2.ezas -l stderr -d stderr
 	bin/ezas share/ezvm/mul.ezas -l stderr -d stderr

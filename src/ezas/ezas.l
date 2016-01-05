@@ -52,6 +52,8 @@ sp [ \t]
 "cmp" return CMP;
 "div" return DIV;
 "ld" return LD;
+"lsl" return LSL;
+"lsr" return LSR;
 "mod" return MOD;
 "mul" return MUL;
 "mv" return MV;

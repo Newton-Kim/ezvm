@@ -37,6 +37,14 @@ static void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.ld();
 }
 
+static void run_lsl(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.lsl(arg1, arg2, arg3);
+}
+
+static void run_lsr(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.lsr(arg1, arg2, arg3);
+}
+
 static void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.call(arg1, arg2);
 }
@@ -106,7 +114,7 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 }
 
 static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_bge, run_blt, run_bne, run_bra,
-                   run_call, run_cmp, run_div, run_ld, run_mod, run_mul, run_mv,
+                   run_call, run_cmp, run_div, run_ld, run_lsl, run_lsr, run_mod, run_mul, run_mv,
                    run_neg,  run_not, run_or,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
@@ -203,6 +211,52 @@ void ezThread::ld(void) {
   if (m_stack.empty()) throw runtime_error("stack underrun");
   ezStackFrame* sf = m_stack.top();
   sf->pc += 3;
+}
+
+void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, function<ezValue*(ezValue*,ezValue*)> func) {
+  ezStackFrame* sf = m_stack.top();
+  ezInstDecoder decoder;
+  ezAddress dest, addr, cond;
+  decoder.argument(sf->carousel->instruction[sf->pc++], dest);
+  ezValue* rst = NULL, * obj = NULL, * offset = NULL;
+  switch (ndests) {
+    case 2:
+      decoder.argument(sf->carousel->instruction[sf->pc++], cond);
+    case 1:
+      break;
+    default:
+      throw runtime_error("the destination of the operation must be 1 or 2");
+      break;
+  }
+  switch(nsrcs) {
+    case 1:
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      obj = addr2val(addr);
+      break;
+    default:
+      throw runtime_error("the oject of the operation must be 1");
+      break;
+  }
+  switch(noffsets) {
+    case 1:
+      decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+      offset = addr2val(addr);
+      break;
+    default:
+      throw runtime_error("the offset of the operation must be 1");
+      break;
+  }
+  rst = func(obj, offset);
+  val2addr(dest, rst);
+  if (ndests == 2) val2addr(cond, rst->condition());
+}
+
+void ezThread::lsl(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {return new ezInteger(obj->to_integer() << offset->to_integer());});
+}
+
+void ezThread::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {return new ezInteger(obj->to_integer() >> offset->to_integer());});
 }
 
 void ezThread::call(uint8_t nargs, uint8_t nrets) {

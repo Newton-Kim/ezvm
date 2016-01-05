@@ -58,6 +58,8 @@ class ezAsmProcedure {
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress src);
+  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
   void branch_instruction(ezOpCode op, const ezAddress cond, string label);
 
  public:
@@ -92,6 +94,10 @@ class ezAsmProcedure {
   * @param offset An offset of a member in the obj.
   */
   void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
+  void lsr(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
   /**
   * @brief creates an add instruction. See add of ezas.
   *

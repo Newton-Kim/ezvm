@@ -3,8 +3,8 @@
 .proc main (0) 0:
 	.memories 4
 	mv l:0 l:1, 1 2
-	lsr l:2, l:0 l:1
+	lsr l:2, l:0, l:1
 	call io:print (stdout l:2 "=" l:0 ">>" l:1)
 	mv l:0 l:1, 4 2
-	lsr l:2, l:0 l:1
+	lsr l:2, l:0, l:1
 	call io:print (stdout l:2 "=" l:0 ">>" l:1)

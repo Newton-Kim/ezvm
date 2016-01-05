@@ -60,14 +60,48 @@ void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src) {
     instruction.argument(*it);
 }
 
-//TODO:refactoring is needed
-void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj,
+void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress obj,
                         const ezAddress offset) {
   ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_LD, 1, 1, 1);
+  instruction.opcode(op, 1, 1, 1);
   instruction.argument(dest);
   instruction.argument(obj);
   instruction.argument(offset);
+}
+
+void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress obj,
+                        const ezAddress offset) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(op, 2, 1, 1);
+  instruction.argument(dest);
+  instruction.argument(cond);
+  instruction.argument(obj);
+  instruction.argument(offset);
+}
+
+void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj,
+                        const ezAddress offset) {
+  instruction_with_1_1_1_arguments(EZ_OP_LD, dest, obj, offset);
+}
+
+void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress obj,
+                        const ezAddress offset) {
+  instruction_with_1_1_1_arguments(EZ_OP_LSL, dest, obj, offset);
+}
+
+void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+                        const ezAddress offset) {
+  instruction_with_1_1_1_arguments(EZ_OP_LSL, dest, cond, obj, offset);
+}
+
+void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress obj,
+                        const ezAddress offset) {
+  instruction_with_1_1_1_arguments(EZ_OP_LSR, dest, obj, offset);
+}
+ 
+void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+                        const ezAddress offset) {
+  instruction_with_1_1_1_arguments(EZ_OP_LSR, dest, cond, obj, offset);
 }
 
 void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op, const ezAddress dest, vector<ezAddress>& src) {
