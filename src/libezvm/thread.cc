@@ -117,9 +117,10 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bra(arg1);
 }
 
-static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_bge, run_blt, run_bne, run_bra,
-                   run_call, run_cmp, run_div, run_ld, run_lsl, run_lsr, run_mod, run_mul, run_mv,
-                   run_neg,  run_not, run_or,  run_ret, run_sub, run_xor};
+static RUNFUNC s_run[] = {run_add, run_and,  run_beq, run_bge, run_blt, run_bne,
+                          run_bra, run_call, run_cmp, run_div, run_ld,  run_lsl,
+                          run_lsr, run_mod,  run_mul, run_mv,  run_neg, run_not,
+                          run_or,  run_ret,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -217,12 +218,13 @@ void ezThread::ld(void) {
   sf->pc += 3;
 }
 
-void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, function<ezValue*(ezValue*,ezValue*)> func) {
+void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+                               function<ezValue*(ezValue*, ezValue*)> func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
-  ezValue* rst = NULL, * obj = NULL, * offset = NULL;
+  ezValue* rst = NULL, *obj = NULL, *offset = NULL;
   switch (ndests) {
     case 2:
       decoder.argument(sf->carousel->instruction[sf->pc++], cond);
@@ -232,7 +234,7 @@ void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, 
       throw runtime_error("the destination of the operation must be 1 or 2");
       break;
   }
-  switch(nsrcs) {
+  switch (nsrcs) {
     case 1:
       decoder.argument(sf->carousel->instruction[sf->pc++], addr);
       obj = addr2val(addr);
@@ -241,7 +243,7 @@ void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, 
       throw runtime_error("the oject of the operation must be 1");
       break;
   }
-  switch(noffsets) {
+  switch (noffsets) {
     case 1:
       decoder.argument(sf->carousel->instruction[sf->pc++], addr);
       offset = addr2val(addr);
@@ -256,11 +258,15 @@ void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, 
 }
 
 void ezThread::lsl(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {return new ezInteger(obj->to_integer() << offset->to_integer());});
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {
+    return new ezInteger(obj->to_integer() << offset->to_integer());
+  });
 }
 
 void ezThread::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {return new ezInteger(obj->to_integer() >> offset->to_integer());});
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {
+    return new ezInteger(obj->to_integer() >> offset->to_integer());
+  });
 }
 
 void ezThread::call(uint8_t nargs, uint8_t nrets) {
@@ -362,7 +368,10 @@ void ezThread::cmp(uint8_t ndests, uint8_t nsrcs) {
   val2addr(cond, rst);
 }
 
-void ezThread::binary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*,ezValue*)> binary_func, function<ezValue*(vector<ezValue*>&)> multi_func) {
+void ezThread::binary_operation(
+    uint8_t ndests, uint8_t nsrcs,
+    function<ezValue*(ezValue*, ezValue*)> binary_func,
+    function<ezValue*(vector<ezValue*>&)> multi_func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -405,14 +414,20 @@ void ezThread::binary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*
 }
 
 void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.add(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.add(args);});
+  binary_operation(ndests, nsrcs,
+                   [&](ezValue* vl, ezValue* vr) { return m_alu.add(vl, vr); },
+                   [&](vector<ezValue*>& args) { return m_alu.add(args); });
 }
 
 void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_and(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_and(args);});
+  binary_operation(
+      ndests, nsrcs,
+      [&](ezValue* vl, ezValue* vr) { return m_alu.bitwise_and(vl, vr); },
+      [&](vector<ezValue*>& args) { return m_alu.bitwise_and(args); });
 }
 
-void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(ezValue*)> unary_func) {
+void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs,
+                               function<ezValue*(ezValue*)> unary_func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -427,7 +442,8 @@ void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(
       throw runtime_error("the destination of the operation must be 1 or 2");
       break;
   }
-  if (nsrcs != 1) throw runtime_error("the operands of the operation must be 1");
+  if (nsrcs != 1)
+    throw runtime_error("the operands of the operation must be 1");
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
   v = addr2val(addr);
   rst = unary_func(v);
@@ -436,15 +452,19 @@ void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs, function<ezValue*(
 }
 
 void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {
-  unary_operation(ndests, nsrcs, [&](ezValue* v) {return m_alu.neg(v);});
+  unary_operation(ndests, nsrcs, [&](ezValue* v) { return m_alu.neg(v); });
 }
 
 void ezThread::bitwise_not(uint8_t ndests, uint8_t nsrcs) {
-  unary_operation(ndests, nsrcs, [&](ezValue* v) {return m_alu.bitwise_not(v);});
+  unary_operation(ndests, nsrcs,
+                  [&](ezValue* v) { return m_alu.bitwise_not(v); });
 }
 
 void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_or(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_or(args);});
+  binary_operation(
+      ndests, nsrcs,
+      [&](ezValue* vl, ezValue* vr) { return m_alu.bitwise_or(vl, vr); },
+      [&](vector<ezValue*>& args) { return m_alu.bitwise_or(args); });
 }
 
 void ezThread::ret(uint8_t nsrcs) {
@@ -460,26 +480,38 @@ void ezThread::ret(uint8_t nsrcs) {
 }
 
 void ezThread::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_xor(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_xor(args);});
+  binary_operation(
+      ndests, nsrcs,
+      [&](ezValue* vl, ezValue* vr) { return m_alu.bitwise_xor(vl, vr); },
+      [&](vector<ezValue*>& args) { return m_alu.bitwise_xor(args); });
 }
 
 void ezThread::div(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.div(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.div(args);});
+  binary_operation(ndests, nsrcs,
+                   [&](ezValue* vl, ezValue* vr) { return m_alu.div(vl, vr); },
+                   [&](vector<ezValue*>& args) { return m_alu.div(args); });
 }
 
 void ezThread::mod(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.mod(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.mod(args);});
+  binary_operation(ndests, nsrcs,
+                   [&](ezValue* vl, ezValue* vr) { return m_alu.mod(vl, vr); },
+                   [&](vector<ezValue*>& args) { return m_alu.mod(args); });
 }
 
 void ezThread::mul(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.mul(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.mul(args);});
+  binary_operation(ndests, nsrcs,
+                   [&](ezValue* vl, ezValue* vr) { return m_alu.mul(vl, vr); },
+                   [&](vector<ezValue*>& args) { return m_alu.mul(args); });
 }
 
 void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.sub(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.sub(args);});
+  binary_operation(ndests, nsrcs,
+                   [&](ezValue* vl, ezValue* vr) { return m_alu.sub(vl, vr); },
+                   [&](vector<ezValue*>& args) { return m_alu.sub(args); });
 }
 
-void ezThread::conditional_bra(uint8_t index, function<bool(ezCondition*)>func) {
+void ezThread::conditional_bra(uint8_t index,
+                               function<bool(ezCondition*)> func) {
   ezStackFrame* sf = m_stack.top();
   ezInstDecoder decoder;
   ezAddress addr;
@@ -491,19 +523,20 @@ void ezThread::conditional_bra(uint8_t index, function<bool(ezCondition*)>func) 
 }
 
 void ezThread::beq(uint8_t index) {
-  conditional_bra(index, [](ezCondition* cond) {return cond->zero;});
+  conditional_bra(index, [](ezCondition* cond) { return cond->zero; });
 }
 
 void ezThread::bge(uint8_t index) {
-  conditional_bra(index, [](ezCondition* cond) {return (cond->zero || !cond->negative);});
+  conditional_bra(
+      index, [](ezCondition* cond) { return (cond->zero || !cond->negative); });
 }
 
 void ezThread::blt(uint8_t index) {
-  conditional_bra(index, [](ezCondition* cond) {return cond->negative;});
+  conditional_bra(index, [](ezCondition* cond) { return cond->negative; });
 }
 
 void ezThread::bne(uint8_t index) {
-  conditional_bra(index, [](ezCondition* cond) {return !cond->zero;});
+  conditional_bra(index, [](ezCondition* cond) { return !cond->zero; });
 }
 
 void ezThread::bra(uint8_t index) {

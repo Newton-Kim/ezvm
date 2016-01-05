@@ -43,7 +43,8 @@ void ezAsmProcedure::call(const ezAddress& func, vector<ezAddress>& args,
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::cmp(const ezAddress& cond, const ezAddress& larg, const ezAddress& rarg) {
+void ezAsmProcedure::cmp(const ezAddress& cond, const ezAddress& larg,
+                         const ezAddress& rarg) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_CMP, 1, 2);
   instruction.argument(cond);
@@ -60,8 +61,10 @@ void ezAsmProcedure::mv(vector<ezAddress>& dest, vector<ezAddress>& src) {
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress obj,
-                        const ezAddress offset) {
+void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
+                                                      const ezAddress dest,
+                                                      const ezAddress obj,
+                                                      const ezAddress offset) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 1, 1, 1);
   instruction.argument(dest);
@@ -69,8 +72,11 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op, const e
   instruction.argument(offset);
 }
 
-void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress obj,
-                        const ezAddress offset) {
+void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
+                                                      const ezAddress dest,
+                                                      const ezAddress cond,
+                                                      const ezAddress obj,
+                                                      const ezAddress offset) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 2, 1, 1);
   instruction.argument(dest);
@@ -85,26 +91,28 @@ void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj,
 }
 
 void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress obj,
-                        const ezAddress offset) {
+                         const ezAddress offset) {
   instruction_with_1_1_1_arguments(EZ_OP_LSL, dest, obj, offset);
 }
 
-void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
-                        const ezAddress offset) {
+void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress cond,
+                         const ezAddress obj, const ezAddress offset) {
   instruction_with_1_1_1_arguments(EZ_OP_LSL, dest, cond, obj, offset);
 }
 
 void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress obj,
-                        const ezAddress offset) {
+                         const ezAddress offset) {
   instruction_with_1_1_1_arguments(EZ_OP_LSR, dest, obj, offset);
 }
- 
-void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj,
-                        const ezAddress offset) {
+
+void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress cond,
+                         const ezAddress obj, const ezAddress offset) {
   instruction_with_1_1_1_arguments(EZ_OP_LSR, dest, cond, obj, offset);
 }
 
-void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op, const ezAddress dest, vector<ezAddress>& src) {
+void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op,
+                                                      const ezAddress dest,
+                                                      vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 1, src.size());
   instruction.argument(dest);
@@ -112,7 +120,10 @@ void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op, const ezAddre
     instruction.argument(*it);
 }
 
-void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src) {
+void ezAsmProcedure::instruction_with_array_arguments(ezOpCode op,
+                                                      const ezAddress dest,
+                                                      const ezAddress cond,
+                                                      vector<ezAddress>& src) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 2, src.size());
   instruction.argument(dest);
@@ -135,7 +146,7 @@ void ezAsmProcedure::bitwise_and(const ezAddress dest, vector<ezAddress>& src) {
 }
 
 void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond,
-                         vector<ezAddress>& src) {
+                                 vector<ezAddress>& src) {
   instruction_with_array_arguments(EZ_OP_AND, dest, cond, src);
 }
 
@@ -166,15 +177,19 @@ void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_MUL, dest, cond, src);
 }
 
-void ezAsmProcedure::instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress org) {
+void ezAsmProcedure::instruction_with_an_argument(ezOpCode op,
+                                                  const ezAddress dest,
+                                                  const ezAddress org) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 1, 1);
   instruction.argument(dest);
   instruction.argument(org);
 }
 
-void ezAsmProcedure::instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond,
-                         const ezAddress org) {
+void ezAsmProcedure::instruction_with_an_argument(ezOpCode op,
+                                                  const ezAddress dest,
+                                                  const ezAddress cond,
+                                                  const ezAddress org) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(op, 2, 1);
   instruction.argument(dest);
@@ -196,7 +211,7 @@ void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress org) {
 }
 
 void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress cond,
-                         const ezAddress org) {
+                                 const ezAddress org) {
   instruction_with_an_argument(EZ_OP_NOT, dest, cond, org);
 }
 
@@ -205,7 +220,7 @@ void ezAsmProcedure::bitwise_or(const ezAddress dest, vector<ezAddress>& src) {
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress cond,
-                         vector<ezAddress>& src) {
+                                vector<ezAddress>& src) {
   instruction_with_array_arguments(EZ_OP_OR, dest, cond, src);
 }
 
@@ -235,7 +250,7 @@ void ezAsmProcedure::bitwise_xor(const ezAddress dest, vector<ezAddress>& src) {
 }
 
 void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
-                         vector<ezAddress>& src) {
+                                 vector<ezAddress>& src) {
   instruction_with_array_arguments(EZ_OP_XOR, dest, cond, src);
 }
 
@@ -247,7 +262,8 @@ size_t ezAsmProcedure::label2index(string label) {
   return m_carousel->symtab[label];
 }
 
-void ezAsmProcedure::branch_instruction(ezOpCode op, const ezAddress cond, string label) {
+void ezAsmProcedure::branch_instruction(ezOpCode op, const ezAddress cond,
+                                        string label) {
   ezInstEncoder instruction(m_carousel->instruction);
   size_t index = label2index(label);
   instruction.opcode(op, index);

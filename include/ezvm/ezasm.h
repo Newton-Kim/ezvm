@@ -54,12 +54,22 @@ class ezAsmProcedure {
   * @brief is an instance of a carousel.
   */
   ezCarousel* m_carousel;
-  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, vector<ezAddress>& src);
-  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
-  void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress src);
-  void instruction_with_an_argument(ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress src);
-  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
+  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
+                                        vector<ezAddress>& src);
+  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
+                                        const ezAddress cond,
+                                        vector<ezAddress>& src);
+  void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
+                                    const ezAddress src);
+  void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
+                                    const ezAddress cond, const ezAddress src);
+  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest,
+                                        const ezAddress obj,
+                                        const ezAddress offset);
+  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest,
+                                        const ezAddress cond,
+                                        const ezAddress obj,
+                                        const ezAddress offset);
   void branch_instruction(ezOpCode op, const ezAddress cond, string label);
 
  public:
@@ -95,9 +105,11 @@ class ezAsmProcedure {
   */
   void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
+  void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+           const ezAddress offset);
   void lsr(const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj, const ezAddress offset);
+  void lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+           const ezAddress offset);
   /**
   * @brief creates an add instruction. See add of ezas.
   *
@@ -129,7 +141,8 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void bitwise_and(const ezAddress dest, const ezAddress cond,
+                   vector<ezAddress>& src);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
@@ -246,7 +259,8 @@ class ezAsmProcedure {
   */
   void bitwise_not(const ezAddress dest, ezAddress src);
   /**
-  * @brief creates a bitwise NOT instruction. The instruction stores a condition at the
+  * @brief creates a bitwise NOT instruction. The instruction stores a condition
+  *at the
   *address of cond. See not of ezas.
   *
   * @param dest An address which the product is stored.
@@ -269,7 +283,8 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void bitwise_or(const ezAddress dest, const ezAddress cond,
+                  vector<ezAddress>& src);
   void ret(void);
   void ret(vector<ezAddress>& src);
   /**
@@ -302,7 +317,8 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void bitwise_xor(const ezAddress dest, const ezAddress cond,
+                   vector<ezAddress>& src);
 };
 
 /**

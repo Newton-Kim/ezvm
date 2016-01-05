@@ -105,10 +105,15 @@ class ezThread {
   * @param nrets is a number of return addresses which follows the arguments.
   */
   void call(ezCarousel* func, uint8_t nargs, uint8_t nrets);
-  void binary_operation(uint8_t nargs, uint8_t nsrcs, function<ezValue*(ezValue*,ezValue*)> binary_func, function<ezValue*(vector<ezValue*>&)> multi_func);
-  void unary_operation(uint8_t nargs, uint8_t nsrcs, function<ezValue*(ezValue*)> unary_func);
+  void binary_operation(uint8_t nargs, uint8_t nsrcs,
+                        function<ezValue*(ezValue*, ezValue*)> binary_func,
+                        function<ezValue*(vector<ezValue*>&)> multi_func);
+  void unary_operation(uint8_t nargs, uint8_t nsrcs,
+                       function<ezValue*(ezValue*)> unary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition*)> func);
-  void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets, function<ezValue*(ezValue*,ezValue*)> func);
+  void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+                       function<ezValue*(ezValue*, ezValue*)> func);
+
  public:
   /**
   * @brief constructs a thread with an entry point, a global memory, and a
