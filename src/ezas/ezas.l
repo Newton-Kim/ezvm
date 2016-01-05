@@ -60,6 +60,7 @@ sp [ \t]
 "neg" return NEG;
 "not" return NOT;
 "or" return OR;
+"ret" return RET;
 "sub" return SUB;
 "xor" return XOR;
 ".import" return IMPORT;

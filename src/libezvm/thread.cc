@@ -85,6 +85,10 @@ static void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.bitwise_or(arg1, arg2);
 }
 
+static void run_ret(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
+  thd.ret(arg1);
+}
+
 static void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
   thd.sub(arg1, arg2);
 }
@@ -115,7 +119,7 @@ static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
 
 static RUNFUNC s_run[] = {run_add,  run_and, run_beq, run_bge, run_blt, run_bne, run_bra,
                    run_call, run_cmp, run_div, run_ld, run_lsl, run_lsr, run_mod, run_mul, run_mv,
-                   run_neg,  run_not, run_or,  run_sub, run_xor};
+                   run_neg,  run_not, run_or,  run_ret, run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
                    vector<ezValue*>& constants)
@@ -441,6 +445,18 @@ void ezThread::bitwise_not(uint8_t ndests, uint8_t nsrcs) {
 
 void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs, [&](ezValue* vl, ezValue* vr) {return m_alu.bitwise_or(vl, vr);}, [&](vector<ezValue*>& args) {return m_alu.bitwise_or(args);});
+}
+
+void ezThread::ret(uint8_t nsrcs) {
+  ezStackFrame* sf = m_stack.top();
+  ezInstDecoder decoder;
+  ezAddress dest, addr, cond;
+  ezValue* v = NULL;
+  for (size_t i = 0; i < nsrcs; i++) {
+    decoder.argument(sf->carousel->instruction[sf->pc++], addr);
+    v = addr2val(addr);
+    sf->returns.push_back(v);
+  }
 }
 
 void ezThread::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {

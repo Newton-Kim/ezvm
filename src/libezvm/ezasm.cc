@@ -209,6 +209,18 @@ void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_OR, dest, cond, src);
 }
 
+void ezAsmProcedure::ret(void) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_RET);
+}
+
+void ezAsmProcedure::ret(vector<ezAddress>& src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_RET, src.size());
+  for (vector<ezAddress>::iterator it = src.begin(); it != src.end(); it++)
+    instruction.argument(*it);
+}
+
 void ezAsmProcedure::sub(const ezAddress dest, vector<ezAddress>& src) {
   instruction_with_array_arguments(EZ_OP_SUB, dest, src);
 }

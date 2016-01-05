@@ -150,5 +150,6 @@ class ezThread {
   void neg(uint8_t ndests, uint8_t nsrcs);
   void bitwise_not(uint8_t ndests, uint8_t nsrcs);
   void bitwise_or(uint8_t ndests, uint8_t nsrcs);
+  void ret(uint8_t nsrcs);
   void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
 };

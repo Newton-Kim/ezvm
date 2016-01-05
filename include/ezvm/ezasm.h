@@ -270,6 +270,8 @@ class ezAsmProcedure {
   * @param src Addresses of arguments.
   */
   void bitwise_or(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void ret(void);
+  void ret(vector<ezAddress>& src);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *

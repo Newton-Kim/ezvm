@@ -162,7 +162,7 @@ static vector<ezAddress> s_args_var;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR SUB XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
@@ -228,6 +228,7 @@ line : | add
 	| neg
 	| not
 	| or 
+	| ret 
 	| sub 
 	| xor 
 	| label;
@@ -279,6 +280,8 @@ not : NOT var ',' var {s_proc_current->bitwise_not(ezAddress($2.segment, $2.offs
 
 or : OR var ',' vars {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| OR var var ',' vars {s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+
+ret : RET {s_proc_current->ret();} | RET vars {s_proc_current->ret(s_args_var); s_args_var.clear();}
 
 sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| SUB var var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
