@@ -60,7 +60,7 @@
  * \subsubsection ezas-memory-example Example
  * \section ezas-address Address
  * \subsection ezas-address-syntax Syntax
- * [g|c|l|p|string]+:[0-9|string]+\n
+ * [g|c|l|p|string]:{[0-9]+|string}\n
  * \subsection ezas-address-operation Operation
  * \subsection ezas-address-description Description
  * Address is described by segment and offset. 'g' stands for a global segment, 'c' stands for a constant segment, 'l' stands for a local segment, and 'p' stands for a parent local segment on the scope. 'string' comes from the name of .import.
