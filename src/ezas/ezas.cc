@@ -24,7 +24,7 @@
 */
 #include "ezvm/ezvm.h"
 #include "ezvm/ezlog.h"
-#include "ezas.tab.cc.h"
+#include "parse.hh"
 #include <getopt.h>
 #include <iostream>
 #include <cstring>

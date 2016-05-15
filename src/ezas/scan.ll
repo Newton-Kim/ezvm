@@ -24,7 +24,7 @@
 * 
 */
 #include "ezvm/ezaddr.h"
-#include "ezas.hh"
+#include "parse.hh"
 %}
 
 %option yylineno

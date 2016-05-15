@@ -2,7 +2,7 @@ lib_LTLIBRARIES=libezvm.la
 
 libezvm_la_SOURCES=ezalu.cc \
 		   ezarchive.cc \
-		   ezaszm.cc \
+		   ezasm.cc \
 		   ezdump.cc \
 		   ezinstruction.cc \
 		   ezval.cc \
@@ -29,4 +29,4 @@ include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezval.h \
 		../../include/ezvm/ezvm.h
 
-AM_CPPFLAGS=-I../../include
+AM_CPPFLAGS=-I../../include -std=c++11
