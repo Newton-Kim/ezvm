@@ -1,0 +1,32 @@
+lib_LTLIBRARIES=libezvm.la
+
+libezvm_la_SOURCES=ezalu.cc \
+		   ezarchive.cc \
+		   ezaszm.cc \
+		   ezdump.cc \
+		   ezinstruction.cc \
+		   ezval.cc \
+		   stack.cc \
+		   thread.cc \
+		   vm.cc \
+		   intrinsic/ezintrinsic.cc \
+		   intrinsic/ezio.cc \
+		   utility/ezfile.cc \
+		   utility/ezlog.cc
+
+includedir=$(prefix)/ezvm
+
+include_HEADERS=../../include/ezvm/ezaddr.h \
+		../../include/ezvm/ezalu.h \
+		../../include/ezvm/ezarchive.h \
+		../../include/ezvm/ezasm.h \
+		../../include/ezvm/ezdump.h \
+		../../include/ezvm/ezfile.h \
+		../../include/ezvm/ezinstruction.h \
+		../../include/ezvm/ezlog.h \
+		../../include/ezvm/ezstack.h \
+		../../include/ezvm/ezthread.h \
+		../../include/ezvm/ezval.h \
+		../../include/ezvm/ezvm.h
+
+AM_CPPFLAGS=-I../../include
