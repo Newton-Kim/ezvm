@@ -42,15 +42,8 @@ enum ezCoercOperation {
   EZ_COERC_OPERATION_MAX
 };
 
-typedef ezValueType ezCoercTable[EZ_COERC_OPERATION_MAX][EZ_VALUE_TYPE_MAX]
-                                [EZ_VALUE_TYPE_MAX];
 class ezALU {
- private:
-  ezCoercTable& m_pCoercTable;
-
  public:
-  ezALU();
-  ezALU(ezCoercTable& coercTable);
   ezValue* add(vector<ezValue*>& args);
   ezValue* add(ezValue* larg, ezValue* rarg);
   ezValue* cmp(ezValue* larg, ezValue* rarg);

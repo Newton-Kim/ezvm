@@ -270,10 +270,6 @@ static ezValueType defaultCoercTable
              EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         }};
 
-ezALU::ezALU() : m_pCoercTable(defaultCoercTable) {}
-
-ezALU::ezALU(ezCoercTable& coercTable) : m_pCoercTable(coercTable) {}
-
 typedef ezValue* (*ARITHEMATIC_V)(vector<ezValue*>& args);
 typedef ezValue* (*ARITHEMATIC_DUO)(ezValue* larg, ezValue* rarg);
 typedef ezValue* (*ARITHEMATIC_UNI)(ezValue* arg);
@@ -308,7 +304,7 @@ ARITHEMATIC_V addv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::add(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_ADDITION][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_ADDITION][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do addition");
   }
   return addv[type](args);
@@ -339,7 +335,7 @@ ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::add(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_ADDITION][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_ADDITION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do addition");
   return addd[type](larg, rarg);
 }
@@ -378,7 +374,7 @@ ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::cmp(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_COMPARISON][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_COMPARISON][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to compare");
   return cmpf[type](larg, rarg);
 }
@@ -407,7 +403,7 @@ ARITHEMATIC_V subv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::sub(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_SUBTRACTION][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_SUBTRACTION][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX)
       throw runtime_error("unable to do subtraction");
   }
@@ -435,7 +431,7 @@ ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::sub(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_SUBTRACTION][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_SUBTRACTION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX)
     throw runtime_error("unable to do subtraction");
   return subd[type](larg, rarg);
@@ -466,7 +462,7 @@ ezValue* ezALU::mod(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
     type =
-        m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][type][args[i]->type];
+        defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX)
       throw runtime_error("unable to do modulation");
   }
@@ -494,7 +490,7 @@ ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::mod(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do modulation");
   return modd[type](larg, rarg);
 }
@@ -524,7 +520,7 @@ ezValue* ezALU::mul(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
     type =
-        m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][type][args[i]->type];
+        defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX)
       throw runtime_error("unable to do multiplication");
   }
@@ -552,7 +548,7 @@ ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::mul(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX)
     throw runtime_error("unable to do multiplication");
   return muld[type](larg, rarg);
@@ -582,7 +578,7 @@ ARITHEMATIC_V divv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::div(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_DIVISION][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_DIVISION][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do division");
   }
   return divv[type](args);
@@ -609,7 +605,7 @@ ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::div(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_DIVISION][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_DIVISION][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do division");
   return divd[type](larg, rarg);
 }
@@ -681,7 +677,7 @@ ARITHEMATIC_V andv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::bitwise_and(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_AND][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_AND][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do AND");
   }
   return andv[type](args);
@@ -712,7 +708,7 @@ ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::bitwise_and(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_AND][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_AND][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do AND");
   return andd[type](larg, rarg);
 }
@@ -747,7 +743,7 @@ ARITHEMATIC_V orv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::bitwise_or(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_OR][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_OR][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do OR");
   }
   return orv[type](args);
@@ -778,7 +774,7 @@ ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::bitwise_or(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_OR][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_OR][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do OR");
   return ord[type](larg, rarg);
 }
@@ -813,7 +809,7 @@ ARITHEMATIC_V xorv[EZ_VALUE_TYPE_MAX] = {
 ezValue* ezALU::bitwise_xor(vector<ezValue*>& args) {
   ezValueType type = args[0]->type;
   for (size_t i = 1; i < args.size(); i++) {
-    type = m_pCoercTable[EZ_COERC_OPERATION_XOR][type][args[i]->type];
+    type = defaultCoercTable[EZ_COERC_OPERATION_XOR][type][args[i]->type];
     if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do XOR");
   }
   return xorv[type](args);
@@ -844,7 +840,7 @@ ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
 
 ezValue* ezALU::bitwise_xor(ezValue* larg, ezValue* rarg) {
   ezValueType type =
-      m_pCoercTable[EZ_COERC_OPERATION_XOR][larg->type][rarg->type];
+      defaultCoercTable[EZ_COERC_OPERATION_XOR][larg->type][rarg->type];
   if (type == EZ_VALUE_TYPE_MAX) throw runtime_error("unable to do XOR");
   return xord[type](larg, rarg);
 }
