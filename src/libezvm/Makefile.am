@@ -30,3 +30,4 @@ include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS=-I../../include -std=c++11
+libezvm_la_LDFLAGS=-version-info 2:1:0

@@ -143,6 +143,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libezvm_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(libezvm_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -361,6 +364,7 @@ include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS = -I../../include -std=c++11
+libezvm_la_LDFLAGS = -version-info 2:1:0
 all: all-am
 
 .SUFFIXES:
@@ -451,7 +455,7 @@ utility/ezlog.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
 
 libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libezvm_la_OBJECTS) $(libezvm_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(libezvm_la_LINK) -rpath $(libdir) $(libezvm_la_OBJECTS) $(libezvm_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
