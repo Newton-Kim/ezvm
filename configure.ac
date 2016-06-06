@@ -29,5 +29,6 @@ AC_CONFIG_FILES([Makefile
                  src/libezvm/Makefile
                  src/ezvm/Makefile
                  src/ezas/Makefile
-                 share/Makefile])
+                 share/Makefile
+                 src/libezvm/libezvm.pc])
 AC_OUTPUT
