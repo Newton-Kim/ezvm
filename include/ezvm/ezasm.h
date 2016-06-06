@@ -366,12 +366,6 @@ class ezASM {
   */
   ~ezASM();
   /**
-  * @brief specifies a library.
-  *
-  * @param name is a symbol of the library.
-  */
-  void import(const string name);
-  /**
   * @brief sets an entry point.
   *
   * @param name is a symbol of the entry point.
