@@ -8,6 +8,7 @@ LT_INIT
 AC_CONFIG_SRCDIR([include/ezvm/ezvm.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
+AC_PREFIX_DEFAULT(/usr/local)
 
 # Checks for programs.
 AC_PROG_CXX
