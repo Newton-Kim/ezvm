@@ -14,7 +14,7 @@ libezvm_la_SOURCES=ezalu.cc \
 		   utility/ezfile.cc \
 		   utility/ezlog.cc
 
-includedir=$(prefix)/ezvm
+includedir=$(prefix)/include/ezvm
 
 include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezalu.h \
@@ -30,4 +30,4 @@ include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS=-I../../include -std=c++11
-libezvm_la_LDFLAGS=-version-info 2:1:0
+libezvm_la_LDFLAGS=-version-info 1:2:0

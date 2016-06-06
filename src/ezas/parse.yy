@@ -194,7 +194,6 @@ program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::i
 
 import : | IMPORT SYMBOL NEWLINE {
 		//TODO:load a script ($2+'.ezas')
-		s_vm.assembler().import($2);
 	};
 
 entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
