@@ -36,6 +36,7 @@ enum ezValueType {
   EZ_VALUE_TYPE_CONDITION,
   EZ_VALUE_TYPE_BOOL,
   EZ_VALUE_TYPE_INTEGER,
+  EZ_VALUE_TYPE_FLOAT,
   EZ_VALUE_TYPE_STRING,
   EZ_VALUE_TYPE_CAROUSEL,
   EZ_VALUE_TYPE_NATIVE_CAROUSEL,
@@ -57,6 +58,7 @@ class ezValue {
   virtual int to_integer(void);
   virtual string to_string(void);
   virtual ezValue* condition(void);
+  virtual double to_float(void);
 };
 
 class ezCondition : public ezValue {
@@ -85,6 +87,7 @@ class ezBool : public ezValue {
   int to_integer(void);
   string to_string(void);
   ezValue* condition(void);
+  virtual double to_float(void);
 };
 
 class ezInteger : public ezValue {
@@ -97,6 +100,20 @@ class ezInteger : public ezValue {
   int to_integer(void);
   string to_string(void);
   ezValue* condition(void);
+  virtual double to_float(void);
+};
+
+class ezFloat: public ezValue {
+ private:
+  double m_value;
+
+ public:
+  ezFloat(double val, const bool dynamic = true);
+  bool to_bool(void);
+  int to_integer(void);
+  string to_string(void);
+  ezValue* condition(void);
+  virtual double to_float(void);
 };
 
 class ezString : public ezValue {
@@ -109,6 +126,7 @@ class ezString : public ezValue {
   int to_integer(void);
   string to_string(void);
   ezValue* condition(void);
+  virtual double to_float(void);
 };
 
 typedef uint32_t ezInstruction;

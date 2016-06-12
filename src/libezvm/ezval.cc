@@ -41,6 +41,9 @@ bool ezValue::to_bool(void) { throw runtime_error("unable to cast to bool"); }
 int ezValue::to_integer(void) {
   throw runtime_error("unable to cast to integer");
 }
+double ezValue::to_float(void) {
+  throw runtime_error("unable to cast to float");
+}
 string ezValue::to_string(void) {
   throw runtime_error("unable to cast to string");
 }
@@ -66,6 +69,7 @@ ezBool::ezBool(bool val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_BOOL, dynamic), m_value(val) {}
 bool ezBool::to_bool(void) { return m_value; }
 int ezBool::to_integer(void) { return m_value ? 1 : 0; }
+double ezBool::to_float(void) { return m_value ? 1. : 0; }
 string ezBool::to_string(void) {
   string str;
   str = m_value ? "true" : "false";
@@ -79,12 +83,30 @@ ezInteger::ezInteger(int val, const bool dynamic)
     : ezValue(EZ_VALUE_TYPE_INTEGER, dynamic), m_value(val) {}
 bool ezInteger::to_bool(void) { return m_value ? true : false; }
 int ezInteger::to_integer(void) { return m_value; }
+double ezInteger::to_float(void) { return (double)m_value; }
 string ezInteger::to_string(void) {
   stringstream ss;
   ss << m_value;
   return ss.str();
 }
+
 ezValue* ezInteger::condition(void) {
+  return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
+                         false, false);
+}
+
+ezFloat::ezFloat(double val, const bool dynamic)
+    : ezValue(EZ_VALUE_TYPE_FLOAT, dynamic), m_value(val) {}
+bool ezFloat::to_bool(void) { return m_value ? true : false; }
+int ezFloat::to_integer(void) { return (int)m_value; }
+double ezFloat::to_float(void) { return m_value; }
+string ezFloat::to_string(void) {
+  stringstream ss;
+  ss << m_value;
+  return ss.str();
+}
+
+ezValue* ezFloat::condition(void) {
   return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
 }
@@ -102,6 +124,7 @@ bool ezString::to_bool(void) {
   return ret;
 }
 int ezString::to_integer(void) { return m_value.size() ? 1 : 0; }
+double ezString::to_float(void) { return m_value.size() ? 1. : 0; }
 string ezString::to_string(void) { return m_value; }
 ezValue* ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);

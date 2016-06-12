@@ -399,6 +399,14 @@ class ezASM {
   */
   size_t global(const string value);
   /**
+  * @brief adds a null.
+  *
+  * @param value is a null.
+  *
+  * @return is an offset in a constant segment.
+  */
+  size_t constant_null(void);
+  /**
   * @brief adds a constant string.
   *
   * @param value is a string.
@@ -422,6 +430,14 @@ class ezASM {
   * @return is an offset in a constant segment.
   */
   size_t constant(const bool value);
+  /**
+  * @brief adds a constant double.
+  *
+  * @param value is a double.
+  *
+  * @return is an offset in a constant segment.
+  */
+  size_t constant(const double value);
   /**
   * @brief finds the offset of a segment segment whose name is value.
   *

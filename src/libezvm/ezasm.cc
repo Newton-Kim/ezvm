@@ -367,6 +367,19 @@ size_t ezASM::global(const string value) {
   return it->second;
 }
 
+size_t ezASM::constant_null(void) {
+  for (size_t i = 0; i < m_constants.size(); i++) {
+    ezValue* v = m_constants[i];
+    if (v->type == EZ_VALUE_TYPE_NULL)
+      return i;
+  }
+  size_t idx = m_constants.size();
+  ezValue* v = ezNull::instance();
+  v->reference();
+  m_constants.push_back(v);
+  return idx;
+}
+
 size_t ezASM::constant(const char* arg) {
   string value = arg;
   for (size_t i = 0; i < m_constants.size(); i++) {
@@ -403,6 +416,19 @@ size_t ezASM::constant(const bool value) {
   }
   size_t idx = m_constants.size();
   ezValue* v = new ezBool(value);
+  v->reference();
+  m_constants.push_back(v);
+  return idx;
+}
+
+size_t ezASM::constant(const double value) {
+  for (size_t i = 0; i < m_constants.size(); i++) {
+    ezValue* v = m_constants[i];
+    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezBool*)v)->to_float() == value)
+      return i;
+  }
+  size_t idx = m_constants.size();
+  ezValue* v = new ezFloat(value);
   v->reference();
   m_constants.push_back(v);
   return idx;
