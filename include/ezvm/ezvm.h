@@ -43,10 +43,11 @@ class ezVM {
   ezASM* m_pasm;
   ezArchive* m_parchive;
   ezDump* m_pdump;
+  ezALU& m_alu;
   vector<ezThread*> m_threads;
 
  public:
-  ezVM();
+  ezVM(ezALU& alu);
   ~ezVM();
   void run(void);
   ezASM& assembler(void);

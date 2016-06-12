@@ -154,7 +154,8 @@ int yylex();
 void yyerror (char const *s);
 
 using namespace std;
-static ezVM s_vm;
+static ezALU s_alu;
+static ezVM s_vm(s_alu);
 static ezAsmProcedure* s_proc_current = NULL;
 static map<string, unsigned int> s_global;
 static vector<ezAddress> s_args_addr;

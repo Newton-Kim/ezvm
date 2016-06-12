@@ -66,7 +66,7 @@ class ezThread {
   /**
   * @brief An arithematic logic unit
   */
-  ezALU m_alu;
+  ezALU& m_alu;
   /**
   * @brief fetches a value from an address.
   *
@@ -124,7 +124,7 @@ class ezThread {
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
-           vector<ezValue*>& constants);
+           vector<ezValue*>& constants, ezALU& alu);
   /**
   * @brief destroys the thread.
   */

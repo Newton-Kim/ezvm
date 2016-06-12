@@ -123,8 +123,8 @@ static RUNFUNC s_run[] = {run_add, run_and,  run_beq, run_bge, run_blt, run_bne,
                           run_or,  run_ret,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
-                   vector<ezValue*>& constants)
-    : m_entry(entry), m_constants(constants), m_globals(globals) {
+                   vector<ezValue*>& constants, ezALU& alu)
+    : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu) {
   ezValue* v = addr2val(entry);
   switch (v->type) {
     case EZ_VALUE_TYPE_CAROUSEL: {
