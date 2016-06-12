@@ -309,6 +309,33 @@ ezASM::~ezASM() {
     if (*it) delete *it;
 }
 
+void ezASM::load_intrinsics(const string entry, char** symtab, ezValue** constants) {
+  ezLog& log = ezLog::instance();
+  if (!symtab || !constants) throw runtime_error(entry + " is not found");
+  size_t segment = m_globals.size();
+  vector<ezValue*>* offsets = new vector<ezValue*>;
+  map<string, size_t>* offset_symtab = new map<string, size_t>;
+  for (size_t i = 0; constants[i] && symtab[i]; i++) {
+    ezValue* constant = constants[i];
+    const char* symbol = symtab[i];
+    size_t offset = m_constants.size();
+    offsets->push_back(constant);
+    ezLog::instance().debug("global[%lu][%lu] = %s", m_globals.size(),
+                            offsets->size() - 1, symbol);
+    m_constants.push_back(constant);
+    (*offset_symtab)[symbol] = offset;
+    log.debug("constant[%lu] = %s", offset, symbol);
+  }
+  if (!offsets->size()) {
+    log.debug("no content is found in %s", entry.c_str());
+    return;
+  }
+  m_seg_symtab[entry] = segment;
+  m_offset_symtab.push_back(offset_symtab);
+  log.debug("global[%lu] = %s", m_globals.size(), entry.c_str());
+  m_globals.push_back(offsets);
+}
+
 void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc,

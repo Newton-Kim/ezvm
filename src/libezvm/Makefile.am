@@ -8,8 +8,6 @@ libezvm_la_SOURCES=ezarchive.cc \
 		   stack.cc \
 		   thread.cc \
 		   vm.cc \
-		   intrinsic/ezintrinsic.cc \
-		   intrinsic/ezio.cc \
 		   utility/ezfile.cc \
 		   utility/ezlog.cc
 

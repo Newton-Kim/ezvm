@@ -35,6 +35,7 @@
 using namespace std;
 #define VERSION "1.0.0"
 
+extern void ezinit(void);
 extern int ezparse(FILE* fd, const string target, const string dump);
 
 void show_help(const char* name) {
@@ -117,6 +118,7 @@ int main(int argc, char* argv[]) {
       return 1;
     }
   }
+  ezinit();
   FILE* fd = fopen(source.c_str(), "rb");
   if (!fd) {
     cerr << "error: " << strerror(errno) << endl;

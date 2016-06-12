@@ -136,8 +136,7 @@ libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezarchive.lo ezasm.lo ezdump.lo \
 	ezinstruction.lo ezval.lo stack.lo thread.lo vm.lo \
-	intrinsic/ezintrinsic.lo intrinsic/ezio.lo utility/ezfile.lo \
-	utility/ezlog.lo
+	utility/ezfile.lo utility/ezlog.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -345,8 +344,6 @@ libezvm_la_SOURCES = ezarchive.cc \
 		   stack.cc \
 		   thread.cc \
 		   vm.cc \
-		   intrinsic/ezintrinsic.cc \
-		   intrinsic/ezio.cc \
 		   utility/ezfile.cc \
 		   utility/ezlog.cc
 
@@ -435,16 +432,6 @@ clean-libLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
-intrinsic/$(am__dirstamp):
-	@$(MKDIR_P) intrinsic
-	@: > intrinsic/$(am__dirstamp)
-intrinsic/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) intrinsic/$(DEPDIR)
-	@: > intrinsic/$(DEPDIR)/$(am__dirstamp)
-intrinsic/ezintrinsic.lo: intrinsic/$(am__dirstamp) \
-	intrinsic/$(DEPDIR)/$(am__dirstamp)
-intrinsic/ezio.lo: intrinsic/$(am__dirstamp) \
-	intrinsic/$(DEPDIR)/$(am__dirstamp)
 utility/$(am__dirstamp):
 	@$(MKDIR_P) utility
 	@: > utility/$(am__dirstamp)
@@ -461,8 +448,6 @@ libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f intrinsic/*.$(OBJEXT)
-	-rm -f intrinsic/*.lo
 	-rm -f utility/*.$(OBJEXT)
 	-rm -f utility/*.lo
 
@@ -477,8 +462,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@intrinsic/$(DEPDIR)/ezintrinsic.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@intrinsic/$(DEPDIR)/ezio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezlog.Plo@am__quote@
 
@@ -511,7 +494,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf intrinsic/.libs intrinsic/_libs
 	-rm -rf utility/.libs utility/_libs
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -650,8 +632,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f intrinsic/$(DEPDIR)/$(am__dirstamp)
-	-rm -f intrinsic/$(am__dirstamp)
 	-rm -f utility/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utility/$(am__dirstamp)
 
@@ -664,7 +644,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) intrinsic/$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -710,7 +690,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) intrinsic/$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

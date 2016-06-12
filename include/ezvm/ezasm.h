@@ -366,6 +366,14 @@ class ezASM {
   */
   ~ezASM();
   /**
+  * @brief load intrinsic functions.
+  *
+  * @param name is a segment.
+  * @param symtab is an array of symbols respective to constants.
+  * @param constants is an array of intrinsic functions.
+  */
+  void load_intrinsics(const string name, char** symtab, ezValue** constants);
+  /**
   * @brief sets an entry point.
   *
   * @param name is a symbol of the entry point.
