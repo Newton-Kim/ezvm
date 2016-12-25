@@ -341,15 +341,11 @@ class ezASM {
   /**
   * @brief A reference to a global segment
   */
-  vector<vector<ezValue*>*>& m_globals;
+  vector<ezValue*>& m_globals;
   /**
-  * @brief A symbol table of segments
+  * @brief A symbol table of m_globals
   */
-  map<string, size_t> m_seg_symtab;
-  /**
-  * @brief A collection of symbol tables respect to segments
-  */
-  vector<map<string, size_t>*> m_offset_symtab;
+  map<string, size_t> m_symtab;
 
  public:
   /**
@@ -360,7 +356,7 @@ class ezASM {
   * @param globals is a reference to a global memory.
   */
   ezASM(ezAddress& entry, vector<ezValue*>& constants,
-        vector<vector<ezValue*>*>& globals);
+        vector<ezValue*>& globals);
   /**
   * @brief is a destructor.
   */
@@ -368,11 +364,10 @@ class ezASM {
   /**
   * @brief load intrinsic functions.
   *
-  * @param name is a segment.
   * @param symtab is an array of symbols respective to constants.
   * @param constants is an array of intrinsic functions.
   */
-  void load_intrinsics(const string name, char** symtab, ezValue** constants);
+  void load_intrinsics(char** symtab, ezValue** constants);
   /**
   * @brief sets an entry point.
   *
@@ -438,24 +433,6 @@ class ezASM {
   * @return is an offset in a constant segment.
   */
   size_t constant(const double value);
-  /**
-  * @brief finds the offset of a segment segment whose name is value.
-  *
-  * @param segment is a name of a segment.
-  *
-  * @param value is a symbol.
-  *
-  * @return
-  */
-  size_t offset(const string segment, const string value);
-  /**
-  * @brief finds the segment index whose name is 'segment'.
-  *
-  * @param segment is the symbol of a segment.
-  *
-  * @return is the index of the segemnt.
-  */
-  size_t segment(const string segment);
   /**
   * @brief dumps the states and the instructions to sink.
   *

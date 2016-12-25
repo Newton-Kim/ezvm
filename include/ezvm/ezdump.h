@@ -48,7 +48,7 @@ class ezDump {
   /**
   * @brief A reference to a global segment
   */
-  vector<vector<ezValue*>*>& m_globals;
+  vector<ezValue*>& m_globals;
   /**
   * @brief A reference to ezASM insance
   */
@@ -71,7 +71,7 @@ class ezDump {
   * @param pasm is a pointer to an ezASM instance.
   */
   ezDump(ezAddress& entry, vector<ezValue*>& constants,
-         vector<vector<ezValue*>*>& globals, ezASM* pasm);
+         vector<ezValue*>& globals, ezASM* pasm);
   /**
   * @brief dumps the state of ezVM to a file of path.
   *

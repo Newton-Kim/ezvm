@@ -30,8 +30,6 @@
 using namespace std;
 
 ezVM::ezVM(ezALU& alu) : m_pasm(NULL), m_parchive(NULL), m_alu(alu) {
-  vector<ezValue*>* dummy = new vector<ezValue*>;
-  m_globals.push_back(dummy);
 }
 
 /** \page thread-model Threading model
@@ -41,18 +39,13 @@ ezVM::ezVM(ezALU& alu) : m_pasm(NULL), m_parchive(NULL), m_alu(alu) {
 ezVM::~ezVM() {
   if (m_pasm) delete m_pasm;
   if (m_parchive) delete m_parchive;
-  for (vector<vector<ezValue*>*>::iterator it = m_globals.begin();
+  for (vector<ezValue*>::iterator it = m_globals.begin();
        it != m_globals.end(); it++) {
-    vector<ezValue*>* vct = *it;
-    for (vector<ezValue*>::iterator subit = vct->begin(); subit != vct->end();
-         subit++) {
-      ezValue* v = *subit;
-      if (v->dynamic) {
-        size_t ref = v->release();
-        if (ref == 0) delete v;
-      }
+    ezValue* v = *it;
+    if (v->dynamic) {
+      size_t ref = v->release();
+      if (ref == 0) delete v;
     }
-    if (vct) delete vct;
   }
   for (vector<ezValue*>::iterator it = m_constants.begin();
        it != m_constants.end(); it++) {

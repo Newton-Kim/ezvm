@@ -39,7 +39,7 @@ class ezVM {
  private:
   ezAddress m_entry;
   vector<ezValue*> m_constants;
-  vector<vector<ezValue*>*> m_globals;
+  vector<ezValue*> m_globals;
   ezASM* m_pasm;
   ezArchive* m_parchive;
   ezDump* m_pdump;

@@ -28,7 +28,7 @@
 using namespace std;
 
 ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants,
-               vector<vector<ezValue*>*>& globals, ezASM* pasm)
+               vector<ezValue*>& globals, ezASM* pasm)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_asm(pasm) {}
 
 void ezDump::dump(ezFile& sink, const ezValue* v) {
@@ -112,12 +112,8 @@ void ezDump::dump(const string path) {
   sink.print(".entry: %d:%u\n", m_entry.segment, m_entry.offset);
   sink.print(".global:\n");
   for (size_t i = 0; i < m_globals.size(); i++) {
-    sink.print("  segment %lu:\n", i);
-    vector<ezValue*>* global = m_globals[i];
-    for (size_t j = 0; j < global->size(); j++) {
-      sink.print("    [%lu]=", j);
-      dump(sink, (*global)[j]);
-    }
+    sink.print("    [%lu]=", i);
+    dump(sink, m_globals[i]);
   }
   sink.print(".constant:\n");
   for (size_t i = 0; i < m_constants.size(); i++) {

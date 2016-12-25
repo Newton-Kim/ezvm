@@ -1,0 +1,10 @@
+1.Global should be reduced to an array.
+2.The assembler should have reserved keywords of [rgc][0-9]+.
+3.Mark and sweep garbage collector should be implemented.
+4.The instruction should not be decoded in a class.
+5.operations should be changed to 3 operand structure.
+6.triVM should be implemented.
+7.ezALU should be intrinsic and ezCoerc should be external.
+8.CAROUSEL should be renamed to FUCTION.
+9.ezClass should be added.
+10.ezIO should be changed to a class.

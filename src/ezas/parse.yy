@@ -294,7 +294,6 @@ label : ':' SYMBOL {s_proc_current->label($2);}
 
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}
-	| SYMBOLIC_ADDRESS {$$.segment = s_vm.assembler().segment($1.segment); $$.offset = s_vm.assembler().offset($1.segment, $1.offset);};
 
 addrs : | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
 
@@ -312,7 +311,7 @@ void ezinit(void) {
 	char** symtab = NULL;
 	ezValue** constants = NULL;
 	ezIO::load(&symtab, &constants);
-	s_vm.assembler().load_intrinsics("io", symtab, constants);
+	s_vm.assembler().load_intrinsics(symtab, constants);
 }
 
 int ezparse(FILE* fd, const string target, const string dump) {

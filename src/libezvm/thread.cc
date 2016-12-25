@@ -122,7 +122,7 @@ static RUNFUNC s_run[] = {run_add, run_and,  run_beq, run_bge, run_blt, run_bne,
                           run_lsr, run_mod,  run_mul, run_mv,  run_neg, run_not,
                           run_or,  run_ret,  run_sub, run_xor};
 
-ezThread::ezThread(ezAddress entry, vector<vector<ezValue*>*>& globals,
+ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
                    vector<ezValue*>& constants, ezALU& alu)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu) {
   ezValue* v = addr2val(entry);
@@ -562,9 +562,9 @@ ezValue* ezThread::addr2val(ezAddress addr) {
   } else if (addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
     if (addr.segment >= m_globals.size())
       throw runtime_error("invalid segment");
-    if (addr.offset >= m_globals[addr.segment]->size())
+    if (addr.offset >= m_globals.size())
       throw runtime_error("global memory access violation");
-    v = (*m_globals[addr.segment])[addr.offset];
+    v = m_globals[addr.offset];
   } else {
     throw runtime_error("out of segment boundary");
   }
@@ -599,11 +599,11 @@ void ezThread::val2addr(ezAddress addr, ezValue* v) {
   } else if (addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
     if (addr.segment >= m_globals.size())
       throw runtime_error("invalid segment");
-    if (addr.offset >= m_globals[addr.segment]->size())
+    if (addr.offset >= m_globals.size())
       throw runtime_error("global memory access violation");
     v->reference();
-    (*m_globals[addr.segment])[addr.offset]->release();
-    (*m_globals[addr.segment])[addr.offset] = v;
+    m_globals[addr.offset]->release();
+    m_globals[addr.offset] = v;
   } else {
     throw runtime_error("out of segment boundary");
   }
