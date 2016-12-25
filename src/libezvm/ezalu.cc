@@ -29,245 +29,272 @@ static ezValueType defaultCoercTable
         // EZ_COERC_OPERATION_ADDITION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
-            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,    EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_STRING, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_COMPARISON,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_BOOL,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,    EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_STRING, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_SUBTRACTION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_MULTIPLICATION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_DIVISION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
-            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_MODULATION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
-            {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_AND,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_BOOL,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_OR,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_BOOL,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         },
         // EZ_COERC_OPERATION_XOR
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
-            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_STRING,
+            // EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_FLOAT, EZ_VALUE_TYPE_STRING,
             // EZ_VALUE_TYPE_CAROUSEL, EZ_VALUE_TYPE_NATIVE_CAROUSEL
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_NULL = 0,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CONDITION,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_BOOL,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_BOOL,
             {EZ_VALUE_TYPE_MAX,     EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_INTEGER, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_INTEGER,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_FLOAT,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX},  // EZ_VALUE_TYPE_CAROUSEL,
+            {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}  // EZ_VALUE_TYPE_NATIVE_CAROUSEL,
         }};
 
 typedef ezValue* (*ARITHEMATIC_V)(vector<ezValue*>& args);
@@ -285,6 +312,12 @@ static ezValue* addv_integer(vector<ezValue*>& args) {
   return new ezInteger(iret);
 }
 
+static ezValue* addv_float(vector<ezValue*>& args) {
+  double iret = args[0]->to_float();
+  for (size_t i = 1; i < args.size(); i++) iret += args[i]->to_float();
+  return new ezFloat(iret);
+}
+
 static ezValue* addv_string(vector<ezValue*>& args) {
   string sret = args[0]->to_string();
   for (size_t i = 1; i < args.size(); i++) sret += args[i]->to_string();
@@ -296,6 +329,7 @@ ARITHEMATIC_V addv[EZ_VALUE_TYPE_MAX] = {
     addv_default,  // EZ_VALUE_TYPE_CONDITION,
     addv_default,  // EZ_VALUE_TYPE_BOOL,
     addv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    addv_float,    // EZ_VALUE_TYPE_FLOAT,
     addv_string,   // EZ_VALUE_TYPE_STRING,
     addv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     addv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -319,6 +353,10 @@ static ezValue* addd_integer(ezValue* larg, ezValue* rarg) {
   return new ezInteger(larg->to_integer() + rarg->to_integer());
 }
 
+static ezValue* addd_float(ezValue* larg, ezValue* rarg) {
+  return new ezFloat(larg->to_float() + rarg->to_float());
+}
+
 static ezValue* addd_string(ezValue* larg, ezValue* rarg) {
   return new ezString(larg->to_string() + rarg->to_string());
 }
@@ -328,6 +366,7 @@ ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
     addd_default,  // EZ_VALUE_TYPE_CONDITION,
     addd_default,  // EZ_VALUE_TYPE_BOOL,
     addd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    addd_float,    // EZ_VALUE_TYPE_FLOAT,
     addd_string,   // EZ_VALUE_TYPE_STRING,
     addd_default,  // EZ_VALUE_TYPE_CAROUSEL,
     addd_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -356,6 +395,12 @@ static ezValue* cmp_integer(ezValue* larg, ezValue* rarg) {
                          false);
 }
 
+static ezValue* cmp_float(ezValue* larg, ezValue* rarg) {
+  int v = larg->to_float() - rarg->to_float();
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+                         false);
+}
+
 static ezValue* cmp_string(ezValue* larg, ezValue* rarg) {
   bool eq = (larg->to_string() == rarg->to_string());
   int sz = larg->to_string().size() - rarg->to_string().size();
@@ -367,6 +412,7 @@ ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
     cmp_default,  // EZ_VALUE_TYPE_CONDITION,
     cmp_bool,     // EZ_VALUE_TYPE_BOOL,
     cmp_integer,  // EZ_VALUE_TYPE_INTEGER,
+    cmp_float,    // EZ_VALUE_TYPE_FLOAT,
     cmp_string,   // EZ_VALUE_TYPE_STRING,
     cmp_default,  // EZ_VALUE_TYPE_CAROUSEL,
     cmp_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -390,11 +436,18 @@ static ezValue* subv_integer(vector<ezValue*>& args) {
   return new ezInteger(iret);
 }
 
+static ezValue* subv_float(vector<ezValue*>& args) {
+  double iret = args[0]->to_float();
+  for (size_t i = 1; i < args.size(); i++) iret -= args[i]->to_float();
+  return new ezFloat(iret);
+}
+
 ARITHEMATIC_V subv[EZ_VALUE_TYPE_MAX] = {
     subv_default,  // EZ_VALUE_TYPE_NULL = 0,
     subv_default,  // EZ_VALUE_TYPE_CONDITION,
     subv_default,  // EZ_VALUE_TYPE_BOOL,
     subv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    subv_float,    // EZ_VALUE_TYPE_FLOAT,
     subv_default,  // EZ_VALUE_TYPE_STRING,
     subv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     subv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -419,11 +472,16 @@ static ezValue* subd_integer(ezValue* larg, ezValue* rarg) {
   return new ezInteger(larg->to_integer() - rarg->to_integer());
 }
 
+static ezValue* subd_float(ezValue* larg, ezValue* rarg) {
+  return new ezFloat(larg->to_float() - rarg->to_float());
+}
+
 ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
     subd_default,  // EZ_VALUE_TYPE_NULL = 0,
     subd_default,  // EZ_VALUE_TYPE_CONDITION,
     subd_default,  // EZ_VALUE_TYPE_BOOL,
     subd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    subd_float,    // EZ_VALUE_TYPE_FLOAT,
     subd_default,  // EZ_VALUE_TYPE_STRING,
     subd_default,  // EZ_VALUE_TYPE_CAROUSEL,
     subd_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -453,6 +511,7 @@ ARITHEMATIC_V modv[EZ_VALUE_TYPE_MAX] = {
     modv_default,  // EZ_VALUE_TYPE_CONDITION,
     modv_default,  // EZ_VALUE_TYPE_BOOL,
     modv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    modv_default,  // EZ_VALUE_TYPE_FLOAT,
     modv_default,  // EZ_VALUE_TYPE_STRING,
     modv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     modv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -478,11 +537,16 @@ static ezValue* modd_integer(ezValue* larg, ezValue* rarg) {
   return new ezInteger(larg->to_integer() % rarg->to_integer());
 }
 
+static ezValue* modd_float(ezValue* larg, ezValue* rarg) {
+  return new ezFloat(larg->to_integer() % rarg->to_integer());
+}
+
 ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
     modd_default,  // EZ_VALUE_TYPE_NULL = 0,
     modd_default,  // EZ_VALUE_TYPE_CONDITION,
     modd_default,  // EZ_VALUE_TYPE_BOOL,
     modd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    modd_float,    // EZ_VALUE_TYPE_FLOAT,
     modd_default,  // EZ_VALUE_TYPE_STRING,
     modd_default,  // EZ_VALUE_TYPE_CAROUSEL,
     modd_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -506,11 +570,18 @@ static ezValue* mulv_integer(vector<ezValue*>& args) {
   return new ezInteger(iret);
 }
 
+static ezValue* mulv_float(vector<ezValue*>& args) {
+  double iret = args[0]->to_float();
+  for (size_t i = 1; i < args.size(); i++) iret *= args[i]->to_float();
+  return new ezFloat(iret);
+}
+
 ARITHEMATIC_V mulv[EZ_VALUE_TYPE_MAX] = {
     mulv_default,  // EZ_VALUE_TYPE_NULL = 0,
     mulv_default,  // EZ_VALUE_TYPE_CONDITION,
     mulv_default,  // EZ_VALUE_TYPE_BOOL,
     mulv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    mulv_float,    // EZ_VALUE_TYPE_FLOAT,
     mulv_default,  // EZ_VALUE_TYPE_STRING,
     mulv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     mulv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -536,11 +607,16 @@ static ezValue* muld_integer(ezValue* larg, ezValue* rarg) {
   return new ezInteger(larg->to_integer() * rarg->to_integer());
 }
 
+static ezValue* muld_float(ezValue* larg, ezValue* rarg) {
+  return new ezFloat(larg->to_float() * rarg->to_float());
+}
+
 ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
     muld_default,  // EZ_VALUE_TYPE_NULL = 0,
     muld_default,  // EZ_VALUE_TYPE_CONDITION,
     muld_default,  // EZ_VALUE_TYPE_BOOL,
     muld_integer,  // EZ_VALUE_TYPE_INTEGER,
+    muld_float,    // EZ_VALUE_TYPE_FLOAT,
     muld_default,  // EZ_VALUE_TYPE_STRING,
     muld_default,  // EZ_VALUE_TYPE_CAROUSEL,
     muld_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -565,11 +641,18 @@ static ezValue* divv_integer(vector<ezValue*>& args) {
   return new ezInteger(iret);
 }
 
+static ezValue* divv_float(vector<ezValue*>& args) {
+  double iret = args[0]->to_float();
+  for (size_t i = 1; i < args.size(); i++) iret /= args[i]->to_float();
+  return new ezFloat(iret);
+}
+
 ARITHEMATIC_V divv[EZ_VALUE_TYPE_MAX] = {
     divv_default,  // EZ_VALUE_TYPE_NULL = 0,
     divv_default,  // EZ_VALUE_TYPE_CONDITION,
     divv_default,  // EZ_VALUE_TYPE_BOOL,
     divv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    divv_float,    // EZ_VALUE_TYPE_FLOAT,
     divv_default,  // EZ_VALUE_TYPE_STRING,
     divv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     divv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -593,11 +676,16 @@ static ezValue* divd_integer(ezValue* larg, ezValue* rarg) {
   return new ezInteger(larg->to_integer() / rarg->to_integer());
 }
 
+static ezValue* divd_float(ezValue* larg, ezValue* rarg) {
+  return new ezFloat(larg->to_float() / rarg->to_float());
+}
+
 ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
     divd_default,  // EZ_VALUE_TYPE_NULL = 0,
     divd_default,  // EZ_VALUE_TYPE_CONDITION,
     divd_default,  // EZ_VALUE_TYPE_BOOL,
     divd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    divd_float,    // EZ_VALUE_TYPE_FLOAT,
     divd_default,  // EZ_VALUE_TYPE_STRING,
     divd_default,  // EZ_VALUE_TYPE_CAROUSEL,
     divd_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -640,6 +728,7 @@ ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
     not_default,  // EZ_VALUE_TYPE_CONDITION,
     not_bool,     // EZ_VALUE_TYPE_BOOL,
     not_integer,  // EZ_VALUE_TYPE_INTEGER,
+    not_default,  // EZ_VALUE_TYPE_FLOAT,
     not_default,  // EZ_VALUE_TYPE_STRING,
     not_default,  // EZ_VALUE_TYPE_CAROUSEL,
     not_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -669,6 +758,7 @@ ARITHEMATIC_V andv[EZ_VALUE_TYPE_MAX] = {
     andv_default,  // EZ_VALUE_TYPE_CONDITION,
     andv_bool,     // EZ_VALUE_TYPE_BOOL,
     andv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    andv_default,  // EZ_VALUE_TYPE_FLOAT,
     andv_default,  // EZ_VALUE_TYPE_STRING,
     andv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     andv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -701,6 +791,7 @@ ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
     andd_default,  // EZ_VALUE_TYPE_CONDITION,
     andd_bool,     // EZ_VALUE_TYPE_BOOL,
     andd_integer,  // EZ_VALUE_TYPE_INTEGER,
+    andd_default,  // EZ_VALUE_TYPE_FLOAT,
     andd_default,  // EZ_VALUE_TYPE_STRING,
     andd_default,  // EZ_VALUE_TYPE_CAROUSEL,
     andd_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -735,6 +826,7 @@ ARITHEMATIC_V orv[EZ_VALUE_TYPE_MAX] = {
     orv_default,  // EZ_VALUE_TYPE_CONDITION,
     orv_bool,     // EZ_VALUE_TYPE_BOOL,
     orv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    orv_default,  // EZ_VALUE_TYPE_FLOAT,
     orv_default,  // EZ_VALUE_TYPE_STRING,
     orv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     orv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -767,6 +859,7 @@ ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
     ord_default,  // EZ_VALUE_TYPE_CONDITION,
     ord_bool,     // EZ_VALUE_TYPE_BOOL,
     ord_integer,  // EZ_VALUE_TYPE_INTEGER,
+    ord_default,  // EZ_VALUE_TYPE_FLOAT,
     ord_default,  // EZ_VALUE_TYPE_STRING,
     ord_default,  // EZ_VALUE_TYPE_CAROUSEL,
     ord_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -801,6 +894,7 @@ ARITHEMATIC_V xorv[EZ_VALUE_TYPE_MAX] = {
     xorv_default,  // EZ_VALUE_TYPE_CONDITION,
     xorv_bool,     // EZ_VALUE_TYPE_BOOL,
     xorv_integer,  // EZ_VALUE_TYPE_INTEGER,
+    xorv_default,  // EZ_VALUE_TYPE_FLOAT,
     xorv_default,  // EZ_VALUE_TYPE_STRING,
     xorv_default,  // EZ_VALUE_TYPE_CAROUSEL,
     xorv_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL
@@ -833,6 +927,7 @@ ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
     xord_default,  // EZ_VALUE_TYPE_CONDITION,
     xord_bool,     // EZ_VALUE_TYPE_BOOL,
     xord_integer,  // EZ_VALUE_TYPE_INTEGER,
+    xord_default,  // EZ_VALUE_TYPE_FLOAT,
     xord_default,  // EZ_VALUE_TYPE_STRING,
     xord_default,  // EZ_VALUE_TYPE_CAROUSEL,
     xord_default   // EZ_VALUE_TYPE_NATIVE_CAROUSEL

@@ -29,7 +29,7 @@
 
 using namespace std;
 
-ezVM::ezVM(ezALU& alu) : m_pasm(NULL), m_parchive(NULL), m_alu(alu) {
+ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
 }
 
 /** \page thread-model Threading model

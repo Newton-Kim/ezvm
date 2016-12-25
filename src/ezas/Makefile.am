@@ -1,5 +1,5 @@
 bin_PROGRAMS=ezas
-ezas_SOURCES=ezio.cc ezas.cc ezalu.cc parse.yy scan.ll
+ezas_SOURCES=ezio.cc ezas.cc parse.yy scan.ll
 ezas_LDADD=../libezvm/libezvm.la -lfl
 AM_CPPFLAGS=-I../../include -std=c++11
 BUILT_SOURCES=parse.hh
