@@ -8,3 +8,4 @@
 8.CAROUSEL should be renamed to FUCTION.
 9.ezClass should be added.
 10.ezIO should be changed to a class.
+11.Intrinsic functions shouldn't be constant.
