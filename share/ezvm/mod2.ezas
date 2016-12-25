@@ -1,13 +1,12 @@
-.import io
 .entry main
 .proc main (0) 0:
 	.memories 12
 	mv l:0 l:1, 1 2
 	mul l:2 l:3, l:0 l:1
-	call io:print (stdout l:2 "=" l:0 "%" l:1)
+	call print (stdout l:2 "=" l:0 "%" l:1)
 	beq l:3 int_zero
-	call io:print (stdout l:2 " is non-zero value")
+	call print (stdout l:2 " is non-zero value")
 	bra int_end
 	:int_zero
-	call io:print (stdout l:2 " is zero value")
+	call print (stdout l:2 " is zero value")
 	:int_end

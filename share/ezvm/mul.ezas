@@ -1,15 +1,14 @@
-.import io
 .entry main
 .proc main (0) 0:
 	.memories 4
 	mv l:0 l:1, 1 2
 	mul l:2, l:0 l:1
-	call io:print (stdout l:2 "=" l:0 "*" l:1)
+	call print (stdout l:2 "=" l:0 "*" l:1)
 	mul l:3, 1 2 3 4
-	call io:print (stdout l:3 "=1*2*3*4")
+	call print (stdout l:3 "=1*2*3*4")
 	mv l:0 l:1, 4 2
 	mul l:2, l:0 l:1
-	call io:print (stdout l:2 "=" l:0 "*" l:1)
+	call print (stdout l:2 "=" l:0 "*" l:1)
 	mul l:3, 4 3 2 1
-	call io:print (stdout l:3 "=4*3*2*1")
+	call print (stdout l:3 "=4*3*2*1")
 

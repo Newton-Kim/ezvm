@@ -1,7 +1,6 @@
-.import io
 .entry main
 .proc print (2) 0:
-	call io:print (l:0 l:1)
+	call print (l:0 l:1)
 
 .proc main (0) 0:
 	call print (stdout "hello world")

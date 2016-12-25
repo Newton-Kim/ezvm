@@ -1,28 +1,27 @@
-.import io
 .entry main
 .proc main (0) 0:
 	.memories 8
 	mv l:0 l:1, 1 2
 	cmp l:2 , l:0 l:1
 	bge l:2 label_bge1
-	call io:print (stdout l:0 " < " l:1 " , it make sense.")
+	call print (stdout l:0 " < " l:1 " , it make sense.")
 	bra label_end1
 	:label_bge1
-	call io:print (stdout l:0 " >= " l:1)
+	call print (stdout l:0 " >= " l:1)
 	:label_end1
 	mv l:0 l:1, 2 2
 	cmp l:2 , l:0 l:1
 	bge l:2 label_bge2
-	call io:print (stdout l:0 " < " l:1)
+	call print (stdout l:0 " < " l:1)
 	bra label_end2
 	:label_bge2
-	call io:print (stdout l:0 " >= " l:1 " , it make sense.")
+	call print (stdout l:0 " >= " l:1 " , it make sense.")
 	:label_end2
 	mv l:0 l:1, 3 2
 	cmp l:2 , l:0 l:1
 	bge l:2 label_bge3
-	call io:print (stdout l:0 " < " l:1)
+	call print (stdout l:0 " < " l:1)
 	bra label_end3
 	:label_bge3
-	call io:print (stdout l:0 " >= " l:1 " , it make sense.")
+	call print (stdout l:0 " >= " l:1 " , it make sense.")
 	:label_end3
