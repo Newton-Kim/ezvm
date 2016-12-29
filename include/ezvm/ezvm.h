@@ -28,6 +28,7 @@
 #include "ezdump.h"
 #include "ezval.h"
 #include "ezthread.h"
+#include "ezgc.h"
 #include <string>
 
 using namespace std;
@@ -45,6 +46,7 @@ class ezVM {
   ezDump* m_pdump;
   ezALU m_alu;
   vector<ezThread*> m_threads;
+  ezGC<ezValue, ezThread> m_gc;
 
  public:
   ezVM();

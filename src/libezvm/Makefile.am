@@ -2,7 +2,6 @@ lib_LTLIBRARIES=libezvm.la
 
 libezvm_la_SOURCES=ezarchive.cc \
 		   ezalu.cc \
-		   ezmem.cc \
 		   ezasm.cc \
 		   ezdump.cc \
 		   ezinstruction.cc \
