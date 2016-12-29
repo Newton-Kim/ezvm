@@ -44,9 +44,9 @@ class ezVM {
   ezASM* m_pasm;
   ezArchive* m_parchive;
   ezDump* m_pdump;
+  ezGC<ezValue, ezThread> m_gc;
   ezALU m_alu;
   vector<ezThread*> m_threads;
-  ezGC<ezValue, ezThread> m_gc;
 
  public:
   ezVM();
