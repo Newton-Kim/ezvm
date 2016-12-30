@@ -77,6 +77,7 @@ class ezCondition : public ezValue {
 class ezNull : public ezValue {
  public:
   ezNull();
+  static ezNull* instance(void);
 };
 
 class ezBool : public ezValue {

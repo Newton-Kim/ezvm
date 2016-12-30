@@ -36,7 +36,7 @@ using namespace std;
 /**
 * @brief ezVM is the VM class
 */
-class ezVM {
+class ezVM : public ezGCClient{
  private:
   ezAddress m_entry;
   vector<ezValue*> m_constants;
@@ -44,7 +44,7 @@ class ezVM {
   ezASM* m_pasm;
   ezArchive* m_parchive;
   ezDump* m_pdump;
-  ezGC<ezValue, ezVM> m_gc;
+  ezGC<ezValue> m_gc;
   ezALU m_alu;
   vector<ezThread*> m_threads;
 

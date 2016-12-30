@@ -131,7 +131,7 @@ ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
       ezCarousel* crsl = (ezCarousel*)v;
       ezStackFrame* sf = new ezStackFrame(crsl);
       for (size_t i = 0; i < crsl->nmems; i++)
-        sf->local.push_back(new ezNull);
+        sf->local.push_back(ezNull::instance());
       m_stack.push_back(sf);
     } break;
     case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -166,7 +166,7 @@ ezStepState ezThread::step(void) {
       val2addr(sf->return_dest[i], sf->returns[i]);
     if (dests > rets) {
       for (size_t i = cnt; i < dests; i++)
-        val2addr(sf->return_dest[i], new ezNull);
+        val2addr(sf->return_dest[i], ezNull::instance());
     }
     delete sf;
     return EZ_STEP_CONTINUE;
@@ -205,7 +205,7 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
   if (ndests > nsrcs) {
     for (i = cnt; i < ndests; i++) {
       decoder.argument(sf->carousel->instruction[sf->pc + cnt + i], dest_addr);
-      val2addr(dest_addr, new ezNull);
+      val2addr(dest_addr, ezNull::instance());
     }
   }
   sf->pc += (ndests + nsrcs);
@@ -324,11 +324,11 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets) {
   }
   if (func->nargs > nargs) {
     for (size_t i = min_args; i < func->nargs; i++, sf->pc++) {
-      nsf->local.push_back(new ezNull);
+      nsf->local.push_back(ezNull::instance());
     }
   }
   for (size_t i = 0; i < func->nmems; i++)
-    nsf->local.push_back(new ezNull);
+    nsf->local.push_back(ezNull::instance());
   vector<ezAddress> ret_dest;
   for (size_t i = 0; i < nrets; i++, sf->pc++) {
     decoder.argument(sf->carousel->instruction[sf->pc], addr);
@@ -579,7 +579,7 @@ void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
   }
   if (addr_sz > vals_sz) {
     for (size_t i = gcv; i < addr_sz; i++)
-      val2addr(addr[i], new ezNull);
+      val2addr(addr[i], ezNull::instance());
   }
 }
 

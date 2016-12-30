@@ -355,7 +355,7 @@ size_t ezASM::constant_null(void) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue* v = new ezNull;
+  ezValue* v = ezNull::instance();
   m_constants.push_back(v);
   return idx;
 }

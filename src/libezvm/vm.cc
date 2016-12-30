@@ -30,6 +30,7 @@
 using namespace std;
 
 ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
+  m_gc.subscribe(this);
 }
 
 /** \page thread-model Threading model

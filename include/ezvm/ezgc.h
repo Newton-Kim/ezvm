@@ -29,9 +29,15 @@
 
 using namespace std;
 
-template < class V, class T> class ezGC {
+class ezGCClient {
+ public:
+   virtual ~ezGCClient(){};
+   virtual void on_mark(void) = 0;
+};
+
+template < class V> class ezGC {
  private:
-  vector<T*> m_clients;
+  vector<ezGCClient*> m_clients;
   list<V*> m_memories;
   size_t m_size;
   size_t m_prev_size;
@@ -41,17 +47,17 @@ template < class V, class T> class ezGC {
   ezGC();
   ~ezGC();
   void add(V* v);
-  void subscribe(T* t);
+  void subscribe(ezGCClient* t);
 };
 
-template < class V, class T> ezGC<V,T>::ezGC() : m_size(0), m_prev_size(0) {
+template < class V> ezGC<V>::ezGC() : m_size(0), m_prev_size(0) {
 }
 
-template < class V, class T> ezGC<V,T>::~ezGC() {
+template < class V> ezGC<V>::~ezGC() {
 }
 
-template < class V, class T> void ezGC<V,T>::collect(void) {
-  for(typename vector<T*>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++) {
+template < class V> void ezGC<V>::collect(void) {
+  for(typename vector<ezGCClient*>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++) {
     (*it)->on_mark();
   }
 
@@ -68,13 +74,13 @@ template < class V, class T> void ezGC<V,T>::collect(void) {
   m_prev_size = m_size;
 }
 
-template < class V, class T> void ezGC<V,T>::add(V* v) {
+template < class V> void ezGC<V>::add(V* v) {
   v->unmark();
   m_size += v->size();
   m_memories.push_back(v);
   if(m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD) collect();
 }
 
-template < class V, class T> void ezGC<V,T>::subscribe(T* t) {
+template < class V> void ezGC<V>::subscribe(ezGCClient* t) {
   m_clients.push_back(t);
 } 

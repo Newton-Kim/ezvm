@@ -60,6 +60,11 @@ ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
   m_size = sizeof(*this);
 }
 
+ezNull* ezNull::instance() {
+  static ezNull null;
+  return &null;
+}
+
 ezBool::ezBool(bool val)
     : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
   m_size = sizeof(*this);
@@ -114,7 +119,7 @@ ezValue* ezFloat::condition(void) {
 
 ezString::ezString(const string val)
     : ezValue(EZ_VALUE_TYPE_STRING), m_value(val) {
-  m_size = sizeof(*this);
+  m_size = sizeof(*this) + val.size() + 1;
 }
 bool ezString::to_bool(void) {
   bool ret;
