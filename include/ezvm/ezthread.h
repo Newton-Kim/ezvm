@@ -62,7 +62,7 @@ class ezThread {
   /**
   * @brief A stack of stack frames
   */
-  stack<ezStackFrame*> m_stack;
+  vector<ezStackFrame*> m_stack;
   /**
   * @brief An arithematic logic unit
   */
@@ -157,4 +157,5 @@ class ezThread {
   void bitwise_or(uint8_t ndests, uint8_t nsrcs);
   void ret(uint8_t nsrcs);
   void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
+  void on_mark(void);
 };

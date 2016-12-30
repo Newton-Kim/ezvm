@@ -34,7 +34,7 @@ class ezIoPrint : public ezNativeCarousel {
   void run(vector<ezValue*>& args, vector<ezValue*>& rets);
 };
 
-ezIoPrint::ezIoPrint() : ezNativeCarousel(false) {}
+ezIoPrint::ezIoPrint() : ezNativeCarousel() {}
 
 void ezIoPrint::run(vector<ezValue*>& args, vector<ezValue*>& rets) {
   rets.clear();

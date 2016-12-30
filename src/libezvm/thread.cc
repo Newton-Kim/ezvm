@@ -131,8 +131,8 @@ ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
       ezCarousel* crsl = (ezCarousel*)v;
       ezStackFrame* sf = new ezStackFrame(crsl);
       for (size_t i = 0; i < crsl->nmems; i++)
-        sf->local.push_back(ezNull::instance());
-      m_stack.push(sf);
+        sf->local.push_back(new ezNull);
+      m_stack.push_back(sf);
     } break;
     case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
       ((ezNativeCarousel*)v)->run(m_args, m_rets);
@@ -145,20 +145,20 @@ ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
 
 ezThread::~ezThread() {
   while (!m_stack.empty()) {
-    ezStackFrame* sf = m_stack.top();
+    ezStackFrame* sf = m_stack.back();
     if (sf) delete sf;
-    m_stack.pop();
+    m_stack.pop_back();
   }
 }
 
 ezStepState ezThread::step(void) {
   // It needs 3 steps to finalize a thread
   if (m_stack.empty()) return EZ_STEP_DONE;
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezLog& log = ezLog::instance();
   if (sf->pc >= sf->carousel->instruction.size()) {
     log.verbose("stack %p has poped out", sf);
-    m_stack.pop();
+    m_stack.pop_back();
     size_t rets = sf->returns.size();
     size_t dests = sf->return_dest.size();
     size_t cnt = (rets > dests) ? dests : rets;
@@ -166,7 +166,7 @@ ezStepState ezThread::step(void) {
       val2addr(sf->return_dest[i], sf->returns[i]);
     if (dests > rets) {
       for (size_t i = cnt; i < dests; i++)
-        val2addr(sf->return_dest[i], ezNull::instance());
+        val2addr(sf->return_dest[i], new ezNull);
     }
     delete sf;
     return EZ_STEP_CONTINUE;
@@ -183,7 +183,7 @@ ezStepState ezThread::step(void) {
 void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
   // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   size_t cnt = (ndests > nsrcs) ? nsrcs : ndests;
   ezInstDecoder decoder;
   ezAddress src_addr;
@@ -205,7 +205,7 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
   if (ndests > nsrcs) {
     for (i = cnt; i < ndests; i++) {
       decoder.argument(sf->carousel->instruction[sf->pc + cnt + i], dest_addr);
-      val2addr(dest_addr, ezNull::instance());
+      val2addr(dest_addr, new ezNull);
     }
   }
   sf->pc += (ndests + nsrcs);
@@ -214,13 +214,13 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
 void ezThread::ld(void) {
   // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   sf->pc += 3;
 }
 
 void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
                                function<ezValue*(ezValue*, ezValue*)> func) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
@@ -272,7 +272,7 @@ void ezThread::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
 void ezThread::call(uint8_t nargs, uint8_t nrets) {
   // TODO it can be done via a macro
   if (m_stack.empty()) throw runtime_error("stack underrun");
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress addr;
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
@@ -291,7 +291,7 @@ void ezThread::call(uint8_t nargs, uint8_t nrets) {
 }
 
 void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   vector<ezValue*> args;
   ezAddress addr;
@@ -312,7 +312,7 @@ void ezThread::call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets) {
 
 void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets) {
   ezStackFrame* nsf = new ezStackFrame(func);
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   vector<ezValue*> args;
   ezAddress addr;
@@ -320,26 +320,25 @@ void ezThread::call(ezCarousel* func, uint8_t nargs, uint8_t nrets) {
   for (size_t i = 0; i < min_args; i++, sf->pc++) {
     decoder.argument(sf->carousel->instruction[sf->pc], addr);
     ezValue* v = addr2val(addr);
-    v->reference();
     nsf->local.push_back(v);
   }
   if (func->nargs > nargs) {
     for (size_t i = min_args; i < func->nargs; i++, sf->pc++) {
-      nsf->local.push_back(ezNull::instance());
+      nsf->local.push_back(new ezNull);
     }
   }
   for (size_t i = 0; i < func->nmems; i++)
-    nsf->local.push_back(ezNull::instance());
+    nsf->local.push_back(new ezNull);
   vector<ezAddress> ret_dest;
   for (size_t i = 0; i < nrets; i++, sf->pc++) {
     decoder.argument(sf->carousel->instruction[sf->pc], addr);
     nsf->return_dest.push_back(addr);
   }
-  m_stack.push(nsf);
+  m_stack.push_back(nsf);
 }
 
 void ezThread::cmp(uint8_t ndests, uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress addr, cond;
   ezValue* rst = NULL;
@@ -372,7 +371,7 @@ void ezThread::binary_operation(
     uint8_t ndests, uint8_t nsrcs,
     function<ezValue*(ezValue*, ezValue*)> binary_func,
     function<ezValue*(vector<ezValue*>&)> multi_func) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
@@ -428,7 +427,7 @@ void ezThread::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
 
 void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs,
                                function<ezValue*(ezValue*)> unary_func) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(sf->carousel->instruction[sf->pc++], dest);
@@ -468,7 +467,7 @@ void ezThread::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezThread::ret(uint8_t nsrcs) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   ezValue* v = NULL;
@@ -512,7 +511,7 @@ void ezThread::sub(uint8_t ndests, uint8_t nsrcs) {
 
 void ezThread::conditional_bra(uint8_t index,
                                function<bool(ezCondition*)> func) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress addr;
   decoder.argument(sf->carousel->instruction[sf->pc++], addr);
@@ -540,7 +539,7 @@ void ezThread::bne(uint8_t index) {
 }
 
 void ezThread::bra(uint8_t index) {
-  ezStackFrame* sf = m_stack.top();
+  ezStackFrame* sf = m_stack.back();
   if (sf->carousel->jmptbl.size() <= index)
     throw runtime_error("tried to jump to an invalid label");
   sf->pc = sf->carousel->jmptbl[index];
@@ -553,7 +552,7 @@ ezValue* ezThread::addr2val(ezAddress addr) {
       throw runtime_error("constant memory access violation");
     v = m_constants[addr.offset];
   } else if (addr.segment == EZ_ASM_SEGMENT_LOCAL) {
-    ezStackFrame* sf = m_stack.top();
+    ezStackFrame* sf = m_stack.back();
     if (addr.offset >= sf->local.size())
       throw runtime_error("local memory access violation");
     v = sf->local[addr.offset];
@@ -580,7 +579,7 @@ void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
   }
   if (addr_sz > vals_sz) {
     for (size_t i = gcv; i < addr_sz; i++)
-      val2addr(addr[i], ezNull::instance());
+      val2addr(addr[i], new ezNull);
   }
 }
 
@@ -588,11 +587,9 @@ void ezThread::val2addr(ezAddress addr, ezValue* v) {
   if (addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
     throw runtime_error("cannot write to constant");
   } else if (addr.segment == EZ_ASM_SEGMENT_LOCAL) {
-    ezStackFrame* sf = m_stack.top();
+    ezStackFrame* sf = m_stack.back();
     if (addr.offset >= sf->local.size())
       throw runtime_error("local memory access violation");
-    v->reference();
-    sf->local[addr.offset]->release();
     sf->local[addr.offset] = v;
   } else if (addr.segment == EZ_ASM_SEGMENT_PARENT) {
     throw runtime_error("parent segment has not been implemented");
@@ -601,10 +598,18 @@ void ezThread::val2addr(ezAddress addr, ezValue* v) {
       throw runtime_error("invalid segment");
     if (addr.offset >= m_globals.size())
       throw runtime_error("global memory access violation");
-    v->reference();
-    m_globals[addr.offset]->release();
     m_globals[addr.offset] = v;
   } else {
     throw runtime_error("out of segment boundary");
+  }
+}
+
+void ezThread::on_mark(void) {
+  for(vector<ezStackFrame*>::iterator it = m_stack.begin() ; it != m_stack.end() ; it++) {
+    ezStackFrame* stk = *it;
+    for (vector<ezValue*>::iterator lit = stk->local.begin() ; lit != stk->local.end() ; lit++)
+      (*lit)->mark();
+    for (vector<ezValue*>::iterator lit = stk->returns.begin() ; lit != stk->returns.end() ; lit++)
+      (*lit)->mark();
   }
 }

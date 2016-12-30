@@ -44,7 +44,7 @@ class ezVM {
   ezASM* m_pasm;
   ezArchive* m_parchive;
   ezDump* m_pdump;
-  ezGC<ezValue, ezThread> m_gc;
+  ezGC<ezValue, ezVM> m_gc;
   ezALU m_alu;
   vector<ezThread*> m_threads;
 
@@ -55,4 +55,5 @@ class ezVM {
   ezASM& assembler(void);
   ezArchive& archive(void);
   ezDump& dump(void);
+  void on_mark(void);
 };

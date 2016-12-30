@@ -39,22 +39,6 @@ ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
 ezVM::~ezVM() {
   if (m_pasm) delete m_pasm;
   if (m_parchive) delete m_parchive;
-  for (vector<ezValue*>::iterator it = m_globals.begin();
-       it != m_globals.end(); it++) {
-    ezValue* v = *it;
-    if (v->dynamic) {
-      size_t ref = v->release();
-      if (ref == 0) delete v;
-    }
-  }
-  for (vector<ezValue*>::iterator it = m_constants.begin();
-       it != m_constants.end(); it++) {
-    ezValue* v = *it;
-    if (v->dynamic) {
-      size_t ref = v->release();
-      if (ref == 0) delete v;
-    }
-  }
   for (vector<ezThread*>::iterator it = m_threads.begin();
        it != m_threads.end(); it++)
     if (*it) delete *it;
@@ -100,4 +84,10 @@ ezArchive& ezVM::archive(void) {
 ezDump& ezVM::dump(void) {
   if (!m_pdump) m_pdump = new ezDump(m_entry, m_constants, m_globals, m_pasm);
   return *m_pdump;
+}
+
+void ezVM::on_mark(void) {
+  for (vector<ezThread*>::iterator it = m_threads.begin();
+       it != m_threads.end(); it++)
+    (*it)->on_mark();
 }

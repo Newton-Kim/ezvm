@@ -45,15 +45,19 @@ enum ezValueType {
 
 class ezValue {
  private:
-  size_t m_reference;
+  bool m_mark;
+
+ protected:
+  size_t m_size;
 
  public:
   const ezValueType type;
-  const bool dynamic;
-  ezValue(const ezValueType tp, const bool dyn);
+  ezValue(const ezValueType tp);
   virtual ~ezValue();
-  size_t reference(void);
-  size_t release(void);
+  inline bool marked(void) { return m_mark;}
+  inline void mark(void) { m_mark = true;}
+  inline void unmark(void) { m_mark = false;}
+  inline size_t size(void) {return m_size;}
   virtual bool to_bool(void);
   virtual int to_integer(void);
   virtual string to_string(void);
@@ -67,14 +71,12 @@ class ezCondition : public ezValue {
   const bool negative;
   const bool overflow;
   const bool carry;
-  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry,
-              const bool dynamic = true);
+  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
 };
 
 class ezNull : public ezValue {
  public:
   ezNull();
-  static ezNull* instance(void);
 };
 
 class ezBool : public ezValue {
@@ -82,7 +84,7 @@ class ezBool : public ezValue {
   bool m_value;
 
  public:
-  ezBool(bool val, const bool dynamic = true);
+  ezBool(bool val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
@@ -95,7 +97,7 @@ class ezInteger : public ezValue {
   int m_value;
 
  public:
-  ezInteger(int val, const bool dynamic = true);
+  ezInteger(int val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
@@ -108,7 +110,7 @@ class ezFloat: public ezValue {
   double m_value;
 
  public:
-  ezFloat(double val, const bool dynamic = true);
+  ezFloat(double val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
@@ -121,7 +123,7 @@ class ezString : public ezValue {
   string m_value;
 
  public:
-  ezString(const string val, const bool dynamic = true);
+  ezString(const string val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
@@ -136,8 +138,7 @@ class ezCarousel : public ezValue {
   uint8_t nargs;
   uint8_t nrets;
   size_t nmems;
-  ezCarousel(uint8_t args, uint8_t rets, size_t mems,
-             const bool dynamic = true);
+  ezCarousel(uint8_t args, uint8_t rets, size_t mems);
   ~ezCarousel();
   vector<ezInstruction> instruction;
   vector<ezInstruction> jmptbl;
@@ -147,6 +148,6 @@ class ezCarousel : public ezValue {
 class ezNativeCarousel : public ezValue {
  private:
  public:
-  ezNativeCarousel(const bool dynamic = true);
+  ezNativeCarousel();
   virtual void run(vector<ezValue*>& args, vector<ezValue*>& rets) = 0;
 };
