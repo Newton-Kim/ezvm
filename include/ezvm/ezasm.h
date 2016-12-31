@@ -26,6 +26,7 @@
 
 #include "ezaddr.h"
 #include "ezval.h"
+#include "ezgc.h"
 #include "ezfile.h"
 #include "ezinstruction.h"
 #include <cstddef>
@@ -346,6 +347,7 @@ class ezASM {
   * @brief A symbol table of m_globals
   */
   map<string, size_t> m_symtab;
+  ezGC<ezValue>& m_gc;
 
  public:
   /**
@@ -356,7 +358,7 @@ class ezASM {
   * @param globals is a reference to a global memory.
   */
   ezASM(ezAddress& entry, vector<ezValue*>& constants,
-        vector<ezValue*>& globals);
+        vector<ezValue*>& globals, ezGC<ezValue>& gc);
   /**
   * @brief is a destructor.
   */

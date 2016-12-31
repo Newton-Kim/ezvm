@@ -123,8 +123,8 @@ static RUNFUNC s_run[] = {run_add, run_and,  run_beq, run_bge, run_blt, run_bne,
                           run_or,  run_ret,  run_sub, run_xor};
 
 ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
-                   vector<ezValue*>& constants, ezALU& alu)
-    : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu) {
+                   vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc)
+    : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc) {
   ezValue* v = addr2val(entry);
   switch (v->type) {
     case EZ_VALUE_TYPE_CAROUSEL: {
@@ -219,7 +219,7 @@ void ezThread::ld(void) {
 }
 
 void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                               function<ezValue*(ezValue*, ezValue*)> func) {
+                               function<ezValue*(ezGC<ezValue>&gc, ezValue*, ezValue*)> func) {
   ezStackFrame* sf = m_stack.back();
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -252,20 +252,20 @@ void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
       throw runtime_error("the offset of the operation must be 1");
       break;
   }
-  rst = func(obj, offset);
+  rst = func(m_gc, obj, offset);
   val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  if (ndests == 2) val2addr(cond, m_gc.add(rst->condition()));
 }
 
 void ezThread::lsl(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {
-    return new ezInteger(obj->to_integer() << offset->to_integer());
+  shift_operation(ndests, nsrcs, noffsets, [](ezGC<ezValue>& gc, ezValue* obj, ezValue* offset) {
+    return gc.add(new ezInteger(obj->to_integer() << offset->to_integer()));
   });
 }
 
 void ezThread::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue* obj, ezValue* offset) {
-    return new ezInteger(obj->to_integer() >> offset->to_integer());
+  shift_operation(ndests, nsrcs, noffsets, [](ezGC<ezValue>& gc, ezValue* obj, ezValue* offset) {
+    return gc.add(new ezInteger(obj->to_integer() >> offset->to_integer()));
   });
 }
 
@@ -409,7 +409,7 @@ void ezThread::binary_operation(
     } break;
   }
   val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  if (ndests == 2) val2addr(cond, m_gc.add(rst->condition()));
 }
 
 void ezThread::add(uint8_t ndests, uint8_t nsrcs) {
@@ -447,7 +447,7 @@ void ezThread::unary_operation(uint8_t ndests, uint8_t nsrcs,
   v = addr2val(addr);
   rst = unary_func(v);
   val2addr(dest, rst);
-  if (ndests == 2) val2addr(cond, rst->condition());
+  if (ndests == 2) val2addr(cond, m_gc.add(rst->condition()));
 }
 
 void ezThread::neg(uint8_t ndests, uint8_t nsrcs) {

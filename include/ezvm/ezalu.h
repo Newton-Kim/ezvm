@@ -25,6 +25,7 @@
 #pragma once
 
 #include "ezval.h"
+#include "ezgc.h"
 #include <vector>
 
 using namespace std;
@@ -43,7 +44,11 @@ enum ezCoercOperation {
 };
 
 class ezALU {
+ private:
+  ezGC<ezValue>& m_gc;
+
  public:
+  ezALU(ezGC<ezValue>& gc);
   ezValue* add(vector<ezValue*>& args);
   ezValue* add(ezValue* larg, ezValue* rarg);
   ezValue* cmp(ezValue* larg, ezValue* rarg);

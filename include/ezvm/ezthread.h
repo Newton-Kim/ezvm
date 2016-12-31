@@ -26,6 +26,7 @@
 
 #include "ezaddr.h"
 #include "ezval.h"
+#include "ezgc.h"
 #include "ezstack.h"
 #include "ezalu.h"
 #include <cstddef>
@@ -67,6 +68,10 @@ class ezThread {
   * @brief An arithematic logic unit
   */
   ezALU& m_alu;
+  /**
+  * @brief A garbage collector
+  */
+  ezGC<ezValue>& m_gc;
   /**
   * @brief fetches a value from an address.
   *
@@ -112,7 +117,7 @@ class ezThread {
                        function<ezValue*(ezValue*)> unary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition*)> func);
   void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                       function<ezValue*(ezValue*, ezValue*)> func);
+                       function<ezValue*(ezGC<ezValue>&gc, ezValue*, ezValue*)> func);
 
  public:
   /**
@@ -124,7 +129,7 @@ class ezThread {
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, vector<ezValue*>& globals,
-           vector<ezValue*>& constants, ezALU& alu);
+           vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc);
   /**
   * @brief destroys the thread.
   */

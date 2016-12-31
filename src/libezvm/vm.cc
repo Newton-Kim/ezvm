@@ -29,7 +29,7 @@
 
 using namespace std;
 
-ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL) {
+ezVM::ezVM() : m_pasm(NULL), m_parchive(NULL), m_alu(m_gc) {
   m_gc.subscribe(this);
 }
 
@@ -48,7 +48,7 @@ ezVM::~ezVM() {
 void ezVM::run(void) {
   ezLog& log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
-  ezThread* thread = new ezThread(m_entry, m_globals, m_constants, m_alu);
+  ezThread* thread = new ezThread(m_entry, m_globals, m_constants, m_alu, m_gc);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
   while (!m_threads.empty() && m_threads[0]) {
@@ -73,7 +73,7 @@ void ezVM::run(void) {
 }
 
 ezASM& ezVM::assembler(void) {
-  if (!m_pasm) m_pasm = new ezASM(m_entry, m_constants, m_globals);
+  if (!m_pasm) m_pasm = new ezASM(m_entry, m_constants, m_globals, m_gc);
   return *m_pasm;
 }
 

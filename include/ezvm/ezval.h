@@ -57,7 +57,7 @@ class ezValue {
   inline bool marked(void) { return m_mark;}
   inline void mark(void) { m_mark = true;}
   inline void unmark(void) { m_mark = false;}
-  inline size_t size(void) {return m_size;}
+  virtual size_t size(void) {return m_size;}
   virtual bool to_bool(void);
   virtual int to_integer(void);
   virtual string to_string(void);

@@ -46,7 +46,7 @@ template < class V> class ezGC {
  public:
   ezGC();
   ~ezGC();
-  void add(V* v);
+  V* add(V* v);
   void subscribe(ezGCClient* t);
 };
 
@@ -74,13 +74,15 @@ template < class V> void ezGC<V>::collect(void) {
   m_prev_size = m_size;
 }
 
-template < class V> void ezGC<V>::add(V* v) {
+template < class V> V* ezGC<V>::add(V* v) {
   v->unmark();
   m_size += v->size();
   m_memories.push_back(v);
   if(m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD) collect();
+  return v;
 }
 
 template < class V> void ezGC<V>::subscribe(ezGCClient* t) {
   m_clients.push_back(t);
 } 
+
