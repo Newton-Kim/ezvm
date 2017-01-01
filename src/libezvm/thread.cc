@@ -558,9 +558,7 @@ ezValue* ezThread::addr2val(ezAddress addr) {
     v = sf->local[addr.offset];
   } else if (addr.segment == EZ_ASM_SEGMENT_PARENT) {
     throw runtime_error("parent segment has not been implemented");
-  } else if (addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-    if (addr.segment >= m_globals.size())
-      throw runtime_error("invalid segment");
+  } else if (addr.segment == EZ_ASM_SEGMENT_GLOBAL) {
     if (addr.offset >= m_globals.size())
       throw runtime_error("global memory access violation");
     v = m_globals[addr.offset];
