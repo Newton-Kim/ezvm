@@ -27,7 +27,7 @@
 #include <sstream>
 
 ezValue::ezValue(const ezValueType tp)
-    : type(tp) {
+    : m_mark(false), type(tp) {
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}

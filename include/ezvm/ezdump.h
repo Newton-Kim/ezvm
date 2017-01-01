@@ -59,6 +59,7 @@ class ezDump {
   * @param sink is a file stream.
   * @param v is a value.
   */
+  void dump(ezFile& sink, const ezAddress addr);
   void dump(ezFile& sink, const ezValue* v);
 
  public:

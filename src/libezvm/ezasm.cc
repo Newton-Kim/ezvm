@@ -313,12 +313,10 @@ void ezASM::load_intrinsics(char** symtab, ezValue** constants) {
   for (size_t i = 0; constants[i] && symtab[i]; i++) {
     ezValue* constant = constants[i];
     const char* symbol = symtab[i];
-    size_t offset = m_constants.size();
+    size_t offset = m_globals.size();
     m_globals.push_back(constant);
-    ezLog::instance().debug("global[%lu] = %s", m_globals.size(), symbol);
-    m_constants.push_back(constant);
+    ezLog::instance().debug("global[%lu] = %s", offset, symbol);
     m_symtab[symbol] = offset;
-    log.debug("constant[%lu] = %s", offset, symbol);
   }
 }
 
@@ -330,7 +328,6 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc,
   if (it != m_symtab.end())
     throw runtime_error("global symbol " + name + " already exists");
   ezCarousel* carousel = (ezCarousel*)m_gc.add((ezValue*)new ezCarousel(argc, retc, mems));
-  m_constants.push_back(carousel);
   m_globals.push_back(carousel);
   m_symtab[name] = m_globals.size() - 1;
   if (name == m_entry_string) {
@@ -414,5 +411,5 @@ void ezASM::dump(ezFile& sink) {
   sink.print(".symtab:\n");
   for (map<string, size_t>::iterator it = m_symtab.begin();
        it != m_symtab.end(); it++)
-    sink.print("    %s->%lu\n", it->first.c_str(), it->second);
+    sink.print("    _%s->%lu\n", it->first.c_str(), it->second);
 }

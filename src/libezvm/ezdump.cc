@@ -31,6 +31,26 @@ ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants,
                vector<ezValue*>& globals, ezASM* pasm)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_asm(pasm) {}
 
+void ezDump::dump(ezFile& sink, const ezAddress addr) {
+  switch (addr.segment) {
+    case EZ_ASM_SEGMENT_CONSTANT:
+      sink.print(" c");
+      break;
+    case EZ_ASM_SEGMENT_LOCAL:
+      sink.print(" r");
+      break;
+    case EZ_ASM_SEGMENT_PARENT:
+      sink.print(" p");
+      break;
+    case EZ_ASM_SEGMENT_GLOBAL:
+      sink.print(" g");
+      break;
+    default:
+      sink.print(" %d", addr.segment);
+    }
+    sink.print("%u", addr.offset);
+}
+
 void ezDump::dump(ezFile& sink, const ezValue* v) {
   switch (v->type) {
     case EZ_VALUE_TYPE_NULL:
@@ -68,33 +88,17 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
       while (pc < len) {
         decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
         sink.print("      %s", decoder.opstr(op));
-        sink.print(":%d:%d:%d", arg[0], arg[1], arg[2]);
+        sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
         if (op == EZ_OP_CALL) {
           decoder.argument(crsl->instruction[pc++], addr);
-          sink.print("[%d:%u]", addr.segment, addr.offset);
+          dump(sink, addr);
         }
         for (size_t c = 0; c < 3; c++) {
           if (!arg[c]) continue;
           sink.print(",");
           for (size_t i = 0; i < arg[c]; i++) {
             decoder.argument(crsl->instruction[pc++], addr);
-            switch (addr.segment) {
-              case EZ_ASM_SEGMENT_CONSTANT:
-                sink.print(" c");
-                break;
-              case EZ_ASM_SEGMENT_LOCAL:
-                sink.print(" l");
-                break;
-              case EZ_ASM_SEGMENT_PARENT:
-                sink.print(" p");
-                break;
-              case EZ_ASM_SEGMENT_GLOBAL:
-                sink.print(" g");
-                break;
-              default:
-                sink.print(" %d", addr.segment);
-            }
-            sink.print(":%u", addr.offset);
+            dump(sink, addr);
           }
         }
         sink.print("\n");
@@ -109,7 +113,9 @@ void ezDump::dump(ezFile& sink, const ezValue* v) {
 
 void ezDump::dump(const string path) {
   ezFile sink(path, "wb");
-  sink.print(".entry: %d:%u\n", m_entry.segment, m_entry.offset);
+  sink.print(".entry: ");
+  dump(sink, m_entry);
+  sink.print("\n");
   sink.print(".global:\n");
   for (size_t i = 0; i < m_globals.size(); i++) {
     sink.print("    [%lu]=", i);
