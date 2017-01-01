@@ -1,7 +1,7 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 2
-	mv l:0 l:1 , 1 2
-	call print (stdout l:0 "," l:1)
-	mv l:0 l:1 , l:1 l:0
-	call print (stdout l:0 "," l:1)
+	mv r0 r1 , 1 2
+	call _print (stdout r0 "," r1)
+	mv r0 r1 , r1 r0
+	call _print (stdout r0 "," r1)

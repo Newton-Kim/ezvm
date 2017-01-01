@@ -32,9 +32,9 @@
 comment #.*
 integer [+-]?[0-9]+
 string \"[^"]*\"
-symbol [a-zA-Z_][a-zA-Z_0-9]*
+symbol _[a-zA-Z_][a-zA-Z_0-9]*
+address [cgrp][0-9]+
 newline [\n\r]
-address [cglp]:[0-9]+
 sp [ \t]
 %%
 
@@ -70,7 +70,7 @@ sp [ \t]
 "stderr" { yylval.i_value = 2; return INTEGER; }
 {string} {yylval.s_value = strndup(yytext + 1, strlen(yytext) - 2); return STRING;}
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
-{symbol} {yylval.s_value = strdup(yytext); return SYMBOL; }
+{symbol} {yylval.s_value = strdup(yytext + 1); return SYMBOL; }
 {address} {
 	switch(yytext[0]){
 		case 'g':
@@ -79,7 +79,7 @@ sp [ \t]
 		case 'c':
 			yylval.a_value.segment = EZ_ASM_SEGMENT_CONSTANT;
 			break;
-		case 'l':
+		case 'r':
 			yylval.a_value.segment = EZ_ASM_SEGMENT_LOCAL;
 			break;
 		case 'p':
@@ -89,7 +89,7 @@ sp [ \t]
 			fprintf(stderr, "error (%d): invalid segment %c\n", yylineno, yytext[0]);
 			break;
 	}
-	yylval.a_value.offset = atoi(yytext + 2);
+	yylval.a_value.offset = atoi(yytext + 1);
 	return ADDRESS;
 }
 {newline} return NEWLINE;

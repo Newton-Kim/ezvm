@@ -1,27 +1,27 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 8
-	mv l:0 l:1, 1 2
-	cmp l:2 , l:0 l:1
-	bne l:2 label_bne1
-	call print (stdout l:0 " == " l:1)
+	mv r0 r1, 1 2
+	cmp r2 , r0 r1
+	bne r2 label_bne1
+	call _print (stdout r0 " == " r1)
 	bra label_end1
 	:label_bne1
-	call print (stdout l:0 " != " l:1 " , it make sense.")
+	call _print (stdout r0 " != " r1 " , it make sense.")
 	:label_end1
-	mv l:0 l:1, 2 2
-	cmp l:2 , l:0 l:1
-	bne l:2 label_bne2
-	call print (stdout l:0 " == " l:1 " , it make sense.")
+	mv r0 r1, 2 2
+	cmp r2 , r0 r1
+	bne r2 label_bne2
+	call _print (stdout r0 " == " r1 " , it make sense.")
 	bra label_end2
 	:label_bne2
-	call print (stdout l:0 " != " l:1)
+	call _print (stdout r0 " != " r1)
 	:label_end2
-	mv l:0 l:1, 3 2
-	cmp l:2 , l:0 l:1
-	bne l:2 label_bne3
-	call print (stdout l:0 " == " l:1)
+	mv r0 r1, 3 2
+	cmp r2 , r0 r1
+	bne r2 label_bne3
+	call _print (stdout r0 " == " r1)
 	bra label_end3
 	:label_bne3
-	call print (stdout l:0 " != " l:1 " , it make sense.")
+	call _print (stdout r0 " != " r1 " , it make sense.")
 	:label_end3

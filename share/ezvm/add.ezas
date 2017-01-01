@@ -1,13 +1,13 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 8
-	mv l:0 l:1, 1 2
-	add l:2, l:0 l:1
-	call print (stdout l:2 "=" l:0 "+" l:1)
-	add l:3, 1 2 3 4
-	call print (stdout l:3 "=1+2+3+4")
-	mv l:4 l:5, "hello" "world"
-	add l:6, l:4 l:5
-	call print (stdout l:6 "=" l:4 "+" l:5)
-	add l:7, "I " "am " "Sam"
-	call print (stdout l:7)
+	mv r0 r1, 1 2
+	add r2, r0 r1
+	call _print (stdout r2 "=" r0 "+" r1)
+	add r3, 1 2 3 4
+	call _print (stdout r3 "=1+2+3+4")
+	mv r4 r5, "hello" "world"
+	add r6, r4 r5
+	call _print (stdout r6 "=" r4 "+" r5)
+	add r7, "I " "am " "Sam"
+	call _print (stdout r7)

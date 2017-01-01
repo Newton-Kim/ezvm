@@ -1,9 +1,9 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 4
-	mv l:0 l:1, 1 2
-	lsr l:2, l:0, l:1
-	call print (stdout l:2 "=" l:0 ">>" l:1)
-	mv l:0 l:1, 4 2
-	lsr l:2, l:0, l:1
-	call print (stdout l:2 "=" l:0 ">>" l:1)
+	mv r0 r1, 1 2
+	lsr r2, r0, r1
+	call _print (stdout r2 "=" r0 ">>" r1)
+	mv r0 r1, 4 2
+	lsr r2, r0, r1
+	call _print (stdout r2 "=" r0 ">>" r1)

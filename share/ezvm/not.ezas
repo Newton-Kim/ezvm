@@ -1,9 +1,9 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 4
-	mv l:0 , 1
-	not l:1, l:0
-	call print (stdout l:1 "=~" l:0)
-	mv l:0 , -4
-	not l:1, l:0
-	call print (stdout l:1 "=~" l:0)
+	mv r0 , 1
+	not r1, r0
+	call _print (stdout r1 "=~" r0)
+	mv r0 , -4
+	not r1, r0
+	call _print (stdout r1 "=~" r0)

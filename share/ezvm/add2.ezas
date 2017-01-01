@@ -1,26 +1,26 @@
-.entry main
-.proc main (0) 0:
+.entry _main
+.proc _main (0) 0:
 	.memories 12
-	mv l:0 l:1, 1 2
-	add l:2 l:3, l:0 l:1
-	call print (stdout l:2 "=" l:0 "+" l:1)
-	beq l:3 int_zero
-	call print (stdout l:2 " is non-zero value")
+	mv r0 r1, 1 2
+	add r2 r3, r0 r1
+	call _print (stdout r2 "=" r0 "+" r1)
+	beq r3 int_zero
+	call _print (stdout r2 " is non-zero value")
 	bra int_end
 	:int_zero
-	call print (stdout l:2 " is zero value")
+	call _print (stdout r2 " is zero value")
 	:int_end
-	add l:4 l:5, 1 2 3 4
-	call print (stdout l:4 "=1+2+3+4")
-	mv l:6 l:7, "hello" "world"
-	add l:8 l:9, l:6 l:7
-	call print (stdout l:8 "=" l:6 "+" l:7)
-	add l:10 l:11, "I " "am " "Sam"
-	call print (stdout l:10)
-	beq l:11 str_zero
-	call print (stdout l:10 " is non-zero string")
+	add r4 r5, 1 2 3 4
+	call _print (stdout r4 "=1+2+3+4")
+	mv r6 r7, "hello" "world"
+	add r8 r9, r6 r7
+	call _print (stdout r8 "=" r6 "+" r7)
+	add r10 r11, "I " "am " "Sam"
+	call _print (stdout r10)
+	beq r11 str_zero
+	call _print (stdout r10 " is non-zero string")
 	bra str_end
 	:str_zero
-	call print (stdout l:10 " is null string")
+	call _print (stdout r10 " is null string")
 	:str_end
 

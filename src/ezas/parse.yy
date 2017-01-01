@@ -61,13 +61,13 @@
  * \subsubsection ezas-memory-example Example
  * \section ezas-address Address
  * \subsection ezas-address-syntax Syntax
- * [g|c|l|p|string]:{[0-9]+|string}\n
+ * [gcrp][0-9]+\n
  * \subsection ezas-address-operation Operation
  * \subsection ezas-address-description Description
  * Address is described by segment and offset. 'g' stands for a global segment, 'c' stands for a constant segment, 'l' stands for a local segment, and 'p' stands for a parent local segment on the scope. 'string' comes from the name of .import.
  * \subsection ezas-address-notes Notes
  * \subsection ezas-address-example Example
- * l:2\n
+ * r2\n
  * io:print\n
  * \section Instructions
  * The instructions are inspired by triVM instruction set. See 'TriVM intermediate language reference manual' by Neil Jonson.
@@ -82,8 +82,8 @@
  * \subsubsection ezas-add-notes Notes
  * This instructions applied to both signed and unsigned values.\n
  * \subsubsection ezas-add-example Example
- * add l:2, l:0 l:1\n
- * add l:3, 1 2 3 4
+ * add r2, r0 r1\n
+ * add r3, 1 2 3 4
  * \subsection ezas-beq beq
  * \subsubsection ezas-beq-syntax Syntax
  * beq rS , label\n
@@ -94,7 +94,7 @@
  * \subsubsection ezas-beq-notes Notes
  * This instruction is applicable to both integer and floading-point comparisons.\n
  * \subsubsection ezas-beq-example Example
- * beq l:3 int_zero
+ * beq r3 int_zero
  * \subsection ezas-blt blt
  * \subsubsection ezas-blt-syntax Syntax
  * blt rS, label\n
@@ -105,7 +105,7 @@
  * \subsubsection ezas-blt-notes Notes
  * The unsigned equivalent is bbl. This instruction is also appplicable to floating point operations.
  * \subsubsection ezas-blt-example Example
- * blt l:3 int_neg
+ * blt r3 int_neg
  * \subsection ezas-bra bra
  * \subsubsection ezas-bra-syntax Syntax
  * bra label\n
@@ -126,7 +126,7 @@
  * \subsubsection ezas-call-notes Notes
  * The target address pointed to by rS must be the biginning of a procedure identified by a visibile procedure identifier.\n
  * \subsubsection ezas-call-example Example
- * call io:print (stdout l:2 "=" l:0 "+" l:1)\n
+ * call io:print (stdout r2 "=" r0 "+" r1)\n
  * \subsection ezas-mv mv
  * \subsubsection ezas-mv-syntax Syntax
  * mv [rD]+, [rS]+\n
@@ -136,7 +136,7 @@
  * The mv instruction moves the value in rS into rD.
  * \subsubsection ezas-mv-notes Notes
  * \subsubsection ezas-mv-example Example
- * mv l:0 l:1, 1 2
+ * mv r0 r1, 1 2
  * \subsection ezas-sub sub
  * \subsubsection ezas-sub-syntax Syntax
  * sub rD [rC]?, [rS]+\n
@@ -147,8 +147,8 @@
  * The sub instruction subtacts the contents of rSs, placing the result in rD. Optionally, the condition codes of the result can be placed in rC.
  * \subsubsection ezas-sub-notes Notes
  * \subsubsection ezas-sub-example Example
- * sub l:2, l:0 l:1\n
- * sub l:2 l:3, l:0 l:1
+ * sub r2, r0 r1\n
+ * sub r2 r3, r0 r1
  */
 
 int yylex();
@@ -164,12 +164,11 @@ static vector<ezAddress> s_args_var;
 
 %token PROC ENTRY IMPORT
 %token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
-%token SYMBOL STRING NEWLINE INTEGER ADDRESS SYMBOLIC_ADDRESS MEMORIES LABEL BOOLEAN
+%token SYMBOL STRING NEWLINE INTEGER ADDRESS MEMORIES LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
 %type <a_value> ADDRESS fname var
-%type <sa_value> SYMBOLIC_ADDRESS
 %type <b_value> BOOLEAN
 
 %union {
@@ -182,10 +181,6 @@ static vector<ezAddress> s_args_var;
         size_t segment;
         size_t offset;
     } a_value;
-    struct {
-        char* segment;
-        char* offset;
-    } sa_value;
 };
 
 %start program
