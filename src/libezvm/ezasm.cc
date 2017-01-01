@@ -411,5 +411,5 @@ void ezASM::dump(ezFile& sink) {
   sink.print(".symtab:\n");
   for (map<string, size_t>::iterator it = m_symtab.begin();
        it != m_symtab.end(); it++)
-    sink.print("    _%s->%lu\n", it->first.c_str(), it->second);
+    sink.print("  [_%s]=%lu\n", it->first.c_str(), it->second);
 }

@@ -118,7 +118,7 @@ void ezDump::dump(const string path) {
   sink.print("\n");
   sink.print(".global:\n");
   for (size_t i = 0; i < m_globals.size(); i++) {
-    sink.print("    [%lu]=", i);
+    sink.print("  [%lu]=", i);
     dump(sink, m_globals[i]);
   }
   sink.print(".constant:\n");
@@ -126,5 +126,7 @@ void ezDump::dump(const string path) {
     sink.print("  [%lu]=", i);
     dump(sink, m_constants[i]);
   }
+  sink.print("\n");
   if (m_asm) m_asm->dump(sink);
+  sink.print("\n");
 }
