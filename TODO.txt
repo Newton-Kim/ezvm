@@ -11,3 +11,4 @@
 -11.Intrinsic functions shouldn't be constant.
 12.They memory spaces should be reorganized linear in the stack frame.
 -13.Instruction should be recognized by a flag.
+14.Scope should be implemented.
