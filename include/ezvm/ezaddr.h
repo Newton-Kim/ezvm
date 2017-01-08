@@ -29,20 +29,20 @@
 /**
 * @brief Constant segment: A value is set on compiling and cannot be altered.
 */
-#define EZ_ASM_SEGMENT_CONSTANT ((int8_t) - 1)
+#define EZ_ASM_SEGMENT_CONSTANT 1
 /**
 * @brief Local segment: A value which is accessible within a procedure only.
 */
-#define EZ_ASM_SEGMENT_LOCAL ((int8_t) - 2)
+#define EZ_ASM_SEGMENT_LOCAL 2
 /**
 * @brief Parent segment: A value which on the scope of a caller.
 */
-#define EZ_ASM_SEGMENT_PARENT ((int8_t) - 3)
+#define EZ_ASM_SEGMENT_PARENT 3
 /**
 * @brief Global segment: A value can be altered and is accessible from all
 * scope.
 */
-#define EZ_ASM_SEGMENT_GLOBAL ((int8_t)0)
+#define EZ_ASM_SEGMENT_GLOBAL 0
 
 /**
 * @brief ezAddress is a class that describes an address of ezVM.
@@ -67,11 +67,11 @@ class ezAddress {
   * @param seg is a segment index.
   * @param off is an offset in the segment.
   */
-  ezAddress(int8_t seg, size_t off) : segment(seg), offset(off) {}
+  ezAddress(uint8_t seg, size_t off) : segment(seg), offset(off) {}
   /**
   * @brief A segment.
   */
-  int8_t segment;
+  uint8_t segment;
   /**
   * @brief An offset of the segment.
   */

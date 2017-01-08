@@ -25,6 +25,9 @@
 #include "ezvm/ezinstruction.h"
 #include <stdexcept>
 
+#define INST_MASK 0x7f
+#define INST_BIT  0x80
+
 struct ezOperation {
   uint8_t code;
   uint8_t arg1;
@@ -42,7 +45,7 @@ ezInstEncoder::ezInstEncoder(vector<ezInstruction>& instr)
 void ezInstEncoder::opcode(ezOpCode op, uint8_t arg1, uint8_t arg2,
                            uint8_t arg3) {
   struct ezOperation opc;
-  opc.code = op;
+  opc.code = op | INST_BIT;
   opc.arg1 = arg1;
   opc.arg2 = arg2;
   opc.arg3 = arg3;
@@ -59,7 +62,8 @@ void ezInstEncoder::argument(ezAddress addr) {
 void ezInstDecoder::opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1,
                            uint8_t& arg2, uint8_t& arg3) {
   ezOperation operation = *((ezOperation*)&inst);
-  op = (ezOpCode)operation.code;
+  if(!(operation.code & INST_BIT)) throw runtime_error("not an instruction");
+  op = (ezOpCode)(operation.code & INST_MASK);
   arg1 = operation.arg1;
   arg2 = operation.arg2;
   arg3 = operation.arg3;
@@ -67,6 +71,7 @@ void ezInstDecoder::opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1,
 
 void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr) {
   ezArgument arg = *((ezArgument*)&inst);
+  if((arg.segment & INST_BIT) != 0) throw runtime_error("not an address");
   addr.segment = arg.segment;
   addr.offset = arg.offset;
 }

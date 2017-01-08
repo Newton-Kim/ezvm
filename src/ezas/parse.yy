@@ -188,7 +188,7 @@ static vector<ezAddress> s_args_var;
 %%
 program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::instance().debug("pass!"); };
 
-import : | IMPORT SYMBOL NEWLINE {
+import : %empty | IMPORT SYMBOL NEWLINE {
 		//TODO:load a script ($2+'.ezas')
 	};
 
@@ -200,11 +200,12 @@ procs : proc
 proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $9);}
 		codes {s_proc_current = NULL;};
 
-proc_meta : {$$ = 0;} | MEMORIES INTEGER NEWLINE {$$ = $2;};
+proc_meta : %empty {$$ = 0;} | MEMORIES INTEGER NEWLINE {$$ = $2;};
 
 codes : line NEWLINE | codes line NEWLINE;
 
-line : | add
+line : %empty
+        | add
 	| and
 	| beq
 	| bge
@@ -289,9 +290,9 @@ label : ':' SYMBOL {s_proc_current->label($2);}
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}
 
-addrs : | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
+addrs : %empty | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
 
-vars : | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
+vars : %empty | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
 var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}

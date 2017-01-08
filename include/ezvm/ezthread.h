@@ -118,28 +118,6 @@ class ezThread {
   void conditional_bra(uint8_t index, function<bool(ezCondition*)> func);
   void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
                        function<ezValue*(ezGC<ezValue>&gc, ezValue*, ezValue*)> func);
-
- public:
-  /**
-  * @brief constructs a thread with an entry point, a global memory, and a
-  *constant memory.
-  *
-    * @param entry is a reference to an entry point.
-    * @param globals is a reference to a global memory.
-    * @param constants is a reference to a constant memory.
-  */
-  ezThread(ezAddress entry, vector<ezValue*>& globals,
-           vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc);
-  /**
-  * @brief destroys the thread.
-  */
-  ~ezThread();
-  /**
-  * @brief runs an instruction in a stack frame on top of the stack.
-  *
-  * @return is a state which indicates if there is an instruction to run.
-  */
-  ezStepState step(void);
   void mv(uint8_t ndsts, uint8_t nsrcs);
   void ld(void);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
@@ -162,5 +140,26 @@ class ezThread {
   void bitwise_or(uint8_t ndests, uint8_t nsrcs);
   void ret(uint8_t nsrcs);
   void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
+ public:
+  /**
+  * @brief constructs a thread with an entry point, a global memory, and a
+  *constant memory.
+  *
+    * @param entry is a reference to an entry point.
+    * @param globals is a reference to a global memory.
+    * @param constants is a reference to a constant memory.
+  */
+  ezThread(ezAddress entry, vector<ezValue*>& globals,
+           vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc);
+  /**
+  * @brief destroys the thread.
+  */
+  ~ezThread();
+  /**
+  * @brief runs an instruction in a stack frame on top of the stack.
+  *
+  * @return is a state which indicates if there is an instruction to run.
+  */
+  ezStepState step(void);
   void on_mark(void);
 };

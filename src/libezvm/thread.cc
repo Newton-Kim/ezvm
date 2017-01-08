@@ -27,101 +27,6 @@
 #include "ezvm/ezinstruction.h"
 #include <stdexcept>
 
-typedef void (*RUNFUNC)(ezThread&, uint8_t, uint8_t, uint8_t);
-
-static void run_mv(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.mv(arg1, arg2);
-}
-
-static void run_ld(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.ld();
-}
-
-static void run_lsl(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.lsl(arg1, arg2, arg3);
-}
-
-static void run_lsr(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.lsr(arg1, arg2, arg3);
-}
-
-static void run_call(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.call(arg1, arg2);
-}
-
-static void run_cmp(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.cmp(arg1, arg2);
-}
-
-static void run_div(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.div(arg1, arg2);
-}
-
-static void run_add(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.add(arg1, arg2);
-}
-
-static void run_and(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bitwise_and(arg1, arg2);
-}
-
-static void run_mod(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.mod(arg1, arg2);
-}
-
-static void run_mul(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.mul(arg1, arg2);
-}
-
-static void run_neg(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.neg(arg1, arg2);
-}
-
-static void run_not(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bitwise_not(arg1, arg2);
-}
-
-static void run_or(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bitwise_or(arg1, arg2);
-}
-
-static void run_ret(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.ret(arg1);
-}
-
-static void run_sub(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.sub(arg1, arg2);
-}
-
-static void run_xor(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bitwise_xor(arg1, arg2);
-}
-
-static void run_beq(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.beq(arg1);
-}
-
-static void run_bge(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bge(arg1);
-}
-
-static void run_blt(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.blt(arg1);
-}
-
-static void run_bne(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bne(arg1);
-}
-
-static void run_bra(ezThread& thd, uint8_t arg1, uint8_t arg2, uint8_t arg3) {
-  thd.bra(arg1);
-}
-
-static RUNFUNC s_run[] = {run_add, run_and,  run_beq, run_bge, run_blt, run_bne,
-                          run_bra, run_call, run_cmp, run_div, run_ld,  run_lsl,
-                          run_lsr, run_mod,  run_mul, run_mv,  run_neg, run_not,
-                          run_or,  run_ret,  run_sub, run_xor};
-
 ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
                    vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc) {
@@ -176,7 +81,74 @@ ezStepState ezThread::step(void) {
   ezOpCode op;
   uint8_t arg1, arg2, arg3;
   decoder.opcode(sf->carousel->instruction[sf->pc++], op, arg1, arg2, arg3);
-  s_run[op](*this, arg1, arg2, arg3);
+  switch(op) {
+    case EZ_OP_ADD:
+      add(arg1, arg2);
+      break;
+    case EZ_OP_AND:
+      bitwise_and(arg1, arg2);
+      break;
+    case EZ_OP_BEQ:
+      beq(arg1);
+      break;
+    case EZ_OP_BGE:
+      bge(arg1);
+      break;
+    case EZ_OP_BLT:
+      blt(arg1);
+      break;
+    case EZ_OP_BNE:
+      bne(arg1);
+      break;
+    case EZ_OP_BRA:
+      bra(arg1);
+      break;
+    case EZ_OP_CALL:
+      call(arg1, arg2);
+      break;
+    case EZ_OP_CMP:
+      cmp(arg1, arg2);
+      break;
+    case EZ_OP_DIV:
+      div(arg1, arg2);
+      break;
+    case EZ_OP_LD:
+      ld();
+      break;
+    case EZ_OP_LSL:
+      lsl(arg1, arg2, arg3);
+      break;
+    case EZ_OP_LSR:
+      lsr(arg1, arg2, arg3);
+      break;
+    case EZ_OP_MOD:
+      mod(arg1, arg2);
+      break;
+    case EZ_OP_MUL:
+      mul(arg1, arg2);
+      break;
+    case EZ_OP_MV:
+      mv(arg1, arg2);
+      break;
+    case EZ_OP_NEG:
+      neg(arg1, arg2);
+      break;
+    case EZ_OP_NOT:
+      bitwise_not(arg1, arg2);
+      break;
+    case EZ_OP_OR:
+      bitwise_or(arg1, arg2);
+      break;
+    case EZ_OP_RET:
+      ret(arg1);
+      break;
+    case EZ_OP_SUB:
+      sub(arg1, arg2);
+      break;
+    case EZ_OP_XOR:
+      bitwise_xor(arg1, arg2);
+      break;
+}
   return EZ_STEP_CONTINUE;
 }
 
@@ -547,23 +519,30 @@ void ezThread::bra(uint8_t index) {
 
 ezValue* ezThread::addr2val(ezAddress addr) {
   ezValue* v = NULL;
-  if (addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
-    if (addr.offset >= m_constants.size())
-      throw runtime_error("constant memory access violation");
-    v = m_constants[addr.offset];
-  } else if (addr.segment == EZ_ASM_SEGMENT_LOCAL) {
-    ezStackFrame* sf = m_stack.back();
-    if (addr.offset >= sf->local.size())
-      throw runtime_error("local memory access violation");
-    v = sf->local[addr.offset];
-  } else if (addr.segment == EZ_ASM_SEGMENT_PARENT) {
-    throw runtime_error("parent segment has not been implemented");
-  } else if (addr.segment == EZ_ASM_SEGMENT_GLOBAL) {
-    if (addr.offset >= m_globals.size())
-      throw runtime_error("global memory access violation");
-    v = m_globals[addr.offset];
-  } else {
-    throw runtime_error("out of segment boundary");
+  switch (addr.segment) {
+    case EZ_ASM_SEGMENT_CONSTANT:
+      if (addr.offset >= m_constants.size())
+        throw runtime_error("constant memory access violation");
+      v = m_constants[addr.offset];
+      break;
+    case EZ_ASM_SEGMENT_LOCAL:
+      {
+        ezStackFrame* sf = m_stack.back();
+        if (addr.offset >= sf->local.size())
+          throw runtime_error("local memory access violation");
+        v = sf->local[addr.offset];
+      }
+      break;
+    case EZ_ASM_SEGMENT_PARENT:
+      throw runtime_error("parent segment has not been implemented");
+      break;
+    case EZ_ASM_SEGMENT_GLOBAL:
+      if (addr.offset >= m_globals.size())
+        throw runtime_error("global memory access violation");
+      v = m_globals[addr.offset];
+      break;
+    default:
+      throw runtime_error("out of segment boundary");
   }
   return v;
 }
@@ -582,23 +561,31 @@ void ezThread::val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals) {
 }
 
 void ezThread::val2addr(ezAddress addr, ezValue* v) {
-  if (addr.segment == EZ_ASM_SEGMENT_CONSTANT) {
-    throw runtime_error("cannot write to constant");
-  } else if (addr.segment == EZ_ASM_SEGMENT_LOCAL) {
-    ezStackFrame* sf = m_stack.back();
-    if (addr.offset >= sf->local.size())
-      throw runtime_error("local memory access violation");
-    sf->local[addr.offset] = v;
-  } else if (addr.segment == EZ_ASM_SEGMENT_PARENT) {
-    throw runtime_error("parent segment has not been implemented");
-  } else if (addr.segment >= EZ_ASM_SEGMENT_GLOBAL) {
-    if (addr.segment >= m_globals.size())
-      throw runtime_error("invalid segment");
-    if (addr.offset >= m_globals.size())
-      throw runtime_error("global memory access violation");
-    m_globals[addr.offset] = v;
-  } else {
-    throw runtime_error("out of segment boundary");
+  switch (addr.segment) {
+    case EZ_ASM_SEGMENT_CONSTANT:
+      throw runtime_error("cannot write to constant");
+      break;
+    case EZ_ASM_SEGMENT_LOCAL:
+      {
+        ezStackFrame* sf = m_stack.back();
+        if (addr.offset >= sf->local.size())
+          throw runtime_error("local memory access violation");
+        sf->local[addr.offset] = v;
+      }
+      break;
+    case EZ_ASM_SEGMENT_PARENT:
+      throw runtime_error("parent segment has not been implemented");
+      break;
+    case EZ_ASM_SEGMENT_GLOBAL:
+      if (addr.segment >= m_globals.size())
+        throw runtime_error("invalid segment");
+      if (addr.offset >= m_globals.size())
+        throw runtime_error("global memory access violation");
+      m_globals[addr.offset] = v;
+      break;
+    break;
+      throw runtime_error("out of segment boundary");
+      break;
   }
 }
 
