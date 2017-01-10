@@ -97,14 +97,6 @@ class ezAsmProcedure {
   * @param src Addresses of source values.
   */
   void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
-  /**
-  * @brief creates a ld instruction. See ld of ezas.
-  *
-  * @param dest An address which the loaded value is stored.
-  * @param obj An address of an object whose member is loaded.
-  * @param offset An offset of a member in the obj.
-  */
-  void ld(const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
            const ezAddress offset);

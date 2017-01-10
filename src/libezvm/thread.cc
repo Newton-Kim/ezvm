@@ -112,9 +112,6 @@ ezStepState ezThread::step(void) {
     case EZ_OP_DIV:
       div(arg1, arg2);
       break;
-    case EZ_OP_LD:
-      ld();
-      break;
     case EZ_OP_LSL:
       lsl(arg1, arg2, arg3);
       break;
@@ -181,13 +178,6 @@ void ezThread::mv(uint8_t ndests, uint8_t nsrcs) {
     }
   }
   sf->pc += (ndests + nsrcs);
-}
-
-void ezThread::ld(void) {
-  // TODO it can be done via a macro
-  if (m_stack.empty()) throw runtime_error("stack underrun");
-  ezStackFrame* sf = m_stack.back();
-  sf->pc += 3;
 }
 
 void ezThread::shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,

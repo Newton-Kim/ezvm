@@ -85,11 +85,6 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
   instruction.argument(offset);
 }
 
-void ezAsmProcedure::ld(const ezAddress dest, const ezAddress obj,
-                        const ezAddress offset) {
-  instruction_with_1_1_1_arguments(EZ_OP_LD, dest, obj, offset);
-}
-
 void ezAsmProcedure::lsl(const ezAddress dest, const ezAddress obj,
                          const ezAddress offset) {
   instruction_with_1_1_1_arguments(EZ_OP_LSL, dest, obj, offset);

@@ -119,7 +119,6 @@ class ezThread {
   void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
                        function<ezValue*(ezGC<ezValue>&gc, ezValue*, ezValue*)> func);
   void mv(uint8_t ndsts, uint8_t nsrcs);
-  void ld(void);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void call(uint8_t nargs, uint8_t nrets);
