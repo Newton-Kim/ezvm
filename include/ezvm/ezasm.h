@@ -24,16 +24,16 @@
 */
 #pragma once
 
-#include "eztable.h"
 #include "ezaddr.h"
-#include "ezval.h"
-#include "ezgc.h"
 #include "ezfile.h"
+#include "ezgc.h"
 #include "ezinstruction.h"
+#include "eztable.h"
+#include "ezval.h"
 #include <cstddef>
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -42,7 +42,7 @@ using namespace std;
 * instructions.
 */
 class ezAsmProcedure {
- private:
+private:
   /**
   * @brief converts a local variable to respective slot index of a local
   * segment.
@@ -55,12 +55,12 @@ class ezAsmProcedure {
   /**
   * @brief is an instance of a carousel.
   */
-  ezCarousel* m_carousel;
+  ezCarousel *m_carousel;
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
-                                        vector<ezAddress>& src);
+                                        vector<ezAddress> &src);
   void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
                                         const ezAddress cond,
-                                        vector<ezAddress>& src);
+                                        vector<ezAddress> &src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
                                     const ezAddress src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
@@ -74,13 +74,13 @@ class ezAsmProcedure {
                                         const ezAddress offset);
   void branch_instruction(ezOpCode op, const ezAddress cond, string label);
 
- public:
+public:
   /**
   * @brief is a constructor.
   *
   * @param carousel is a pointer to a carousel.
   */
-  ezAsmProcedure(ezCarousel* carousel);
+  ezAsmProcedure(ezCarousel *carousel);
   /**
   * @brief creates a call instruction. See add of ezas.
   *
@@ -88,16 +88,16 @@ class ezAsmProcedure {
   * @param args Arguments which are passed to the function
   * @param rets Addresses which the return values of the function are stored.
   */
-  void call(const ezAddress& func, vector<ezAddress>& args,
-            vector<ezAddress>& rets);
-  void cmp(const ezAddress& cond, const ezAddress& larg, const ezAddress& rarg);
+  void call(const ezAddress &func, vector<ezAddress> &args,
+            vector<ezAddress> &rets);
+  void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
   /**
   * @brief creates a mv instruction. See mv of ezas.
   *
   * @param dest Destination addresses which the values of src are stored.
   * @param src Addresses of source values.
   */
-  void mv(vector<ezAddress>& dest, vector<ezAddress>& src);
+  void mv(vector<ezAddress> &dest, vector<ezAddress> &src);
   void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
            const ezAddress offset);
@@ -110,7 +110,7 @@ class ezAsmProcedure {
   * @param dest An address which the sum is stored.
   * @param src Addresses of addends.
   */
-  void add(const ezAddress dest, vector<ezAddress>& src);
+  void add(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates an add instruction. The instruction stores a condition at the
   * address of cond. See add of ezas.
@@ -119,14 +119,14 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of addends.
   */
-  void add(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void add(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
   * @brief creates a bitwise AND instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, vector<ezAddress>& src);
+  void bitwise_and(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates a bitwise AND instruction. The instruction stores a condition
   *at the address of cond. See and of ezas.
@@ -136,7 +136,7 @@ class ezAsmProcedure {
   * @param src Addresses of arguments.
   */
   void bitwise_and(const ezAddress dest, const ezAddress cond,
-                   vector<ezAddress>& src);
+                   vector<ezAddress> &src);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
@@ -181,7 +181,7 @@ class ezAsmProcedure {
   * @param dest An address which the product is stored.
   * @param src Addresses of addends.
   */
-  void div(const ezAddress dest, vector<ezAddress>& src);
+  void div(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates an div instruction. The instruction stores a condition at the
   * address of cond. See div of ezas.
@@ -190,7 +190,7 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of addends.
   */
-  void div(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void div(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
   * @brief tags the address with the name.
   *
@@ -203,7 +203,7 @@ class ezAsmProcedure {
   * @param dest An address which the product is stored.
   * @param src Addresses of arguments.
   */
-  void mod(const ezAddress dest, vector<ezAddress>& src);
+  void mod(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates a mod instruction. The instruction stores a condition at the
   * address of cond. See mod of ezas.
@@ -212,14 +212,14 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void mod(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void mod(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
   * @brief creates a mul instruction. See mul of ezas.
   *
   * @param dest An address which the product is stored.
   * @param src Addresses of addends.
   */
-  void mul(const ezAddress dest, vector<ezAddress>& src);
+  void mul(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates a mul instruction. The instruction stores a condition at the
   * address of cond. See mul of ezas.
@@ -228,7 +228,7 @@ class ezAsmProcedure {
   * @param cond An address which the condition is stored.
   * @param src Addresses of addends.
   */
-  void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
   * @brief creates a neg instruction. See neg of ezas.
   *
@@ -268,7 +268,7 @@ class ezAsmProcedure {
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, vector<ezAddress>& src);
+  void bitwise_or(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates a bitwise OR instruction. The instruction stores a condition
   *at the address of cond. See or of ezas.
@@ -278,16 +278,16 @@ class ezAsmProcedure {
   * @param src Addresses of arguments.
   */
   void bitwise_or(const ezAddress dest, const ezAddress cond,
-                  vector<ezAddress>& src);
+                  vector<ezAddress> &src);
   void ret(void);
-  void ret(vector<ezAddress>& src);
+  void ret(vector<ezAddress> &src);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *
   * @param dest An address which the difference is stored.
   * @param src Addresses of minuend and subtrahend.
   */
-  void sub(const ezAddress dest, vector<ezAddress>& src);
+  void sub(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates an subtration instruction. The instruction stores a condition
   * at the address of cond. See sub of ezas.
@@ -295,14 +295,14 @@ class ezAsmProcedure {
   * @param dest An address which the difference is stored.
   * @param src Addresses of minuend and subtrahend.
   */
-  void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress>& src);
+  void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
   * @brief creates a bitwise XOR instruction. See xor of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, vector<ezAddress>& src);
+  void bitwise_xor(const ezAddress dest, vector<ezAddress> &src);
   /**
   * @brief creates a bitwise XOR instruction. The instruction stores a condition
   *at the address of cond. See xor of ezas.
@@ -312,18 +312,18 @@ class ezAsmProcedure {
   * @param src Addresses of arguments.
   */
   void bitwise_xor(const ezAddress dest, const ezAddress cond,
-                   vector<ezAddress>& src);
+                   vector<ezAddress> &src);
 };
 
 /**
 * @brief ezASM alters the states of ezVM.
 */
 class ezASM {
- private:
+private:
   /**
   * @brief A reference to a procedure entry point
   */
-  ezAddress& m_entry;
+  ezAddress &m_entry;
   /**
   * @brief A symbol of the entry point
   */
@@ -331,14 +331,14 @@ class ezASM {
   /**
   * @brief A reference to a constant segment
   */
-  vector<ezValue*>& m_constants;
+  vector<ezValue *> &m_constants;
   /**
   * @brief A reference to a global segment
   */
-  ezTable<string, ezValue*>& m_globals;
-  ezGC& m_gc;
+  ezTable<string, ezValue *> &m_globals;
+  ezGC &m_gc;
 
- public:
+public:
   /**
   * @brief is a constructor.
   *
@@ -346,8 +346,8 @@ class ezASM {
   * @param constants is a reference to a constant memory.
   * @param globals is a reference to a global memory.
   */
-  ezASM(ezAddress& entry, vector<ezValue*>& constants,
-        ezTable<string, ezValue*>& globals, ezGC& gc);
+  ezASM(ezAddress &entry, vector<ezValue *> &constants,
+        ezTable<string, ezValue *> &globals, ezGC &gc);
   /**
   * @brief is a destructor.
   */
@@ -358,7 +358,7 @@ class ezASM {
   * @param symtab is an array of symbols respective to constants.
   * @param constants is an array of intrinsic functions.
   */
-  void load_intrinsics(char** symtab, ezValue** constants);
+  void load_intrinsics(char **symtab, ezValue **constants);
   /**
   * @brief sets an entry point.
   *
@@ -375,7 +375,7 @@ class ezASM {
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure* new_proc(const string name, int argc, int retc, int mems);
+  ezAsmProcedure *new_proc(const string name, int argc, int retc, int mems);
   /**
   * @brief finds the offset of a global segment whose name is value.
   *
@@ -399,7 +399,7 @@ class ezASM {
   *
   * @return is an offset in a constant segment.
   */
-  size_t constant(const char* value);
+  size_t constant(const char *value);
   /**
   * @brief adds a constant integer number.
   *

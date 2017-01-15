@@ -26,8 +26,8 @@
 
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezval.h"
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 using namespace std;
 
@@ -56,20 +56,20 @@ enum ezOpCode {
 };
 
 class ezInstEncoder {
- private:
-  vector<ezInstruction>& m_instruction;
+private:
+  vector<ezInstruction> &m_instruction;
 
- public:
-  ezInstEncoder(vector<ezInstruction>& instr);
+public:
+  ezInstEncoder(vector<ezInstruction> &instr);
   void opcode(ezOpCode op, uint8_t arg1 = 0, uint8_t arg2 = 0,
               uint8_t arg3 = 0);
   void argument(ezAddress addr);
 };
 
 class ezInstDecoder {
- public:
-  void opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1, uint8_t& arg2,
-              uint8_t& arg3);
-  void argument(ezInstruction inst, ezAddress& addr);
-  const char* opstr(ezOpCode op);
+public:
+  void opcode(ezInstruction inst, ezOpCode &op, uint8_t &arg1, uint8_t &arg2,
+              uint8_t &arg3);
+  void argument(ezInstruction inst, ezAddress &addr);
+  const char *opstr(ezOpCode op);
 };

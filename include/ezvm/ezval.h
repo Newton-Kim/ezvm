@@ -26,10 +26,10 @@
 #include "ezgc.h"
 #include "eztable.h"
 #include <cstddef>
+#include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include <cstdint>
 
 using namespace std;
 
@@ -45,20 +45,20 @@ enum ezValueType {
   EZ_VALUE_TYPE_MAX
 };
 
-class ezValue : public ezGCObject{
- public:
+class ezValue : public ezGCObject {
+public:
   const ezValueType type;
   ezValue(const ezValueType tp);
   virtual ~ezValue();
   virtual bool to_bool(void);
   virtual int to_integer(void);
   virtual string to_string(void);
-  virtual ezValue* condition(void);
+  virtual ezValue *condition(void);
   virtual double to_float(void);
 };
 
 class ezCondition : public ezValue {
- public:
+public:
   const bool zero;
   const bool negative;
   const bool overflow;
@@ -67,70 +67,71 @@ class ezCondition : public ezValue {
 };
 
 class ezNull : public ezValue {
- public:
+public:
   ezNull();
-  static ezNull* instance(void);
+  static ezNull *instance(void);
 };
 
 class ezBool : public ezValue {
- private:
+private:
   bool m_value;
 
- public:
+public:
   ezBool(bool val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
-  ezValue* condition(void);
+  ezValue *condition(void);
   virtual double to_float(void);
 };
 
 class ezInteger : public ezValue {
- private:
+private:
   int m_value;
 
- public:
+public:
   ezInteger(int val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
-  ezValue* condition(void);
+  ezValue *condition(void);
   virtual double to_float(void);
 };
 
-class ezFloat: public ezValue {
- private:
+class ezFloat : public ezValue {
+private:
   double m_value;
 
- public:
+public:
   ezFloat(double val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
-  ezValue* condition(void);
+  ezValue *condition(void);
   virtual double to_float(void);
 };
 
 class ezString : public ezValue {
- private:
+private:
   string m_value;
 
- public:
+public:
   ezString(const string val);
   bool to_bool(void);
   int to_integer(void);
   string to_string(void);
-  ezValue* condition(void);
+  ezValue *condition(void);
   virtual double to_float(void);
 };
 
 typedef uint32_t ezInstruction;
 
 class ezCarousel : public ezValue {
- private:
-  ezTable<string, ezValue*>* m_scope;
-  ezTable<string, ezValue*>* m_local;
- public:
+private:
+  ezTable<string, ezValue *> *m_scope;
+  ezTable<string, ezValue *> *m_local;
+
+public:
   uint8_t nargs;
   uint8_t nrets;
   size_t nmems;
@@ -142,8 +143,8 @@ class ezCarousel : public ezValue {
 };
 
 class ezNativeCarousel : public ezValue {
- private:
- public:
+private:
+public:
   ezNativeCarousel();
-  virtual void run(vector<ezValue*>& args, vector<ezValue*>& rets) = 0;
+  virtual void run(vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
 };

@@ -48,7 +48,7 @@
 * @brief ezAddress is a class that describes an address of ezVM.
 */
 class ezAddress {
- public:
+public:
   /**
   * @brief A default constructor: It points the first slot of the constant
   * segment.
@@ -59,7 +59,7 @@ class ezAddress {
   *
   * @param addr is an adress descriptor.
   */
-  ezAddress(const ezAddress& addr)
+  ezAddress(const ezAddress &addr)
       : segment(addr.segment), offset(addr.offset) {}
   /**
   * @brief A constructor

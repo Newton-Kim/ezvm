@@ -32,14 +32,14 @@ using namespace std;
 * @brief exLog produces footprint of internal operation.
 */
 class ezLog {
- private:
+private:
   /**
   * @brief is a file stream.
   */
   ezFile m_log;
-  void print(const char* level, const char* fmt, va_list ap);
+  void print(const char *level, const char *fmt, va_list ap);
 
- public:
+public:
   /**
   * @brief is a default constructor.
   */
@@ -62,7 +62,7 @@ class ezLog {
   * @return A reference to the log stream which is created in initialize
   *function.
   */
-  static ezLog& instance(void);
+  static ezLog &instance(void);
   /**
   * @brief produces a log of debug priority.
   *
@@ -70,7 +70,7 @@ class ezLog {
   *of fprintf in 'man fprintf'.
   * @param ... is variable arguments.
   */
-  void debug(const char* fmt, ...);
+  void debug(const char *fmt, ...);
   /**
   * @brief produces a log of info priority.
   *
@@ -78,7 +78,7 @@ class ezLog {
   *of fprintf in 'man fprintf'.
   * @param ... is variable arguments.
   */
-  void info(const char* fmt, ...);
+  void info(const char *fmt, ...);
   /**
   * @brief produces a log of verbose priority.
   *
@@ -86,5 +86,5 @@ class ezLog {
   *of fprintf in 'man fprintf'.
   * @param ... is variable arguments.
   */
-  void verbose(const char* fmt, ...);
+  void verbose(const char *fmt, ...);
 };

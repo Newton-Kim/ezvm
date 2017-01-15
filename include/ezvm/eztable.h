@@ -24,29 +24,28 @@
 */
 #pragma once
 
-#include "ezfile.h"
+#include "ezgc.h"
 #include <map>
 #include <vector>
 
 using namespace std;
 
-template <class K, class V> class ezTable {
+template <class K, class V> class ezTable : public ezGCObject {
 public:
- map<K, size_t> m_symtab;
- vector<V> m_memory;
- size_t add(K key, V value);
- bool exist(K key);
+  map<K, size_t> m_symtab;
+  vector<V> m_memory;
+  size_t add(K key, V value);
+  bool exist(K key);
 };
 
-template <class K, class V> size_t ezTable<K,V>::add(K key, V value) {
+template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
   size_t offset = m_memory.size();
   m_memory.push_back(value);
   m_symtab[key] = offset;
   return offset;
 }
 
-template <class K, class V> bool ezTable<K,V>::exist(K key) {
+template <class K, class V> bool ezTable<K, V>::exist(K key) {
   typename map<K, size_t>::iterator it = m_symtab.find(key);
   return (it != m_symtab.end());
 }
-

@@ -23,46 +23,45 @@
 *
 */
 #pragma once
-#include <vector>
 #include <list>
-#define EZGC_THRESHOLD  (20 * 1024)
+#include <vector>
+#define EZGC_THRESHOLD (20 * 1024)
 
 using namespace std;
 
 class ezGCClient {
- public:
-   virtual ~ezGCClient(){};
-   virtual void on_mark(void) = 0;
+public:
+  virtual ~ezGCClient(){};
+  virtual void on_mark(void) = 0;
 };
 
 class ezGCObject {
- private:
+private:
   bool m_mark;
 
- protected:
+protected:
   size_t m_size;
 
- public:
-  ezGCObject():m_mark(false){}
-  virtual ~ezGCObject(){}
-  inline bool marked(void) { return m_mark;}
-  inline void mark(void) { m_mark = true;}
-  inline void unmark(void) { m_mark = false;}
-  virtual size_t size(void) {return m_size;}
+public:
+  ezGCObject() : m_mark(false) {}
+  virtual ~ezGCObject() {}
+  inline bool marked(void) { return m_mark; }
+  inline void mark(void) { m_mark = true; }
+  inline void unmark(void) { m_mark = false; }
+  virtual size_t size(void) { return m_size; }
 };
 
 class ezGC {
- private:
-  vector<ezGCClient*> m_clients;
-  list<ezGCObject*> m_memories;
+private:
+  vector<ezGCClient *> m_clients;
+  list<ezGCObject *> m_memories;
   size_t m_size;
   size_t m_prev_size;
   void collect(void);
 
- public:
+public:
   ezGC();
   ~ezGC();
-  ezGCObject* add(ezGCObject* v);
-  void subscribe(ezGCClient* t);
+  ezGCObject *add(ezGCObject *v);
+  void subscribe(ezGCClient *t);
 };
-

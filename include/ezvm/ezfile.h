@@ -23,8 +23,8 @@
 *
 */
 #pragma once
-#include <cstdio>
 #include <cstdarg>
+#include <cstdio>
 #include <string>
 
 using namespace std;
@@ -33,15 +33,14 @@ using namespace std;
 * @brief ezFile is a wrapper of the file system for ease of use in ezVM.
 */
 class ezFile {
- private:
+private:
   /**
   * @brief is a file descriptor.
   */
-  FILE* m_fd;
+  FILE *m_fd;
   size_t m_indent;
 
-
- public:
+public:
   /**
   * @brief is a default constructor. It creates a null file object, which does
   * nothing like /dev/null.
@@ -68,7 +67,7 @@ class ezFile {
   *of fprintf in 'man fprintf'.
   * @param ... is variable arguments.
   */
-  void print(const char* fmt, ...);
+  void print(const char *fmt, ...);
   /**
   * @brief produces output according to a format
   *
@@ -76,7 +75,7 @@ class ezFile {
   *of fprintf in 'man fprintf'.
   * @param ap is va_list argument.
   */
-  void vprint(const char* fmt, va_list ap);
+  void vprint(const char *fmt, va_list ap);
   /**
   * @brief is an equivalent funciton to print, but it is followed by a line
   *separation such as '\n'.
@@ -85,7 +84,7 @@ class ezFile {
   *of fprintf in 'man fprintf'.
   * @param ... is variable arguments.
   */
-  void println(const char* fmt, ...);
+  void println(const char *fmt, ...);
   /**
   * @brief is an equivalent funciton to vprint, but it is followed by a line
   *separation such as '\n'.
@@ -94,7 +93,7 @@ class ezFile {
   *of fprintf in 'man fprintf'.
   * @param ap is va_list argument.
   */
-  void vprintln(const char* fmt, va_list ap);
+  void vprintln(const char *fmt, va_list ap);
   /**
   * @brief shows if the file object is nill object.
   *

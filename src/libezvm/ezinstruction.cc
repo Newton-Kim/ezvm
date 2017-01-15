@@ -26,7 +26,7 @@
 #include <stdexcept>
 
 #define INST_MASK 0x7f
-#define INST_BIT  0x80
+#define INST_BIT 0x80
 
 struct ezOperation {
   uint8_t code;
@@ -39,7 +39,7 @@ struct ezArgument {
   unsigned int offset : 24;
 };
 
-ezInstEncoder::ezInstEncoder(vector<ezInstruction>& instr)
+ezInstEncoder::ezInstEncoder(vector<ezInstruction> &instr)
     : m_instruction(instr) {}
 
 void ezInstEncoder::opcode(ezOpCode op, uint8_t arg1, uint8_t arg2,
@@ -49,75 +49,77 @@ void ezInstEncoder::opcode(ezOpCode op, uint8_t arg1, uint8_t arg2,
   opc.arg1 = arg1;
   opc.arg2 = arg2;
   opc.arg3 = arg3;
-  m_instruction.push_back(*((ezInstruction*)&opc));
+  m_instruction.push_back(*((ezInstruction *)&opc));
 }
 
 void ezInstEncoder::argument(ezAddress addr) {
   struct ezArgument arg;
   arg.segment = addr.segment;
   arg.offset = addr.offset;
-  m_instruction.push_back(*((ezInstruction*)&arg));
+  m_instruction.push_back(*((ezInstruction *)&arg));
 }
 
-void ezInstDecoder::opcode(ezInstruction inst, ezOpCode& op, uint8_t& arg1,
-                           uint8_t& arg2, uint8_t& arg3) {
-  ezOperation operation = *((ezOperation*)&inst);
-  if(!(operation.code & INST_BIT)) throw runtime_error("not an instruction");
+void ezInstDecoder::opcode(ezInstruction inst, ezOpCode &op, uint8_t &arg1,
+                           uint8_t &arg2, uint8_t &arg3) {
+  ezOperation operation = *((ezOperation *)&inst);
+  if (!(operation.code & INST_BIT))
+    throw runtime_error("not an instruction");
   op = (ezOpCode)(operation.code & INST_MASK);
   arg1 = operation.arg1;
   arg2 = operation.arg2;
   arg3 = operation.arg3;
 }
 
-void ezInstDecoder::argument(ezInstruction inst, ezAddress& addr) {
-  ezArgument arg = *((ezArgument*)&inst);
-  if((arg.segment & INST_BIT) != 0) throw runtime_error("not an address");
+void ezInstDecoder::argument(ezInstruction inst, ezAddress &addr) {
+  ezArgument arg = *((ezArgument *)&inst);
+  if ((arg.segment & INST_BIT) != 0)
+    throw runtime_error("not an address");
   addr.segment = arg.segment;
   addr.offset = arg.offset;
 }
 
-const char* ezInstDecoder::opstr(ezOpCode op) {
+const char *ezInstDecoder::opstr(ezOpCode op) {
   switch (op) {
-    case EZ_OP_ADD:
-      return "add";
-    case EZ_OP_AND:
-      return "add";
-    case EZ_OP_BEQ:
-      return "beq";
-    case EZ_OP_BGE:
-      return "bge";
-    case EZ_OP_BLT:
-      return "blt";
-    case EZ_OP_BNE:
-      return "bne";
-    case EZ_OP_BRA:
-      return "bra";
-    case EZ_OP_CALL:
-      return "call";
-    case EZ_OP_CMP:
-      return "cmp";
-    case EZ_OP_DIV:
-      return "div";
-    case EZ_OP_LSL:
-      return "lsl";
-    case EZ_OP_LSR:
-      return "lsr";
-    case EZ_OP_MOD:
-      return "mod";
-    case EZ_OP_MUL:
-      return "mul";
-    case EZ_OP_MV:
-      return "mv";
-    case EZ_OP_NEG:
-      return "neg";
-    case EZ_OP_NOT:
-      return "not";
-    case EZ_OP_OR:
-      return "or";
-    case EZ_OP_SUB:
-      return "sub";
-    case EZ_OP_XOR:
-      return "xor";
+  case EZ_OP_ADD:
+    return "add";
+  case EZ_OP_AND:
+    return "add";
+  case EZ_OP_BEQ:
+    return "beq";
+  case EZ_OP_BGE:
+    return "bge";
+  case EZ_OP_BLT:
+    return "blt";
+  case EZ_OP_BNE:
+    return "bne";
+  case EZ_OP_BRA:
+    return "bra";
+  case EZ_OP_CALL:
+    return "call";
+  case EZ_OP_CMP:
+    return "cmp";
+  case EZ_OP_DIV:
+    return "div";
+  case EZ_OP_LSL:
+    return "lsl";
+  case EZ_OP_LSR:
+    return "lsr";
+  case EZ_OP_MOD:
+    return "mod";
+  case EZ_OP_MUL:
+    return "mul";
+  case EZ_OP_MV:
+    return "mv";
+  case EZ_OP_NEG:
+    return "neg";
+  case EZ_OP_NOT:
+    return "not";
+  case EZ_OP_OR:
+    return "or";
+  case EZ_OP_SUB:
+    return "sub";
+  case EZ_OP_XOR:
+    return "xor";
   }
   return "unknown";
 }

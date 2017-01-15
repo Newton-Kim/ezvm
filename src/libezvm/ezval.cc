@@ -23,13 +23,10 @@
 *
 */
 #include "ezvm/ezval.h"
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 
-ezValue::ezValue(const ezValueType tp)
-    : type(tp) {
-  m_size = sizeof(*this);
-}
+ezValue::ezValue(const ezValueType tp) : type(tp) { m_size = sizeof(*this); }
 ezValue::~ezValue() {}
 
 bool ezValue::to_bool(void) { throw runtime_error("unable to cast to bool"); }
@@ -42,31 +39,25 @@ double ezValue::to_float(void) {
 string ezValue::to_string(void) {
   throw runtime_error("unable to cast to string");
 }
-ezValue* ezValue::condition(void) {
+ezValue *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
 ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
                          const bool cry)
-    : ezValue(EZ_VALUE_TYPE_CONDITION),
-      zero(zr),
-      negative(neg),
-      overflow(ovf),
+    : ezValue(EZ_VALUE_TYPE_CONDITION), zero(zr), negative(neg), overflow(ovf),
       carry(cry) {
   m_size = sizeof(*this);
 }
 
-ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
-  m_size = sizeof(*this);
-}
+ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) { m_size = sizeof(*this); }
 
-ezNull* ezNull::instance() {
+ezNull *ezNull::instance() {
   static ezNull null;
   return &null;
 }
 
-ezBool::ezBool(bool val)
-    : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
+ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
   m_size = sizeof(*this);
 }
 bool ezBool::to_bool(void) { return m_value; }
@@ -77,12 +68,11 @@ string ezBool::to_string(void) {
   str = m_value ? "true" : "false";
   return str;
 }
-ezValue* ezBool::condition(void) {
+ezValue *ezBool::condition(void) {
   return new ezCondition(!m_value, false, false, false);
 }
 
-ezInteger::ezInteger(int val)
-    : ezValue(EZ_VALUE_TYPE_INTEGER), m_value(val) {
+ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), m_value(val) {
   m_size = sizeof(*this);
 }
 bool ezInteger::to_bool(void) { return m_value ? true : false; }
@@ -94,13 +84,12 @@ string ezInteger::to_string(void) {
   return ss.str();
 }
 
-ezValue* ezInteger::condition(void) {
+ezValue *ezInteger::condition(void) {
   return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
 }
 
-ezFloat::ezFloat(double val)
-    : ezValue(EZ_VALUE_TYPE_FLOAT), m_value(val) {
+ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), m_value(val) {
   m_size = sizeof(*this);
 }
 bool ezFloat::to_bool(void) { return m_value ? true : false; }
@@ -112,7 +101,7 @@ string ezFloat::to_string(void) {
   return ss.str();
 }
 
-ezValue* ezFloat::condition(void) {
+ezValue *ezFloat::condition(void) {
   return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
 }
@@ -134,19 +123,15 @@ bool ezString::to_bool(void) {
 int ezString::to_integer(void) { return m_value.size() ? 1 : 0; }
 double ezString::to_float(void) { return m_value.size() ? 1. : 0; }
 string ezString::to_string(void) { return m_value; }
-ezValue* ezString::condition(void) {
+ezValue *ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);
 }
 
 ezCarousel::ezCarousel(uint8_t args, uint8_t rets, size_t mems)
-    : ezValue(EZ_VALUE_TYPE_CAROUSEL),
-      nargs(args),
-      nrets(rets),
-      nmems(mems) {
+    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(args), nrets(rets), nmems(mems) {
   m_size = sizeof(*this);
 }
 ezCarousel::~ezCarousel() {}
-ezNativeCarousel::ezNativeCarousel()
-    : ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {
+ezNativeCarousel::ezNativeCarousel() : ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {
   m_size = sizeof(*this);
 }

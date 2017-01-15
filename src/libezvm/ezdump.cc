@@ -27,86 +27,87 @@
 
 using namespace std;
 
-ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants,
-               ezTable<string, ezValue*>& globals)
+ezDump::ezDump(ezAddress &entry, vector<ezValue *> &constants,
+               ezTable<string, ezValue *> &globals)
     : m_entry(entry), m_constants(constants), m_globals(globals) {}
 
-void ezDump::dump(ezFile& sink, const ezAddress addr) {
+void ezDump::dump(ezFile &sink, const ezAddress addr) {
   switch (addr.segment) {
-    case EZ_ASM_SEGMENT_CONSTANT:
-      sink.print(" c");
-      break;
-    case EZ_ASM_SEGMENT_LOCAL:
-      sink.print(" r");
-      break;
-    case EZ_ASM_SEGMENT_PARENT:
-      sink.print(" p");
-      break;
-    case EZ_ASM_SEGMENT_GLOBAL:
-      sink.print(" g");
-      break;
-    default:
-      sink.print(" %d", addr.segment);
-    }
-    sink.print("%u", addr.offset);
+  case EZ_ASM_SEGMENT_CONSTANT:
+    sink.print(" c");
+    break;
+  case EZ_ASM_SEGMENT_LOCAL:
+    sink.print(" r");
+    break;
+  case EZ_ASM_SEGMENT_PARENT:
+    sink.print(" p");
+    break;
+  case EZ_ASM_SEGMENT_GLOBAL:
+    sink.print(" g");
+    break;
+  default:
+    sink.print(" %d", addr.segment);
+  }
+  sink.print("%u", addr.offset);
 }
 
-void ezDump::dump(ezFile& sink, const ezValue* v) {
+void ezDump::dump(ezFile &sink, const ezValue *v) {
   switch (v->type) {
-    case EZ_VALUE_TYPE_NULL:
-      sink.print("(nil)");
-      break;
-    case EZ_VALUE_TYPE_BOOL:
-      if (((ezBool*)v)->to_bool() == true)
-        sink.print("true");
-      else
-        sink.print("false");
-      break;
-    case EZ_VALUE_TYPE_INTEGER:
-      sink.print("%d", ((ezInteger*)v)->to_integer());
-      break;
-    case EZ_VALUE_TYPE_STRING:
-      sink.print("\"%s\"", ((ezString*)v)->to_string().c_str());
-      break;
-    case EZ_VALUE_TYPE_CAROUSEL: {
-      ezCarousel* crsl = (ezCarousel*)v;
-      sink.print("(%d) %d\n", crsl->nargs, crsl->nrets);
-      sink.print("      .memsize: %lu\n", crsl->nmems);
-      sink.print("      .jump table:\n");
-      for (size_t i = 0; i < crsl->jmptbl.size(); i++)
-        sink.print("        [%lu]:%lu\n", i, crsl->jmptbl[i]);
-      sink.print("      .jump symbol table:\n");
-      for (map<string, size_t>::iterator it = crsl->symtab.begin();
-           it != crsl->symtab.end(); it++)
-        sink.print("        %s->%lu\n", it->first.c_str(), it->second);
-      ezInstDecoder decoder;
-      ezAddress addr;
-      ezOpCode op;
-      uint8_t arg[3];
-      size_t len = crsl->instruction.size();
-      size_t pc = 0;
-      while (pc < len) {
-        decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
-        sink.print("      %s", decoder.opstr(op));
-        sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
-        if (op == EZ_OP_CALL) {
+  case EZ_VALUE_TYPE_NULL:
+    sink.print("(nil)");
+    break;
+  case EZ_VALUE_TYPE_BOOL:
+    if (((ezBool *)v)->to_bool() == true)
+      sink.print("true");
+    else
+      sink.print("false");
+    break;
+  case EZ_VALUE_TYPE_INTEGER:
+    sink.print("%d", ((ezInteger *)v)->to_integer());
+    break;
+  case EZ_VALUE_TYPE_STRING:
+    sink.print("\"%s\"", ((ezString *)v)->to_string().c_str());
+    break;
+  case EZ_VALUE_TYPE_CAROUSEL: {
+    ezCarousel *crsl = (ezCarousel *)v;
+    sink.print("(%d) %d\n", crsl->nargs, crsl->nrets);
+    sink.print("      .memsize: %lu\n", crsl->nmems);
+    sink.print("      .jump table:\n");
+    for (size_t i = 0; i < crsl->jmptbl.size(); i++)
+      sink.print("        [%lu]:%lu\n", i, crsl->jmptbl[i]);
+    sink.print("      .jump symbol table:\n");
+    for (map<string, size_t>::iterator it = crsl->symtab.begin();
+         it != crsl->symtab.end(); it++)
+      sink.print("        %s->%lu\n", it->first.c_str(), it->second);
+    ezInstDecoder decoder;
+    ezAddress addr;
+    ezOpCode op;
+    uint8_t arg[3];
+    size_t len = crsl->instruction.size();
+    size_t pc = 0;
+    while (pc < len) {
+      decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
+      sink.print("      %s", decoder.opstr(op));
+      sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
+      if (op == EZ_OP_CALL) {
+        decoder.argument(crsl->instruction[pc++], addr);
+        dump(sink, addr);
+      }
+      for (size_t c = 0; c < 3; c++) {
+        if (!arg[c])
+          continue;
+        sink.print(",");
+        for (size_t i = 0; i < arg[c]; i++) {
           decoder.argument(crsl->instruction[pc++], addr);
           dump(sink, addr);
         }
-        for (size_t c = 0; c < 3; c++) {
-          if (!arg[c]) continue;
-          sink.print(",");
-          for (size_t i = 0; i < arg[c]; i++) {
-            decoder.argument(crsl->instruction[pc++], addr);
-            dump(sink, addr);
-          }
-        }
-        sink.print("\n");
       }
-    } break;
-    case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-      sink.print("(native)");
-      break;
+      sink.print("\n");
+    }
+  } break;
+  case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
+    sink.print("(native)");
+    break;
   }
   sink.print("\n");
 }

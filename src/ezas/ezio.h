@@ -27,6 +27,6 @@
 #include "ezvm/ezval.h"
 
 class ezIO {
- public:
-  static void load(char*** symtab, ezValue*** constants);
+public:
+  static void load(char ***symtab, ezValue ***constants);
 };

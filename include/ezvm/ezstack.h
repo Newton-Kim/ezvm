@@ -24,10 +24,10 @@
 */
 #pragma once
 
-#include "ezval.h"
 #include "ezaddr.h"
-#include <vector>
+#include "ezval.h"
 #include <stack>
+#include <vector>
 
 using namespace std;
 
@@ -56,11 +56,11 @@ struct ezStackFrame {
   /**
   * @brief is a local segment.
   */
-  vector<ezValue*> local;
+  vector<ezValue *> local;
   /**
   * @brief is a collection of return values.
   */
-  vector<ezValue*> returns;
+  vector<ezValue *> returns;
   /**
   * @brief is a collection of addresses where the result values place.
   */
@@ -68,13 +68,13 @@ struct ezStackFrame {
   /**
   * @brief is a pointer to a carousel.
   */
-  ezCarousel* carousel;
+  ezCarousel *carousel;
   /**
   * @brief constructs the instance with a carousel.
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel* crsl);
+  ezStackFrame(ezCarousel *crsl);
   /**
   * @brief is a destructor.
   */

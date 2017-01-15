@@ -32,7 +32,7 @@ using namespace std;
 * vice versa.
 */
 class ezArchive {
- public:
+public:
   /**
   * @brief serializes the state of ezVM instance to a binary file presented by a
   * path.

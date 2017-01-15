@@ -23,10 +23,10 @@
 *
 */
 #pragma once
-#include "eztable.h"
 #include "ezaddr.h"
-#include "ezval.h"
 #include "ezfile.h"
+#include "eztable.h"
+#include "ezval.h"
 #include <string>
 #include <vector>
 
@@ -36,29 +36,29 @@ using namespace std;
 * @brief ezDump dumps the state of ezVM to a file system.
 */
 class ezDump {
- private:
+private:
   /**
   * @brief A reference to a procedure entry point
   */
-  ezAddress& m_entry;
+  ezAddress &m_entry;
   /**
   * @brief A reference to a constant segment
   */
-  vector<ezValue*>& m_constants;
+  vector<ezValue *> &m_constants;
   /**
   * @brief A reference to a global segment
   */
-  ezTable<string, ezValue*>& m_globals;
+  ezTable<string, ezValue *> &m_globals;
   /**
   * @brief dumps the content of v to sink.
   *
   * @param sink is a file stream.
   * @param v is a value.
   */
-  void dump(ezFile& sink, const ezAddress addr);
-  void dump(ezFile& sink, const ezValue* v);
+  void dump(ezFile &sink, const ezAddress addr);
+  void dump(ezFile &sink, const ezValue *v);
 
- public:
+public:
   /**
   * @brief is a constructor.
   *
@@ -66,8 +66,8 @@ class ezDump {
     * @param constants is a reference to a constant memory.
     * @param globals is a reference to a global memory.
   */
-  ezDump(ezAddress& entry, vector<ezValue*>& constants,
-         ezTable<string, ezValue*>& globals);
+  ezDump(ezAddress &entry, vector<ezValue *> &constants,
+         ezTable<string, ezValue *> &globals);
   /**
   * @brief dumps the state of ezVM to a file of path.
   *

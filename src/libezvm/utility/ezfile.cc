@@ -24,8 +24,8 @@
 */
 #include "ezvm/ezfile.h"
 #include <cerrno>
-#include <cstring>
 #include <cstdarg>
+#include <cstring>
 #include <stdexcept>
 
 ezFile::ezFile() : m_fd(NULL), m_indent(0) {}
@@ -36,23 +36,28 @@ ezFile::ezFile(const string path, const string mode) : m_fd(NULL), m_indent(0) {
   } else if (path == "stderr") {
     m_fd = stderr;
   } else if (!path.empty()) {
-    if (mode.empty()) throw runtime_error("mode is empty");
+    if (mode.empty())
+      throw runtime_error("mode is empty");
     m_fd = fopen(path.c_str(), mode.c_str());
-    if (!m_fd) throw runtime_error(strerror(errno));
+    if (!m_fd)
+      throw runtime_error(strerror(errno));
   }
 }
 
 void ezFile::indentation(void) {
-  for(size_t i = 0 ; i < m_indent ; i++) fprintf(m_fd, "  ");
+  for (size_t i = 0; i < m_indent; i++)
+    fprintf(m_fd, "  ");
 }
 
 ezFile::~ezFile() {
-  if (!m_fd || m_fd == stdout || m_fd == stderr) return;
+  if (!m_fd || m_fd == stdout || m_fd == stderr)
+    return;
   fclose(m_fd);
 }
 
-void ezFile::println(const char* fmt, ...) {
-  if (!m_fd) return;
+void ezFile::println(const char *fmt, ...) {
+  if (!m_fd)
+    return;
   va_list ap;
   va_start(ap, fmt);
   vfprintf(m_fd, fmt, ap);
@@ -60,29 +65,31 @@ void ezFile::println(const char* fmt, ...) {
   fprintf(m_fd, "\n");
 }
 
-void ezFile::vprintln(const char* fmt, va_list ap) {
-  if (!m_fd) return;
+void ezFile::vprintln(const char *fmt, va_list ap) {
+  if (!m_fd)
+    return;
   vfprintf(m_fd, fmt, ap);
   fprintf(m_fd, "\n");
 }
 
-void ezFile::print(const char* fmt, ...) {
-  if (!m_fd) return;
+void ezFile::print(const char *fmt, ...) {
+  if (!m_fd)
+    return;
   va_list ap;
   va_start(ap, fmt);
   vfprintf(m_fd, fmt, ap);
   va_end(ap);
 }
 
-void ezFile::vprint(const char* fmt, va_list ap) {
-  if (!m_fd) return;
+void ezFile::vprint(const char *fmt, va_list ap) {
+  if (!m_fd)
+    return;
   vfprintf(m_fd, fmt, ap);
 }
 
-void ezFile::indent(void) {
-  m_indent++;
-}
+void ezFile::indent(void) { m_indent++; }
 
 void ezFile::unindent(void) {
-  if(m_indent > 0) m_indent--;
+  if (m_indent > 0)
+    m_indent--;
 }

@@ -24,15 +24,15 @@
 */
 #pragma once
 
-#include "eztable.h"
 #include "ezaddr.h"
-#include "ezval.h"
+#include "ezalu.h"
 #include "ezgc.h"
 #include "ezstack.h"
-#include "ezalu.h"
+#include "eztable.h"
+#include "ezval.h"
 #include <cstddef>
-#include <vector>
 #include <functional>
+#include <vector>
 
 using namespace std;
 
@@ -40,7 +40,7 @@ using namespace std;
 * @brief ezThread is a stack of the instances of ezStackFrame.
 */
 class ezThread {
- private:
+private:
   /**
   * @brief A procedure entry point
   */
@@ -48,31 +48,31 @@ class ezThread {
   /**
   * @brief A reference to a constant segment
   */
-  vector<ezValue*>& m_constants;
+  vector<ezValue *> &m_constants;
   /**
   * @brief An arguments to a new stack frame
   */
-  vector<ezValue*> m_args;
+  vector<ezValue *> m_args;
   /**
   * @brief A return values from the stack frame on top
   */
-  vector<ezValue*> m_rets;
+  vector<ezValue *> m_rets;
   /**
   * @brief A reference to a global segment
   */
-  ezTable<string, ezValue*>& m_globals;
+  ezTable<string, ezValue *> &m_globals;
   /**
   * @brief A stack of stack frames
   */
-  vector<ezStackFrame*> m_stack;
+  vector<ezStackFrame *> m_stack;
   /**
   * @brief An arithematic logic unit
   */
-  ezALU& m_alu;
+  ezALU &m_alu;
   /**
   * @brief A garbage collector
   */
-  ezGC& m_gc;
+  ezGC &m_gc;
   /**
   * @brief fetches a value from an address.
   *
@@ -80,21 +80,21 @@ class ezThread {
   *
   * @return A value.
   */
-  ezValue* addr2val(ezAddress addr);
+  ezValue *addr2val(ezAddress addr);
   /**
   * @brief places a value at an address.
   *
   * @param addr is an address to place v.
   * @param v is a value.
   */
-  void val2addr(ezAddress addr, ezValue* v);
+  void val2addr(ezAddress addr, ezValue *v);
   /**
   * @brief places values at respective addresses.
   *
   * @param addr is an array of addresses.
   * @param v is an array of values.
   */
-  void val2addr(vector<ezAddress>& addr, vector<ezValue*>& vals);
+  void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
   /**
   * @brief invokes a native carousel.
   *
@@ -102,7 +102,7 @@ class ezThread {
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezNativeCarousel* func, uint8_t nargs, uint8_t nrets);
+  void call(ezNativeCarousel *func, uint8_t nargs, uint8_t nrets);
   /**
   * @brief invokes a carousel.
   *
@@ -110,15 +110,16 @@ class ezThread {
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezCarousel* func, uint8_t nargs, uint8_t nrets);
+  void call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
   void binary_operation(uint8_t nargs, uint8_t nsrcs,
-                        function<ezValue*(ezValue*, ezValue*)> binary_func,
-                        function<ezValue*(vector<ezValue*>&)> multi_func);
+                        function<ezValue *(ezValue *, ezValue *)> binary_func,
+                        function<ezValue *(vector<ezValue *> &)> multi_func);
   void unary_operation(uint8_t nargs, uint8_t nsrcs,
-                       function<ezValue*(ezValue*)> unary_func);
-  void conditional_bra(uint8_t index, function<bool(ezCondition*)> func);
-  void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                       function<ezValue*(ezGC& gc, ezValue*, ezValue*)> func);
+                       function<ezValue *(ezValue *)> unary_func);
+  void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
+  void
+  shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+                  function<ezValue *(ezGC &gc, ezValue *, ezValue *)> func);
   void mv(uint8_t ndsts, uint8_t nsrcs);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
@@ -140,7 +141,8 @@ class ezThread {
   void bitwise_or(uint8_t ndests, uint8_t nsrcs);
   void ret(uint8_t nsrcs);
   void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
- public:
+
+public:
   /**
   * @brief constructs a thread with an entry point, a global memory, and a
   *constant memory.
@@ -149,8 +151,8 @@ class ezThread {
     * @param globals is a reference to a global memory.
     * @param constants is a reference to a constant memory.
   */
-  ezThread(ezAddress entry, ezTable<string, ezValue*>& globals,
-           vector<ezValue*>& constants, ezALU& alu, ezGC& gc);
+  ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
+           vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
   /**
   * @brief destroys the thread.
   */

@@ -24,20 +24,20 @@
 */
 #include "ezvm/ezgc.h"
 
-ezGC::ezGC() : m_size(0), m_prev_size(0) {
-}
+ezGC::ezGC() : m_size(0), m_prev_size(0) {}
 
-ezGC::~ezGC() {
-}
+ezGC::~ezGC() {}
 
 void ezGC::collect(void) {
-  for(typename vector<ezGCClient*>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++) {
+  for (typename vector<ezGCClient *>::iterator it = m_clients.begin();
+       it != m_clients.end(); it++) {
     (*it)->on_mark();
   }
 
-  for(typename list<ezGCObject*>::iterator it = m_memories.begin() ; it != m_memories.end() ; it++) {
-    ezGCObject* value = *it;
-    if(value->marked()) {
+  for (typename list<ezGCObject *>::iterator it = m_memories.begin();
+       it != m_memories.end(); it++) {
+    ezGCObject *value = *it;
+    if (value->marked()) {
       value->unmark();
     } else {
       m_size -= value->size();
@@ -48,15 +48,13 @@ void ezGC::collect(void) {
   m_prev_size = m_size;
 }
 
-ezGCObject* ezGC::add(ezGCObject* v) {
+ezGCObject *ezGC::add(ezGCObject *v) {
   v->unmark();
   m_size += v->size();
   m_memories.push_back(v);
-  if(m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD) collect();
+  if (m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD)
+    collect();
   return v;
 }
 
-void ezGC::subscribe(ezGCClient* t) {
-  m_clients.push_back(t);
-} 
-
+void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }

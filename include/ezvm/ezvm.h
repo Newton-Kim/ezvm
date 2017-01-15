@@ -23,39 +23,39 @@
 *
 */
 #pragma once
-#include "eztable.h"
-#include "ezasm.h"
 #include "ezarchive.h"
+#include "ezasm.h"
 #include "ezdump.h"
-#include "ezval.h"
-#include "ezthread.h"
 #include "ezgc.h"
-#include <string>
+#include "eztable.h"
+#include "ezthread.h"
+#include "ezval.h"
 #include <list>
+#include <string>
 
 using namespace std;
 
 /**
 * @brief ezVM is the VM class
 */
-class ezVM : public ezGCClient{
- private:
+class ezVM : public ezGCClient {
+private:
   ezAddress m_entry;
-  vector<ezValue*> m_constants;
-  ezTable<string, ezValue*> m_globals;
-  ezASM* m_pasm;
-  ezArchive* m_parchive;
-  ezDump* m_pdump;
+  vector<ezValue *> m_constants;
+  ezTable<string, ezValue *> m_globals;
+  ezASM *m_pasm;
+  ezArchive *m_parchive;
+  ezDump *m_pdump;
   ezGC m_gc;
   ezALU m_alu;
-  vector<ezThread*> m_threads;
+  vector<ezThread *> m_threads;
 
- public:
+public:
   ezVM();
   ~ezVM();
   void run(void);
-  ezASM& assembler(void);
-  ezArchive& archive(void);
-  ezDump& dump(void);
+  ezASM &assembler(void);
+  ezArchive &archive(void);
+  ezDump &dump(void);
   void on_mark(void);
 };
