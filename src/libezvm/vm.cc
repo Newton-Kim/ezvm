@@ -101,6 +101,9 @@ void ezVM::on_mark(void) {
     (*it)->mark();
     if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL) ((ezCarousel*)(*it))->on_mark();
   }
+  for (vector<ezValue*>::iterator it = m_constants.begin();
+       it != m_constants.end(); it++)
+    (*it)->mark();
   for (vector<ezThread *>::iterator it = m_threads.begin();
        it != m_threads.end(); it++)
     (*it)->on_mark();
