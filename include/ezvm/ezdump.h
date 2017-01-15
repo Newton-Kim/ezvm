@@ -23,6 +23,7 @@
 *
 */
 #pragma once
+#include "eztable.h"
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezfile.h"
@@ -48,7 +49,7 @@ class ezDump {
   /**
   * @brief A reference to a global segment
   */
-  vector<ezValue*>& m_globals;
+  ezTable<string, ezValue*>& m_globals;
   /**
   * @brief A reference to ezASM insance
   */
@@ -72,7 +73,7 @@ class ezDump {
   * @param pasm is a pointer to an ezASM instance.
   */
   ezDump(ezAddress& entry, vector<ezValue*>& constants,
-         vector<ezValue*>& globals, ezASM* pasm);
+         ezTable<string, ezValue*>& globals, ezASM* pasm);
   /**
   * @brief dumps the state of ezVM to a file of path.
   *

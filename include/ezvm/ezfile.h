@@ -38,6 +38,8 @@ class ezFile {
   * @brief is a file descriptor.
   */
   FILE* m_fd;
+  size_t m_indent;
+
 
  public:
   /**
@@ -100,4 +102,7 @@ class ezFile {
   *otherwise.
   */
   bool isnil(void) { return (m_fd) ? false : true; }
+  void indent(void);
+  void unindent(void);
+  void indentation(void);
 };

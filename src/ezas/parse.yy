@@ -164,7 +164,7 @@ static vector<ezAddress> s_args_var;
 
 %token PROC ENTRY IMPORT
 %token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
-%token SYMBOL STRING NEWLINE INTEGER ADDRESS MEMORIES LABEL BOOLEAN
+%token SYMBOL STRING NEWLINE INTEGER ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER proc_meta
@@ -200,7 +200,7 @@ procs : proc
 proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $9);}
 		codes {s_proc_current = NULL;};
 
-proc_meta : %empty {$$ = 0;} | MEMORIES INTEGER NEWLINE {$$ = $2;};
+proc_meta : %empty {$$ = 0;} | SCOPE INTEGER NEWLINE | MEMORIES INTEGER NEWLINE {$$ = $2;};
 
 codes : line NEWLINE | codes line NEWLINE;
 

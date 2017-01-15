@@ -23,39 +23,30 @@
 *
 */
 #pragma once
-#include "eztable.h"
-#include "ezasm.h"
-#include "ezarchive.h"
-#include "ezdump.h"
-#include "ezval.h"
-#include "ezthread.h"
-#include "ezgc.h"
-#include <string>
+
+#include "ezfile.h"
+#include <map>
+#include <vector>
 
 using namespace std;
 
-/**
-* @brief ezVM is the VM class
-*/
-class ezVM : public ezGCClient{
- private:
-  ezAddress m_entry;
-  vector<ezValue*> m_constants;
-  ezTable<string, ezValue*> m_globals;
-  ezTable<string, ezValue*> m_scopes;
-  ezASM* m_pasm;
-  ezArchive* m_parchive;
-  ezDump* m_pdump;
-  ezGC<ezValue> m_gc;
-  ezALU m_alu;
-  vector<ezThread*> m_threads;
-
- public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM& assembler(void);
-  ezArchive& archive(void);
-  ezDump& dump(void);
-  void on_mark(void);
+template <class K, class V> class ezTable {
+public:
+ map<K, size_t> m_symtab;
+ vector<V> m_memory;
+ size_t add(K key, V value);
+ bool exist(K key);
 };
+
+template <class K, class V> size_t ezTable<K,V>::add(K key, V value) {
+  size_t offset = m_memory.size();
+  m_memory.push_back(value);
+  m_symtab[key] = offset;
+  return offset;
+}
+
+template <class K, class V> bool ezTable<K,V>::exist(K key) {
+  typename map<K, size_t>::iterator it = m_symtab.find(key);
+  return (it != m_symtab.end());
+}
+

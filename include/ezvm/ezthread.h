@@ -24,6 +24,7 @@
 */
 #pragma once
 
+#include "eztable.h"
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezgc.h"
@@ -59,7 +60,7 @@ class ezThread {
   /**
   * @brief A reference to a global segment
   */
-  vector<ezValue*>& m_globals;
+  ezTable<string, ezValue*>& m_globals;
   /**
   * @brief A stack of stack frames
   */
@@ -148,7 +149,7 @@ class ezThread {
     * @param globals is a reference to a global memory.
     * @param constants is a reference to a constant memory.
   */
-  ezThread(ezAddress entry, vector<ezValue*>& globals,
+  ezThread(ezAddress entry, ezTable<string, ezValue*>& globals,
            vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc);
   /**
   * @brief destroys the thread.

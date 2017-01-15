@@ -27,7 +27,7 @@
 #include "ezvm/ezinstruction.h"
 #include <stdexcept>
 
-ezThread::ezThread(ezAddress entry, vector<ezValue*>& globals,
+ezThread::ezThread(ezAddress entry, ezTable<string, ezValue*>& globals,
                    vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc) {
   ezValue* v = addr2val(entry);
@@ -527,9 +527,9 @@ ezValue* ezThread::addr2val(ezAddress addr) {
       throw runtime_error("parent segment has not been implemented");
       break;
     case EZ_ASM_SEGMENT_GLOBAL:
-      if (addr.offset >= m_globals.size())
+      if (addr.offset >= m_globals.m_memory.size())
         throw runtime_error("global memory access violation");
-      v = m_globals[addr.offset];
+      v = m_globals.m_memory[addr.offset];
       break;
     default:
       throw runtime_error("out of segment boundary");
@@ -567,11 +567,9 @@ void ezThread::val2addr(ezAddress addr, ezValue* v) {
       throw runtime_error("parent segment has not been implemented");
       break;
     case EZ_ASM_SEGMENT_GLOBAL:
-      if (addr.segment >= m_globals.size())
-        throw runtime_error("invalid segment");
-      if (addr.offset >= m_globals.size())
+      if (addr.offset >= m_globals.m_memory.size())
         throw runtime_error("global memory access violation");
-      m_globals[addr.offset] = v;
+      m_globals.m_memory[addr.offset] = v;
       break;
     break;
       throw runtime_error("out of segment boundary");

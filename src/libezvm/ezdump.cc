@@ -28,7 +28,7 @@
 using namespace std;
 
 ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants,
-               vector<ezValue*>& globals, ezASM* pasm)
+               ezTable<string, ezValue*>& globals, ezASM* pasm)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_asm(pasm) {}
 
 void ezDump::dump(ezFile& sink, const ezAddress addr) {
@@ -117,16 +117,34 @@ void ezDump::dump(const string path) {
   dump(sink, m_entry);
   sink.print("\n");
   sink.print(".global:\n");
-  for (size_t i = 0; i < m_globals.size(); i++) {
-    sink.print("  [%lu]=", i);
-    dump(sink, m_globals[i]);
+  sink.indent();
+  sink.indentation();
+  sink.print("memory:\n");
+  sink.indent();
+  for (size_t i = 0; i < m_globals.m_memory.size(); i++) {
+    sink.indentation();
+    sink.print("[%lu]=", i);
+    dump(sink, m_globals.m_memory[i]);
   }
+  sink.unindent();
+  sink.indentation();
+  sink.print("symtab:\n");
+  sink.indent();
+  for (map<string, size_t>::iterator it = m_globals.m_symtab.begin();
+       it != m_globals.m_symtab.end(); it++) {
+    sink.indentation();
+    sink.print("[_%s]=%lu\n", it->first.c_str(), it->second);
+  }
+  sink.unindent();
+  sink.unindent();
+  sink.print("\n");
   sink.print(".constant:\n");
+  sink.indent();
   for (size_t i = 0; i < m_constants.size(); i++) {
-    sink.print("  [%lu]=", i);
+    sink.indentation();
+    sink.print("[%lu]=", i);
     dump(sink, m_constants[i]);
   }
-  sink.print("\n");
-  if (m_asm) m_asm->dump(sink);
+  sink.unindent();
   sink.print("\n");
 }

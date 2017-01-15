@@ -24,6 +24,7 @@
 */
 #pragma once
 
+#include "eztable.h"
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezgc.h"
@@ -334,11 +335,7 @@ class ezASM {
   /**
   * @brief A reference to a global segment
   */
-  vector<ezValue*>& m_globals;
-  /**
-  * @brief A symbol table of m_globals
-  */
-  map<string, size_t> m_symtab;
+  ezTable<string, ezValue*>& m_globals;
   ezGC<ezValue>& m_gc;
 
  public:
@@ -350,7 +347,7 @@ class ezASM {
   * @param globals is a reference to a global memory.
   */
   ezASM(ezAddress& entry, vector<ezValue*>& constants,
-        vector<ezValue*>& globals, ezGC<ezValue>& gc);
+        ezTable<string, ezValue*>& globals, ezGC<ezValue>& gc);
   /**
   * @brief is a destructor.
   */
@@ -427,10 +424,4 @@ class ezASM {
   * @return is an offset in a constant segment.
   */
   size_t constant(const double value);
-  /**
-  * @brief dumps the states and the instructions to sink.
-  *
-  * @param sink is a file handle that the state data is dumped.
-  */
-  void dump(ezFile& sink);
 };

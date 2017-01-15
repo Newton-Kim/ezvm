@@ -65,6 +65,8 @@ sp [ \t]
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
+".scope" return SCOPE;
+".scpkey" return SCOPE_KEY;
 ".memories" return MEMORIES;
 "stdout" { yylval.i_value = 1; return INTEGER; }
 "stderr" { yylval.i_value = 2; return INTEGER; }

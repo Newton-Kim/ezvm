@@ -28,9 +28,9 @@
 #include <cstdarg>
 #include <stdexcept>
 
-ezFile::ezFile() : m_fd(NULL) {}
+ezFile::ezFile() : m_fd(NULL), m_indent(0) {}
 
-ezFile::ezFile(const string path, const string mode) : m_fd(NULL) {
+ezFile::ezFile(const string path, const string mode) : m_fd(NULL), m_indent(0) {
   if (path == "stdout") {
     m_fd = stdout;
   } else if (path == "stderr") {
@@ -40,6 +40,10 @@ ezFile::ezFile(const string path, const string mode) : m_fd(NULL) {
     m_fd = fopen(path.c_str(), mode.c_str());
     if (!m_fd) throw runtime_error(strerror(errno));
   }
+}
+
+void ezFile::indentation(void) {
+  for(size_t i = 0 ; i < m_indent ; i++) fprintf(m_fd, "  ");
 }
 
 ezFile::~ezFile() {
@@ -73,4 +77,12 @@ void ezFile::print(const char* fmt, ...) {
 void ezFile::vprint(const char* fmt, va_list ap) {
   if (!m_fd) return;
   vfprintf(m_fd, fmt, ap);
+}
+
+void ezFile::indent(void) {
+  m_indent++;
+}
+
+void ezFile::unindent(void) {
+  if(m_indent > 0) m_indent--;
 }

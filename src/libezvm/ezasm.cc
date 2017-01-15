@@ -293,7 +293,7 @@ void ezAsmProcedure::label(string name) {
 }
 
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants,
-             vector<ezValue*>& globals, ezGC<ezValue>& gc)
+             ezTable<string, ezValue*>& globals, ezGC<ezValue>& gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(gc) {
 }
 
@@ -306,12 +306,8 @@ void ezASM::load_intrinsics(char** symtab, ezValue** constants) {
   map<string, size_t>* offset_symtab = new map<string, size_t>;
   /*TODO:should it be put to constant?*/
   for (size_t i = 0; constants[i] && symtab[i]; i++) {
-    ezValue* constant = constants[i];
-    const char* symbol = symtab[i];
-    size_t offset = m_globals.size();
-    m_globals.push_back(constant);
-    ezLog::instance().debug("global[%lu] = %s", offset, symbol);
-    m_symtab[symbol] = offset;
+    size_t offset = m_globals.add(symtab[i], constants[i]);
+    ezLog::instance().debug("global[%lu] = %s", offset, symtab[i]);
   }
 }
 
@@ -319,25 +315,22 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc,
                                 int mems) {
-  map<string, size_t>::iterator it = m_symtab.find(name);
-  if (it != m_symtab.end())
+  if (m_globals.exist(name))
     throw runtime_error("global symbol " + name + " already exists");
   ezCarousel* carousel = (ezCarousel*)m_gc.add((ezValue*)new ezCarousel(argc, retc, mems));
-  m_globals.push_back(carousel);
-  m_symtab[name] = m_globals.size() - 1;
+  size_t offset = m_globals.add(name, carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
-    m_entry.offset = m_globals.size() - 1;
+    m_entry.offset = offset;
   }
   return new ezAsmProcedure(carousel);
 }
 
 size_t ezASM::global(const string value) {
   //	vector<ezValue*>* offset = m_globals[0];
-  map<string, size_t>::iterator it = m_symtab.find(value);
-  if (it == m_symtab.end())
+  if (!m_globals.exist(value))
     throw runtime_error("global symbol " + value + " is not found");
-  return it->second;
+  return m_globals.m_symtab[value];
 }
 
 size_t ezASM::constant_null(void) {
@@ -402,9 +395,3 @@ size_t ezASM::constant(const double value) {
   return idx;
 }
 
-void ezASM::dump(ezFile& sink) {
-  sink.print(".symtab:\n");
-  for (map<string, size_t>::iterator it = m_symtab.begin();
-       it != m_symtab.end(); it++)
-    sink.print("  [_%s]=%lu\n", it->first.c_str(), it->second);
-}

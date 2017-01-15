@@ -5,7 +5,7 @@
 	add p0, p0 1
 
 .proc _main (0) 0:
-	.scope_id 4
+	.scpkey 4
 	.memories 2
 	mv r0 r1, 1 2
 	call _print (stdout r0 "," r1)

@@ -12,3 +12,4 @@
 12.They memory spaces should be reorganized linear in the stack frame.
 -13.Instruction should be recognized by a flag.
 14.Scope should be implemented.
+15.Thread should be an inheritance of ezValue.
