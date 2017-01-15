@@ -126,7 +126,7 @@ public:
 
 typedef uint32_t ezInstruction;
 
-class ezCarousel : public ezValue {
+class ezCarousel : public ezValue, ezGCClient {
 private:
   ezTable<string, ezValue *> *m_scope;
   ezTable<string, ezValue *> *m_local;
@@ -140,6 +140,7 @@ public:
   vector<ezInstruction> instruction;
   vector<ezInstruction> jmptbl;
   map<string, size_t> symtab;
+  void on_mark(void);
 };
 
 class ezNativeCarousel : public ezValue {

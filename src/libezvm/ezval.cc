@@ -135,3 +135,7 @@ ezCarousel::~ezCarousel() {}
 ezNativeCarousel::ezNativeCarousel() : ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {
   m_size = sizeof(*this);
 }
+void ezCarousel::on_mark(void){
+  if(m_scope) m_scope->mark();
+  if(m_local) m_local->mark();
+}

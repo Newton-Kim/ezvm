@@ -96,6 +96,11 @@ ezDump &ezVM::dump(void) {
 }
 
 void ezVM::on_mark(void) {
+  for (vector<ezValue*>::iterator it = m_globals.m_memory.begin();
+       it != m_globals.m_memory.end(); it++) {
+    (*it)->mark();
+    if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL) ((ezCarousel*)(*it))->on_mark();
+  }
   for (vector<ezThread *>::iterator it = m_threads.begin();
        it != m_threads.end(); it++)
     (*it)->on_mark();
