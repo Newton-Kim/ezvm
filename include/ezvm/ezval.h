@@ -23,6 +23,8 @@
 *
 */
 #pragma once
+#include "ezgc.h"
+#include "eztable.h"
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -43,21 +45,11 @@ enum ezValueType {
   EZ_VALUE_TYPE_MAX
 };
 
-class ezValue {
- private:
-  bool m_mark;
-
- protected:
-  size_t m_size;
-
+class ezValue : public ezGCObject{
  public:
   const ezValueType type;
   ezValue(const ezValueType tp);
   virtual ~ezValue();
-  inline bool marked(void) { return m_mark;}
-  inline void mark(void) { m_mark = true;}
-  inline void unmark(void) { m_mark = false;}
-  virtual size_t size(void) {return m_size;}
   virtual bool to_bool(void);
   virtual int to_integer(void);
   virtual string to_string(void);
@@ -135,6 +127,9 @@ class ezString : public ezValue {
 typedef uint32_t ezInstruction;
 
 class ezCarousel : public ezValue {
+ private:
+  ezTable<string, ezValue*>* m_scope;
+  ezTable<string, ezValue*>* m_local;
  public:
   uint8_t nargs;
   uint8_t nrets;

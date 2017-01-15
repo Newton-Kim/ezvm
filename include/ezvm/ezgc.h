@@ -35,10 +35,26 @@ class ezGCClient {
    virtual void on_mark(void) = 0;
 };
 
-template < class V> class ezGC {
+class ezGCObject {
+ private:
+  bool m_mark;
+
+ protected:
+  size_t m_size;
+
+ public:
+  ezGCObject():m_mark(false){}
+  virtual ~ezGCObject(){}
+  inline bool marked(void) { return m_mark;}
+  inline void mark(void) { m_mark = true;}
+  inline void unmark(void) { m_mark = false;}
+  virtual size_t size(void) {return m_size;}
+};
+
+class ezGC {
  private:
   vector<ezGCClient*> m_clients;
-  list<V*> m_memories;
+  list<ezGCObject*> m_memories;
   size_t m_size;
   size_t m_prev_size;
   void collect(void);
@@ -46,43 +62,7 @@ template < class V> class ezGC {
  public:
   ezGC();
   ~ezGC();
-  V* add(V* v);
+  ezGCObject* add(ezGCObject* v);
   void subscribe(ezGCClient* t);
 };
-
-template < class V> ezGC<V>::ezGC() : m_size(0), m_prev_size(0) {
-}
-
-template < class V> ezGC<V>::~ezGC() {
-}
-
-template < class V> void ezGC<V>::collect(void) {
-  for(typename vector<ezGCClient*>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++) {
-    (*it)->on_mark();
-  }
-
-  for(typename list<V*>::iterator it = m_memories.begin() ; it != m_memories.end() ; it++) {
-    V* value = *it;
-    if(value->marked()) {
-      value->unmark();
-    } else {
-      m_size -= value->size();
-      delete value;
-      it = m_memories.erase(it);
-    }
-  }
-  m_prev_size = m_size;
-}
-
-template < class V> V* ezGC<V>::add(V* v) {
-  v->unmark();
-  m_size += v->size();
-  m_memories.push_back(v);
-  if(m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD) collect();
-  return v;
-}
-
-template < class V> void ezGC<V>::subscribe(ezGCClient* t) {
-  m_clients.push_back(t);
-} 
 

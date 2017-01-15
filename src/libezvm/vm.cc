@@ -83,7 +83,7 @@ ezArchive& ezVM::archive(void) {
 }
 
 ezDump& ezVM::dump(void) {
-  if (!m_pdump) m_pdump = new ezDump(m_entry, m_constants, m_globals, m_pasm);
+  if (!m_pdump) m_pdump = new ezDump(m_entry, m_constants, m_globals);
   return *m_pdump;
 }
 

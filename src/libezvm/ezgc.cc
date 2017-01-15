@@ -22,40 +22,41 @@
 * THE SOFTWARE.
 *
 */
-#pragma once
-#include "eztable.h"
-#include "ezasm.h"
-#include "ezarchive.h"
-#include "ezdump.h"
-#include "ezval.h"
-#include "ezthread.h"
-#include "ezgc.h"
-#include <string>
-#include <list>
+#include "ezvm/ezgc.h"
 
-using namespace std;
+ezGC::ezGC() : m_size(0), m_prev_size(0) {
+}
 
-/**
-* @brief ezVM is the VM class
-*/
-class ezVM : public ezGCClient{
- private:
-  ezAddress m_entry;
-  vector<ezValue*> m_constants;
-  ezTable<string, ezValue*> m_globals;
-  ezASM* m_pasm;
-  ezArchive* m_parchive;
-  ezDump* m_pdump;
-  ezGC m_gc;
-  ezALU m_alu;
-  vector<ezThread*> m_threads;
+ezGC::~ezGC() {
+}
 
- public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM& assembler(void);
-  ezArchive& archive(void);
-  ezDump& dump(void);
-  void on_mark(void);
-};
+void ezGC::collect(void) {
+  for(typename vector<ezGCClient*>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++) {
+    (*it)->on_mark();
+  }
+
+  for(typename list<ezGCObject*>::iterator it = m_memories.begin() ; it != m_memories.end() ; it++) {
+    ezGCObject* value = *it;
+    if(value->marked()) {
+      value->unmark();
+    } else {
+      m_size -= value->size();
+      delete value;
+      it = m_memories.erase(it);
+    }
+  }
+  m_prev_size = m_size;
+}
+
+ezGCObject* ezGC::add(ezGCObject* v) {
+  v->unmark();
+  m_size += v->size();
+  m_memories.push_back(v);
+  if(m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD) collect();
+  return v;
+}
+
+void ezGC::subscribe(ezGCClient* t) {
+  m_clients.push_back(t);
+} 
+

@@ -45,10 +45,10 @@ enum ezCoercOperation {
 
 class ezALU {
  private:
-  ezGC<ezValue>& m_gc;
+  ezGC& m_gc;
 
  public:
-  ezALU(ezGC<ezValue>& gc);
+  ezALU(ezGC& gc);
   ezValue* add(vector<ezValue*>& args);
   ezValue* add(ezValue* larg, ezValue* rarg);
   ezValue* cmp(ezValue* larg, ezValue* rarg);

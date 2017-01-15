@@ -27,7 +27,6 @@
 #include "ezaddr.h"
 #include "ezval.h"
 #include "ezfile.h"
-#include "ezasm.h"
 #include <string>
 #include <vector>
 
@@ -51,10 +50,6 @@ class ezDump {
   */
   ezTable<string, ezValue*>& m_globals;
   /**
-  * @brief A reference to ezASM insance
-  */
-  ezASM* m_asm;
-  /**
   * @brief dumps the content of v to sink.
   *
   * @param sink is a file stream.
@@ -70,10 +65,9 @@ class ezDump {
     * @param entry is a reference to an entry point.
     * @param constants is a reference to a constant memory.
     * @param globals is a reference to a global memory.
-  * @param pasm is a pointer to an ezASM instance.
   */
   ezDump(ezAddress& entry, vector<ezValue*>& constants,
-         ezTable<string, ezValue*>& globals, ezASM* pasm);
+         ezTable<string, ezValue*>& globals);
   /**
   * @brief dumps the state of ezVM to a file of path.
   *

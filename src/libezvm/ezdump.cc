@@ -28,8 +28,8 @@
 using namespace std;
 
 ezDump::ezDump(ezAddress& entry, vector<ezValue*>& constants,
-               ezTable<string, ezValue*>& globals, ezASM* pasm)
-    : m_entry(entry), m_constants(constants), m_globals(globals), m_asm(pasm) {}
+               ezTable<string, ezValue*>& globals)
+    : m_entry(entry), m_constants(constants), m_globals(globals) {}
 
 void ezDump::dump(ezFile& sink, const ezAddress addr) {
   switch (addr.segment) {

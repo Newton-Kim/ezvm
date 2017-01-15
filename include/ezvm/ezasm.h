@@ -336,7 +336,7 @@ class ezASM {
   * @brief A reference to a global segment
   */
   ezTable<string, ezValue*>& m_globals;
-  ezGC<ezValue>& m_gc;
+  ezGC& m_gc;
 
  public:
   /**
@@ -347,7 +347,7 @@ class ezASM {
   * @param globals is a reference to a global memory.
   */
   ezASM(ezAddress& entry, vector<ezValue*>& constants,
-        ezTable<string, ezValue*>& globals, ezGC<ezValue>& gc);
+        ezTable<string, ezValue*>& globals, ezGC& gc);
   /**
   * @brief is a destructor.
   */

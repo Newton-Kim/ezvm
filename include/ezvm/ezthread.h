@@ -72,7 +72,7 @@ class ezThread {
   /**
   * @brief A garbage collector
   */
-  ezGC<ezValue>& m_gc;
+  ezGC& m_gc;
   /**
   * @brief fetches a value from an address.
   *
@@ -118,7 +118,7 @@ class ezThread {
                        function<ezValue*(ezValue*)> unary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition*)> func);
   void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                       function<ezValue*(ezGC<ezValue>&gc, ezValue*, ezValue*)> func);
+                       function<ezValue*(ezGC& gc, ezValue*, ezValue*)> func);
   void mv(uint8_t ndsts, uint8_t nsrcs);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
@@ -150,7 +150,7 @@ class ezThread {
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, ezTable<string, ezValue*>& globals,
-           vector<ezValue*>& constants, ezALU& alu, ezGC<ezValue>& gc);
+           vector<ezValue*>& constants, ezALU& alu, ezGC& gc);
   /**
   * @brief destroys the thread.
   */

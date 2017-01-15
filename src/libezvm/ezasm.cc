@@ -293,7 +293,7 @@ void ezAsmProcedure::label(string name) {
 }
 
 ezASM::ezASM(ezAddress& entry, vector<ezValue*>& constants,
-             ezTable<string, ezValue*>& globals, ezGC<ezValue>& gc)
+             ezTable<string, ezValue*>& globals, ezGC& gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(gc) {
 }
 
@@ -317,7 +317,7 @@ ezAsmProcedure* ezASM::new_proc(const string name, int argc, int retc,
                                 int mems) {
   if (m_globals.exist(name))
     throw runtime_error("global symbol " + name + " already exists");
-  ezCarousel* carousel = (ezCarousel*)m_gc.add((ezValue*)new ezCarousel(argc, retc, mems));
+  ezCarousel* carousel = (ezCarousel*)m_gc.add((ezGCObject*)new ezCarousel(argc, retc, mems));
   size_t offset = m_globals.add(name, carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
@@ -353,7 +353,7 @@ size_t ezASM::constant(const char* arg) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue* v = m_gc.add(new ezString(value));
+  ezValue* v = (ezValue*)m_gc.add((ezGCObject*)new ezString(value));
   m_constants.push_back(v);
   return idx;
 }
@@ -366,7 +366,7 @@ size_t ezASM::constant(const int value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue* v = m_gc.add(new ezInteger(value));
+  ezValue* v = (ezValue*)m_gc.add((ezGCObject*)new ezInteger(value));
   m_constants.push_back(v);
   return idx;
 }
@@ -378,7 +378,7 @@ size_t ezASM::constant(const bool value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue* v = m_gc.add(new ezBool(value));
+  ezValue* v = (ezValue*)m_gc.add((ezGCObject*)new ezBool(value));
   m_constants.push_back(v);
   return idx;
 }
@@ -390,7 +390,7 @@ size_t ezASM::constant(const double value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue* v = m_gc.add(new ezFloat(value));
+  ezValue* v = (ezValue*)m_gc.add((ezGCObject*)new ezFloat(value));
   m_constants.push_back(v);
   return idx;
 }
