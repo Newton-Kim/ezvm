@@ -290,6 +290,7 @@ void ezAsmProcedure::bra(string label) {
 void ezAsmProcedure::label(string name) {
   size_t index = label2index(name);
   m_carousel->jmptbl[index] = m_carousel->instruction.size();
+  cerr << name << ":" << index << "=" << m_carousel->jmptbl[index] << endl;
 }
 
 ezASM::ezASM(ezAddress &entry, vector<ezValue *> &constants,

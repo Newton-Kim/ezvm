@@ -1,27 +1,27 @@
 .entry _main
-.proc _main (0) 0:
+.proc _main (0) 0
 	.memories 8
 	mv r0 r1, 1 2
 	cmp r2 , r0 r1
-	blt r2 label_blt1
+	blt r2 _label_blt1
 	call _print (stdout r0 " >= " r1)
-	bra label_end1
+	bra _label_end1
 	:label_blt1
 	call _print (stdout r0 " < " r1 " , it make sense.")
 	:label_end1
 	mv r0 r1, 2 2
 	cmp r2 , r0 r1
-	blt r2 label_blt2
+	blt r2 _label_blt2
 	call _print (stdout r0 " >= " r1 " , it make sense.")
-	bra label_end2
+	bra _label_end2
 	:label_blt2
 	call _print (stdout r0 " < " r1)
 	:label_end2
 	mv r0 r1, 3 2
 	cmp r2 , r0 r1
-	blt r2 label_blt3
+	blt r2 _label_blt3
 	call _print (stdout r0 " >= " r1 " , it make sense.")
-	bra label_end3
+	bra _label_end3
 	:label_blt3
 	call _print (stdout r0 " < " r1)
 	:label_end3

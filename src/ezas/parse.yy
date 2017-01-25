@@ -197,7 +197,7 @@ entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 procs : proc
 	| proc procs;
 
-proc : PROC SYMBOL '(' INTEGER ')' INTEGER ':' NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $9);}
+proc : PROC SYMBOL '(' INTEGER ')' INTEGER NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $8);}
 		codes {s_proc_current = NULL;};
 
 proc_meta : %empty {$$ = 0;} | SCOPE INTEGER NEWLINE | MEMORIES INTEGER NEWLINE {$$ = $2;};
@@ -282,7 +282,7 @@ sub : SUB var ',' vars {s_proc_current->sub(ezAddress($2.segment, $2.offset), s_
 xor : XOR var ',' vars {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| XOR var var ',' vars {s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 
-label : ':' SYMBOL {s_proc_current->label($2);}
+label : LABEL {s_proc_current->label($1);}
 
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| ADDRESS {$$ = $1;}

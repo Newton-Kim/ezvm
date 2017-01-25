@@ -1,12 +1,12 @@
 .entry _main
-.proc _main (0) 0:
+.proc _main (0) 0
 	.memories 3
 	mv r0 , 1
 	not r1 r2, r0
 	call _print (stdout r1 "=~" r0)
-	beq r2 int_zero
+	beq r2 _int_zero
 	call _print (stdout r1 " is non-zero value")
-	bra int_end
+	bra _int_end
 	:int_zero
 	call _print (stdout r1 " is zero value")
 	:int_end

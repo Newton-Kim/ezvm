@@ -89,9 +89,22 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
       sink.print("      %s", decoder.opstr(op));
       sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
-      if (op == EZ_OP_CALL) {
+      switch(op) {
+      case EZ_OP_BEQ:
+      case EZ_OP_BGE:
+      case EZ_OP_BLT:
+      case EZ_OP_BNE:
         decoder.argument(crsl->instruction[pc++], addr);
         dump(sink, addr);
+        sink.print("\n");
+        continue;
+      case EZ_OP_BRA:
+        sink.print("\n");
+        continue;
+      case EZ_OP_CALL: 
+        decoder.argument(crsl->instruction[pc++], addr);
+        dump(sink, addr);
+        break;
       }
       for (size_t c = 0; c < 3; c++) {
         if (!arg[c])

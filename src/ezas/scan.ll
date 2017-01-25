@@ -33,6 +33,7 @@ comment #.*
 integer [+-]?[0-9]+
 string \"[^"]*\"
 symbol _[a-zA-Z_][a-zA-Z_0-9]*
+label  :.*
 address [cgrp][0-9]+
 newline [\n\r]
 sp [ \t]
@@ -73,6 +74,7 @@ sp [ \t]
 {string} {yylval.s_value = strndup(yytext + 1, strlen(yytext) - 2); return STRING;}
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
 {symbol} {yylval.s_value = strdup(yytext + 1); return SYMBOL; }
+{label} {yylval.s_value = strdup(yytext + 1); return LABEL; }
 {address} {
 	switch(yytext[0]){
 		case 'g':

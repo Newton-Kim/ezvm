@@ -111,36 +111,7 @@ private:
   * @param nrets is a number of return addresses which follows the arguments.
   */
   void call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
-  void binary_operation(uint8_t nargs, uint8_t nsrcs,
-                        function<ezValue *(ezValue *, ezValue *)> binary_func,
-                        function<ezValue *(vector<ezValue *> &)> multi_func);
-  void unary_operation(uint8_t nargs, uint8_t nsrcs,
-                       function<ezValue *(ezValue *)> unary_func);
-  void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
-  void
-  shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                  function<ezValue *(ezGC &gc, ezValue *, ezValue *)> func);
-  void mv(uint8_t ndsts, uint8_t nsrcs);
-  void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
-  void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void call(uint8_t nargs, uint8_t nrets);
-  void cmp(uint8_t ndests, uint8_t nsrcs);
-  void add(uint8_t ndests, uint8_t nsrcs);
-  void bitwise_and(uint8_t ndests, uint8_t nsrcs);
-  void div(uint8_t ndests, uint8_t nsrcs);
-  void sub(uint8_t ndests, uint8_t nsrcs);
-  void beq(uint8_t index);
-  void bge(uint8_t index);
-  void blt(uint8_t index);
-  void bne(uint8_t index);
-  void bra(uint8_t index);
-  void mod(uint8_t ndests, uint8_t nsrcs);
-  void mul(uint8_t ndests, uint8_t nsrcs);
-  void neg(uint8_t ndests, uint8_t nsrcs);
-  void bitwise_not(uint8_t ndests, uint8_t nsrcs);
-  void bitwise_or(uint8_t ndests, uint8_t nsrcs);
-  void ret(uint8_t nsrcs);
-  void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
 
 public:
   /**

@@ -25,9 +25,11 @@
 #pragma once
 
 #include "ezaddr.h"
+#include "ezalu.h"
 #include "ezval.h"
 #include <stack>
 #include <vector>
+#include <functional>
 
 using namespace std;
 
@@ -48,7 +50,78 @@ enum ezStepState {
 /**
 * @brief contains data for representing a procedure in action.
 */
-struct ezStackFrame {
+class ezStackFrame {
+private:
+  /**
+  * @brief A reference to a constant segment
+  */
+  vector<ezValue *> &m_constants;
+  /**
+  * @brief A reference to a global segment
+  */
+  ezTable<string, ezValue *> &m_globals;
+  /**
+  * @brief An arithematic logic unit
+  */
+  ezALU &m_alu;
+  /**
+  * @brief A garbage collector
+  */
+  ezGC &m_gc;
+  /**
+  * @brief fetches a value from an address.
+  *
+  * @param addr is an address.
+  *
+  * @return A value.
+  */
+  ezValue *addr2val(ezAddress addr);
+  /**
+  * @brief places a value at an address.
+  *
+  * @param addr is an address to place v.
+  * @param v is a value.
+  */
+  void val2addr(ezAddress addr, ezValue *v);
+  /**
+  * @brief places values at respective addresses.
+  *
+  * @param addr is an array of addresses.
+  * @param v is an array of values.
+  */
+  void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
+  void binary_operation(
+    uint8_t ndests, uint8_t nsrcs,
+    function<ezValue *(ezValue *, ezValue *)> binary_func,
+    function<ezValue *(vector<ezValue *> &)> multi_func);
+  void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
+  void
+  shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+                  function<ezValue *(ezGC &gc, ezValue *, ezValue *)> func);
+  void unary_operation(uint8_t nargs, uint8_t nsrcs,
+                       function<ezValue *(ezValue *)> unary_func);
+  void add(uint8_t ndests, uint8_t nsrcs);
+  void bitwise_and(uint8_t ndests, uint8_t nsrcs);
+  void beq(uint8_t index);
+  void bge(uint8_t index);
+  void blt(uint8_t index);
+  void bne(uint8_t index);
+  void bra(uint8_t index);
+  void cmp(uint8_t ndests, uint8_t nsrcs);
+  void div(uint8_t ndests, uint8_t nsrcs);
+  void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
+  void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
+  void mod(uint8_t ndests, uint8_t nsrcs);
+  void mul(uint8_t ndests, uint8_t nsrcs);
+  void mv(uint8_t ndsts, uint8_t nsrcs);
+  void neg(uint8_t ndests, uint8_t nsrcs);
+  void bitwise_not(uint8_t ndests, uint8_t nsrcs);
+  void ret(uint8_t nsrcs);
+  void sub(uint8_t ndests, uint8_t nsrcs);
+  void bitwise_or(uint8_t ndests, uint8_t nsrcs);
+  void bitwise_xor(uint8_t ndests, uint8_t nsrcs);
+
+public:
   /**
   * @brief is a program counter.
   */
@@ -74,9 +147,11 @@ struct ezStackFrame {
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel *crsl);
+  ezStackFrame(ezCarousel *crsl, ezTable<string, ezValue *> &globals,
+                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
   /**
   * @brief is a destructor.
   */
   ~ezStackFrame();
+  ezStepState step(ezOpCode& op, uint8_t& arg1, uint8_t& arg2, uint8_t& arg3); //the arguments are temporary ones.
 };
