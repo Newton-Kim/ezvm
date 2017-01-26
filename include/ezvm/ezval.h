@@ -132,9 +132,9 @@ private:
   ezTable<string, ezValue *> *m_local;
 
 public:
-  uint8_t nargs;
-  uint8_t nrets;
-  size_t nmems;
+  const uint8_t nargs;
+  const uint8_t nrets;
+  const size_t nmems;
   ezCarousel(uint8_t args, uint8_t rets, size_t mems);
   ~ezCarousel();
   vector<ezInstruction> instruction;

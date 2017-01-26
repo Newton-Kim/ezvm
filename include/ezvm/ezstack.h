@@ -44,6 +44,7 @@ enum ezStepState {
   /**
   * @brief means the stack is empty and ready to be collected.
   */
+  EZ_STEP_CALL,
   EZ_STEP_DONE
 };
 
@@ -52,6 +53,26 @@ enum ezStepState {
 */
 class ezStackFrame {
 private:
+  /**
+  * @brief is a program counter.
+  */
+  size_t m_pc;
+  /**
+  * @brief is a local segment.
+  */
+  vector<ezValue *> m_local;
+  /**
+  * @brief is a collection of return values.
+  */
+  vector<ezValue *> m_returns;
+  /**
+  * @brief is a collection of addresses where the result values place.
+  */
+  vector<ezAddress> m_return_dest;
+  /**
+  * @brief is a pointer to a carousel.
+  */
+  ezCarousel *m_carousel;
   /**
   * @brief A reference to a constant segment
   */
@@ -68,6 +89,7 @@ private:
   * @brief A garbage collector
   */
   ezGC &m_gc;
+  ezStackFrame* m_callee;
   /**
   * @brief fetches a value from an address.
   *
@@ -90,6 +112,22 @@ private:
   * @param v is an array of values.
   */
   void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
+  /**
+  * @brief invokes a native carousel.
+  *
+  * @param func is a pointer to a native carousel.
+  * @param nargs is a number of arguments which follows the func.
+  * @param nrets is a number of return addresses which follows the arguments.
+  */
+  ezStepState call(ezNativeCarousel *func, uint8_t nargs, uint8_t nrets);
+  /**
+  * @brief invokes a carousel.
+  *
+  * @param func is a pointer to a native carousel.
+  * @param nargs is a number of arguments which follows the func.
+  * @param nrets is a number of return addresses which follows the arguments.
+  */
+  ezStepState call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
   void binary_operation(
     uint8_t ndests, uint8_t nsrcs,
     function<ezValue *(ezValue *, ezValue *)> binary_func,
@@ -107,6 +145,7 @@ private:
   void blt(uint8_t index);
   void bne(uint8_t index);
   void bra(uint8_t index);
+  ezStepState call(uint8_t nargs, uint8_t nrets);
   void cmp(uint8_t ndests, uint8_t nsrcs);
   void div(uint8_t ndests, uint8_t nsrcs);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
@@ -123,26 +162,6 @@ private:
 
 public:
   /**
-  * @brief is a program counter.
-  */
-  size_t pc;
-  /**
-  * @brief is a local segment.
-  */
-  vector<ezValue *> local;
-  /**
-  * @brief is a collection of return values.
-  */
-  vector<ezValue *> returns;
-  /**
-  * @brief is a collection of addresses where the result values place.
-  */
-  vector<ezAddress> return_dest;
-  /**
-  * @brief is a pointer to a carousel.
-  */
-  ezCarousel *carousel;
-  /**
   * @brief constructs the instance with a carousel.
   *
   * @param crsl is a pointer to a carousel.
@@ -153,5 +172,7 @@ public:
   * @brief is a destructor.
   */
   ~ezStackFrame();
-  ezStepState step(ezOpCode& op, uint8_t& arg1, uint8_t& arg2, uint8_t& arg3); //the arguments are temporary ones.
+  ezStepState step(void); //the arguments are temporary ones.
+  ezStackFrame* callee(void) { return m_callee;}
+  void on_mark(void);
 };

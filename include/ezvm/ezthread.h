@@ -81,37 +81,6 @@ private:
   * @return A value.
   */
   ezValue *addr2val(ezAddress addr);
-  /**
-  * @brief places a value at an address.
-  *
-  * @param addr is an address to place v.
-  * @param v is a value.
-  */
-  void val2addr(ezAddress addr, ezValue *v);
-  /**
-  * @brief places values at respective addresses.
-  *
-  * @param addr is an array of addresses.
-  * @param v is an array of values.
-  */
-  void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
-  /**
-  * @brief invokes a native carousel.
-  *
-  * @param func is a pointer to a native carousel.
-  * @param nargs is a number of arguments which follows the func.
-  * @param nrets is a number of return addresses which follows the arguments.
-  */
-  void call(ezNativeCarousel *func, uint8_t nargs, uint8_t nrets);
-  /**
-  * @brief invokes a carousel.
-  *
-  * @param func is a pointer to a native carousel.
-  * @param nargs is a number of arguments which follows the func.
-  * @param nrets is a number of return addresses which follows the arguments.
-  */
-  void call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
-  void call(uint8_t nargs, uint8_t nrets);
 
 public:
   /**

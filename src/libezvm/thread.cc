@@ -36,8 +36,6 @@ ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     ezStackFrame *sf = new ezStackFrame(crsl, m_globals, m_constants, m_alu, m_gc);
-    for (size_t i = 0; i < crsl->nmems; i++)
-      sf->local.push_back(ezNull::instance());
     m_stack.push_back(sf);
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -64,100 +62,22 @@ ezStepState ezThread::step(void) {
     return EZ_STEP_DONE;
   ezStackFrame *sf = m_stack.back();
   ezLog &log = ezLog::instance();
-  ezOpCode op;
-  uint8_t arg1, arg2, arg3;
-  if (EZ_STEP_DONE == sf->step(op, arg1, arg2, arg3)) {
-    log.verbose("stack %p has poped out", sf);
-    m_stack.pop_back();
-    size_t rets = sf->returns.size();
-    size_t dests = sf->return_dest.size();
-    size_t cnt = (rets > dests) ? dests : rets;
-    for (size_t i = 0; i < cnt; i++)
-      val2addr(sf->return_dest[i], sf->returns[i]);
-    if (dests > rets) {
-      for (size_t i = cnt; i < dests; i++)
-        val2addr(sf->return_dest[i], ezNull::instance());
-    }
-    delete sf;
-    return EZ_STEP_CONTINUE;
+  ezStepState state = sf->step();
+  switch(state) {
+    case EZ_STEP_DONE:
+      log.verbose("stack %p has poped out", sf);
+      m_stack.pop_back();
+      break;
+    case EZ_STEP_CALL:
+      {
+        ezStackFrame* nsf = sf->callee();
+        if(!nsf) throw("invalid call stack");
+        m_stack.push_back(nsf);
+      }
+      break;
   }
   log.verbose("stack %p has turn", sf);
-  switch (op) {
-  case EZ_OP_CALL:
-    call(arg1, arg2);
-    break;
-  }
   return EZ_STEP_CONTINUE;
-}
-
-void ezThread::call(uint8_t nargs, uint8_t nrets) {
-  // TODO it can be done via a macro
-  if (m_stack.empty())
-    throw runtime_error("stack underrun");
-  ezStackFrame *sf = m_stack.back();
-  ezInstDecoder decoder;
-  ezAddress addr;
-  decoder.argument(sf->carousel->instruction[sf->pc++], addr);
-  ezValue *func = addr2val(addr);
-  switch (func->type) {
-  case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    call((ezNativeCarousel *)func, nargs, nrets);
-    break;
-  case EZ_VALUE_TYPE_CAROUSEL:
-    call((ezCarousel *)func, nargs, nrets);
-    break;
-  default:
-    throw runtime_error("function is not executable");
-    break;
-  }
-}
-
-void ezThread::call(ezNativeCarousel *func, uint8_t nargs, uint8_t nrets) {
-  ezStackFrame *sf = m_stack.back();
-  ezInstDecoder decoder;
-  vector<ezValue *> args;
-  ezAddress addr;
-  for (size_t i = 0; i < nargs; i++, sf->pc++) {
-    decoder.argument(sf->carousel->instruction[sf->pc], addr);
-    ezValue *v = addr2val(addr);
-    args.push_back(v);
-  }
-  vector<ezAddress> ret_dest;
-  for (size_t i = 0; i < nrets; i++, sf->pc++) {
-    decoder.argument(sf->carousel->instruction[sf->pc], addr);
-    ret_dest.push_back(addr);
-  }
-  vector<ezValue *> rets;
-  func->run(args, rets);
-  if (rets.size())
-    val2addr(ret_dest, rets);
-}
-
-void ezThread::call(ezCarousel *func, uint8_t nargs, uint8_t nrets) {
-  ezStackFrame *nsf = new ezStackFrame(func, m_globals, m_constants, m_alu, m_gc);
-  ezStackFrame *sf = m_stack.back();
-  ezInstDecoder decoder;
-  vector<ezValue *> args;
-  ezAddress addr;
-  size_t min_args = (func->nargs > nargs) ? nargs : func->nargs;
-  for (size_t i = 0; i < min_args; i++, sf->pc++) {
-    decoder.argument(sf->carousel->instruction[sf->pc], addr);
-    ezValue *v = addr2val(addr);
-    nsf->local.push_back(v);
-  }
-  if (func->nargs > nargs) {
-    for (size_t i = min_args; i < func->nargs; i++, sf->pc++) {
-      nsf->local.push_back(ezNull::instance());
-    }
-  }
-  for (size_t i = 0; i < func->nmems; i++)
-    nsf->local.push_back(ezNull::instance());
-  vector<ezAddress> ret_dest;
-  for (size_t i = 0; i < nrets; i++, sf->pc++) {
-    decoder.argument(sf->carousel->instruction[sf->pc], addr);
-    nsf->return_dest.push_back(addr);
-  }
-  m_stack.push_back(nsf);
 }
 
 ezValue *ezThread::addr2val(ezAddress addr) {
@@ -169,10 +89,7 @@ ezValue *ezThread::addr2val(ezAddress addr) {
     v = m_constants[addr.offset];
     break;
   case EZ_ASM_SEGMENT_LOCAL: {
-    ezStackFrame *sf = m_stack.back();
-    if (addr.offset >= sf->local.size())
-      throw runtime_error("local memory access violation");
-    v = sf->local[addr.offset];
+    throw runtime_error("invalid segment for the thread");
   } break;
   case EZ_ASM_SEGMENT_PARENT:
     throw runtime_error("parent segment has not been implemented");
@@ -188,53 +105,9 @@ ezValue *ezThread::addr2val(ezAddress addr) {
   return v;
 }
 
-void ezThread::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
-  size_t addr_sz = addr.size(), vals_sz = vals.size();
-  size_t gcv = (addr_sz > vals_sz) ? vals_sz : addr_sz;
-  for (size_t i = 0; i < gcv; i++) {
-    ezValue *v = vals[i];
-    val2addr(addr[i], v);
-  }
-  if (addr_sz > vals_sz) {
-    for (size_t i = gcv; i < addr_sz; i++)
-      val2addr(addr[i], ezNull::instance());
-  }
-}
-
-void ezThread::val2addr(ezAddress addr, ezValue *v) {
-  switch (addr.segment) {
-  case EZ_ASM_SEGMENT_CONSTANT:
-    throw runtime_error("cannot write to constant");
-    break;
-  case EZ_ASM_SEGMENT_LOCAL: {
-    ezStackFrame *sf = m_stack.back();
-    if (addr.offset >= sf->local.size())
-      throw runtime_error("local memory access violation");
-    sf->local[addr.offset] = v;
-  } break;
-  case EZ_ASM_SEGMENT_PARENT:
-    throw runtime_error("parent segment has not been implemented");
-    break;
-  case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= m_globals.m_memory.size())
-      throw runtime_error("global memory access violation");
-    m_globals.m_memory[addr.offset] = v;
-    break;
-    break;
-    throw runtime_error("out of segment boundary");
-    break;
-  }
-}
-
 void ezThread::on_mark(void) {
   for (vector<ezStackFrame *>::iterator it = m_stack.begin();
        it != m_stack.end(); it++) {
-    ezStackFrame *stk = *it;
-    for (vector<ezValue *>::iterator lit = stk->local.begin();
-         lit != stk->local.end(); lit++)
-      (*lit)->mark();
-    for (vector<ezValue *>::iterator lit = stk->returns.begin();
-         lit != stk->returns.end(); lit++)
-      (*lit)->mark();
+    (*it)->on_mark();
   }
 }
