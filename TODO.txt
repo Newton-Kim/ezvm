@@ -13,3 +13,6 @@
 -13.Instruction should be recognized by a flag.
 14.Scope should be implemented.
 15.Thread should be an inheritance of ezValue.
+16.fgc (force garbage collection) should be implemented.
+17.priviledge queue is required.
+18.thd (thead commoand), join (pending this thread for others) should be implemented.
