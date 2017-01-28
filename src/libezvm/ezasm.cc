@@ -27,6 +27,7 @@
 #include "intrinsic/ezintrinsic.h"
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 
 using namespace std;
 
@@ -314,11 +315,28 @@ void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
 void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 ezAsmProcedure *ezASM::new_proc(const string name, int argc, int retc,
-                                int mems) {
+                                size_t mems, int scpkey, int scope) {
+  ezTable<string, ezValue*>* p_scope = NULL, * p_scpkey = NULL;
   if (m_globals.exist(name))
     throw runtime_error("global symbol " + name + " already exists");
+  stringstream ss;
+  if(scope >= 0) {
+    if(m_scopes.end() == m_scopes.find(scope)) {
+      ss << "scope[" << scope << "] doesn't exist";
+      throw runtime_error(ss.str());
+    }
+    p_scope = m_scopes[scope];
+  }
+  if(scpkey >= 0) {
+    if(m_scopes.end() == m_scopes.find(scpkey)) {
+      ss << "scope[" << scpkey << "] already exist";
+      throw runtime_error(ss.str());
+    }
+    m_scopes[scpkey] = (ezTable<string, ezValue*>*) m_gc.add((ezGCObject *)new ezTable<string, ezValue*>);
+    p_scope = m_scopes[scpkey];
+  }
   ezCarousel *carousel =
-      (ezCarousel *)m_gc.add((ezGCObject *)new ezCarousel(argc, retc, mems));
+      (ezCarousel *)m_gc.add((ezGCObject *)new ezCarousel(argc, retc, mems, p_scpkey, p_scope));
   size_t offset = m_globals.add(name, carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;

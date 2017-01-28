@@ -337,6 +337,7 @@ private:
   */
   ezTable<string, ezValue *> &m_globals;
   ezGC &m_gc;
+  map<size_t, ezTable<string, ezValue *>*> m_scopes;
 
 public:
   /**
@@ -372,10 +373,12 @@ public:
   * @param argc is the number of the arguments.
   * @param retc is the number of the returns.
   * @param mems is the size of memories.
+  * @param scope is the identifier of the scope.
+  * @param scpkey is the reference to the scope.
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure *new_proc(const string name, int argc, int retc, int mems);
+  ezAsmProcedure *new_proc(const string name, int argc, int retc, size_t mems, int scope, int scpkey);
   /**
   * @brief finds the offset of a global segment whose name is value.
   *

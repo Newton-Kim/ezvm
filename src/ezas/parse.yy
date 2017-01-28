@@ -160,6 +160,9 @@ static ezAsmProcedure* s_proc_current = NULL;
 static map<string, unsigned int> s_global;
 static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
+static size_t s_memories = 0;
+static int s_scope = -1;
+static int s_scpkey = -1;
 %}
 
 %token PROC ENTRY IMPORT
@@ -197,10 +200,23 @@ entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 procs : proc
 	| proc procs;
 
-proc : PROC SYMBOL '(' INTEGER ')' INTEGER NEWLINE proc_meta {if(s_proc_current) delete s_proc_current; s_proc_current = s_vm.assembler().new_proc($2, $4, $6, $8);}
-		codes {s_proc_current = NULL;};
+proc : PROC SYMBOL '(' INTEGER ')' INTEGER NEWLINE {
+		s_memories = 0;
+		s_scope = -1;
+		s_scpkey = -1;
+	} proc_meta {
+		if(s_proc_current) delete s_proc_current;
+		s_proc_current = s_vm.assembler().new_proc($2, $4, $6, s_memories, s_scpkey, s_scope);
+		s_memories = 0;
+		s_scope = -1;
+		s_scpkey = -1;
+	}
+	codes {s_proc_current = NULL;};
 
-proc_meta : %empty {$$ = 0;} | SCOPE INTEGER NEWLINE | MEMORIES INTEGER NEWLINE {$$ = $2;};
+proc_meta : %empty {$$ = 0;}
+	| proc_meta SCOPE INTEGER NEWLINE {s_scope = $3;}
+	| proc_meta SCOPE_KEY INTEGER NEWLINE {s_scpkey = $3;}
+	| proc_meta MEMORIES INTEGER NEWLINE {s_memories = $3;};
 
 codes : line NEWLINE | codes line NEWLINE;
 
