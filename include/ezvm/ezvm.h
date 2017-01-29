@@ -48,7 +48,7 @@ private:
   ezDump *m_pdump;
   ezGC m_gc;
   ezALU m_alu;
-  vector<ezThread *> m_threads;
+  list<ezThread *> m_threads;
 
 public:
   ezVM();

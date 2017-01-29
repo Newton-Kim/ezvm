@@ -42,8 +42,9 @@ ezVM::~ezVM() {
     delete m_pasm;
   if (m_parchive)
     delete m_parchive;
-  for (vector<ezThread *>::iterator it = m_threads.begin();
-       it != m_threads.end(); it++)
+
+  for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
+       it++)
     if (*it)
       delete *it;
 }
@@ -54,24 +55,23 @@ void ezVM::run(void) {
   ezThread *thread = new ezThread(m_entry, m_globals, m_constants, m_alu, m_gc);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
-  while (!m_threads.empty() && m_threads[0]) {
-    size_t idx = 0, sz = m_threads.size();
-    for (idx = 0; idx < sz; idx++) {
-      log.verbose("m_thread[%lu](%p) gets turn", idx, m_threads[idx]);
-      ezThread *thd = m_threads[idx];
-      if (thd == NULL)
-        break;
-      switch (thd->step()) {
-      case EZ_STEP_DONE:
-        delete thd;
-        m_threads[idx] = NULL;
-        for (size_t i = idx + 1; i < sz; i++) {
-          log.debug("m_threads[%lu] <- m_threads[%lu]", i - 1, i);
-          if (!m_threads[i])
-            break;
-          m_threads[i] = m_threads[i + 1];
+  while (!m_threads.empty()) {
+    list<ezThread *>::iterator it = m_threads.begin();
+    while (it != m_threads.end()) {
+      ezThread *thd = *it;
+      log.verbose("m_thread(%p) gets turn", thd);
+      if (thd == NULL) {
+        it = m_threads.erase(it);
+      } else {
+        switch (thd->step()) {
+        case EZ_STEP_DONE:
+          it = m_threads.erase(it);
+          delete thd;
+          break;
+        default:
+          it++;
+          break;
         }
-        break;
       }
     }
   }
@@ -105,7 +105,7 @@ void ezVM::on_mark(void) {
   for (vector<ezValue *>::iterator it = m_constants.begin();
        it != m_constants.end(); it++)
     (*it)->mark();
-  for (vector<ezThread *>::iterator it = m_threads.begin();
-       it != m_threads.end(); it++)
+  for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
+       it++)
     (*it)->on_mark();
 }
