@@ -25,16 +25,22 @@
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezlog.h"
 #include "ezvm/ezstack.h"
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
-ezStackFrame::ezStackFrame(ezCarousel *crsl, ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc) : m_pc(0), m_local(m_carousel->local_memory()), m_scope(m_carousel->scope_memory()), m_carousel(crsl), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc), m_callee(NULL) {
+ezStackFrame::ezStackFrame(ezCarousel *crsl,
+                           ezTable<string, ezValue *> &globals,
+                           vector<ezValue *> &constants, ezALU &alu, ezGC &gc)
+    : m_pc(0), m_local(m_carousel->local_memory()),
+      m_scope(m_carousel->scope_memory()), m_carousel(crsl),
+      m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc),
+      m_callee(NULL) {
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
 }
 
 ezStackFrame::~ezStackFrame() {
-  if(!m_carousel->is_local_scoped()) delete m_local;
+  if (!m_carousel->is_local_scoped())
+    delete m_local;
 }
 
 ezValue *ezStackFrame::addr2val(ezAddress addr) {
@@ -53,7 +59,7 @@ ezValue *ezStackFrame::addr2val(ezAddress addr) {
   case EZ_ASM_SEGMENT_SCOPE:
     if (!m_scope)
       throw runtime_error("the function does not have a scope");
-    if(addr.offset >= m_scope->size())
+    if (addr.offset >= m_scope->size())
       throw runtime_error("scope memory access violation");
     v = (*m_scope)[addr.offset];
     break;
@@ -94,7 +100,7 @@ void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
   case EZ_ASM_SEGMENT_SCOPE:
     if (!m_scope)
       throw runtime_error("the function does not have a scope");
-    if(addr.offset >= m_scope->size())
+    if (addr.offset >= m_scope->size())
       throw runtime_error("scope memory access violation");
     (*m_scope)[addr.offset] = v;
     break;
@@ -164,7 +170,6 @@ void ezStackFrame::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
                         obj->to_integer() >> offset->to_integer()));
                   });
 }
-
 
 void ezStackFrame::binary_operation(
     uint8_t ndests, uint8_t nsrcs,
@@ -249,7 +254,7 @@ void ezStackFrame::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezStackFrame::conditional_bra(uint8_t index,
-                               function<bool(ezCondition *)> func) {
+                                   function<bool(ezCondition *)> func) {
   ezInstDecoder decoder;
   ezAddress addr;
   decoder.argument(m_carousel->instruction[m_pc++], addr);
@@ -298,7 +303,7 @@ void ezStackFrame::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezStackFrame::unary_operation(uint8_t ndests, uint8_t nsrcs,
-                               function<ezValue *(ezValue *)> unary_func) {
+                                   function<ezValue *(ezValue *)> unary_func) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(m_carousel->instruction[m_pc++], dest);
@@ -438,7 +443,8 @@ ezStepState ezStackFrame::call(ezCarousel *func, uint8_t nargs, uint8_t nrets) {
   return EZ_STEP_CALL;
 }
 
-ezStepState ezStackFrame::call(ezNativeCarousel *func, uint8_t nargs, uint8_t nrets) {
+ezStepState ezStackFrame::call(ezNativeCarousel *func, uint8_t nargs,
+                               uint8_t nrets) {
   ezInstDecoder decoder;
   vector<ezValue *> args;
   ezAddress addr;
@@ -459,8 +465,8 @@ ezStepState ezStackFrame::call(ezNativeCarousel *func, uint8_t nargs, uint8_t nr
   return EZ_STEP_CONTINUE;
 }
 
-ezStepState ezStackFrame::step(void){
-  if(m_callee) {
+ezStepState ezStackFrame::step(void) {
+  if (m_callee) {
     size_t rets = m_callee->m_returns.size();
     size_t dests = m_callee->m_return_dest.size();
     size_t cnt = (rets > dests) ? dests : rets;
@@ -471,9 +477,10 @@ ezStepState ezStackFrame::step(void){
         val2addr(m_callee->m_return_dest[i], ezNull::instance());
     }
     delete m_callee;
-    m_callee= NULL;
+    m_callee = NULL;
   }
-  if(m_pc >= m_carousel->instruction.size()) return EZ_STEP_DONE;
+  if (m_pc >= m_carousel->instruction.size())
+    return EZ_STEP_DONE;
   ezStepState status = EZ_STEP_CONTINUE;
   ezInstDecoder decoder;
   ezOpCode op;
@@ -545,8 +552,8 @@ ezStepState ezStackFrame::step(void){
 }
 
 void ezStackFrame::on_mark(void) {
-  for (vector<ezValue *>::iterator it = m_local->begin();
-       it != m_local->end(); it++)
+  for (vector<ezValue *>::iterator it = m_local->begin(); it != m_local->end();
+       it++)
     (*it)->mark();
   for (vector<ezValue *>::iterator it = m_returns.begin();
        it != m_returns.end(); it++)

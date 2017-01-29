@@ -337,7 +337,7 @@ private:
   */
   ezTable<string, ezValue *> &m_globals;
   ezGC &m_gc;
-  map<size_t, ezTable<string, ezValue *>*> m_scopes;
+  map<size_t, ezTable<string, ezValue *> *> m_scopes;
 
 public:
   /**
@@ -378,7 +378,8 @@ public:
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure *new_proc(const string name, int argc, int retc, size_t mems, int scope, int scpkey);
+  ezAsmProcedure *new_proc(const string name, int argc, int retc, size_t mems,
+                           int scope, int scpkey);
   /**
   * @brief finds the offset of a global segment whose name is value.
   *

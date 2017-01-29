@@ -27,9 +27,9 @@
 #include "ezaddr.h"
 #include "ezalu.h"
 #include "ezval.h"
+#include <functional>
 #include <stack>
 #include <vector>
-#include <functional>
 
 using namespace std;
 
@@ -64,11 +64,11 @@ private:
   /**
   * @brief is a local segment.
   */
-  vector<ezValue *>* m_local;
+  vector<ezValue *> *m_local;
   /**
   * @brief is a scope segment.
   */
-  vector<ezValue *>* m_scope;
+  vector<ezValue *> *m_scope;
   /**
   * @brief is a collection of return values.
   */
@@ -93,7 +93,7 @@ private:
   * @brief A garbage collector
   */
   ezGC &m_gc;
-  ezStackFrame* m_callee;
+  ezStackFrame *m_callee;
   /**
   * @brief fetches a value from an address.
   *
@@ -132,10 +132,9 @@ private:
   * @param nrets is a number of return addresses which follows the arguments.
   */
   ezStepState call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
-  void binary_operation(
-    uint8_t ndests, uint8_t nsrcs,
-    function<ezValue *(ezValue *, ezValue *)> binary_func,
-    function<ezValue *(vector<ezValue *> &)> multi_func);
+  void binary_operation(uint8_t ndests, uint8_t nsrcs,
+                        function<ezValue *(ezValue *, ezValue *)> binary_func,
+                        function<ezValue *(vector<ezValue *> &)> multi_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
   void
   shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
@@ -171,12 +170,12 @@ public:
   * @param crsl is a pointer to a carousel.
   */
   ezStackFrame(ezCarousel *crsl, ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
+               vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
   /**
   * @brief is a destructor.
   */
   ~ezStackFrame();
-  ezStepState step(void); //the arguments are temporary ones.
-  ezStackFrame* callee(void) { return m_callee;}
+  ezStepState step(void); // the arguments are temporary ones.
+  ezStackFrame *callee(void) { return m_callee; }
   void on_mark(void);
 };

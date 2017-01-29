@@ -136,15 +136,17 @@ public:
   const uint8_t nargs;
   const uint8_t nrets;
   const size_t nmems;
-  ezCarousel(uint8_t args, uint8_t rets, size_t mems, ezTable<string, ezValue*>* local, ezTable<string, ezValue*>* scope);
+  ezCarousel(uint8_t args, uint8_t rets, size_t mems,
+             ezTable<string, ezValue *> *local,
+             ezTable<string, ezValue *> *scope);
   ~ezCarousel();
   vector<ezInstruction> instruction;
   vector<ezInstruction> jmptbl;
   void on_mark(void);
-  vector<ezValue*>* local_memory(void);
-  map<string, size_t>& local_symtab(void);
-  vector<ezValue*>* scope_memory(void);
-  bool is_local_scoped(void) { return (m_local) ? true : false;}
+  vector<ezValue *> *local_memory(void);
+  map<string, size_t> &local_symtab(void);
+  vector<ezValue *> *scope_memory(void);
+  bool is_local_scoped(void) { return (m_local) ? true : false; }
 };
 
 class ezNativeCarousel : public ezValue {

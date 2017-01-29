@@ -35,7 +35,8 @@ ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
-    ezStackFrame *sf = new ezStackFrame(crsl, m_globals, m_constants, m_alu, m_gc);
+    ezStackFrame *sf =
+        new ezStackFrame(crsl, m_globals, m_constants, m_alu, m_gc);
     m_stack.push_back(sf);
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -63,18 +64,17 @@ ezStepState ezThread::step(void) {
   ezStackFrame *sf = m_stack.back();
   ezLog &log = ezLog::instance();
   ezStepState state = sf->step();
-  switch(state) {
-    case EZ_STEP_DONE:
-      log.verbose("stack %p has poped out", sf);
-      m_stack.pop_back();
-      break;
-    case EZ_STEP_CALL:
-      {
-        ezStackFrame* nsf = sf->callee();
-        if(!nsf) throw("invalid call stack");
-        m_stack.push_back(nsf);
-      }
-      break;
+  switch (state) {
+  case EZ_STEP_DONE:
+    log.verbose("stack %p has poped out", sf);
+    m_stack.pop_back();
+    break;
+  case EZ_STEP_CALL: {
+    ezStackFrame *nsf = sf->callee();
+    if (!nsf)
+      throw("invalid call stack");
+    m_stack.push_back(nsf);
+  } break;
   }
   log.verbose("stack %p has turn", sf);
   return EZ_STEP_CONTINUE;

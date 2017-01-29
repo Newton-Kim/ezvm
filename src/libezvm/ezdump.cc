@@ -89,7 +89,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
       sink.print("      %s", decoder.opstr(op));
       sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
-      switch(op) {
+      switch (op) {
       case EZ_OP_BEQ:
       case EZ_OP_BGE:
       case EZ_OP_BLT:
@@ -101,7 +101,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       case EZ_OP_BRA:
         sink.print("\n");
         continue;
-      case EZ_OP_CALL: 
+      case EZ_OP_CALL:
         decoder.argument(crsl->instruction[pc++], addr);
         dump(sink, addr);
         break;

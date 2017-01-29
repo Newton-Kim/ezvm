@@ -46,7 +46,7 @@ template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
     m_memory.push_back(value);
     m_symtab[key] = offset;
     return offset;
-  } 
+  }
   offset = m_symtab[key];
   if (!m_memory[offset])
     m_memory[offset] = value;

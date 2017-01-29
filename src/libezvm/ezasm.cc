@@ -26,8 +26,8 @@
 #include "ezvm/ezlog.h"
 #include "intrinsic/ezintrinsic.h"
 #include <iostream>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -251,7 +251,8 @@ void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
 }
 
 size_t ezAsmProcedure::label2index(string label) {
-  if (m_carousel->local_symtab().find(label) == m_carousel->local_symtab().end()) {
+  if (m_carousel->local_symtab().find(label) ==
+      m_carousel->local_symtab().end()) {
     m_carousel->local_symtab()[label] = m_carousel->jmptbl.size();
     m_carousel->jmptbl.push_back(0);
   }
@@ -316,27 +317,28 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 ezAsmProcedure *ezASM::new_proc(const string name, int argc, int retc,
                                 size_t mems, int scpkey, int scope) {
-  ezTable<string, ezValue*>* p_scope = NULL, * p_scpkey = NULL;
+  ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
     throw runtime_error("global symbol " + name + " already exists");
   stringstream ss;
-  if(scope >= 0) {
-    if(m_scopes.end() == m_scopes.find(scope)) {
+  if (scope >= 0) {
+    if (m_scopes.end() == m_scopes.find(scope)) {
       ss << "scope[" << scope << "] doesn't exist";
       throw runtime_error(ss.str());
     }
     p_scope = m_scopes[scope];
   }
-  if(scpkey >= 0) {
-    if(m_scopes.end() != m_scopes.find(scpkey)) {
+  if (scpkey >= 0) {
+    if (m_scopes.end() != m_scopes.find(scpkey)) {
       ss << "scope[" << scpkey << "] already exist";
       throw runtime_error(ss.str());
     }
-    m_scopes[scpkey] = (ezTable<string, ezValue*>*) m_gc.add((ezGCObject *)new ezTable<string, ezValue*>);
+    m_scopes[scpkey] = (ezTable<string, ezValue *> *)m_gc.add(
+        (ezGCObject *)new ezTable<string, ezValue *>);
     p_scpkey = m_scopes[scpkey];
   }
-  ezCarousel *carousel =
-      (ezCarousel *)m_gc.add((ezGCObject *)new ezCarousel(argc, retc, mems, p_scpkey, p_scope));
+  ezCarousel *carousel = (ezCarousel *)m_gc.add(
+      (ezGCObject *)new ezCarousel(argc, retc, mems, p_scpkey, p_scope));
   size_t offset = m_globals.add(name, carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
@@ -349,7 +351,7 @@ size_t ezASM::global(const string value) {
   //	vector<ezValue*>* offset = m_globals[0];
   if (!m_globals.exist(value))
     m_globals.add(value, NULL);
-//    throw runtime_error("global symbol " + value + " is not found");
+  //    throw runtime_error("global symbol " + value + " is not found");
   return m_globals.m_symtab[value];
 }
 
