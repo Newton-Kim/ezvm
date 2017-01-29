@@ -88,11 +88,9 @@ ezValue *ezThread::addr2val(ezAddress addr) {
       throw runtime_error("constant memory access violation");
     v = m_constants[addr.offset];
     break;
-  case EZ_ASM_SEGMENT_LOCAL: {
+  case EZ_ASM_SEGMENT_LOCAL:
+  case EZ_ASM_SEGMENT_SCOPE:
     throw runtime_error("invalid segment for the thread");
-  } break;
-  case EZ_ASM_SEGMENT_PARENT:
-    throw runtime_error("parent segment has not been implemented");
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
     if (addr.offset >= m_globals.m_memory.size())

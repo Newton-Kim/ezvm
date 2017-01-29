@@ -58,9 +58,17 @@ private:
   */
   size_t m_pc;
   /**
+  * @brief is a pointer to a carousel.
+  */
+  ezCarousel *m_carousel;
+  /**
   * @brief is a local segment.
   */
-  vector<ezValue *> m_local;
+  vector<ezValue *>* m_local;
+  /**
+  * @brief is a scope segment.
+  */
+  vector<ezValue *>* m_scope;
   /**
   * @brief is a collection of return values.
   */
@@ -69,10 +77,6 @@ private:
   * @brief is a collection of addresses where the result values place.
   */
   vector<ezAddress> m_return_dest;
-  /**
-  * @brief is a pointer to a carousel.
-  */
-  ezCarousel *m_carousel;
   /**
   * @brief A reference to a constant segment
   */

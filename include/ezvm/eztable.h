@@ -36,13 +36,29 @@ public:
   vector<V> m_memory;
   size_t add(K key, V value);
   bool exist(K key);
+  bool is_null(K key);
 };
 
 template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
-  size_t offset = m_memory.size();
-  m_memory.push_back(value);
-  m_symtab[key] = offset;
+  size_t offset = 0;
+  if (m_symtab.end() == m_symtab.find(key)) {
+    offset = m_memory.size();
+    m_memory.push_back(value);
+    m_symtab[key] = offset;
+    return offset;
+  } 
+  offset = m_symtab[key];
+  if (!m_memory[offset])
+    m_memory[offset] = value;
+  else
+    throw runtime_error("value already exists");
   return offset;
+}
+
+template <class K, class V> bool ezTable<K, V>::is_null(K key) {
+  if (m_symtab.end() == m_symtab.find(key))
+    throw runtime_error("key doesn't exist");
+  return (m_memory[m_symtab[key]]) ? false : true;
 }
 
 template <class K, class V> bool ezTable<K, V>::exist(K key) {

@@ -37,7 +37,7 @@
 /**
 * @brief Parent segment: A value which on the scope of a caller.
 */
-#define EZ_ASM_SEGMENT_PARENT 3
+#define EZ_ASM_SEGMENT_SCOPE 3
 /**
 * @brief Global segment: A value can be altered and is accessible from all
 * scope.

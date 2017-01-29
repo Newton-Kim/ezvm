@@ -39,8 +39,8 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
   case EZ_ASM_SEGMENT_LOCAL:
     sink.print(" r");
     break;
-  case EZ_ASM_SEGMENT_PARENT:
-    sink.print(" p");
+  case EZ_ASM_SEGMENT_SCOPE:
+    sink.print(" s");
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
     sink.print(" g");
@@ -76,8 +76,8 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
       sink.print("        [%lu]:%lu\n", i, crsl->jmptbl[i]);
     sink.print("      .jump symbol table:\n");
-    for (map<string, size_t>::iterator it = crsl->symtab.begin();
-         it != crsl->symtab.end(); it++)
+    for (map<string, size_t>::iterator it = crsl->local_symtab().begin();
+         it != crsl->local_symtab().end(); it++)
       sink.print("        %s->%lu\n", it->first.c_str(), it->second);
     ezInstDecoder decoder;
     ezAddress addr;

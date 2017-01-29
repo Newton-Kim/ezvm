@@ -130,6 +130,7 @@ class ezCarousel : public ezValue, ezGCClient {
 private:
   ezTable<string, ezValue *> *m_scope;
   ezTable<string, ezValue *> *m_local;
+  map<string, size_t> m_symtab;
 
 public:
   const uint8_t nargs;
@@ -139,8 +140,11 @@ public:
   ~ezCarousel();
   vector<ezInstruction> instruction;
   vector<ezInstruction> jmptbl;
-  map<string, size_t> symtab;
   void on_mark(void);
+  vector<ezValue*>* local_memory(void);
+  map<string, size_t>& local_symtab(void);
+  vector<ezValue*>* scope_memory(void);
+  bool is_local_scoped(void) { return (m_local) ? true : false;}
 };
 
 class ezNativeCarousel : public ezValue {

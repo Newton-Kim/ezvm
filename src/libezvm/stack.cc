@@ -29,14 +29,13 @@
 #include <iostream>
 
 ezStackFrame::ezStackFrame(ezCarousel *crsl, ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc) : m_pc(0), m_carousel(crsl), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc), m_callee(NULL) {
+                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc) : m_pc(0), m_local(m_carousel->local_memory()), m_scope(m_carousel->scope_memory()), m_carousel(crsl), m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc), m_callee(NULL) {
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
-  size_t memories = (crsl->nmems > crsl->nargs) ? crsl->nmems : crsl->nargs;
-  for (size_t i = 0; i < memories; i++)
-    m_local.push_back(ezNull::instance()); //TODO:using stl APIs
 }
 
-ezStackFrame::~ezStackFrame() {}
+ezStackFrame::~ezStackFrame() {
+  if(!m_carousel->is_local_scoped()) delete m_local;
+}
 
 ezValue *ezStackFrame::addr2val(ezAddress addr) {
   ezValue *v = NULL;
@@ -47,12 +46,16 @@ ezValue *ezStackFrame::addr2val(ezAddress addr) {
     v = m_constants[addr.offset];
     break;
   case EZ_ASM_SEGMENT_LOCAL: {
-    if (addr.offset >= m_local.size())
-      throw runtime_error("m_local memory access violation");
-    v = m_local[addr.offset];
+    if (addr.offset >= m_local->size())
+      throw runtime_error("local memory access violation");
+    v = (*m_local)[addr.offset];
   } break;
-  case EZ_ASM_SEGMENT_PARENT:
-    throw runtime_error("parent segment has not been implemented");
+  case EZ_ASM_SEGMENT_SCOPE:
+    if (!m_scope)
+      throw runtime_error("the function does not have a scope");
+    if(addr.offset >= m_scope->size())
+      throw runtime_error("scope memory access violation");
+    v = (*m_scope)[addr.offset];
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
     if (addr.offset >= m_globals.m_memory.size())
@@ -84,12 +87,16 @@ void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
     throw runtime_error("cannot write to constant");
     break;
   case EZ_ASM_SEGMENT_LOCAL: {
-    if (addr.offset >= m_local.size())
-      throw runtime_error("m_local memory access violation");
-    m_local[addr.offset] = v;
+    if (addr.offset >= m_local->size())
+      throw runtime_error("local memory access violation");
+    (*m_local)[addr.offset] = v;
   } break;
-  case EZ_ASM_SEGMENT_PARENT:
-    throw runtime_error("parent segment has not been implemented");
+  case EZ_ASM_SEGMENT_SCOPE:
+    if (!m_scope)
+      throw runtime_error("the function does not have a scope");
+    if(addr.offset >= m_scope->size())
+      throw runtime_error("scope memory access violation");
+    (*m_scope)[addr.offset] = v;
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
     if (addr.offset >= m_globals.m_memory.size())
@@ -421,7 +428,7 @@ ezStepState ezStackFrame::call(ezCarousel *func, uint8_t nargs, uint8_t nrets) {
   for (size_t i = 0; i < min_args; i++, m_pc++) {
     decoder.argument(m_carousel->instruction[m_pc], addr);
     ezValue *v = addr2val(addr);
-    m_callee->m_local[i] = v;
+    (*(m_callee->m_local))[i] = v;
   }
   vector<ezAddress> ret_dest;
   for (size_t i = 0; i < nrets; i++, m_pc++) {
@@ -538,8 +545,8 @@ ezStepState ezStackFrame::step(void){
 }
 
 void ezStackFrame::on_mark(void) {
-  for (vector<ezValue *>::iterator it = m_local.begin();
-       it != m_local.end(); it++)
+  for (vector<ezValue *>::iterator it = m_local->begin();
+       it != m_local->end(); it++)
     (*it)->mark();
   for (vector<ezValue *>::iterator it = m_returns.begin();
        it != m_returns.end(); it++)

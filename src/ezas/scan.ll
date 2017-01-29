@@ -34,7 +34,7 @@ integer [+-]?[0-9]+
 string \"[^"]*\"
 symbol _[a-zA-Z_][a-zA-Z_0-9]*
 label  :.*
-address [cgrp][0-9]+
+address [cgrs][0-9]+
 newline [\n\r]
 sp [ \t]
 %%
@@ -86,8 +86,8 @@ sp [ \t]
 		case 'r':
 			yylval.a_value.segment = EZ_ASM_SEGMENT_LOCAL;
 			break;
-		case 'p':
-			yylval.a_value.segment = EZ_ASM_SEGMENT_PARENT;
+		case 's':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_SCOPE;
 			break;
 		default:
 			fprintf(stderr, "error (%d): invalid segment %c\n", yylineno, yytext[0]);
