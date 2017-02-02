@@ -151,6 +151,7 @@ private:
   ezStepState call(uint8_t nargs, uint8_t nrets);
   void cmp(uint8_t ndests, uint8_t nsrcs);
   void div(uint8_t ndests, uint8_t nsrcs);
+  void fgc(void);
   void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void mod(uint8_t ndests, uint8_t nsrcs);

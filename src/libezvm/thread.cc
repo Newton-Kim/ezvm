@@ -68,6 +68,8 @@ ezStepState ezThread::step(void) {
   case EZ_STEP_DONE:
     log.verbose("stack %p has poped out", sf);
     m_stack.pop_back();
+    if(m_stack.empty())
+      delete sf;
     break;
   case EZ_STEP_CALL: {
     ezStackFrame *nsf = sf->callee();

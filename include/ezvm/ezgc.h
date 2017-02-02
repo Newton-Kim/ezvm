@@ -64,4 +64,5 @@ public:
   ~ezGC();
   ezGCObject *add(ezGCObject *v);
   void subscribe(ezGCClient *t);
+  void force(void);
 };

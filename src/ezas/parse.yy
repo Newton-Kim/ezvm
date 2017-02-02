@@ -166,7 +166,7 @@ static int s_scpkey = -1;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
 %token SYMBOL STRING NEWLINE INTEGER ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
@@ -231,6 +231,7 @@ line : %empty
 	| call
 	| cmp
 	| div
+	| fgc
 	| lsl
 	| lsr
 	| mod
@@ -266,6 +267,8 @@ cmp : CMP var ',' var var {s_proc_current->cmp(ezAddress($2.segment, $2.offset),
 
 div : DIV var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
 	| DIV var var ',' vars {s_proc_current->div(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), s_args_var); s_args_addr.clear(); s_args_var.clear();}
+
+fgc : FGC {s_proc_current->fgc();}
 
 lsl : LSL var ',' var ',' var {s_proc_current->lsl(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($6.segment, $6.offset));}
 	| LSL var var ',' var ',' var {s_proc_current->lsl(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($7.segment, $7.offset));};

@@ -155,6 +155,11 @@ void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_DIV, dest, cond, src);
 }
 
+void ezAsmProcedure::fgc(void) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_FGC, 0, 0);
+}
+
 void ezAsmProcedure::mod(const ezAddress dest, vector<ezAddress> &src) {
   instruction_with_array_arguments(EZ_OP_MOD, dest, src);
 }

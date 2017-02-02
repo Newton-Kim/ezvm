@@ -336,6 +336,10 @@ void ezStackFrame::bitwise_not(uint8_t ndests, uint8_t nsrcs) {
                   [&](ezValue *v) { return m_alu.bitwise_not(v); });
 }
 
+void ezStackFrame::fgc(void) {
+  m_gc.force();
+}
+
 void ezStackFrame::ret(uint8_t nsrcs) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
@@ -514,6 +518,8 @@ ezStepState ezStackFrame::step(void) {
   case EZ_OP_DIV:
     div(arg1, arg2);
     break;
+  case EZ_OP_FGC:
+    fgc();
   case EZ_OP_LSL:
     lsl(arg1, arg2, arg3);
     break;

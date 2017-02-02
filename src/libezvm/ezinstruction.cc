@@ -100,6 +100,8 @@ const char *ezInstDecoder::opstr(ezOpCode op) {
     return "cmp";
   case EZ_OP_DIV:
     return "div";
+  case EZ_OP_FGC:
+    return "fgc";
   case EZ_OP_LSL:
     return "lsl";
   case EZ_OP_LSR:

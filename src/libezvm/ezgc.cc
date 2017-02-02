@@ -58,3 +58,5 @@ ezGCObject *ezGC::add(ezGCObject *v) {
 }
 
 void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }
+
+void ezGC::force(void) {collect();}

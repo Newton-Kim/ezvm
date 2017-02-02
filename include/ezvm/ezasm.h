@@ -191,6 +191,7 @@ public:
   * @param src Addresses of addends.
   */
   void div(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  void fgc(void);
   /**
   * @brief tags the address with the name.
   *

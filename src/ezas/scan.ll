@@ -63,6 +63,7 @@ sp [ \t]
 "ret" return RET;
 "sub" return SUB;
 "xor" return XOR;
+"fgc" return FGC;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
