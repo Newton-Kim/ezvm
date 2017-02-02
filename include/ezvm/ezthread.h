@@ -36,6 +36,11 @@
 
 using namespace std;
 
+enum ezThreadScheduler {
+  EZ_THREAD_SCHED_REALTIME,
+  EZ_THREAD_SCHED_ROUNDROBIN
+};
+
 /**
 * @brief ezThread is a stack of the instances of ezStackFrame.
 */
@@ -45,6 +50,7 @@ private:
   * @brief A procedure entry point
   */
   ezAddress m_entry;
+  ezThreadScheduler m_scheduler;
   /**
   * @brief A reference to a constant segment
   */
@@ -92,7 +98,7 @@ public:
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
-           vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
+           vector<ezValue *> &constants, ezALU &alu, ezGC &gc, ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
   /**
   * @brief destroys the thread.
   */
@@ -103,5 +109,6 @@ public:
   * @return is a state which indicates if there is an instruction to run.
   */
   ezStepState step(void);
+  ezStepState run(void);
   void on_mark(void);
 };

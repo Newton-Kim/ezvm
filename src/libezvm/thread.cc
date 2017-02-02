@@ -28,8 +28,8 @@
 #include <stdexcept>
 
 ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc)
-    : m_entry(entry), m_constants(constants), m_globals(globals), m_alu(alu),
+                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc, ezThreadScheduler sched)
+    : m_entry(entry), m_scheduler(sched), m_constants(constants), m_globals(globals), m_alu(alu),
       m_gc(gc) {
   ezValue *v = addr2val(entry);
   switch (v->type) {
@@ -103,6 +103,19 @@ ezValue *ezThread::addr2val(ezAddress addr) {
     throw runtime_error("out of segment boundary");
   }
   return v;
+}
+
+ezStepState ezThread::run(void) {
+  ezStepState state;
+  switch(m_scheduler) {
+    case EZ_THREAD_SCHED_REALTIME:
+      do state = step(); while(state != EZ_STEP_DONE);
+      break;
+    case EZ_THREAD_SCHED_ROUNDROBIN:
+      state = step();
+      break;
+  }
+  return state;
 }
 
 void ezThread::on_mark(void) {

@@ -21,9 +21,11 @@ include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezasm.h \
 		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \
+		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
 		../../include/ezvm/ezlog.h \
 		../../include/ezvm/ezstack.h \
+		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \
 		../../include/ezvm/ezval.h \
 		../../include/ezvm/ezvm.h
