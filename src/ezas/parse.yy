@@ -25,7 +25,6 @@
 */
 #include "ezvm/ezvm.h"
 #include "ezvm/ezlog.h"
-#include "ezio.h"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -318,12 +317,6 @@ var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler()
 %%
 
 extern FILE * yyin;
-void ezinit(void) {
-	char** symtab = NULL;
-	ezValue** constants = NULL;
-	ezIO::load(&symtab, &constants);
-	s_vm.assembler().load_intrinsics(symtab, constants);
-}
 
 int ezparse(FILE* fd, const string target, const string dump) {
 	yyin = fd;

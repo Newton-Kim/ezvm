@@ -136,7 +136,7 @@ libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezarchive.lo ezalu.lo ezgc.lo ezasm.lo \
 	ezdump.lo ezinstruction.lo ezval.lo stack.lo thread.lo vm.lo \
-	utility/ezfile.lo utility/ezlog.lo
+	utility/ezfile.lo utility/ezlog.lo linux/ezio.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -347,7 +347,8 @@ libezvm_la_SOURCES = ezarchive.cc \
 		   thread.cc \
 		   vm.cc \
 		   utility/ezfile.cc \
-		   utility/ezlog.cc
+		   utility/ezlog.cc \
+                   linux/ezio.cc
 
 include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezalu.h \
@@ -355,9 +356,11 @@ include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezasm.h \
 		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \
+		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
 		../../include/ezvm/ezlog.h \
 		../../include/ezvm/ezstack.h \
+		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \
 		../../include/ezvm/ezval.h \
 		../../include/ezvm/ezvm.h
@@ -444,12 +447,21 @@ utility/ezfile.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
 utility/ezlog.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
+linux/$(am__dirstamp):
+	@$(MKDIR_P) linux
+	@: > linux/$(am__dirstamp)
+linux/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) linux/$(DEPDIR)
+	@: > linux/$(DEPDIR)/$(am__dirstamp)
+linux/ezio.lo: linux/$(am__dirstamp) linux/$(DEPDIR)/$(am__dirstamp)
 
 libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libezvm_la_LINK) -rpath $(libdir) $(libezvm_la_OBJECTS) $(libezvm_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f linux/*.$(OBJEXT)
+	-rm -f linux/*.lo
 	-rm -f utility/*.$(OBJEXT)
 	-rm -f utility/*.lo
 
@@ -466,6 +478,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@linux/$(DEPDIR)/ezio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezlog.Plo@am__quote@
 
@@ -498,6 +511,7 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf linux/.libs linux/_libs
 	-rm -rf utility/.libs utility/_libs
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -636,6 +650,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f linux/$(DEPDIR)/$(am__dirstamp)
+	-rm -f linux/$(am__dirstamp)
 	-rm -f utility/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utility/$(am__dirstamp)
 
@@ -648,7 +664,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) linux/$(DEPDIR) utility/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -694,7 +710,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) linux/$(DEPDIR) utility/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

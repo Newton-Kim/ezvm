@@ -11,7 +11,8 @@ libezvm_la_SOURCES=ezarchive.cc \
 		   thread.cc \
 		   vm.cc \
 		   utility/ezfile.cc \
-		   utility/ezlog.cc
+		   utility/ezlog.cc \
+                   linux/ezio.cc
 
 includedir=$(prefix)/include/ezvm
 
