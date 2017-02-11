@@ -72,6 +72,13 @@ private:
                                         const ezAddress cond,
                                         const ezAddress obj,
                                         const ezAddress offset);
+  void instruction_with_1_2_0_arguments(const ezOpCode op, const ezAddress dest,
+                                        const ezAddress obj,
+                                        const ezAddress offset);
+  void instruction_with_1_2_0_arguments(const ezOpCode op, const ezAddress dest,
+                                        const ezAddress cond,
+                                        const ezAddress obj,
+                                        const ezAddress offset);
   void branch_instruction(ezOpCode op, const ezAddress cond, string label);
 
 public:
@@ -118,6 +125,14 @@ public:
   */
   void add(const ezAddress dest, vector<ezAddress> &src);
   /**
+  * @brief creates an add instruction. See add of ezas.
+  *
+  * @param dest An address which the sum is stored.
+  * @param lsrc Addresses of left addends.
+  * @param rsrc Addresses of right addends.
+  */
+  void add(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  /**
   * @brief creates an add instruction. The instruction stores a condition at the
   * address of cond. See add of ezas.
   *
@@ -126,6 +141,15 @@ public:
   * @param src Addresses of addends.
   */
   void add(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  /**
+  * @brief creates an add instruction. See add of ezas.
+  *
+  * @param dest An address which the sum is stored.
+  * @param cond An address which the condition is stored.
+  * @param lsrc Addresses of left addends.
+  * @param rsrc Addresses of right addends.
+  */
+  void add(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
   /**
   * @brief creates a bitwise AND instruction. See and of ezas.
   *
@@ -296,6 +320,14 @@ public:
   */
   void sub(const ezAddress dest, vector<ezAddress> &src);
   /**
+  * @brief creates a subtraction instruction. See sub of ezas.
+  *
+  * @param dest An address which the difference is stored.
+  * @param lsrc Addresses of minuend.
+  * @param rsrc Addresses of subtrahend.
+  */
+  void sub(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  /**
   * @brief creates an subtration instruction. The instruction stores a condition
   * at the address of cond. See sub of ezas.
   *
@@ -303,6 +335,14 @@ public:
   * @param src Addresses of minuend and subtrahend.
   */
   void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  /**
+  * @brief creates a subtraction instruction. See sub of ezas.
+  *
+  * @param dest An address which the difference is stored.
+  * @param lsrc Addresses of minuend.
+  * @param rsrc Addresses of subtrahend.
+  */
+  void sub(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
   /**
   * @brief creates a bitwise XOR instruction. See xor of ezas.
   *
