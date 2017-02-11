@@ -134,7 +134,7 @@ private:
 
 public:
   const uint8_t nargs;
-  const uint8_t nrets;
+  const uint8_t nrets; //TODO:it actually does nothing.
   const size_t nmems;
   ezCarousel(uint8_t args, uint8_t rets, size_t mems,
              ezTable<string, ezValue *> *local,
