@@ -27,6 +27,8 @@
 #include "ezgc.h"
 #include <map>
 #include <vector>
+#include <stdexcept>
+#include <sstream>
 
 using namespace std;
 
@@ -34,10 +36,21 @@ template <class K, class V> class ezTable : public ezGCObject {
 public:
   map<K, size_t> m_symtab;
   vector<V> m_memory;
+  void reset(K key);
   size_t add(K key, V value);
   bool exist(K key);
   bool is_null(K key);
 };
+
+template <class K, class V> void ezTable<K, V>::reset(K key) {
+  if (m_symtab.end() == m_symtab.find(key)) {
+    stringstream ss;
+    ss << key << " does not exist";
+    throw runtime_error(ss.str());
+  }
+  size_t offset = m_symtab[key];
+  m_memory[offset] = NULL;
+}
 
 template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
   size_t offset = 0;

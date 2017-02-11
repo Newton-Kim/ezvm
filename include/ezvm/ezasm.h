@@ -367,6 +367,12 @@ public:
   * @param name is a symbol of the entry point.
   */
   void entry(const string name);
+/**
+* @brief sets the global memory slot.
+*
+* @param name is the name of the slot.
+*/
+  void reset(const string name);
   /**
   * @brief creates a new procedure and an assembler dedicated to the procedure.
   *

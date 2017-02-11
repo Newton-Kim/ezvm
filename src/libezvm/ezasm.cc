@@ -325,6 +325,10 @@ void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
 
 void ezASM::entry(const string entry) { m_entry_string = entry; }
 
+void ezASM::reset(const string name) {
+  m_globals.reset(name);
+}
+
 ezAsmProcedure *ezASM::new_proc(const string name, int argc, int retc,
                                 size_t mems, int scpkey, int scope) {
   ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
