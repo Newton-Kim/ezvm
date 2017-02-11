@@ -33,6 +33,11 @@ using namespace std;
 
 ezAsmProcedure::ezAsmProcedure(ezCarousel *carousel) : m_carousel(carousel) {}
 
+void ezAsmProcedure::grow(size_t mems) {
+  if(m_carousel->nmems < mems)
+    m_carousel->nmems = mems;
+}
+
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
                           vector<ezAddress> &rets) {
   ezInstEncoder instruction(m_carousel->instruction);

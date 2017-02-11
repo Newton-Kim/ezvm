@@ -81,6 +81,12 @@ public:
   * @param carousel is a pointer to a carousel.
   */
   ezAsmProcedure(ezCarousel *carousel);
+/**
+* @brief grows the local memory.
+*
+* @param mems is a new size. if the size of the local memory is greater than mems. the size is not changed.
+*/
+  void grow(size_t mems);
   /**
   * @brief creates a call instruction. See add of ezas.
   *
