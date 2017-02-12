@@ -193,6 +193,14 @@ void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_DIV, dest, cond, src);
 }
 
+void ezAsmProcedure::div(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_DIV, dest, lsrc, rsrc);
+}
+
+void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_DIV, dest, cond, lsrc, rsrc);
+}
+
 void ezAsmProcedure::fgc(void) {
   ezInstEncoder instruction(m_carousel->instruction);
   instruction.opcode(EZ_OP_FGC, 0, 0);
@@ -207,6 +215,14 @@ void ezAsmProcedure::mod(const ezAddress dest, const ezAddress cond,
   instruction_with_array_arguments(EZ_OP_MOD, dest, cond, src);
 }
 
+void ezAsmProcedure::mod(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_MOD, dest, lsrc, rsrc);
+}
+
+void ezAsmProcedure::mod(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_MOD, dest, cond, lsrc, rsrc);
+}
+
 void ezAsmProcedure::mul(const ezAddress dest, vector<ezAddress> &src) {
   instruction_with_array_arguments(EZ_OP_MUL, dest, src);
 }
@@ -214,6 +230,14 @@ void ezAsmProcedure::mul(const ezAddress dest, vector<ezAddress> &src) {
 void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
                          vector<ezAddress> &src) {
   instruction_with_array_arguments(EZ_OP_MUL, dest, cond, src);
+}
+
+void ezAsmProcedure::mul(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_MUL, dest, lsrc, rsrc);
+}
+
+void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc) {
+  instruction_with_1_2_0_arguments(EZ_OP_MUL, dest, cond, lsrc, rsrc);
 }
 
 void ezAsmProcedure::instruction_with_an_argument(ezOpCode op,

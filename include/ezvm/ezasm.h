@@ -221,6 +221,23 @@ public:
   * @param src Addresses of addends.
   */
   void div(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  /**
+  * @brief creates an div instruction. See div of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param lsrc Addresses of dividend.
+  * @param rsrc Addresses of dividor.
+  */
+  void div(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  /**
+  * @brief creates an div instruction. See div of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param lsrc Addresses of dividend.
+  * @param rsrc Addresses of dividor.
+  */
+  void div(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
   void fgc(void);
   /**
   * @brief tags the address with the name.
@@ -245,6 +262,23 @@ public:
   */
   void mod(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
   /**
+  * @brief creates a mod instruction. See mod of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param lsrc Addresses of the dividend.
+  * @param rsrc Addresses of the divisor.
+  */
+  void mod(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  /**
+  * @brief creates a mod instruction. See mod of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param lsrc Addresses of the dividend.
+  * @param rsrc Addresses of the divisor.
+  */
+  void mod(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
+  /**
   * @brief creates a mul instruction. See mul of ezas.
   *
   * @param dest An address which the product is stored.
@@ -260,6 +294,23 @@ public:
   * @param src Addresses of addends.
   */
   void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  /**
+  * @brief creates a mul instruction. See mul of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param lsrc Addresses of multiplicand.
+  * @param rsrc Addresses of multiplier.
+  */
+  void mul(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  /**
+  * @brief creates a mul instruction. See mul of ezas.
+  *
+  * @param dest An address which the product is stored.
+  * @param cond An address which the condition is stored.
+  * @param lsrc Addresses of multiplicand.
+  * @param rsrc Addresses of multiplier.
+  */
+  void mul(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
   /**
   * @brief creates a neg instruction. See neg of ezas.
   *
