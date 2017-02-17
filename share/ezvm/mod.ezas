@@ -3,8 +3,8 @@
 	.memories 4
 	mv r0 r1, 1 2
 	mod r2, r0 r1
-	call _print (stdout r2 "=" r0 "%" r1)
+	call _stdout ( r2 "=" r0 "%" r1)
 	mv r0 r1, -3 2
 	mod r2, r0 r1
-	call _print (stdout r2 "=" r0 "%" r1)
+	call _stdout ( r2 "=" r0 "%" r1)
 

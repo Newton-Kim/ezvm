@@ -29,21 +29,20 @@
 #include <stdexcept>
 
 class ezIoPrint : public ezNativeCarousel {
+private:
+  ostream& m_io;
 public:
-  ezIoPrint();
+  ezIoPrint(ostream& io);
   void run(vector<ezValue *> &args, vector<ezValue *> &rets);
 };
 
-ezIoPrint::ezIoPrint() : ezNativeCarousel() {}
+ezIoPrint::ezIoPrint(ostream& io) : ezNativeCarousel(), m_io(io) {}
 
 void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
   rets.clear();
   stringstream ss;
   size_t len = args.size();
-  if (args[0]->type != EZ_VALUE_TYPE_INTEGER)
-    throw runtime_error("argument 1 is not a number");
-  size_t ioidx = ((ezInteger *)args[0])->to_integer();
-  for (size_t i = 1; i < len; i++) {
+  for (size_t i = 0; i < len; i++) {
     ezValue *v = args[i];
     switch (v->type) {
     case EZ_VALUE_TYPE_INTEGER:
@@ -60,23 +59,13 @@ void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
     }
   }
   ss << endl;
-  switch (ioidx) {
-  case 1:
-    cout << ss.str();
-    break;
-  case 2:
-    cerr << ss.str();
-    break;
-  default:
-    throw runtime_error("invalid IO index");
-    break;
-  }
+  m_io << ss.str();
 }
 
 void ezIO::load(char ***symtab, ezValue ***constants) {
-  static ezIoPrint io_print;
-  static const char *io_symtab[] = {"print", NULL};
-  static ezValue *io_constants[] = {&io_print, NULL};
+  static ezIoPrint io_stdout(cout), io_stderr(cerr);
+  static const char *io_symtab[] = {"stdout", "stderr", NULL};
+  static ezValue *io_constants[] = {&io_stdout, &io_stderr, NULL};
   *symtab = (char **)io_symtab;
   *constants = io_constants;
 }

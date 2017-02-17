@@ -3,9 +3,9 @@
 	.scpkey 4
 	.memories 2
 	mv r0 r1, 1 2
-	call _print (stdout r0 "," r1)
+	call _stdout ( r0 "," r1)
 	call _subf ()
-	call _print (stdout r0 "," r1)
+	call _stdout ( r0 "," r1)
 
 .proc _subf (0) 0
 	.scope 4

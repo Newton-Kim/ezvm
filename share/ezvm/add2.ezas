@@ -3,24 +3,24 @@
 	.memories 12
 	mv r0 r1, 1 2
 	add r2 r3, r0 r1
-	call _print (stdout r2 "=" r0 "+" r1)
+	call _stdout ( r2 "=" r0 "+" r1)
 	beq r3 _int_zero
-	call _print (stdout r2 " is non-zero value")
+	call _stdout ( r2 " is non-zero value")
 	bra _int_end
 	:int_zero
-	call _print (stdout r2 " is zero value")
+	call _stdout ( r2 " is zero value")
 	:int_end
 	add r4 r5, 1 2 3 4
-	call _print (stdout r4 "=1+2+3+4")
+	call _stdout ( r4 "=1+2+3+4")
 	mv r6 r7, "hello" "world"
 	add r8 r9, r6 r7
-	call _print (stdout r8 "=" r6 "+" r7)
+	call _stdout ( r8 "=" r6 "+" r7)
 	add r10 r11, "I " "am " "Sam"
-	call _print (stdout r10)
+	call _stdout ( r10)
 	beq r11 _str_zero
-	call _print (stdout r10 " is non-zero string")
+	call _stdout ( r10 " is non-zero string")
 	bra _str_end
 	:str_zero
-	call _print (stdout r10 " is null string")
+	call _stdout ( r10 " is null string")
 	:str_end
 

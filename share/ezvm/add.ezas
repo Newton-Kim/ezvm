@@ -3,11 +3,11 @@
 	.memories 8
 	mv r0 r1, 1 2
 	add r2, r0 r1
-	call _print (stdout r2 "=" r0 "+" r1)
+	call _stdout ( r2 "=" r0 "+" r1)
 	add r3, 1 2 3 4
-	call _print (stdout r3 "=1+2+3+4")
+	call _stdout ( r3 "=1+2+3+4")
 	mv r4 r5, "hello" "world"
 	add r6, r4 r5
-	call _print (stdout r6 "=" r4 "+" r5)
+	call _stdout ( r6 "=" r4 "+" r5)
 	add r7, "I " "am " "Sam"
-	call _print (stdout r7)
+	call _stdout ( r7)

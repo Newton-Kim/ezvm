@@ -4,24 +4,24 @@
 	mv r0 r1, 1 2
 	cmp r2 , r0 r1
 	blt r2 _label_blt1
-	call _print (stdout r0 " >= " r1)
+	call _stdout ( r0 " >= " r1)
 	bra _label_end1
 	:label_blt1
-	call _print (stdout r0 " < " r1 " , it make sense.")
+	call _stdout ( r0 " < " r1 " , it make sense.")
 	:label_end1
 	mv r0 r1, 2 2
 	cmp r2 , r0 r1
 	blt r2 _label_blt2
-	call _print (stdout r0 " >= " r1 " , it make sense.")
+	call _stdout ( r0 " >= " r1 " , it make sense.")
 	bra _label_end2
 	:label_blt2
-	call _print (stdout r0 " < " r1)
+	call _stdout ( r0 " < " r1)
 	:label_end2
 	mv r0 r1, 3 2
 	cmp r2 , r0 r1
 	blt r2 _label_blt3
-	call _print (stdout r0 " >= " r1 " , it make sense.")
+	call _stdout ( r0 " >= " r1 " , it make sense.")
 	bra _label_end3
 	:label_blt3
-	call _print (stdout r0 " < " r1)
+	call _stdout ( r0 " < " r1)
 	:label_end3

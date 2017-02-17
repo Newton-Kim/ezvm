@@ -3,7 +3,7 @@
 	.memories 4
 	mv r0 , 1
 	not r1, r0
-	call _print (stdout r1 "=~" r0)
+	call _stdout ( r1 "=~" r0)
 	mv r0 , -4
 	not r1, r0
-	call _print (stdout r1 "=~" r0)
+	call _stdout ( r1 "=~" r0)

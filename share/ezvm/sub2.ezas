@@ -3,17 +3,17 @@
 	.memories 6
 	mv r0 r1, 1 2
 	sub r2 r3, r0 r1
-	call _print (stdout r2 "=" r0 "-" r1)
+	call _stdout ( r2 "=" r0 "-" r1)
 	beq r3 _int_zero
 	blt r3 _int_neg
-	call _print (stdout r2 " is positive value")
+	call _stdout ( r2 " is positive value")
 	bra _int_end
 	:int_neg
-	call _print (stdout r2 " is negative value")
+	call _stdout ( r2 " is negative value")
 	bra _int_end
 	:int_zero
-	call _print (stdout r2 " is zero value")
+	call _stdout ( r2 " is zero value")
 	:int_end
 	sub r4 r5, 1 2 3 4
-	call _print (stdout r4 "=1-2-3-4")
+	call _stdout ( r4 "=1-2-3-4")
 

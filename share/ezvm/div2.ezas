@@ -3,12 +3,12 @@
 	.memories 12
 	mv r0 r1, 1 2
 	div r2 r3, r0 r1
-	call _print (stdout r2 "=" r0 "/" r1)
+	call _stdout ( r2 "=" r0 "/" r1)
 	beq r3 _int_zero
-	call _print (stdout r2 " is non-zero value")
+	call _stdout ( r2 " is non-zero value")
 	bra _int_end
 	:int_zero
-	call _print (stdout r2 " is zero value")
+	call _stdout ( r2 " is zero value")
 	:int_end
 	div r4 r5, 1 2 3 4
-	call _print (stdout r4 "=1/2/3/4")
+	call _stdout ( r4 "=1/2/3/4")

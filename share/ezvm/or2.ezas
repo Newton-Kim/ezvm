@@ -3,10 +3,10 @@
 	.memories 4
 	mv r0 r1, 1 2
 	or r2 r3, r0 r1
-	call _print (stdout r2 "=" r0 "|" r1)
+	call _stdout ( r2 "=" r0 "|" r1)
 	beq r3 _int_zero
-	call _print (stdout r2 " is non-zero value")
+	call _stdout ( r2 " is non-zero value")
 	bra _int_end
 	:int_zero
-	call _print (stdout r2 " is zero value")
+	call _stdout ( r2 " is zero value")
 	:int_end

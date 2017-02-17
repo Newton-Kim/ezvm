@@ -3,19 +3,19 @@
 	.memories 4
 	mv r0 r1, 1 2
 	and r2 r3, r0 r1
-	call _print (stdout r2 "=" r0 "&" r1)
+	call _stdout ( r2 "=" r0 "&" r1)
 	beq r3 _int_zero
-	call _print (stdout r2 " is non-zero value")
+	call _stdout ( r2 " is non-zero value")
 	bra _int_end
 	:int_zero
-	call _print (stdout r2 " is zero value")
+	call _stdout ( r2 " is zero value")
 	:int_end
 	mv r0 r1 , true false
 	and r2, r0 r1
 	beq r3 _bool_zero
-	call _print (stdout r2 " is true")
+	call _stdout ( r2 " is true")
 	bra _bool_end
 	:bool_zero
-	call _print (stdout r2 " is false")
+	call _stdout ( r2 " is false")
 	:bool_end
 

@@ -2,6 +2,6 @@
 .proc _main (0) 0
 	.memories 2
 	mv r0 r1 , 1 2
-	call _print (stdout r0 "," r1)
+	call _stdout ( r0 "," r1)
 	mv r0 r1 , r1 r0
-	call _print (stdout r0 "," r1)
+	call _stdout ( r0 "," r1)

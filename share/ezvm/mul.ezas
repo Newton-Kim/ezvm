@@ -3,12 +3,12 @@
 	.memories 4
 	mv r0 r1, 1 2
 	mul r2, r0 r1
-	call _print (stdout r2 "=" r0 "*" r1)
+	call _stdout ( r2 "=" r0 "*" r1)
 	mul r3, 1 2 3 4
-	call _print (stdout r3 "=1*2*3*4")
+	call _stdout ( r3 "=1*2*3*4")
 	mv r0 r1, 4 2
 	mul r2, r0 r1
-	call _print (stdout r2 "=" r0 "*" r1)
+	call _stdout ( r2 "=" r0 "*" r1)
 	mul r3, 4 3 2 1
-	call _print (stdout r3 "=4*3*2*1")
+	call _stdout ( r3 "=4*3*2*1")
 

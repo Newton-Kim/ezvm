@@ -16,3 +16,6 @@
 16.fgc (force garbage collection) should be implemented.
 17.priviledge queue is required.
 18.thd (thead commoand), join (pending this thread for others) should be implemented.
+19.complex number should be introduced.
+20.nret should be removed.
+21.print should be changed to stdout and stderr.
