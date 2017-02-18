@@ -1,5 +1,5 @@
 .entry _main
-.proc _main (0) 0
+.proc _main (0)
 	.memories 3
 	mv r0 , 1
 	neg r1 r2, r0

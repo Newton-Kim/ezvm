@@ -70,7 +70,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     break;
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
-    sink.print("(%d) %d\n", crsl->nargs, crsl->nrets);
+    sink.print("(%d)\n", crsl->nargs);
     sink.print("      .memsize: %lu\n", crsl->nmems);
     sink.print("      .jump table:\n");
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)

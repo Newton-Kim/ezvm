@@ -199,13 +199,13 @@ entry : ENTRY SYMBOL NEWLINE { s_vm.assembler().entry($2); };
 procs : proc
 	| proc procs;
 
-proc : PROC SYMBOL '(' INTEGER ')' INTEGER NEWLINE {
+proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 		s_memories = 0;
 		s_scope = -1;
 		s_scpkey = -1;
 	} proc_meta {
 		if(s_proc_current) delete s_proc_current;
-		s_proc_current = s_vm.assembler().new_proc($2, $4, $6, s_memories, s_scpkey, s_scope);
+		s_proc_current = s_vm.assembler().new_proc($2, $4, s_memories, s_scpkey, s_scope);
 		s_memories = 0;
 		s_scope = -1;
 		s_scpkey = -1;

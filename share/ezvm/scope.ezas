@@ -1,5 +1,5 @@
 .entry _main
-.proc _main (0) 0
+.proc _main (0)
 	.scpkey 4
 	.memories 2
 	mv r0 r1, 1 2
@@ -7,7 +7,7 @@
 	call _subf ()
 	call _stdout ( r0 "," r1)
 
-.proc _subf (0) 0
+.proc _subf (0)
 	.scope 4
 	.memories 2
 	add s0, s0 1

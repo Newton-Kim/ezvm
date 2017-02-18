@@ -1,8 +1,8 @@
 .entry _main
-.proc _strs (0) 0
+.proc _strs (0)
 	ret "hello" "world"
 
-.proc _main (0) 0
+.proc _main (0)
 	.memories 2
 	call _strs() r0 r1
 	call _stdout ( r0 " " r1)

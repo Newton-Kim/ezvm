@@ -475,14 +475,13 @@ public:
   *
   * @param name is the symbol of a procedure.
   * @param argc is the number of the arguments.
-  * @param retc is the number of the returns.
   * @param mems is the size of memories.
   * @param scope is the identifier of the scope.
   * @param scpkey is the reference to the scope.
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure *new_proc(const string name, int argc, int retc, size_t mems,
+  ezAsmProcedure *new_proc(const string name, int argc, size_t mems,
                            int scope, int scpkey);
   /**
   * @brief finds the offset of a global segment whose name is value.

@@ -127,10 +127,10 @@ ezValue *ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);
 }
 
-ezCarousel::ezCarousel(uint8_t args, uint8_t rets, size_t mems,
+ezCarousel::ezCarousel(uint8_t args, size_t mems,
                        ezTable<string, ezValue *> *local,
                        ezTable<string, ezValue *> *scope)
-    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(args), nrets(rets), nmems(mems),
+    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(args), nmems(mems),
       m_local(local), m_scope(scope) {
   m_size = sizeof(*this);
   if (m_local) {

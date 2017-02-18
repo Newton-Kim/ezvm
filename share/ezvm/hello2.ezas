@@ -1,6 +1,6 @@
 .entry _main
-.proc _printf (2) 0
-	call _print (r0 r1)
+.proc _printf (1)
+	call _stdout (r0)
 
-.proc _main (0) 0
-	call _printf (stdout "hello world")
+.proc _main (0)
+	call _printf ("hello world")

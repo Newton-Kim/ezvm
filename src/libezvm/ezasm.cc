@@ -399,7 +399,7 @@ void ezASM::reset(const string name) {
   m_globals.reset(name);
 }
 
-ezAsmProcedure *ezASM::new_proc(const string name, int argc, int retc,
+ezAsmProcedure *ezASM::new_proc(const string name, int argc,
                                 size_t mems, int scpkey, int scope) {
   ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
@@ -422,7 +422,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int argc, int retc,
     p_scpkey = m_scopes[scpkey];
   }
   ezCarousel *carousel = (ezCarousel *)m_gc.add(
-      (ezGCObject *)new ezCarousel(argc, retc, mems, p_scpkey, p_scope));
+      (ezGCObject *)new ezCarousel(argc, mems, p_scpkey, p_scope));
   size_t offset = m_globals.add(name, carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
