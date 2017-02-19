@@ -52,6 +52,10 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
 }
 
 void ezDump::dump(ezFile &sink, const ezValue *v) {
+  if(!v) {
+    sink.print("null\n");
+    return;
+  }
   switch (v->type) {
   case EZ_VALUE_TYPE_NULL:
     sink.print("(nil)");
