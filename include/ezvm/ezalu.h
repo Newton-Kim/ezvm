@@ -43,12 +43,29 @@ enum ezCoercOperation {
   EZ_COERC_OPERATION_MAX
 };
 
+class ezUsrALU {
+public:
+  virtual ~ezUsrALU() {};
+  virtual ezValue *add(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *cmp(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *sub(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *mod(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *mul(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *div(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *neg(ezValue *arg) = 0;
+  virtual ezValue *bitwise_not(ezValue *arg) = 0;
+  virtual ezValue *bitwise_and(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *bitwise_or(ezValue *larg, ezValue *rarg) = 0;
+  virtual ezValue *bitwise_xor(ezValue *larg, ezValue *rarg) = 0;
+};
+
 class ezALU {
 private:
   ezGC &m_gc;
+  ezUsrALU *m_usr_alu;
 
 public:
-  ezALU(ezGC &gc);
+  ezALU(ezGC &gc, ezUsrALU *usr_alu);
   ezValue *add(ezValue *larg, ezValue *rarg);
   ezValue *cmp(ezValue *larg, ezValue *rarg);
   ezValue *sub(ezValue *larg, ezValue *rarg);
