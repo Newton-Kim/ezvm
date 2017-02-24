@@ -30,13 +30,14 @@
 
 class ezIoPrint : public ezNativeCarousel {
 private:
-  ostream& m_io;
+  ostream &m_io;
+
 public:
-  ezIoPrint(ostream& io);
+  ezIoPrint(ostream &io);
   void run(vector<ezValue *> &args, vector<ezValue *> &rets);
 };
 
-ezIoPrint::ezIoPrint(ostream& io) : ezNativeCarousel(), m_io(io) {}
+ezIoPrint::ezIoPrint(ostream &io) : ezNativeCarousel(), m_io(io) {}
 
 void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
   rets.clear();

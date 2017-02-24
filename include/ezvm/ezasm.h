@@ -83,11 +83,12 @@ public:
   * @param carousel is a pointer to a carousel.
   */
   ezAsmProcedure(ezCarousel *carousel);
-/**
-* @brief grows the local memory.
-*
-* @param mems is a new size. if the size of the local memory is greater than mems. the size is not changed.
-*/
+  /**
+  * @brief grows the local memory.
+  *
+  * @param mems is a new size. if the size of the local memory is greater than
+  * mems. the size is not changed.
+  */
   void grow(size_t mems);
   /**
   * @brief creates a call instruction. See add of ezas.
@@ -128,14 +129,16 @@ public:
   * @param lsrc Addresses of left addends.
   * @param rsrc Addresses of right addends.
   */
-  void add(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void add(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+           const ezAddress &rsrc);
   /**
   * @brief creates a bitwise AND instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_and(const ezAddress dest, const ezAddress &lsrc,
+                   const ezAddress &rsrc);
   /**
   * @brief creates a bitwise AND instruction. The instruction stores a condition
   *at the address of cond. See and of ezas.
@@ -144,7 +147,8 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_and(const ezAddress dest, const ezAddress cond,
+                   const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
@@ -199,7 +203,8 @@ public:
   * @param lsrc Addresses of dividend.
   * @param rsrc Addresses of dividor.
   */
-  void div(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void div(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+           const ezAddress &rsrc);
   void fgc(void);
   /**
   * @brief tags the address with the name.
@@ -223,7 +228,8 @@ public:
   * @param lsrc Addresses of the dividend.
   * @param rsrc Addresses of the divisor.
   */
-  void mod(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void mod(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+           const ezAddress &rsrc);
   /**
   * @brief creates a mul instruction. See mul of ezas.
   *
@@ -240,7 +246,8 @@ public:
   * @param lsrc Addresses of multiplicand.
   * @param rsrc Addresses of multiplier.
   */
-  void mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+           const ezAddress &rsrc);
   /**
   * @brief creates a neg instruction. See neg of ezas.
   *
@@ -280,7 +287,8 @@ public:
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_or(const ezAddress dest, const ezAddress &lsrc,
+                  const ezAddress &rsrc);
   /**
   * @brief creates a bitwise OR instruction. The instruction stores a condition
   *at the address of cond. See or of ezas.
@@ -289,7 +297,8 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_or(const ezAddress dest, const ezAddress cond,
+                  const ezAddress &lsrc, const ezAddress &rsrc);
   void ret(void);
   void ret(vector<ezAddress> &src);
   /**
@@ -307,14 +316,16 @@ public:
   * @param lsrc Addresses of minuend.
   * @param rsrc Addresses of subtrahend.
   */
-  void sub(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void sub(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+           const ezAddress &rsrc);
   /**
   * @brief creates a bitwise XOR instruction. See xor of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_xor(const ezAddress dest, const ezAddress &lsrc,
+                   const ezAddress &rsrc);
   /**
   * @brief creates a bitwise XOR instruction. The instruction stores a condition
   *at the address of cond. See xor of ezas.
@@ -323,7 +334,8 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
+  void bitwise_xor(const ezAddress dest, const ezAddress cond,
+                   const ezAddress &lsrc, const ezAddress &rsrc);
 };
 
 /**
@@ -377,11 +389,11 @@ public:
   * @param name is a symbol of the entry point.
   */
   void entry(const string name);
-/**
-* @brief sets the global memory slot.
-*
-* @param name is the name of the slot.
-*/
+  /**
+  * @brief sets the global memory slot.
+  *
+  * @param name is the name of the slot.
+  */
   void reset(const string name);
   /**
   * @brief creates a new procedure and an assembler dedicated to the procedure.
@@ -394,8 +406,8 @@ public:
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure *new_proc(const string name, int argc, size_t mems,
-                           int scope, int scpkey);
+  ezAsmProcedure *new_proc(const string name, int argc, size_t mems, int scope,
+                           int scpkey);
   /**
   * @brief finds the offset of a global segment whose name is value.
   *

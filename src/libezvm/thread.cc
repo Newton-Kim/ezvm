@@ -28,9 +28,10 @@
 #include <stdexcept>
 
 ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc, ezThreadScheduler sched)
-    : m_entry(entry), m_scheduler(sched), m_constants(constants), m_globals(globals), m_alu(alu),
-      m_gc(gc) {
+                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
+                   ezThreadScheduler sched)
+    : m_entry(entry), m_scheduler(sched), m_constants(constants),
+      m_globals(globals), m_alu(alu), m_gc(gc) {
   ezValue *v = addr2val(entry);
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
@@ -68,7 +69,7 @@ ezStepState ezThread::step(void) {
   case EZ_STEP_DONE:
     log.verbose("stack %p has poped out", sf);
     m_stack.pop_back();
-    if(m_stack.empty())
+    if (m_stack.empty())
       delete sf;
     break;
   case EZ_STEP_CALL: {
@@ -107,13 +108,15 @@ ezValue *ezThread::addr2val(ezAddress addr) {
 
 ezStepState ezThread::run(void) {
   ezStepState state;
-  switch(m_scheduler) {
-    case EZ_THREAD_SCHED_REALTIME:
-      do state = step(); while(state != EZ_STEP_DONE);
-      break;
-    case EZ_THREAD_SCHED_ROUNDROBIN:
+  switch (m_scheduler) {
+  case EZ_THREAD_SCHED_REALTIME:
+    do
       state = step();
-      break;
+    while (state != EZ_STEP_DONE);
+    break;
+  case EZ_THREAD_SCHED_ROUNDROBIN:
+    state = step();
+    break;
   }
   return state;
 }

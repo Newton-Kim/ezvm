@@ -231,9 +231,9 @@ void ezStackFrame::sub(uint8_t ndests, uint8_t nsrcs) {
 }
 
 void ezStackFrame::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(
-      ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_and(vl, vr); });
+  binary_operation(ndests, nsrcs, [&](ezValue *vl, ezValue *vr) {
+    return m_alu.bitwise_and(vl, vr);
+  });
 }
 
 void ezStackFrame::conditional_bra(uint8_t index,
@@ -272,15 +272,15 @@ void ezStackFrame::bra(uint8_t index) {
 }
 
 void ezStackFrame::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(
-      ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_or(vl, vr); });
+  binary_operation(ndests, nsrcs, [&](ezValue *vl, ezValue *vr) {
+    return m_alu.bitwise_or(vl, vr);
+  });
 }
 
 void ezStackFrame::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(
-      ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_xor(vl, vr); });
+  binary_operation(ndests, nsrcs, [&](ezValue *vl, ezValue *vr) {
+    return m_alu.bitwise_xor(vl, vr);
+  });
 }
 
 void ezStackFrame::unary_operation(uint8_t ndests, uint8_t nsrcs,
@@ -317,9 +317,7 @@ void ezStackFrame::bitwise_not(uint8_t ndests, uint8_t nsrcs) {
                   [&](ezValue *v) { return m_alu.bitwise_not(v); });
 }
 
-void ezStackFrame::fgc(void) {
-  m_gc.force();
-}
+void ezStackFrame::fgc(void) { m_gc.force(); }
 
 void ezStackFrame::ret(uint8_t nsrcs) {
   ezInstDecoder decoder;

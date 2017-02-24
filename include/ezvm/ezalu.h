@@ -45,7 +45,7 @@ enum ezCoercOperation {
 
 class ezUsrALU {
 public:
-  virtual ~ezUsrALU() {};
+  virtual ~ezUsrALU(){};
   virtual ezValue *add(ezValue *larg, ezValue *rarg) = 0;
   virtual ezValue *cmp(ezValue *larg, ezValue *rarg) = 0;
   virtual ezValue *sub(ezValue *larg, ezValue *rarg) = 0;

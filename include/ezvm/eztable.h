@@ -26,9 +26,9 @@
 
 #include "ezgc.h"
 #include <map>
-#include <vector>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
+#include <vector>
 
 using namespace std;
 

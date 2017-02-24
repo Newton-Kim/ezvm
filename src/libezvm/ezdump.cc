@@ -52,7 +52,7 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
 }
 
 void ezDump::dump(ezFile &sink, const ezValue *v) {
-  if(!v) {
+  if (!v) {
     sink.print("null\n");
     return;
   }

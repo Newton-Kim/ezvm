@@ -36,10 +36,7 @@
 
 using namespace std;
 
-enum ezThreadScheduler {
-  EZ_THREAD_SCHED_REALTIME,
-  EZ_THREAD_SCHED_ROUNDROBIN
-};
+enum ezThreadScheduler { EZ_THREAD_SCHED_REALTIME, EZ_THREAD_SCHED_ROUNDROBIN };
 
 /**
 * @brief ezThread is a stack of the instances of ezStackFrame.
@@ -98,7 +95,8 @@ public:
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
-           vector<ezValue *> &constants, ezALU &alu, ezGC &gc, ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
+           vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
+           ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
   /**
   * @brief destroys the thread.
   */

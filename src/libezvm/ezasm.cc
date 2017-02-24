@@ -23,8 +23,8 @@
 *
 */
 #include "ezvm/ezasm.h"
-#include "ezvm/ezlog.h"
 #include "ezio.h"
+#include "ezvm/ezlog.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -34,7 +34,7 @@ using namespace std;
 ezAsmProcedure::ezAsmProcedure(ezCarousel *carousel) : m_carousel(carousel) {}
 
 void ezAsmProcedure::grow(size_t mems) {
-  if(m_carousel->nmems < mems)
+  if (m_carousel->nmems < mems)
     m_carousel->nmems = mems;
 }
 
@@ -135,20 +135,23 @@ void ezAsmProcedure::lsr(const ezAddress dest, const ezAddress cond,
   instruction_with_1_1_1_arguments(EZ_OP_LSR, dest, cond, obj, offset);
 }
 
-void ezAsmProcedure::add(const ezAddress dest, const ezAddress& lsrc, const ezAddress& rsrc) {
+void ezAsmProcedure::add(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_ADD, dest, lsrc, rsrc);
 }
 
 void ezAsmProcedure::add(const ezAddress dest, const ezAddress cond,
-                         const ezAddress& lsrc, const ezAddress& rsrc) {
+                         const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_ADD, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::div(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::div(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_DIV, dest, lsrc, rsrc);
 }
 
-void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
+                         const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_DIV, dest, cond, lsrc, rsrc);
 }
 
@@ -157,19 +160,23 @@ void ezAsmProcedure::fgc(void) {
   instruction.opcode(EZ_OP_FGC, 0, 0);
 }
 
-void ezAsmProcedure::mod(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::mod(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_MOD, dest, lsrc, rsrc);
 }
 
-void ezAsmProcedure::mod(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::mod(const ezAddress dest, const ezAddress cond,
+                         const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_MOD, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::mul(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::mul(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_MUL, dest, lsrc, rsrc);
 }
 
-void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc) {
+void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
+                         const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_MUL, dest, cond, lsrc, rsrc);
 }
 
@@ -228,34 +235,38 @@ void ezAsmProcedure::sub(const ezAddress dest, const ezAddress cond,
   instruction_with_1_2_0_arguments(EZ_OP_SUB, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::sub(const ezAddress dest, const ezAddress& lsrc, const ezAddress& rsrc) {
+void ezAsmProcedure::sub(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_SUB, dest, lsrc, rsrc);
 }
 
 void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress cond,
-                         const ezAddress &lsrc, const ezAddress &rsrc) {
+                                 const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_AND, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress& lsrc, const ezAddress& rsrc) {
+void ezAsmProcedure::bitwise_and(const ezAddress dest, const ezAddress &lsrc,
+                                 const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_AND, dest, lsrc, rsrc);
 }
 
 void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress cond,
-                         const ezAddress &lsrc, const ezAddress &rsrc) {
+                                const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_OR, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress& lsrc, const ezAddress& rsrc) {
+void ezAsmProcedure::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
+                                const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_OR, dest, lsrc, rsrc);
 }
 
 void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
-                         const ezAddress &lsrc, const ezAddress &rsrc) {
+                                 const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_XOR, dest, cond, lsrc, rsrc);
 }
 
-void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress& lsrc, const ezAddress& rsrc) {
+void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress &lsrc,
+                                 const ezAddress &rsrc) {
   instruction_with_1_2_0_arguments(EZ_OP_XOR, dest, lsrc, rsrc);
 }
 
@@ -306,8 +317,8 @@ void ezAsmProcedure::label(string name) {
 ezASM::ezASM(ezAddress &entry, vector<ezValue *> &constants,
              ezTable<string, ezValue *> &globals, ezGC &gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(gc) {
-  char** symtab = NULL;
-  ezValue** constant = NULL;
+  char **symtab = NULL;
+  ezValue **constant = NULL;
   ezIO::load(&symtab, &constant);
   load_intrinsics(symtab, constant);
 }
@@ -328,12 +339,10 @@ void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
 
 void ezASM::entry(const string entry) { m_entry_string = entry; }
 
-void ezASM::reset(const string name) {
-  m_globals.reset(name);
-}
+void ezASM::reset(const string name) { m_globals.reset(name); }
 
-ezAsmProcedure *ezASM::new_proc(const string name, int argc,
-                                size_t mems, int scpkey, int scope) {
+ezAsmProcedure *ezASM::new_proc(const string name, int argc, size_t mems,
+                                int scpkey, int scope) {
   ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
     throw runtime_error("global symbol " + name + " already exists");
