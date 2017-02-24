@@ -56,11 +56,6 @@ private:
   * @brief is an instance of a carousel.
   */
   ezCarousel *m_carousel;
-  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
-                                        vector<ezAddress> &src);
-  void instruction_with_array_arguments(ezOpCode op, const ezAddress dest,
-                                        const ezAddress cond,
-                                        vector<ezAddress> &src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
                                     const ezAddress src);
   void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
@@ -121,26 +116,10 @@ public:
   * @brief creates an add instruction. See add of ezas.
   *
   * @param dest An address which the sum is stored.
-  * @param src Addresses of addends.
-  */
-  void add(const ezAddress dest, vector<ezAddress> &src);
-  /**
-  * @brief creates an add instruction. See add of ezas.
-  *
-  * @param dest An address which the sum is stored.
   * @param lsrc Addresses of left addends.
   * @param rsrc Addresses of right addends.
   */
-  void add(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
-  /**
-  * @brief creates an add instruction. The instruction stores a condition at the
-  * address of cond. See add of ezas.
-  *
-  * @param dest An address which the sum is stored.
-  * @param cond An address which the condition is stored.
-  * @param src Addresses of addends.
-  */
-  void add(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  void add(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates an add instruction. See add of ezas.
   *
@@ -149,14 +128,14 @@ public:
   * @param lsrc Addresses of left addends.
   * @param rsrc Addresses of right addends.
   */
-  void add(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
+  void add(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a bitwise AND instruction. See and of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, vector<ezAddress> &src);
+  void bitwise_and(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a bitwise AND instruction. The instruction stores a condition
   *at the address of cond. See and of ezas.
@@ -165,8 +144,7 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_and(const ezAddress dest, const ezAddress cond,
-                   vector<ezAddress> &src);
+  void bitwise_and(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
@@ -209,26 +187,10 @@ public:
   * @brief creates an div instruction. See div of ezas.
   *
   * @param dest An address which the product is stored.
-  * @param src Addresses of addends.
-  */
-  void div(const ezAddress dest, vector<ezAddress> &src);
-  /**
-  * @brief creates an div instruction. The instruction stores a condition at the
-  * address of cond. See div of ezas.
-  *
-  * @param dest An address which the product is stored.
-  * @param cond An address which the condition is stored.
-  * @param src Addresses of addends.
-  */
-  void div(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
-  /**
-  * @brief creates an div instruction. See div of ezas.
-  *
-  * @param dest An address which the product is stored.
   * @param lsrc Addresses of dividend.
   * @param rsrc Addresses of dividor.
   */
-  void div(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  void div(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates an div instruction. See div of ezas.
   *
@@ -237,7 +199,7 @@ public:
   * @param lsrc Addresses of dividend.
   * @param rsrc Addresses of dividor.
   */
-  void div(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
+  void div(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   void fgc(void);
   /**
   * @brief tags the address with the name.
@@ -249,26 +211,10 @@ public:
   * @brief creates a mod instruction. See mod of ezas.
   *
   * @param dest An address which the product is stored.
-  * @param src Addresses of arguments.
-  */
-  void mod(const ezAddress dest, vector<ezAddress> &src);
-  /**
-  * @brief creates a mod instruction. The instruction stores a condition at the
-  * address of cond. See mod of ezas.
-  *
-  * @param dest An address which the product is stored.
-  * @param cond An address which the condition is stored.
-  * @param src Addresses of arguments.
-  */
-  void mod(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
-  /**
-  * @brief creates a mod instruction. See mod of ezas.
-  *
-  * @param dest An address which the product is stored.
   * @param lsrc Addresses of the dividend.
   * @param rsrc Addresses of the divisor.
   */
-  void mod(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  void mod(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a mod instruction. See mod of ezas.
   *
@@ -277,23 +223,7 @@ public:
   * @param lsrc Addresses of the dividend.
   * @param rsrc Addresses of the divisor.
   */
-  void mod(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
-  /**
-  * @brief creates a mul instruction. See mul of ezas.
-  *
-  * @param dest An address which the product is stored.
-  * @param src Addresses of addends.
-  */
-  void mul(const ezAddress dest, vector<ezAddress> &src);
-  /**
-  * @brief creates a mul instruction. The instruction stores a condition at the
-  * address of cond. See mul of ezas.
-  *
-  * @param dest An address which the product is stored.
-  * @param cond An address which the condition is stored.
-  * @param src Addresses of addends.
-  */
-  void mul(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
+  void mod(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a mul instruction. See mul of ezas.
   *
@@ -301,7 +231,7 @@ public:
   * @param lsrc Addresses of multiplicand.
   * @param rsrc Addresses of multiplier.
   */
-  void mul(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
+  void mul(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a mul instruction. See mul of ezas.
   *
@@ -310,7 +240,7 @@ public:
   * @param lsrc Addresses of multiplicand.
   * @param rsrc Addresses of multiplier.
   */
-  void mul(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
+  void mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a neg instruction. See neg of ezas.
   *
@@ -350,7 +280,7 @@ public:
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, vector<ezAddress> &src);
+  void bitwise_or(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a bitwise OR instruction. The instruction stores a condition
   *at the address of cond. See or of ezas.
@@ -359,17 +289,17 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_or(const ezAddress dest, const ezAddress cond,
-                  vector<ezAddress> &src);
+  void bitwise_or(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   void ret(void);
   void ret(vector<ezAddress> &src);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *
   * @param dest An address which the difference is stored.
-  * @param src Addresses of minuend and subtrahend.
+  * @param lsrc Addresses of minuend.
+  * @param rsrc Addresses of subtrahend.
   */
-  void sub(const ezAddress dest, vector<ezAddress> &src);
+  void sub(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a subtraction instruction. See sub of ezas.
   *
@@ -377,30 +307,14 @@ public:
   * @param lsrc Addresses of minuend.
   * @param rsrc Addresses of subtrahend.
   */
-  void sub(const ezAddress dest, ezAddress &lsrc, ezAddress &rsrc);
-  /**
-  * @brief creates an subtration instruction. The instruction stores a condition
-  * at the address of cond. See sub of ezas.
-  *
-  * @param dest An address which the difference is stored.
-  * @param src Addresses of minuend and subtrahend.
-  */
-  void sub(const ezAddress dest, const ezAddress cond, vector<ezAddress> &src);
-  /**
-  * @brief creates a subtraction instruction. See sub of ezas.
-  *
-  * @param dest An address which the difference is stored.
-  * @param lsrc Addresses of minuend.
-  * @param rsrc Addresses of subtrahend.
-  */
-  void sub(const ezAddress dest, const ezAddress cond, ezAddress &lsrc, ezAddress &rsrc);
+  void sub(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a bitwise XOR instruction. See xor of ezas.
   *
   * @param dest An address which the result is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, vector<ezAddress> &src);
+  void bitwise_xor(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates a bitwise XOR instruction. The instruction stores a condition
   *at the address of cond. See xor of ezas.
@@ -409,8 +323,7 @@ public:
   * @param cond An address which the condition is stored.
   * @param src Addresses of arguments.
   */
-  void bitwise_xor(const ezAddress dest, const ezAddress cond,
-                   vector<ezAddress> &src);
+  void bitwise_xor(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc, const ezAddress &rsrc);
 };
 
 /**

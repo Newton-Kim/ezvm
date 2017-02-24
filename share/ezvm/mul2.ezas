@@ -10,5 +10,7 @@
 	:int_zero
 	call _stdout ( r2 " is zero value")
 	:int_end
-	mul r4 r5, 1 2 3 4
+	mul r4 r5, 1 2
+	mul r4 r5, r4 3
+	mul r4 r5, r4 4
 	call _stdout ( r4 "=1*2*3*4")

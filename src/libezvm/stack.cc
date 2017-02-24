@@ -173,8 +173,7 @@ void ezStackFrame::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
 
 void ezStackFrame::binary_operation(
     uint8_t ndests, uint8_t nsrcs,
-    function<ezValue *(ezValue *, ezValue *)> binary_func,
-    function<ezValue *(vector<ezValue *> &)> multi_func) {
+    function<ezValue *(ezValue *, ezValue *)> binary_func) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(m_carousel->instruction[m_pc++], dest);
@@ -185,13 +184,10 @@ void ezStackFrame::binary_operation(
   case 1:
     break;
   default:
-    throw runtime_error("the destination of ADD must be 1 or 2");
+    throw runtime_error("the destination of the operands must be 1 or 2");
     break;
   }
   switch (nsrcs) {
-  case 1:
-    throw runtime_error("the number of ADD operands must be 2 or more");
-    break;
   case 2: {
     ezValue *vr = NULL, *vl = NULL;
     decoder.argument(m_carousel->instruction[m_pc++], addr);
@@ -200,16 +196,9 @@ void ezStackFrame::binary_operation(
     vr = addr2val(addr);
     rst = binary_func(vl, vr);
   } break;
-  default: {
-    ezValue *v = NULL;
-    vector<ezValue *> args;
-    for (size_t i = 0; i < nsrcs; i++) {
-      decoder.argument(m_carousel->instruction[m_pc++], addr);
-      v = addr2val(addr);
-      args.push_back(v);
-    }
-    rst = multi_func(args);
-  } break;
+  default:
+    throw runtime_error("the number of the operands must be 2 or more");
+    break;
   }
   val2addr(dest, rst);
   if (ndests == 2)
@@ -218,39 +207,33 @@ void ezStackFrame::binary_operation(
 
 void ezStackFrame::add(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); },
-                   [&](vector<ezValue *> &args) { return m_alu.add(args); });
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); });
 }
 
 void ezStackFrame::div(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.div(vl, vr); },
-                   [&](vector<ezValue *> &args) { return m_alu.div(args); });
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.div(vl, vr); });
 }
 
 void ezStackFrame::mod(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mod(vl, vr); },
-                   [&](vector<ezValue *> &args) { return m_alu.mod(args); });
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.mod(vl, vr); });
 }
 
 void ezStackFrame::mul(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mul(vl, vr); },
-                   [&](vector<ezValue *> &args) { return m_alu.mul(args); });
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.mul(vl, vr); });
 }
 
 void ezStackFrame::sub(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(ndests, nsrcs,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.sub(vl, vr); },
-                   [&](vector<ezValue *> &args) { return m_alu.sub(args); });
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.sub(vl, vr); });
 }
 
 void ezStackFrame::bitwise_and(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(
       ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_and(vl, vr); },
-      [&](vector<ezValue *> &args) { return m_alu.bitwise_and(args); });
+      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_and(vl, vr); });
 }
 
 void ezStackFrame::conditional_bra(uint8_t index,
@@ -291,15 +274,13 @@ void ezStackFrame::bra(uint8_t index) {
 void ezStackFrame::bitwise_or(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(
       ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_or(vl, vr); },
-      [&](vector<ezValue *> &args) { return m_alu.bitwise_or(args); });
+      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_or(vl, vr); });
 }
 
 void ezStackFrame::bitwise_xor(uint8_t ndests, uint8_t nsrcs) {
   binary_operation(
       ndests, nsrcs,
-      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_xor(vl, vr); },
-      [&](vector<ezValue *> &args) { return m_alu.bitwise_xor(args); });
+      [&](ezValue *vl, ezValue *vr) { return m_alu.bitwise_xor(vl, vr); });
 }
 
 void ezStackFrame::unary_operation(uint8_t ndests, uint8_t nsrcs,

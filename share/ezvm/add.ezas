@@ -4,10 +4,13 @@
 	mv r0 r1, 1 2
 	add r2, r0 r1
 	call _stdout ( r2 "=" r0 "+" r1)
-	add r3, 1 2 3 4
+	add r3, 1 2
+	add r3, r3 3
+	add r3, r3 4
 	call _stdout ( r3 "=1+2+3+4")
 	mv r4 r5, "hello" "world"
 	add r6, r4 r5
 	call _stdout ( r6 "=" r4 "+" r5)
-	add r7, "I " "am " "Sam"
+	add r7, "I " "am "
+	add r7, r7 "Sam"
 	call _stdout ( r7)

@@ -49,23 +49,15 @@ private:
 
 public:
   ezALU(ezGC &gc);
-  ezValue *add(vector<ezValue *> &args);
   ezValue *add(ezValue *larg, ezValue *rarg);
   ezValue *cmp(ezValue *larg, ezValue *rarg);
-  ezValue *sub(vector<ezValue *> &args);
   ezValue *sub(ezValue *larg, ezValue *rarg);
-  ezValue *mod(vector<ezValue *> &args);
   ezValue *mod(ezValue *larg, ezValue *rarg);
-  ezValue *mul(vector<ezValue *> &args);
   ezValue *mul(ezValue *larg, ezValue *rarg);
-  ezValue *div(vector<ezValue *> &args);
   ezValue *div(ezValue *larg, ezValue *rarg);
   ezValue *neg(ezValue *arg);
   ezValue *bitwise_not(ezValue *arg);
   ezValue *bitwise_and(ezValue *larg, ezValue *rarg);
-  ezValue *bitwise_and(vector<ezValue *> &args);
   ezValue *bitwise_or(ezValue *larg, ezValue *rarg);
-  ezValue *bitwise_or(vector<ezValue *> &args);
   ezValue *bitwise_xor(ezValue *larg, ezValue *rarg);
-  ezValue *bitwise_xor(vector<ezValue *> &args);
 };

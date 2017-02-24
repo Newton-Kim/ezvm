@@ -10,12 +10,15 @@
 	:int_zero
 	call _stdout ( r2 " is zero value")
 	:int_end
-	add r4 r5, 1 2 3 4
+	add r4 r5, 1 2
+	add r4 r5, r4 3
+	add r4 r5, r4 4
 	call _stdout ( r4 "=1+2+3+4")
 	mv r6 r7, "hello" "world"
 	add r8 r9, r6 r7
 	call _stdout ( r8 "=" r6 "+" r7)
-	add r10 r11, "I " "am " "Sam"
+	add r10 r11, "I " "am "
+	add r10 r11, r10 "Sam"
 	call _stdout ( r10)
 	beq r11 _str_zero
 	call _stdout ( r10 " is non-zero string")

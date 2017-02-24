@@ -4,5 +4,7 @@
 	mv r0 r1, 1 2
 	sub r2, r0 r1
 	call _stdout ( r2 "=" r0 "-" r1)
-	sub r3, 1 2 3 4
+	sub r3, 1 2
+	sub r3, r3 3
+	sub r3, r3 4
 	call _stdout ( r3 "=1-2-3-4")

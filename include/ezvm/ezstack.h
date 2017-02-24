@@ -133,8 +133,7 @@ private:
   */
   ezStepState call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
   void binary_operation(uint8_t ndests, uint8_t nsrcs,
-                        function<ezValue *(ezValue *, ezValue *)> binary_func,
-                        function<ezValue *(vector<ezValue *> &)> multi_func);
+                        function<ezValue *(ezValue *, ezValue *)> binary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
   void
   shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
