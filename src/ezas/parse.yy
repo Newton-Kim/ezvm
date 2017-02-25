@@ -166,10 +166,10 @@ static int s_scpkey = -1;
 
 %token PROC ENTRY IMPORT
 %token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
-%token SYMBOL STRING NEWLINE INTEGER ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
+%token SYMBOL STRING NEWLINE INTEGER COMPLEX ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
-%type <i_value> INTEGER proc_meta
+%type <i_value> INTEGER COMPLEX proc_meta
 %type <a_value> ADDRESS fname var
 %type <b_value> BOOLEAN
 
@@ -351,6 +351,7 @@ vars : %empty | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset))
 var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
 	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(complex<double>(0, $1));}
 	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
 	| ADDRESS {$$ = $1;};
 %%

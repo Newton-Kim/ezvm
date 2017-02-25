@@ -1,6 +1,6 @@
 .entry _main
 .proc _main (0)
-	.memories 8
+	.memories 10
 	mv r0 r1, 1 2
 	add r2, r0 r1
 	call _stdout ( r2 "=" r0 "+" r1)
@@ -14,3 +14,5 @@
 	add r7, "I " "am "
 	add r7, r7 "Sam"
 	call _stdout ( r7)
+	add r8, 1 2j
+	call _stdout ( r8)

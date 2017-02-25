@@ -456,4 +456,12 @@ public:
   * @return is an offset in a constant segment.
   */
   size_t constant(const double value);
+  /**
+  * @brief adds a constant complex.
+  *
+  * @param value is a complex.
+  *
+  * @return is an offset in a constant segment.
+  */
+  size_t constant(const complex<double> value);
 };

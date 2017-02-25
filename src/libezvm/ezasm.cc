@@ -435,11 +435,23 @@ size_t ezASM::constant(const bool value) {
 size_t ezASM::constant(const double value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezBool *)v)->to_float() == value)
+    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->to_float() == value)
       return i;
   }
   size_t idx = m_constants.size();
   ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezFloat(value));
+  m_constants.push_back(v);
+  return idx;
+}
+
+size_t ezASM::constant(const complex<double> value) {
+  for (size_t i = 0; i < m_constants.size(); i++) {
+    ezValue *v = m_constants[i];
+    if (v->type == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->to_float() == value)
+      return i;
+  }
+  size_t idx = m_constants.size();
+  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezComplex(value));
   m_constants.push_back(v);
   return idx;
 }

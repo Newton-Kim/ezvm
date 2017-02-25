@@ -31,6 +31,7 @@
 
 comment #.*
 integer [+-]?[0-9]+
+complex {integer}j
 string \"[^"]*\"
 symbol _[a-zA-Z_][a-zA-Z_0-9]*
 label  :.*
@@ -72,6 +73,7 @@ sp [ \t]
 ".memories" return MEMORIES;
 {string} {yylval.s_value = strndup(yytext + 1, strlen(yytext) - 2); return STRING;}
 {integer} {yylval.i_value = atoi(yytext); return INTEGER; }
+{complex} {yytext[strlen(yytext) - 1] = 0; yylval.i_value = atoi(yytext); return COMPLEX; }
 {symbol} {yylval.s_value = strdup(yytext + 1); return SYMBOL; }
 {label} {yylval.s_value = strdup(yytext + 1); return LABEL; }
 {address} {

@@ -49,6 +49,15 @@ void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
     case EZ_VALUE_TYPE_INTEGER:
       ss << ((ezInteger *)v)->to_integer();
       break;
+    case EZ_VALUE_TYPE_FLOAT:
+      ss << ((ezFloat*)v)->to_float();
+      break;
+    case EZ_VALUE_TYPE_COMPLEX:
+      {
+        complex<double> c = ((ezComplex*)v)->to_complex();
+        ss << c.real() << (c.imag() > 0 ? "+" : "-") << c.imag() << "j";
+      }
+      break;
     case EZ_VALUE_TYPE_STRING:
       ss << ((ezString *)v)->to_string();
       break;

@@ -30,6 +30,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <complex>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ enum ezValueType {
   EZ_VALUE_TYPE_BOOL,
   EZ_VALUE_TYPE_INTEGER,
   EZ_VALUE_TYPE_FLOAT,
+  EZ_VALUE_TYPE_COMPLEX,
   EZ_VALUE_TYPE_STRING,
   EZ_VALUE_TYPE_CAROUSEL,
   EZ_VALUE_TYPE_NATIVE_CAROUSEL,
@@ -56,6 +58,7 @@ public:
   virtual string to_string(void);
   virtual ezValue *condition(void);
   virtual double to_float(void);
+  virtual complex<double> to_complex(void);
 };
 
 class ezCondition : public ezValue {
@@ -83,7 +86,8 @@ public:
   int to_integer(void);
   string to_string(void);
   ezValue *condition(void);
-  virtual double to_float(void);
+  double to_float(void);
+  complex<double> to_complex(void);
 };
 
 class ezInteger : public ezValue {
@@ -96,7 +100,8 @@ public:
   int to_integer(void);
   string to_string(void);
   ezValue *condition(void);
-  virtual double to_float(void);
+  double to_float(void);
+  complex<double> to_complex(void);
 };
 
 class ezFloat : public ezValue {
@@ -109,7 +114,19 @@ public:
   int to_integer(void);
   string to_string(void);
   ezValue *condition(void);
-  virtual double to_float(void);
+  double to_float(void);
+  complex<double> to_complex(void);
+};
+
+class ezComplex: public ezValue {
+private:
+  complex<double> m_value;
+
+public:
+  ezComplex(complex<double> val);
+  string to_string(void);
+  ezValue *condition(void);
+  complex<double> to_complex(void);
 };
 
 class ezString : public ezValue {
@@ -122,7 +139,7 @@ public:
   int to_integer(void);
   string to_string(void);
   ezValue *condition(void);
-  virtual double to_float(void);
+  double to_float(void);
 };
 
 typedef uint32_t ezInstruction;
