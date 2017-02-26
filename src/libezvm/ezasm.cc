@@ -447,7 +447,7 @@ size_t ezASM::constant(const double value) {
 size_t ezASM::constant(const complex<double> value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->to_float() == value)
+    if (v->type == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->to_complex() == value)
       return i;
   }
   size_t idx = m_constants.size();

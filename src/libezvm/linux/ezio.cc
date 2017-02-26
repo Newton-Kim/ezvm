@@ -55,7 +55,9 @@ void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
     case EZ_VALUE_TYPE_COMPLEX:
       {
         complex<double> c = ((ezComplex*)v)->to_complex();
-        ss << c.real() << (c.imag() > 0 ? "+" : "-") << c.imag() << "j";
+        ss << c.real();
+        if(c.imag() > 0) ss << "+";
+        ss << c.imag() << "j";
       }
       break;
     case EZ_VALUE_TYPE_STRING:
