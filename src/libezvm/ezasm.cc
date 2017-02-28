@@ -23,7 +23,6 @@
 *
 */
 #include "ezvm/ezasm.h"
-#include "ezio.h"
 #include "ezvm/ezlog.h"
 #include <iostream>
 #include <sstream>
@@ -317,10 +316,6 @@ void ezAsmProcedure::label(string name) {
 ezASM::ezASM(ezAddress &entry, vector<ezValue *> &constants,
              ezTable<string, ezValue *> &globals, ezGC &gc)
     : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(gc) {
-  char **symtab = NULL;
-  ezValue **constant = NULL;
-  ezIO::load(&symtab, &constant);
-  load_intrinsics(symtab, constant);
 }
 
 ezASM::~ezASM() {}
