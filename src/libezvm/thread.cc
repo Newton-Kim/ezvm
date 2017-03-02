@@ -41,7 +41,7 @@ ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
     m_stack.push_back(sf);
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    ((ezNativeCarousel *)v)->run(m_args, m_rets);
+    ((ezNativeCarousel *)v)->run(m_gc, m_args, m_rets);
     break;
   default:
     throw("invalid value type");

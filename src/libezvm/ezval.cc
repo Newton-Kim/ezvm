@@ -24,6 +24,7 @@
 */
 #include "ezvm/ezval.h"
 #include <sstream>
+#include <iostream>
 #include <stdexcept>
 
 ezValue::ezValue(const ezValueType tp) : type(tp) { m_size = sizeof(*this); }

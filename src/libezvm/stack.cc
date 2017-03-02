@@ -442,7 +442,7 @@ ezStepState ezStackFrame::call(ezNativeCarousel *func, uint8_t nargs,
     ret_dest.push_back(addr);
   }
   vector<ezValue *> rets;
-  func->run(args, rets);
+  func->run(m_gc, args, rets);
   if (rets.size())
     val2addr(ret_dest, rets);
   return EZ_STEP_CONTINUE;
