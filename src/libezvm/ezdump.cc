@@ -69,13 +69,11 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
   case EZ_VALUE_TYPE_INTEGER:
     sink.print("%d", ((ezInteger *)v)->to_integer());
     break;
-  case EZ_VALUE_TYPE_COMPLEX:
-    {
-      double cr = ((ezComplex *)v)->to_complex().real();
-      double ci = ((ezComplex *)v)->to_complex().imag();
-      sink.print("%f %s %fj", cr, (ci > 0 ? "+":"-"), ci);
-    }
-    break;
+  case EZ_VALUE_TYPE_COMPLEX: {
+    double cr = ((ezComplex *)v)->to_complex().real();
+    double ci = ((ezComplex *)v)->to_complex().imag();
+    sink.print("%f %s %fj", cr, (ci > 0 ? "+" : "-"), ci);
+  } break;
   case EZ_VALUE_TYPE_STRING:
     sink.print("\"%s\"", ((ezString *)v)->to_string().c_str());
     break;

@@ -23,8 +23,8 @@
 *
 */
 #include "ezvm/ezval.h"
-#include <sstream>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 ezValue::ezValue(const ezValueType tp) : type(tp) { m_size = sizeof(*this); }
@@ -67,7 +67,9 @@ ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
 bool ezBool::to_bool(void) { return m_value; }
 int ezBool::to_integer(void) { return m_value ? 1 : 0; }
 double ezBool::to_float(void) { return m_value ? 1. : 0; }
-complex<double> ezBool::to_complex(void) { return complex<double>((m_value ? 1. : 0), 0); }
+complex<double> ezBool::to_complex(void) {
+  return complex<double>((m_value ? 1. : 0), 0);
+}
 string ezBool::to_string(void) {
   string str;
   str = m_value ? "true" : "false";
@@ -83,7 +85,9 @@ ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), m_value(val) {
 bool ezInteger::to_bool(void) { return m_value ? true : false; }
 int ezInteger::to_integer(void) { return m_value; }
 double ezInteger::to_float(void) { return (double)m_value; }
-complex<double> ezInteger::to_complex(void) { return complex<double>(m_value, 0); }
+complex<double> ezInteger::to_complex(void) {
+  return complex<double>(m_value, 0);
+}
 string ezInteger::to_string(void) {
   stringstream ss;
   ss << m_value;
@@ -101,7 +105,9 @@ ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), m_value(val) {
 bool ezFloat::to_bool(void) { return m_value ? true : false; }
 int ezFloat::to_integer(void) { return (int)m_value; }
 double ezFloat::to_float(void) { return m_value; }
-complex<double> ezFloat::to_complex(void) { return complex<double>(m_value, 0); }
+complex<double> ezFloat::to_complex(void) {
+  return complex<double>(m_value, 0);
+}
 string ezFloat::to_string(void) {
   stringstream ss;
   ss << m_value;
@@ -113,7 +119,8 @@ ezValue *ezFloat::condition(void) {
                          false, false);
 }
 
-ezComplex::ezComplex(complex<double> val) : ezValue(EZ_VALUE_TYPE_COMPLEX), m_value(val) {
+ezComplex::ezComplex(complex<double> val)
+    : ezValue(EZ_VALUE_TYPE_COMPLEX), m_value(val) {
   m_size = sizeof(*this);
 }
 string ezComplex::to_string(void) {
@@ -124,8 +131,8 @@ string ezComplex::to_string(void) {
 complex<double> ezComplex::to_complex(void) { return m_value; }
 
 ezValue *ezComplex::condition(void) {
-  return new ezCondition(abs(m_value) ? false : true, (abs(m_value) < 0) ? true : false,
-                         false, false);
+  return new ezCondition(abs(m_value) ? false : true,
+                         (abs(m_value) < 0) ? true : false, false, false);
 }
 
 ezString::ezString(const string val)

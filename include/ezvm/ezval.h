@@ -25,12 +25,12 @@
 #pragma once
 #include "ezgc.h"
 #include "eztable.h"
+#include <complex>
 #include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
 #include <vector>
-#include <complex>
 
 using namespace std;
 
@@ -118,7 +118,7 @@ public:
   complex<double> to_complex(void);
 };
 
-class ezComplex: public ezValue {
+class ezComplex : public ezValue {
 private:
   complex<double> m_value;
 
@@ -169,5 +169,6 @@ class ezNativeCarousel : public ezValue {
 private:
 public:
   ezNativeCarousel();
-  virtual void run(ezGC& gc, vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
+  virtual void run(ezGC &gc, vector<ezValue *> &args,
+                   vector<ezValue *> &rets) = 0;
 };
