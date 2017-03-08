@@ -1,0 +1,19 @@
+.entry _main
+.proc _main (0)
+	.memories 8
+	mv r0 r1, 1 2
+	cmp r2 , r0 r1
+	beq r2 _label_beq1
+	call _stdout ( r0 " != " r1 " , it make sense.")
+	bra _label_end1
+	:label_beq1
+	call _stdout ( r0 " == " r1)
+	:label_end1
+	mv r0 r1, 2 2
+	cmp r2 , r0 r1
+	beq r2 _label_beq2
+	call _stdout ( r0 " != " r1)
+	bra _label_end2
+	:label_beq2
+	call _stdout ( r0 " == " r1 " , it make sense.")
+	:label_end2

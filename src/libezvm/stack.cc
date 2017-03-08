@@ -371,8 +371,6 @@ void ezStackFrame::cmp(uint8_t ndests, uint8_t nsrcs) {
     break;
   }
   switch (nsrcs) {
-  case 1:
-    break;
   case 2: {
     ezValue *vr = NULL, *vl = NULL;
     decoder.argument(m_carousel->instruction[m_pc++], addr);
@@ -381,7 +379,7 @@ void ezStackFrame::cmp(uint8_t ndests, uint8_t nsrcs) {
     vr = addr2val(addr);
     rst = m_alu.cmp(vl, vr);
   } break;
-    throw runtime_error("the number of ADD operands must be 2 or more");
+    throw runtime_error("the number of ADD operands must be 2");
     break;
   }
   val2addr(cond, rst);
@@ -493,6 +491,9 @@ ezStepState ezStackFrame::step(void) {
     break;
   case EZ_OP_CALL:
     status = call(arg1, arg2);
+    break;
+  case EZ_OP_CMP:
+    cmp(arg1, arg2);
     break;
   case EZ_OP_DIV:
     div(arg1, arg2);
