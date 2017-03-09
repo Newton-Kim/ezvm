@@ -96,7 +96,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     size_t pc = 0;
     while (pc < len) {
       decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
-      sink.print("      %s", decoder.opstr(op));
+      sink.print("      %d:%s", pc - 1, decoder.opstr(op));
       sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
       switch (op) {
       case EZ_OP_BEQ:

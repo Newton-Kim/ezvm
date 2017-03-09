@@ -107,6 +107,7 @@ public:
   * @param src Addresses of source values.
   */
   void mv(vector<ezAddress> &dest, vector<ezAddress> &src);
+  void mv(ezAddress &dest, ezAddress &src);
   void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
            const ezAddress offset);

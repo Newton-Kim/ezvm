@@ -66,6 +66,13 @@ void ezAsmProcedure::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
     instruction.argument(*it);
 }
 
+void ezAsmProcedure::mv(ezAddress &dest, ezAddress &src) {
+  ezInstEncoder instruction(m_carousel->instruction);
+  instruction.opcode(EZ_OP_MV, 1, 1);
+  instruction.argument(dest);
+  instruction.argument(src);
+}
+
 void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
                                                       const ezAddress dest,
                                                       const ezAddress obj,
