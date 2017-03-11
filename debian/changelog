@@ -1,0 +1,5 @@
+ezvm (2.0.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- newton <newton.s.kim@gmail.com>  Sun, 12 Mar 2017 01:23:46 +0900

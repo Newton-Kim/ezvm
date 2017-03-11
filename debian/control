@@ -1,0 +1,15 @@
+Source: ezvm
+Section: utils
+Priority: optional
+Maintainer: newton <newton.s.kim@gmail.com>
+Build-Depends: debhelper (>=9),autotools-dev
+Standards-Version: 3.9.8
+Homepage: https://sourceforge.net/projects/ezvm
+#Vcs-Git: git://anonscm.debian.org/collab-maint/ezvm.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/ezvm.git
+
+Package: ezvm
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: evzm is a multi purpose language vm.
+ It is based on Harvard architecture and it supports high level data type such as a hash table or array.
