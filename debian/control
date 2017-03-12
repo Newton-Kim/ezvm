@@ -11,5 +11,5 @@ Homepage: https://sourceforge.net/projects/ezvm
 Package: ezvm
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: evzm is a multi purpose language vm.
- It is based on Harvard architecture and it supports high level data type such as a hash table or array.
+Description: evzm is a language vm which is dedicated to script languages.
+ It is based on Harvard architecture, provides script language functions (scope, dynamic prototyping and first class object), and supports garbage collection. ezvm serves back end functions of any scripting langaage.
