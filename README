@@ -1,0 +1,2 @@
+1. Version policy
+Version format is major.minor.path. The major change implies that there has been significant change of function. The minor change implies that there has been trivial improvements. The patch change means there has been bug fixes.
