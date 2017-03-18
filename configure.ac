@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([ezvm],[2.0.0], [newton.s.kim@gmail.com],[ezvm])
+AC_INIT([libezvm],[1.0.0], [newton.s.kim@gmail.com],[libezvm])
 AM_INIT_AUTOMAKE([subdir-objects])
 LT_INIT
 AC_CONFIG_SRCDIR([include/ezvm/ezvm.h])

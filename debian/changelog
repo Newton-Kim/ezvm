@@ -1,4 +1,4 @@
-ezvm (2.0.0-1) unstable; urgency=medium
+libezvm (1.0.0-1) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 

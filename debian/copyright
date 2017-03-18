@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: ezvm
-Source: <url://example.com>
+Upstream-Name: libezvm
+Source: <https://sourceforge.net/projects/ezvm>
 
 Files: *
 Copyright: 2017 Newton Kim, newton.s.kim@gmail.com

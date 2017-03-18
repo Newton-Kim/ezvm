@@ -1,4 +1,4 @@
-Source: ezvm
+Source: libezvm
 Section: utils
 Priority: optional
 Maintainer: newton <newton.s.kim@gmail.com>
@@ -8,7 +8,7 @@ Homepage: https://sourceforge.net/projects/ezvm
 #Vcs-Git: git://anonscm.debian.org/collab-maint/ezvm.git
 #Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/ezvm.git
 
-Package: ezvm
+Package: libezvm
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: evzm is a language vm which is dedicated to script languages.

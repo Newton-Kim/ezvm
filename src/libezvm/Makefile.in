@@ -365,7 +365,7 @@ include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS = -I../../include -std=c++11
-libezvm_la_LDFLAGS = -version-info 2:0:0
+libezvm_la_LDFLAGS = -version-info 1:0:0
 all: all-am
 
 .SUFFIXES:
@@ -379,9 +379,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/libezvm/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/libezvm/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/libezvm/Makefile
+	  $(AUTOMAKE) --gnu src/libezvm/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
