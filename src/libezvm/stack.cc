@@ -113,11 +113,15 @@ void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
     throw runtime_error("out of segment boundary");
     break;
   }
+  m_gc.pause();
+  if (v != ezNull::instance())
+    m_gc.add((ezGCObject *)v);
+  m_gc.resume();
 }
 
 void ezStackFrame::shift_operation(
     uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-    function<ezValue *(ezGC &gc, ezValue *, ezValue *)> func) {
+    function<ezValue *(ezValue *, ezValue *)> func) {
   ezInstDecoder decoder;
   ezAddress dest, addr, cond;
   decoder.argument(m_carousel->instruction[m_pc++], dest);
@@ -149,26 +153,22 @@ void ezStackFrame::shift_operation(
     throw runtime_error("the offset of the operation must be 1");
     break;
   }
-  rst = func(m_gc, obj, offset);
+  rst = func(obj, offset);
   val2addr(dest, rst);
   if (ndests == 2)
-    val2addr(cond, (ezValue *)m_gc.add(rst->condition()));
+    val2addr(cond, rst->condition());
 }
 
 void ezStackFrame::lsl(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets,
-                  [](ezGC &gc, ezValue *obj, ezValue *offset) {
-                    return (ezValue *)gc.add((ezGCObject *)new ezInteger(
-                        obj->to_integer() << offset->to_integer()));
-                  });
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue *obj, ezValue *offset) {
+    return new ezInteger(obj->to_integer() << offset->to_integer());
+  });
 }
 
 void ezStackFrame::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets,
-                  [](ezGC &gc, ezValue *obj, ezValue *offset) {
-                    return (ezValue *)gc.add((ezGCObject *)new ezInteger(
-                        obj->to_integer() >> offset->to_integer()));
-                  });
+  shift_operation(ndests, nsrcs, noffsets, [](ezValue *obj, ezValue *offset) {
+    return new ezInteger(obj->to_integer() >> offset->to_integer());
+  });
 }
 
 void ezStackFrame::binary_operation(
@@ -202,7 +202,7 @@ void ezStackFrame::binary_operation(
   }
   val2addr(dest, rst);
   if (ndests == 2)
-    val2addr(cond, (ezValue *)m_gc.add(rst->condition()));
+    val2addr(cond, rst->condition());
 }
 
 void ezStackFrame::add(uint8_t ndests, uint8_t nsrcs) {
@@ -305,7 +305,7 @@ void ezStackFrame::unary_operation(uint8_t ndests, uint8_t nsrcs,
   rst = unary_func(v);
   val2addr(dest, rst);
   if (ndests == 2)
-    val2addr(cond, (ezValue *)m_gc.add(rst->condition()));
+    val2addr(cond, rst->condition());
 }
 
 void ezStackFrame::neg(uint8_t ndests, uint8_t nsrcs) {

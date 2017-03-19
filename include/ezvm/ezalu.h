@@ -61,11 +61,10 @@ public:
 
 class ezALU {
 private:
-  ezGC &m_gc;
   ezUsrALU *m_usr_alu;
 
 public:
-  ezALU(ezGC &gc, ezUsrALU *usr_alu);
+  ezALU(ezUsrALU *usr_alu);
   ezValue *add(ezValue *larg, ezValue *rarg);
   ezValue *cmp(ezValue *larg, ezValue *rarg);
   ezValue *sub(ezValue *larg, ezValue *rarg);

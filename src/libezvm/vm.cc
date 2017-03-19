@@ -29,8 +29,7 @@
 
 using namespace std;
 
-ezVM::ezVM(ezUsrALU *usr_alu)
-    : m_pasm(NULL), m_parchive(NULL), m_alu(m_gc, usr_alu) {
+ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL), m_alu(usr_alu) {
   m_gc.subscribe(this);
 }
 

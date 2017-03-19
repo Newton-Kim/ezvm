@@ -334,6 +334,7 @@ void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
   /*TODO:should it be put to constant?*/
   for (size_t i = 0; constants[i] && symtab[i]; i++) {
     size_t offset = m_globals.add(symtab[i], constants[i]);
+    m_gc.add((ezGCObject *)constants[i]);
     ezLog::instance().debug("global[%lu] = %s", offset, symtab[i]);
   }
 }
@@ -360,13 +361,13 @@ ezAsmProcedure *ezASM::new_proc(const string name, int argc, size_t mems,
       ss << "scope[" << scpkey << "] already exist";
       throw runtime_error(ss.str());
     }
-    m_scopes[scpkey] = (ezTable<string, ezValue *> *)m_gc.add(
-        (ezGCObject *)new ezTable<string, ezValue *>);
+    m_scopes[scpkey] = new ezTable<string, ezValue *>;
+    m_gc.add((ezGCObject *)m_scopes[scpkey]);
     p_scpkey = m_scopes[scpkey];
   }
-  ezCarousel *carousel = (ezCarousel *)m_gc.add(
-      (ezGCObject *)new ezCarousel(argc, mems, p_scpkey, p_scope));
+  ezCarousel *carousel = new ezCarousel(argc, mems, p_scpkey, p_scope);
   size_t offset = m_globals.add(name, carousel);
+  m_gc.add((ezGCObject *)carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
     m_entry.offset = offset;
@@ -403,8 +404,9 @@ size_t ezASM::constant(const char *arg) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezString(value));
+  ezValue *v = new ezString(value);
   m_constants.push_back(v);
+  m_gc.add((ezGCObject *)v);
   return idx;
 }
 
@@ -416,8 +418,9 @@ size_t ezASM::constant(const int value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezInteger(value));
+  ezValue *v = new ezInteger(value);
   m_constants.push_back(v);
+  m_gc.add((ezGCObject *)v);
   return idx;
 }
 
@@ -428,8 +431,9 @@ size_t ezASM::constant(const bool value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezBool(value));
+  ezValue *v = new ezBool(value);
   m_constants.push_back(v);
+  m_gc.add((ezGCObject *)v);
   return idx;
 }
 
@@ -440,8 +444,9 @@ size_t ezASM::constant(const double value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezFloat(value));
+  ezValue *v = new ezFloat(value);
   m_constants.push_back(v);
+  m_gc.add((ezGCObject *)v);
   return idx;
 }
 
@@ -453,7 +458,8 @@ size_t ezASM::constant(const complex<double> value) {
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = (ezValue *)m_gc.add((ezGCObject *)new ezComplex(value));
+  ezValue *v = new ezComplex(value);
   m_constants.push_back(v);
+  m_gc.add((ezGCObject *)v);
   return idx;
 }

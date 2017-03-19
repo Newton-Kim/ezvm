@@ -135,9 +135,8 @@ private:
   void binary_operation(uint8_t ndests, uint8_t nsrcs,
                         function<ezValue *(ezValue *, ezValue *)> binary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
-  void
-  shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
-                  function<ezValue *(ezGC &gc, ezValue *, ezValue *)> func);
+  void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+                       function<ezValue *(ezValue *, ezValue *)> func);
   void unary_operation(uint8_t nargs, uint8_t nsrcs,
                        function<ezValue *(ezValue *)> unary_func);
   void add(uint8_t ndests, uint8_t nsrcs);

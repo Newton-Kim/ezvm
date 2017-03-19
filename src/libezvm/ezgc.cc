@@ -24,7 +24,7 @@
 */
 #include "ezvm/ezgc.h"
 
-ezGC::ezGC() : m_size(0), m_prev_size(0) {}
+ezGC::ezGC() : m_size(0), m_prev_size(0), m_pause(false) {}
 
 ezGC::~ezGC() {}
 
@@ -48,13 +48,14 @@ void ezGC::collect(void) {
   m_prev_size = m_size;
 }
 
-ezGCObject *ezGC::add(ezGCObject *v) {
+void ezGC::add(ezGCObject *v) {
+  if (m_pause)
+    return;
   v->unmark();
   m_size += v->size();
   m_memories.push_back(v);
   if (m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD)
     collect();
-  return v;
 }
 
 void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }

@@ -514,42 +514,33 @@ static ezValueType defaultCoercTable
              EZ_VALUE_TYPE_MAX} // EZ_VALUE_TYPE_USER_DEFINED,
         }};
 
-ezALU::ezALU(ezGC &gc, ezUsrALU *usr_alu) : m_gc(gc) {
+ezALU::ezALU(ezUsrALU *usr_alu) {
   if (!usr_alu)
     m_usr_alu = &s_default_alu;
 }
 
-typedef ezValue *(*ARITHEMATIC_DUO)(ezGC &gc, ezUsrALU *alu, ezValue *larg,
+typedef ezValue *(*ARITHEMATIC_DUO)(ezUsrALU *alu, ezValue *larg,
                                     ezValue *rarg);
-typedef ezValue *(*ARITHEMATIC_UNI)(ezGC &gc, ezUsrALU *alu, ezValue *arg);
+typedef ezValue *(*ARITHEMATIC_UNI)(ezUsrALU *alu, ezValue *arg);
 
-static ezValue *addd_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->add(larg, rarg));
+static ezValue *addd_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->add(larg, rarg);
 }
 
-static ezValue *addd_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() + rarg->to_integer()));
+static ezValue *addd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() + rarg->to_integer());
 }
 
-static ezValue *addd_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezFloat(larg->to_float() + rarg->to_float()));
+static ezValue *addd_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezFloat(larg->to_float() + rarg->to_float());
 }
 
-static ezValue *addd_complex(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezComplex(larg->to_complex() + rarg->to_complex()));
+static ezValue *addd_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezComplex(larg->to_complex() + rarg->to_complex());
 }
 
-static ezValue *addd_string(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                            ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezString(larg->to_string() + rarg->to_string()));
+static ezValue *addd_string(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezString(larg->to_string() + rarg->to_string());
 }
 
 ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
@@ -568,40 +559,34 @@ ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::add(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_ADDITION][larg->type][rarg->type];
-  return addd[type](m_gc, m_usr_alu, larg, rarg);
+  return addd[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *cmp_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                            ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->cmp(larg, rarg));
+static ezValue *cmp_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->cmp(larg, rarg);
 }
 
-static ezValue *cmp_bool(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                         ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)new ezCondition(
-      !(larg->to_bool() ^ rarg->to_bool()), false, false, false));
+static ezValue *cmp_bool(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezCondition(!(larg->to_bool() ^ rarg->to_bool()), false, false,
+                         false);
 }
 
-static ezValue *cmp_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                            ezValue *rarg) {
+static ezValue *cmp_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   int v = larg->to_integer() - rarg->to_integer();
-  return (ezValue *)gc.add((ezGCObject *)new ezCondition(
-      (v ? false : true), ((v < 0) ? true : false), false, false));
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+                         false);
 }
 
-static ezValue *cmp_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                          ezValue *rarg) {
+static ezValue *cmp_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   int v = larg->to_float() - rarg->to_float();
-  return (ezValue *)gc.add((ezGCObject *)new ezCondition(
-      (v ? false : true), ((v < 0) ? true : false), false, false));
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+                         false);
 }
 
-static ezValue *cmp_string(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
+static ezValue *cmp_string(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   bool eq = (larg->to_string() == rarg->to_string());
   int sz = larg->to_string().size() - rarg->to_string().size();
-  return (ezValue *)gc.add((ezGCObject *)new ezCondition(
-      eq, ((sz < 0) ? true : false), false, false));
+  return new ezCondition(eq, ((sz < 0) ? true : false), false, false);
 }
 
 ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
@@ -620,30 +605,23 @@ ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::cmp(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_COMPARISON][larg->type][rarg->type];
-  return cmpf[type](m_gc, m_usr_alu, larg, rarg);
+  return cmpf[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *subd_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->sub(larg, rarg));
+static ezValue *subd_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->sub(larg, rarg);
 }
 
-static ezValue *subd_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() - rarg->to_integer()));
+static ezValue *subd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() - rarg->to_integer());
 }
 
-static ezValue *subd_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezFloat(larg->to_float() - rarg->to_float()));
+static ezValue *subd_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezFloat(larg->to_float() - rarg->to_float());
 }
 
-static ezValue *subd_complex(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezComplex(larg->to_complex() - rarg->to_complex()));
+static ezValue *subd_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezComplex(larg->to_complex() - rarg->to_complex());
 }
 
 ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
@@ -662,24 +640,19 @@ ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::sub(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_SUBTRACTION][larg->type][rarg->type];
-  return subd[type](m_gc, m_usr_alu, larg, rarg);
+  return subd[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *modd_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->mod(larg, rarg));
+static ezValue *modd_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->mod(larg, rarg);
 }
 
-static ezValue *modd_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() % rarg->to_integer()));
+static ezValue *modd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() % rarg->to_integer());
 }
 
-static ezValue *modd_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezFloat(larg->to_integer() % rarg->to_integer()));
+static ezValue *modd_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezFloat(larg->to_integer() % rarg->to_integer());
 }
 
 ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
@@ -698,30 +671,23 @@ ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::mod(ezValue *larg, ezValue *rarg) {
   ezValueType type = defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION]
                                       [larg->type][rarg->type];
-  return modd[type](m_gc, m_usr_alu, larg, rarg);
+  return modd[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *muld_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->mul(larg, rarg));
+static ezValue *muld_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->mul(larg, rarg);
 }
 
-static ezValue *muld_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() * rarg->to_integer()));
+static ezValue *muld_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() * rarg->to_integer());
 }
 
-static ezValue *muld_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezFloat(larg->to_float() * rarg->to_float()));
+static ezValue *muld_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezFloat(larg->to_float() * rarg->to_float());
 }
 
-static ezValue *muld_complex(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezComplex(larg->to_complex() * rarg->to_complex()));
+static ezValue *muld_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezComplex(larg->to_complex() * rarg->to_complex());
 }
 
 ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
@@ -740,30 +706,23 @@ ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::mul(ezValue *larg, ezValue *rarg) {
   ezValueType type = defaultCoercTable[EZ_COERC_OPERATION_MULTIPLICATION]
                                       [larg->type][rarg->type];
-  return muld[type](m_gc, m_usr_alu, larg, rarg);
+  return muld[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *divd_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->div(larg, rarg));
+static ezValue *divd_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->div(larg, rarg);
 }
 
-static ezValue *divd_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() / rarg->to_integer()));
+static ezValue *divd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() / rarg->to_integer());
 }
 
-static ezValue *divd_float(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                           ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezFloat(larg->to_float() / rarg->to_float()));
+static ezValue *divd_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezFloat(larg->to_float() / rarg->to_float());
 }
 
-static ezValue *divd_complex(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezComplex(larg->to_complex() / rarg->to_complex()));
+static ezValue *divd_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezComplex(larg->to_complex() / rarg->to_complex());
 }
 
 ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
@@ -782,23 +741,23 @@ ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::div(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_DIVISION][larg->type][rarg->type];
-  return divd[type](m_gc, m_usr_alu, larg, rarg);
+  return divd[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *neg_default(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->bitwise_not(arg));
+static ezValue *neg_default(ezUsrALU *alu, ezValue *arg) {
+  return alu->bitwise_not(arg);
 }
 
-static ezValue *neg_integer(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)new ezInteger(-arg->to_integer()));
+static ezValue *neg_integer(ezUsrALU *alu, ezValue *arg) {
+  return new ezInteger(-arg->to_integer());
 }
 
-static ezValue *neg_float(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)new ezInteger(-arg->to_float()));
+static ezValue *neg_float(ezUsrALU *alu, ezValue *arg) {
+  return new ezInteger(-arg->to_float());
 }
 
-static ezValue *neg_complex(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)new ezComplex(-arg->to_complex()));
+static ezValue *neg_complex(ezUsrALU *alu, ezValue *arg) {
+  return new ezComplex(-arg->to_complex());
 }
 
 ARITHEMATIC_UNI negf[EZ_VALUE_TYPE_MAX] = {
@@ -814,20 +773,18 @@ ARITHEMATIC_UNI negf[EZ_VALUE_TYPE_MAX] = {
     neg_default  // EZ_VALUE_TYPE_USER_DEFINED
 };
 
-ezValue *ezALU::neg(ezValue *arg) {
-  return negf[arg->type](m_gc, m_usr_alu, arg);
+ezValue *ezALU::neg(ezValue *arg) { return negf[arg->type](m_usr_alu, arg); }
+
+static ezValue *not_default(ezUsrALU *alu, ezValue *arg) {
+  return alu->bitwise_not(arg);
 }
 
-static ezValue *not_default(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->bitwise_not(arg));
-}
-
-static ezValue *not_bool(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
+static ezValue *not_bool(ezUsrALU *alu, ezValue *arg) {
   return new ezBool(!arg->to_bool());
 }
 
-static ezValue *not_integer(ezGC &gc, ezUsrALU *alu, ezValue *arg) {
-  return (ezValue *)gc.add((ezGCObject *)new ezInteger(~arg->to_integer()));
+static ezValue *not_integer(ezUsrALU *alu, ezValue *arg) {
+  return new ezInteger(~arg->to_integer());
 }
 
 ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
@@ -844,24 +801,19 @@ ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
 };
 
 ezValue *ezALU::bitwise_not(ezValue *arg) {
-  return notf[arg->type](m_gc, m_usr_alu, arg);
+  return notf[arg->type](m_usr_alu, arg);
 }
 
-static ezValue *andd_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->bitwise_and(larg, rarg));
+static ezValue *andd_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->bitwise_and(larg, rarg);
 }
 
-static ezValue *andd_bool(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                          ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezBool(larg->to_bool() & rarg->to_bool()));
+static ezValue *andd_bool(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezBool(larg->to_bool() & rarg->to_bool());
 }
 
-static ezValue *andd_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() & rarg->to_integer()));
+static ezValue *andd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() & rarg->to_integer());
 }
 
 ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
@@ -880,24 +832,19 @@ ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::bitwise_and(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_AND][larg->type][rarg->type];
-  return andd[type](m_gc, m_usr_alu, larg, rarg);
+  return andd[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *ord_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                            ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->bitwise_or(larg, rarg));
+static ezValue *ord_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->bitwise_or(larg, rarg);
 }
 
-static ezValue *ord_bool(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                         ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezBool(larg->to_bool() | rarg->to_bool()));
+static ezValue *ord_bool(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezBool(larg->to_bool() | rarg->to_bool());
 }
 
-static ezValue *ord_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                            ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() | rarg->to_integer()));
+static ezValue *ord_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() | rarg->to_integer());
 }
 
 ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
@@ -916,24 +863,19 @@ ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::bitwise_or(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_OR][larg->type][rarg->type];
-  return ord[type](m_gc, m_usr_alu, larg, rarg);
+  return ord[type](m_usr_alu, larg, rarg);
 }
 
-static ezValue *xord_default(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add((ezGCObject *)alu->bitwise_xor(larg, rarg));
+static ezValue *xord_default(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return alu->bitwise_xor(larg, rarg);
 }
 
-static ezValue *xord_bool(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                          ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezBool(larg->to_bool() ^ rarg->to_bool()));
+static ezValue *xord_bool(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezBool(larg->to_bool() ^ rarg->to_bool());
 }
 
-static ezValue *xord_integer(ezGC &gc, ezUsrALU *alu, ezValue *larg,
-                             ezValue *rarg) {
-  return (ezValue *)gc.add(
-      (ezGCObject *)new ezInteger(larg->to_integer() ^ rarg->to_integer()));
+static ezValue *xord_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
+  return new ezInteger(larg->to_integer() ^ rarg->to_integer());
 }
 
 ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
@@ -952,5 +894,5 @@ ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
 ezValue *ezALU::bitwise_xor(ezValue *larg, ezValue *rarg) {
   ezValueType type =
       defaultCoercTable[EZ_COERC_OPERATION_XOR][larg->type][rarg->type];
-  return xord[type](m_gc, m_usr_alu, larg, rarg);
+  return xord[type](m_usr_alu, larg, rarg);
 }

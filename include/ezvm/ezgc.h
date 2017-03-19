@@ -57,12 +57,15 @@ private:
   list<ezGCObject *> m_memories;
   size_t m_size;
   size_t m_prev_size;
+  bool m_pause;
   void collect(void);
 
 public:
   ezGC();
   ~ezGC();
-  ezGCObject *add(ezGCObject *v);
+  void add(ezGCObject *v);
   void subscribe(ezGCClient *t);
   void force(void);
+  void pause(void) { m_pause = true; }
+  void resume(void) { m_pause = false; }
 };

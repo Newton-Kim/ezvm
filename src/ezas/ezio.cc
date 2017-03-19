@@ -75,9 +75,9 @@ void ezIoPrint::run(ezGC &gc, vector<ezValue *> &args,
 }
 
 void ezIO::load(char ***symtab, ezValue ***constants) {
-  static ezIoPrint io_stdout(cout), io_stderr(cerr);
+  ezIoPrint *io_stdout = new ezIoPrint(cout), *io_stderr = new ezIoPrint(cerr);
   static const char *io_symtab[] = {"stdout", "stderr", NULL};
-  static ezValue *io_constants[] = {&io_stdout, &io_stderr, NULL};
+  static ezValue *io_constants[] = {io_stdout, io_stderr, NULL};
   *symtab = (char **)io_symtab;
   *constants = io_constants;
 }
