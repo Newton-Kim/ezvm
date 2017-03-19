@@ -169,6 +169,6 @@ class ezNativeCarousel : public ezValue {
 private:
 public:
   ezNativeCarousel();
-  virtual void run(ezGC &gc, vector<ezValue *> &args,
+  virtual void run(vector<ezValue *> &args,
                    vector<ezValue *> &rets) = 0;
 };

@@ -34,12 +34,12 @@ private:
 
 public:
   ezIoPrint(ostream &io);
-  void run(ezGC &gc, vector<ezValue *> &args, vector<ezValue *> &rets);
+  void run(vector<ezValue *> &args, vector<ezValue *> &rets);
 };
 
 ezIoPrint::ezIoPrint(ostream &io) : ezNativeCarousel(), m_io(io) {}
 
-void ezIoPrint::run(ezGC &gc, vector<ezValue *> &args,
+void ezIoPrint::run(vector<ezValue *> &args,
                     vector<ezValue *> &rets) {
   rets.clear();
   stringstream ss;

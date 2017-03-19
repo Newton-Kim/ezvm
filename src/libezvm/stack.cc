@@ -84,6 +84,8 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
   if (addr_sz > vals_sz) {
     for (size_t i = gcv; i < addr_sz; i++)
       val2addr(addr[i], ezNull::instance());
+  } else if (addr_sz < vals_sz) {
+    for (size_t i = gcv; i < vals_sz; i++) delete vals[i];
   }
 }
 
@@ -440,7 +442,7 @@ ezStepState ezStackFrame::call(ezNativeCarousel *func, uint8_t nargs,
     ret_dest.push_back(addr);
   }
   vector<ezValue *> rets;
-  func->run(m_gc, args, rets);
+  func->run(args, rets);
   if (rets.size())
     val2addr(ret_dest, rets);
   return EZ_STEP_CONTINUE;
