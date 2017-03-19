@@ -51,7 +51,8 @@ void ezInstEncoder::opcode(ezOpCode op, uint8_t arg1, uint8_t arg2,
   opc.arg2 = arg2;
   opc.arg3 = arg3;
   m_instruction.push_back(*((ezInstruction *)&opc));
-//  cerr << "enc:" << op << "->" << hex << *(ezInstruction *)&opc << dec << endl;
+  //  cerr << "enc:" << op << "->" << hex << *(ezInstruction *)&opc << dec <<
+  //  endl;
 }
 
 void ezInstEncoder::argument(ezAddress addr) {
@@ -59,13 +60,13 @@ void ezInstEncoder::argument(ezAddress addr) {
   arg.segment = addr.segment;
   arg.offset = addr.offset;
   m_instruction.push_back(*((ezInstruction *)&arg));
-//  cerr << "enc:" << "arg->" << hex << *(ezInstruction *)&arg << dec << endl;
+  //  cerr << "enc:" << "arg->" << hex << *(ezInstruction *)&arg << dec << endl;
 }
 
 void ezInstDecoder::opcode(ezInstruction inst, ezOpCode &op, uint8_t &arg1,
                            uint8_t &arg2, uint8_t &arg3) {
   ezOperation operation = *((ezOperation *)&inst);
-//  cerr << "dec:" << hex << inst << dec << endl;
+  //  cerr << "dec:" << hex << inst << dec << endl;
   if (!(operation.code & INST_BIT))
     throw runtime_error("not an instruction");
   op = (ezOpCode)(operation.code & INST_MASK);
@@ -76,7 +77,7 @@ void ezInstDecoder::opcode(ezInstruction inst, ezOpCode &op, uint8_t &arg1,
 
 void ezInstDecoder::argument(ezInstruction inst, ezAddress &addr) {
   ezArgument arg = *((ezArgument *)&inst);
-//  cerr << "dec:" << "arg->" << hex << inst << dec << endl;
+  //  cerr << "dec:" << "arg->" << hex << inst << dec << endl;
   if ((arg.segment & INST_BIT) != 0)
     throw runtime_error("not an address");
   addr.segment = arg.segment;
