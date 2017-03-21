@@ -132,14 +132,19 @@ private:
   * @param nrets is a number of return addresses which follows the arguments.
   */
   ezStepState call(ezCarousel *func, uint8_t nargs, uint8_t nrets);
-  void binary_operation(uint8_t ndests, uint8_t nsrcs,
+  void binary_operation(ezAddress &dest, ezAddress &src1, ezAddress &src2,
+                        function<ezValue *(ezValue *, ezValue *)> binary_func);
+  void binary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2,
                         function<ezValue *(ezValue *, ezValue *)> binary_func);
   void conditional_bra(uint8_t index, function<bool(ezCondition *)> func);
-  void shift_operation(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+  void shift_operation(ezAddress &dest, ezAddress &src, ezAddress &offset,
+                       function<ezValue *(ezValue *, ezValue *)> func);
+  void shift_operation(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset,
                        function<ezValue *(ezValue *, ezValue *)> func);
   void unary_operation(uint8_t nargs, uint8_t nsrcs,
                        function<ezValue *(ezValue *)> unary_func);
-  void add(uint8_t ndests, uint8_t nsrcs);
+  void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void bitwise_and(uint8_t ndests, uint8_t nsrcs);
   void beq(uint8_t index);
   void bge(uint8_t index);
@@ -150,7 +155,10 @@ private:
   void cmp(uint8_t ndests, uint8_t nsrcs);
   void div(uint8_t ndests, uint8_t nsrcs);
   void fgc(void);
-  void lsl(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
+  void lsl(ezAddress &dest, ezAddress &src, ezAddress &offset);
+  void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
+  void lsr(ezAddress &dest, ezAddress &src, ezAddress &offset);
+  void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
   void mod(uint8_t ndests, uint8_t nsrcs);
   void mul(uint8_t ndests, uint8_t nsrcs);

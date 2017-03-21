@@ -25,6 +25,7 @@
 #pragma once
 #include "ezgc.h"
 #include "eztable.h"
+#include "ezaddr.h"
 #include <complex>
 #include <cstddef>
 #include <cstdint>
@@ -142,7 +143,15 @@ public:
   double to_float(void);
 };
 
-typedef uint32_t ezInstruction;
+class ezInstruction {
+public: 
+  //TODO:It should be replaced with the bind.
+  size_t cmd;
+  size_t offset;
+  ezAddress arg;
+  vector<ezAddress> srcs;
+  vector<ezAddress> dests;
+};
 
 class ezCarousel : public ezValue, ezGCClient {
 private:
@@ -156,8 +165,8 @@ public:
   ezCarousel(uint8_t args, size_t mems, ezTable<string, ezValue *> *local,
              ezTable<string, ezValue *> *scope);
   ~ezCarousel();
-  vector<ezInstruction> instruction;
-  vector<ezInstruction> jmptbl;
+  vector<ezInstruction*> instruction;
+  vector<size_t> jmptbl;
   void on_mark(void);
   vector<ezValue *> *local_memory(void);
   map<string, size_t> &local_symtab(void);

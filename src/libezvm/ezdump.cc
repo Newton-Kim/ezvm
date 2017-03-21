@@ -93,36 +93,23 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     ezOpCode op;
     uint8_t arg[3];
     size_t len = crsl->instruction.size();
-    size_t pc = 0;
-    while (pc < len) {
-      decoder.opcode(crsl->instruction[pc++], op, arg[0], arg[1], arg[2]);
-      sink.print("      %d:%s", pc - 1, decoder.opstr(op));
-      sink.print("(%d:%d:%d)", arg[0], arg[1], arg[2]);
+    for (size_t pc = 0 ; pc < len ; pc++) {
+      op = (ezOpCode)crsl->instruction[pc]->cmd;
+      sink.print("      %d:%s", pc, ezInstDecoder::opstr(op));
       switch (op) {
       case EZ_OP_BEQ:
       case EZ_OP_BGE:
       case EZ_OP_BLT:
       case EZ_OP_BNE:
-        decoder.argument(crsl->instruction[pc++], addr);
-        dump(sink, addr);
+        dump(sink, crsl->instruction[pc]->arg);
         sink.print("\n");
         continue;
       case EZ_OP_BRA:
         sink.print("\n");
         continue;
       case EZ_OP_CALL:
-        decoder.argument(crsl->instruction[pc++], addr);
-        dump(sink, addr);
+        dump(sink, crsl->instruction[pc]->arg);
         break;
-      }
-      for (size_t c = 0; c < 3; c++) {
-        if (!arg[c])
-          continue;
-        sink.print(",");
-        for (size_t i = 0; i < arg[c]; i++) {
-          decoder.argument(crsl->instruction[pc++], addr);
-          dump(sink, addr);
-        }
       }
       sink.print("\n");
     }

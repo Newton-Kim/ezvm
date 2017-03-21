@@ -39,22 +39,22 @@ void ezAsmProcedure::grow(size_t mems) {
 
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
                           vector<ezAddress> &rets) {
-  ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_CALL, args.size(), rets.size());
-  instruction.argument(func);
-  for (vector<ezAddress>::iterator it = args.begin(); it != args.end(); it++)
-    instruction.argument(*it);
-  for (vector<ezAddress>::iterator it = rets.begin(); it != rets.end(); it++)
-    instruction.argument(*it);
+  ezInstruction* inst = new ezInstruction;
+  inst->cmd = EZ_OP_CALL;
+  inst->arg = func;
+  inst->srcs = args;
+  inst->dests = rets;
+  m_carousel->instruction.push_back(inst);
 }
 
 void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
                          const ezAddress &rarg) {
-  ezInstEncoder instruction(m_carousel->instruction);
-  instruction.opcode(EZ_OP_CMP, 1, 2);
-  instruction.argument(cond);
-  instruction.argument(larg);
-  instruction.argument(rarg);
+  ezInstruction* inst = new ezInstruction;
+  inst->cmd = EZ_OP_CMP;
+  inst->arg = cond;
+  inst->dests.push_back(larg);
+  inst->srcs.push_back(rarg);
+  m_carousel->instruction.push_back(inst);
 }
 
 void ezAsmProcedure::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {

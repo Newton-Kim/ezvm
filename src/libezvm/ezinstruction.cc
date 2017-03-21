@@ -40,7 +40,7 @@ struct ezArgument {
   unsigned int offset : 24;
 };
 
-ezInstEncoder::ezInstEncoder(vector<ezInstruction> &instr)
+ezInstEncoder::ezInstEncoder(vector<ezInstruction*> &instr)
     : m_instruction(instr) {}
 
 void ezInstEncoder::opcode(ezOpCode op, uint8_t arg1, uint8_t arg2,

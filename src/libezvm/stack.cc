@@ -122,93 +122,80 @@ void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
 }
 
 void ezStackFrame::shift_operation(
-    uint8_t ndests, uint8_t nsrcs, uint8_t noffsets,
+    ezAddress &dest, ezAddress &src, ezAddress &offset,
     function<ezValue *(ezValue *, ezValue *)> func) {
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(m_carousel->instruction[m_pc++], dest);
-  ezValue *rst = NULL, *obj = NULL, *offset = NULL;
-  switch (ndests) {
-  case 2:
-    decoder.argument(m_carousel->instruction[m_pc++], cond);
-  case 1:
-    break;
-  default:
-    throw runtime_error("the destination of the operation must be 1 or 2");
-    break;
-  }
-  switch (nsrcs) {
-  case 1:
-    decoder.argument(m_carousel->instruction[m_pc++], addr);
-    obj = addr2val(addr);
-    break;
-  default:
-    throw runtime_error("the oject of the operation must be 1");
-    break;
-  }
-  switch (noffsets) {
-  case 1:
-    decoder.argument(m_carousel->instruction[m_pc++], addr);
-    offset = addr2val(addr);
-    break;
-  default:
-    throw runtime_error("the offset of the operation must be 1");
-    break;
-  }
-  rst = func(obj, offset);
+  ezValue *rst = NULL, *obj = NULL, *shift = NULL;
+  obj = addr2val(src);
+  shift = addr2val(offset);
+  rst = func(obj, shift);
   val2addr(dest, rst);
-  if (ndests == 2)
-    val2addr(cond, rst->condition());
 }
 
-void ezStackFrame::lsl(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue *obj, ezValue *offset) {
+void ezStackFrame::shift_operation(
+    ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset,
+    function<ezValue *(ezValue *, ezValue *)> func) {
+  ezValue *rst = NULL, *obj = NULL, *shift = NULL;
+  obj = addr2val(src);
+  shift = addr2val(offset);
+  rst = func(obj, shift);
+  val2addr(dest, rst);
+  val2addr(cond, rst->condition());
+}
+
+void ezStackFrame::lsl(ezAddress &dest, ezAddress &src, ezAddress &offset) {
+  shift_operation(dest, src, offset, [](ezValue *obj, ezValue *offset) {
     return new ezInteger(obj->to_integer() << offset->to_integer());
   });
 }
 
-void ezStackFrame::lsr(uint8_t ndests, uint8_t nsrcs, uint8_t noffsets) {
-  shift_operation(ndests, nsrcs, noffsets, [](ezValue *obj, ezValue *offset) {
+void ezStackFrame::lsl(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset) {
+  shift_operation(dest, cond, src, offset, [](ezValue *obj, ezValue *offset) {
+    return new ezInteger(obj->to_integer() << offset->to_integer());
+  });
+}
+
+void ezStackFrame::lsr(ezAddress &dest, ezAddress &src, ezAddress &offset) {
+  shift_operation(dest, src, offset, [](ezValue *obj, ezValue *offset) {
+    return new ezInteger(obj->to_integer() >> offset->to_integer());
+  });
+}
+
+void ezStackFrame::lsr(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset) {
+  shift_operation(dest, cond, src, offset, [](ezValue *obj, ezValue *offset) {
     return new ezInteger(obj->to_integer() >> offset->to_integer());
   });
 }
 
 void ezStackFrame::binary_operation(
-    uint8_t ndests, uint8_t nsrcs,
+    ezAddress &dest, ezAddress &src1, ezAddress &src2,
     function<ezValue *(ezValue *, ezValue *)> binary_func) {
-  ezInstDecoder decoder;
-  ezAddress dest, addr, cond;
-  decoder.argument(m_carousel->instruction[m_pc++], dest);
   ezValue *rst = NULL;
-  switch (ndests) {
-  case 2:
-    decoder.argument(m_carousel->instruction[m_pc++], cond);
-  case 1:
-    break;
-  default:
-    throw runtime_error("the destination of the operands must be 1 or 2");
-    break;
-  }
-  switch (nsrcs) {
-  case 2: {
-    ezValue *vr = NULL, *vl = NULL;
-    decoder.argument(m_carousel->instruction[m_pc++], addr);
-    vl = addr2val(addr);
-    decoder.argument(m_carousel->instruction[m_pc++], addr);
-    vr = addr2val(addr);
-    rst = binary_func(vl, vr);
-  } break;
-  default:
-    throw runtime_error("the number of the operands must be 2 or more");
-    break;
-  }
+  ezValue *vr = NULL, *vl = NULL;
+  vl = addr2val(src1);
+  vr = addr2val(src2);
+  rst = binary_func(vl, vr);
   val2addr(dest, rst);
-  if (ndests == 2)
-    val2addr(cond, rst->condition());
 }
 
-void ezStackFrame::add(uint8_t ndests, uint8_t nsrcs) {
-  binary_operation(ndests, nsrcs,
+void ezStackFrame::binary_operation(
+    ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2,
+    function<ezValue *(ezValue *, ezValue *)> binary_func) {
+  ezValue *rst = NULL;
+  ezValue *vr = NULL, *vl = NULL;
+  vl = addr2val(src1);
+  vr = addr2val(src2);
+  rst = binary_func(vl, vr);
+  val2addr(dest, rst);
+  val2addr(cond, rst->condition());
+}
+
+void ezStackFrame::add(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
+  binary_operation(dest, src1, src2,
+                   [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); });
+}
+
+void ezStackFrame::add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2) {
+  binary_operation(dest, cond, src1, src2,
                    [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); });
 }
 
@@ -464,14 +451,17 @@ ezStepState ezStackFrame::step(void) {
   }
   if (m_pc >= m_carousel->instruction.size())
     return EZ_STEP_DONE;
+  ezInstruction* inst = m_carousel->instruction[m_pc];
   ezStepState status = EZ_STEP_CONTINUE;
   ezInstDecoder decoder;
   ezOpCode op;
   uint8_t arg1, arg2, arg3;
-  decoder.opcode(m_carousel->instruction[m_pc++], op, arg1, arg2, arg3);
   switch (op) {
   case EZ_OP_ADD:
-    add(arg1, arg2);
+    if(inst->dests.size() == 1)
+    add(inst->dests[0], inst->srcs[0], inst->srcs[1]);
+    else
+    add(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
     break;
   case EZ_OP_AND:
     bitwise_and(arg1, arg2);
@@ -503,10 +493,17 @@ ezStepState ezStackFrame::step(void) {
   case EZ_OP_FGC:
     fgc();
   case EZ_OP_LSL:
-    lsl(arg1, arg2, arg3);
+    if(inst->dests.size() == 1)
+    lsl(inst->dests[0], inst->srcs[0], inst->arg);
+    else
+    lsl(inst->dests[0], inst->dests[1], inst->srcs[0], inst->arg);
     break;
   case EZ_OP_LSR:
-    lsr(arg1, arg2, arg3);
+    if(inst->dests.size() == 1)
+    lsr(inst->dests[0], inst->srcs[0], inst->arg);
+    else
+    lsr(inst->dests[0], inst->dests[1], inst->srcs[0], inst->arg);
+    break;
     break;
   case EZ_OP_MOD:
     mod(arg1, arg2);

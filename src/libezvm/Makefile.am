@@ -5,7 +5,6 @@ libezvm_la_SOURCES=ezarchive.cc \
 		   ezgc.cc \
 		   ezasm.cc \
 		   ezdump.cc \
-		   ezinstruction.cc \
 		   ezval.cc \
 		   stack.cc \
 		   thread.cc \
