@@ -411,7 +411,7 @@ ezStepState ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress>& args, 
   }
   vector<ezValue *> vrets;
   func->run(vargs, vrets);
-  if (vrets.size())
+  if (rets.size())
     val2addr(rets, vrets);
   return EZ_STEP_CONTINUE;
 }
@@ -507,10 +507,16 @@ ezStepState ezStackFrame::step(void) {
     mv(inst->dests, inst->srcs);
     break;
   case EZ_OP_NEG:
+    if(inst->dests.size() == 1)
     neg(inst->dests[0], inst->srcs[0]);
+    else
+    neg(inst->dests[0], inst->dests[1], inst->srcs[0]);
     break;
   case EZ_OP_NOT:
+    if(inst->dests.size() == 1)
     bitwise_not(inst->dests[0], inst->srcs[0]);
+    else
+    bitwise_not(inst->dests[0], inst->dests[1], inst->srcs[0]);
     break;
   case EZ_OP_OR:
     if(inst->dests.size() == 1)

@@ -80,7 +80,7 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
   ezInstruction* inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
-  inst->srcs.push_back(offset);
+  inst->arg = offset;
   inst->dests.push_back(dest);
   m_carousel->instruction.push_back(inst);
 }
@@ -93,7 +93,7 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
   ezInstruction* inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
-  inst->srcs.push_back(offset);
+  inst->arg = offset;
   inst->dests.push_back(dest);
   inst->dests.push_back(cond);
   m_carousel->instruction.push_back(inst);
