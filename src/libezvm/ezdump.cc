@@ -88,7 +88,6 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     for (map<string, size_t>::iterator it = crsl->local_symtab().begin();
          it != crsl->local_symtab().end(); it++)
       sink.print("        %s->%lu\n", it->first.c_str(), it->second);
-    ezInstDecoder decoder;
     ezAddress addr;
     ezOpCode op;
     uint8_t arg[3];
