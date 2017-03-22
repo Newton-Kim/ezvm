@@ -432,7 +432,7 @@ ezStepState ezStackFrame::step(void) {
   }
   if (m_pc >= m_carousel->instruction.size())
     return EZ_STEP_DONE;
-  ezInstruction* inst = m_carousel->instruction[m_pc];
+  ezInstruction* inst = m_carousel->instruction[m_pc++];
   ezStepState status = EZ_STEP_CONTINUE;
   ezOpCode op;
   uint8_t arg1, arg2, arg3;

@@ -57,6 +57,7 @@ private:
   */
   void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, const ezValue *v);
+  const char *opstr(size_t op);
 
 public:
   /**
