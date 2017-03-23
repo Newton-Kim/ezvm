@@ -24,6 +24,7 @@
 */
 #include "ezvm/ezdump.h"
 #include "ezvm/ezinstruction.h"
+#include <iostream>
 
 using namespace std;
 
@@ -198,6 +199,8 @@ const char *ezDump::opstr(size_t op) {
     return "not";
   case EZ_OP_OR:
     return "or";
+  case EZ_OP_RET:
+    return "ret";
   case EZ_OP_SUB:
     return "sub";
   case EZ_OP_XOR:

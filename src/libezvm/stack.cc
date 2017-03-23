@@ -434,9 +434,8 @@ ezStepState ezStackFrame::step(void) {
     return EZ_STEP_DONE;
   ezInstruction* inst = m_carousel->instruction[m_pc++];
   ezStepState status = EZ_STEP_CONTINUE;
-  ezOpCode op;
   uint8_t arg1, arg2, arg3;
-  switch (op) {
+  switch (inst->cmd) {
   case EZ_OP_ADD:
     if(inst->dests.size() == 1)
     add(inst->dests[0], inst->srcs[0], inst->srcs[1]);
