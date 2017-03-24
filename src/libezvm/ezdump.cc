@@ -32,6 +32,15 @@ ezDump::ezDump(ezAddress &entry, vector<ezValue *> &constants,
                ezTable<string, ezValue *> &globals)
     : m_entry(entry), m_constants(constants), m_globals(globals) {}
 
+void ezDump::dump(ezFile &sink, vector<ezAddress> &addrs) {
+  if (addrs.size() == 0) {
+    sink.print(" null");
+    return;
+  }
+  for (vector<ezAddress>::iterator it = addrs.begin(); it != addrs.end(); it++)
+    dump(sink, *it);
+}
+
 void ezDump::dump(ezFile &sink, const ezAddress addr) {
   switch (addr.segment) {
   case EZ_ASM_SEGMENT_CONSTANT:
@@ -97,18 +106,44 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       op = (ezOpCode)crsl->instruction[pc]->cmd;
       sink.print("      %d:%s", pc, opstr(op));
       switch (op) {
+      case EZ_OP_ADD:
+      case EZ_OP_SUB:
+      case EZ_OP_MUL:
+      case EZ_OP_DIV:
+      case EZ_OP_MOD:
+      case EZ_OP_AND:
+      case EZ_OP_OR:
+      case EZ_OP_XOR:
+      case EZ_OP_CMP:
+      case EZ_OP_MV:
+      case EZ_OP_LSL:
+      case EZ_OP_LSR:
+        dump(sink, crsl->instruction[pc]->dests);
+        sink.print(",");
+        dump(sink, crsl->instruction[pc]->srcs);
+        break;
       case EZ_OP_BEQ:
       case EZ_OP_BGE:
       case EZ_OP_BLT:
       case EZ_OP_BNE:
         dump(sink, crsl->instruction[pc]->arg);
-        sink.print("\n");
-        continue;
+        sink.print("%d", crsl->instruction[pc]->offset);
+        break;
       case EZ_OP_BRA:
-        sink.print("\n");
-        continue;
+        sink.print("%d", crsl->instruction[pc]->offset);
+        break;
       case EZ_OP_CALL:
         dump(sink, crsl->instruction[pc]->arg);
+        sink.print(",");
+        dump(sink, crsl->instruction[pc]->srcs);
+        sink.print(",");
+        dump(sink, crsl->instruction[pc]->dests);
+        break;
+      case EZ_OP_NOT:
+        dump(sink, crsl->instruction[pc]->arg);
+        break;
+      case EZ_OP_RET:
+        dump(sink, crsl->instruction[pc]->dests);
         break;
       }
       sink.print("\n");

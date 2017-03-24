@@ -23,9 +23,9 @@
 *
 */
 #pragma once
+#include "ezaddr.h"
 #include "ezgc.h"
 #include "eztable.h"
-#include "ezaddr.h"
 #include <complex>
 #include <cstddef>
 #include <cstdint>
@@ -144,8 +144,8 @@ public:
 };
 
 class ezInstruction {
-public: 
-  //TODO:It should be replaced with the bind.
+public:
+  // TODO:It should be replaced with the bind.
   size_t cmd;
   size_t offset;
   ezAddress arg;
@@ -165,7 +165,7 @@ public:
   ezCarousel(uint8_t args, size_t mems, ezTable<string, ezValue *> *local,
              ezTable<string, ezValue *> *scope);
   ~ezCarousel();
-  vector<ezInstruction*> instruction;
+  vector<ezInstruction *> instruction;
   vector<size_t> jmptbl;
   void on_mark(void);
   vector<ezValue *> *local_memory(void);
@@ -178,6 +178,5 @@ class ezNativeCarousel : public ezValue {
 private:
 public:
   ezNativeCarousel();
-  virtual void run(vector<ezValue *> &args,
-                   vector<ezValue *> &rets) = 0;
+  virtual void run(vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
 };
