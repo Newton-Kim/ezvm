@@ -39,7 +39,7 @@ void ezAsmProcedure::grow(size_t mems) {
 
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
                           vector<ezAddress> &rets) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_CALL;
   inst->arg = func;
   inst->srcs = args;
@@ -49,7 +49,7 @@ void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
 
 void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
                          const ezAddress &rarg) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_CMP;
   inst->arg = cond;
   inst->dests.push_back(larg);
@@ -58,7 +58,7 @@ void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
 }
 
 void ezAsmProcedure::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_MV;
   inst->srcs = src;
   inst->dests = dest;
@@ -66,7 +66,7 @@ void ezAsmProcedure::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
 }
 
 void ezAsmProcedure::mv(ezAddress &dest, ezAddress &src) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_MV;
   inst->srcs.push_back(src);
   inst->dests.push_back(dest);
@@ -77,7 +77,7 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
                                                       const ezAddress dest,
                                                       const ezAddress obj,
                                                       const ezAddress offset) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
   inst->arg = offset;
@@ -90,7 +90,7 @@ void ezAsmProcedure::instruction_with_1_1_1_arguments(const ezOpCode op,
                                                       const ezAddress cond,
                                                       const ezAddress obj,
                                                       const ezAddress offset) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
   inst->arg = offset;
@@ -103,7 +103,7 @@ void ezAsmProcedure::instruction_with_1_2_0_arguments(const ezOpCode op,
                                                       const ezAddress dest,
                                                       const ezAddress obj,
                                                       const ezAddress offset) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
   inst->srcs.push_back(offset);
@@ -116,7 +116,7 @@ void ezAsmProcedure::instruction_with_1_2_0_arguments(const ezOpCode op,
                                                       const ezAddress cond,
                                                       const ezAddress obj,
                                                       const ezAddress offset) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(obj);
   inst->srcs.push_back(offset);
@@ -166,7 +166,7 @@ void ezAsmProcedure::div(const ezAddress dest, const ezAddress cond,
 }
 
 void ezAsmProcedure::fgc(void) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_FGC;
   m_carousel->instruction.push_back(inst);
 }
@@ -194,7 +194,7 @@ void ezAsmProcedure::mul(const ezAddress dest, const ezAddress cond,
 void ezAsmProcedure::instruction_with_an_argument(ezOpCode op,
                                                   const ezAddress dest,
                                                   const ezAddress org) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(org);
   inst->dests.push_back(dest);
@@ -205,7 +205,7 @@ void ezAsmProcedure::instruction_with_an_argument(ezOpCode op,
                                                   const ezAddress dest,
                                                   const ezAddress cond,
                                                   const ezAddress org) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->srcs.push_back(org);
   inst->dests.push_back(dest);
@@ -232,13 +232,13 @@ void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress cond,
 }
 
 void ezAsmProcedure::ret(void) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_RET;
   m_carousel->instruction.push_back(inst);
 }
 
 void ezAsmProcedure::ret(vector<ezAddress> &src) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_RET;
   inst->dests = src;
   m_carousel->instruction.push_back(inst);
@@ -295,7 +295,7 @@ size_t ezAsmProcedure::label2index(string label) {
 
 void ezAsmProcedure::branch_instruction(ezOpCode op, const ezAddress cond,
                                         string label) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = op;
   inst->arg = cond;
   inst->offset = label2index(label);
@@ -319,7 +319,7 @@ void ezAsmProcedure::bne(const ezAddress cond, string label) {
 }
 
 void ezAsmProcedure::bra(string label) {
-  ezInstruction* inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction;
   inst->cmd = EZ_OP_BRA;
   inst->offset = label2index(label);
   m_carousel->instruction.push_back(inst);

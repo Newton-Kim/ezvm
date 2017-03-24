@@ -39,8 +39,7 @@ public:
 
 ezIoPrint::ezIoPrint(ostream &io) : ezNativeCarousel(), m_io(io) {}
 
-void ezIoPrint::run(vector<ezValue *> &args,
-                    vector<ezValue *> &rets) {
+void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
   rets.clear();
   stringstream ss;
   size_t len = args.size();

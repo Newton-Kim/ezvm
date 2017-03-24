@@ -93,7 +93,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     ezOpCode op;
     uint8_t arg[3];
     size_t len = crsl->instruction.size();
-    for (size_t pc = 0 ; pc < len ; pc++) {
+    for (size_t pc = 0; pc < len; pc++) {
       op = (ezOpCode)crsl->instruction[pc]->cmd;
       sink.print("      %d:%s", pc, opstr(op));
       switch (op) {
