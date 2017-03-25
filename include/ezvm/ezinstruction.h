@@ -25,8 +25,8 @@
 #pragma once
 
 #include "ezvm/ezaddr.h"
-#include <cstdint>
 #include <vector>
+#include <functional>
 
 using namespace std;
 
@@ -52,16 +52,25 @@ enum ezOpCode {
   EZ_OP_OR,
   EZ_OP_RET,
   EZ_OP_SUB,
-  EZ_OP_XOR
+  EZ_OP_XOR,
+  EZ_OP_AUTO
 };
 
+class ezStackFrame;
+
 class ezInstruction {
+private:
+  function<void(ezStackFrame* stk, ezInstruction& arg)> m_func;
+
 public:
+  ezInstruction();
+  ezInstruction(function<void(ezStackFrame* stk, ezInstruction& arg)> func);
   // TODO:It should be replaced with the bind.
   ezOpCode cmd;
   size_t offset;
   ezAddress arg;
   vector<ezAddress> srcs;
   vector<ezAddress> dests;
+  inline void process(ezStackFrame* stk) {m_func(stk, *this);}
 };
 

@@ -134,9 +134,9 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_libezvm_la_OBJECTS = ezarchive.lo ezalu.lo ezgc.lo ezasm.lo \
-	ezdump.lo ezval.lo stack.lo thread.lo vm.lo utility/ezfile.lo \
-	utility/ezlog.lo
+am_libezvm_la_OBJECTS = ezarchive.lo ezalu.lo ezgc.lo ezinstruction.lo \
+	ezasm.lo ezdump.lo ezval.lo stack.lo thread.lo vm.lo \
+	utility/ezfile.lo utility/ezlog.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -339,6 +339,7 @@ lib_LTLIBRARIES = libezvm.la
 libezvm_la_SOURCES = ezarchive.cc \
 		   ezalu.cc \
 		   ezgc.cc \
+		   ezinstruction.cc \
 		   ezasm.cc \
 		   ezdump.cc \
 		   ezval.cc \
@@ -378,9 +379,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/libezvm/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/libezvm/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/libezvm/Makefile
+	  $(AUTOMAKE) --gnu src/libezvm/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -462,6 +463,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezasm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezdump.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezgc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezinstruction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezval.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@

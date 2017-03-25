@@ -566,6 +566,9 @@ ezStepState ezStackFrame::step(void) {
     else
       bitwise_xor(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
     break;
+  case EZ_OP_AUTO:
+    inst->process(this);
+    break;
   }
   return status;
 }
