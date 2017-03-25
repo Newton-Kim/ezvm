@@ -26,6 +26,7 @@
 #include "ezaddr.h"
 #include "ezgc.h"
 #include "eztable.h"
+#include "ezinstruction.h"
 #include <complex>
 #include <cstddef>
 #include <cstdint>
@@ -141,16 +142,6 @@ public:
   string to_string(void);
   ezValue *condition(void);
   double to_float(void);
-};
-
-class ezInstruction {
-public:
-  // TODO:It should be replaced with the bind.
-  size_t cmd;
-  size_t offset;
-  ezAddress arg;
-  vector<ezAddress> srcs;
-  vector<ezAddress> dests;
 };
 
 class ezCarousel : public ezValue, ezGCClient {

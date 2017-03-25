@@ -58,7 +58,7 @@ private:
   void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, vector<ezAddress> &addrs);
   void dump(ezFile &sink, const ezValue *v);
-  const char *opstr(size_t op);
+  const char *opstr(ezOpCode op);
 
 public:
   /**

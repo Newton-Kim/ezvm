@@ -25,7 +25,6 @@
 #pragma once
 
 #include "ezvm/ezaddr.h"
-#include "ezvm/ezval.h"
 #include <cstdint>
 #include <vector>
 
@@ -55,3 +54,14 @@ enum ezOpCode {
   EZ_OP_SUB,
   EZ_OP_XOR
 };
+
+class ezInstruction {
+public:
+  // TODO:It should be replaced with the bind.
+  ezOpCode cmd;
+  size_t offset;
+  ezAddress arg;
+  vector<ezAddress> srcs;
+  vector<ezAddress> dests;
+};
+

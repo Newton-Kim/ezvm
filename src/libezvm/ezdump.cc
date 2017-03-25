@@ -194,7 +194,7 @@ void ezDump::dump(const string path) {
   sink.print("\n");
 }
 
-const char *ezDump::opstr(size_t op) {
+const char *ezDump::opstr(ezOpCode op) {
   switch (op) {
   case EZ_OP_ADD:
     return "add";
