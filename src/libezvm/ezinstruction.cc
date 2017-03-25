@@ -1,5 +1,5 @@
 #include "ezvm/ezinstruction.h"
 
-ezInstruction::ezInstruction() {}
+ezInstruction::ezInstruction():auto_cmd(false) {}
 
-ezInstruction::ezInstruction(function<void(ezStackFrame* stk, ezInstruction& arg)> func):cmd(EZ_OP_AUTO), m_func(func) {}
+ezInstruction::ezInstruction(function<void(ezStackFrame* stk, ezInstruction& arg)> func):auto_cmd(true), m_func(func) {}

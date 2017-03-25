@@ -66,6 +66,7 @@ public:
   ezInstruction();
   ezInstruction(function<void(ezStackFrame* stk, ezInstruction& arg)> func);
   // TODO:It should be replaced with the bind.
+  const bool auto_cmd;
   ezOpCode cmd;
   size_t offset;
   ezAddress arg;

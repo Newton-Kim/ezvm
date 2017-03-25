@@ -162,7 +162,9 @@ private:
   void bra(size_t index);
   ezStepState call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
+public:
   void cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2);
+private:
   void div(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void div(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void fgc(void);

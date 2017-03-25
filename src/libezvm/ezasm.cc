@@ -24,6 +24,7 @@
 */
 #include "ezvm/ezasm.h"
 #include "ezvm/ezlog.h"
+#include "ezvm/ezstack.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -49,10 +50,10 @@ void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
 
 void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
                          const ezAddress &rarg) {
-  ezInstruction *inst = new ezInstruction;
+  ezInstruction *inst = new ezInstruction([](ezStackFrame* stk, ezInstruction& inst) {stk->cmp(inst.arg, inst.srcs[0], inst.srcs[1]);});
   inst->cmd = EZ_OP_CMP;
   inst->arg = cond;
-  inst->dests.push_back(larg);
+  inst->srcs.push_back(larg);
   inst->srcs.push_back(rarg);
   m_carousel->instruction.push_back(inst);
 }

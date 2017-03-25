@@ -114,11 +114,15 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       case EZ_OP_AND:
       case EZ_OP_OR:
       case EZ_OP_XOR:
-      case EZ_OP_CMP:
       case EZ_OP_MV:
       case EZ_OP_LSL:
       case EZ_OP_LSR:
         dump(sink, crsl->instruction[pc]->dests);
+        sink.print(",");
+        dump(sink, crsl->instruction[pc]->srcs);
+        break;
+      case EZ_OP_CMP:
+        dump(sink, crsl->instruction[pc]->arg);
         sink.print(",");
         dump(sink, crsl->instruction[pc]->srcs);
         break;
@@ -127,10 +131,11 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       case EZ_OP_BLT:
       case EZ_OP_BNE:
         dump(sink, crsl->instruction[pc]->arg);
-        sink.print("%d", crsl->instruction[pc]->offset);
+        sink.print(",");
+        sink.print(" %d", crsl->instruction[pc]->offset);
         break;
       case EZ_OP_BRA:
-        sink.print("%d", crsl->instruction[pc]->offset);
+        sink.print(" %d", crsl->instruction[pc]->offset);
         break;
       case EZ_OP_CALL:
         dump(sink, crsl->instruction[pc]->arg);
