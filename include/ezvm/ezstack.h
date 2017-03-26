@@ -34,21 +34,6 @@
 using namespace std;
 
 /**
-* @brief ezStepState shows if the stack has procedures to run.
-*/
-enum ezStepState {
-  /**
-  * @brief means the stack has procedures to run.
-  */
-  EZ_STEP_CONTINUE,
-  /**
-  * @brief means the stack is empty and ready to be collected.
-  */
-  EZ_STEP_CALL,
-  EZ_STEP_DONE
-};
-
-/**
 * @brief contains data for representing a procedure in action.
 */
 class ezStackFrame {
@@ -162,8 +147,10 @@ private:
   void bra(size_t index);
   ezStepState call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
+
 public:
   void cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2);
+
 private:
   void div(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void div(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);

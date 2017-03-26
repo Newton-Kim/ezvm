@@ -25,8 +25,8 @@
 #pragma once
 
 #include "ezvm/ezaddr.h"
-#include <vector>
 #include <functional>
+#include <vector>
 
 using namespace std;
 
@@ -56,15 +56,31 @@ enum ezOpCode {
   EZ_OP_AUTO
 };
 
+/**
+* @brief ezStepState shows if the stack has procedures to run.
+*/
+enum ezStepState {
+  /**
+  * @brief means the stack has procedures to run.
+  */
+  EZ_STEP_CONTINUE,
+  /**
+  * @brief means the stack is empty and ready to be collected.
+  */
+  EZ_STEP_CALL,
+  EZ_STEP_DONE
+};
+
 class ezStackFrame;
 
 class ezInstruction {
 private:
-  function<void(ezStackFrame* stk, ezInstruction& arg)> m_func;
+  function<ezStepState(ezStackFrame *stk, ezInstruction &arg)> m_func;
 
 public:
   ezInstruction();
-  ezInstruction(function<void(ezStackFrame* stk, ezInstruction& arg)> func);
+  ezInstruction(
+      function<ezStepState(ezStackFrame *stk, ezInstruction &arg)> func);
   // TODO:It should be replaced with the bind.
   const bool auto_cmd;
   ezOpCode cmd;
@@ -72,6 +88,5 @@ public:
   ezAddress arg;
   vector<ezAddress> srcs;
   vector<ezAddress> dests;
-  inline void process(ezStackFrame* stk) {m_func(stk, *this);}
+  inline ezStepState process(ezStackFrame *stk) { return m_func(stk, *this); }
 };
-

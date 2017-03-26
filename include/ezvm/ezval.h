@@ -25,8 +25,8 @@
 #pragma once
 #include "ezaddr.h"
 #include "ezgc.h"
-#include "eztable.h"
 #include "ezinstruction.h"
+#include "eztable.h"
 #include <complex>
 #include <cstddef>
 #include <cstdint>

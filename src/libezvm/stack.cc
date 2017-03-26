@@ -463,10 +463,8 @@ ezStepState ezStackFrame::step(void) {
   ezInstruction *inst = m_carousel->instruction[m_pc++];
   ezStepState status = EZ_STEP_CONTINUE;
   uint8_t arg1, arg2, arg3;
-  if(inst->auto_cmd) {
-    inst->process(this);
-    return status;
-  }
+  if (inst->auto_cmd)
+    return inst->process(this);
   switch (inst->cmd) {
   case EZ_OP_ADD:
     if (inst->dests.size() == 1)
@@ -498,11 +496,11 @@ ezStepState ezStackFrame::step(void) {
   case EZ_OP_CALL:
     status = call(inst->arg, inst->srcs, inst->dests);
     break;
-/*
-  case EZ_OP_CMP:
-    cmp(inst->dests[0], inst->srcs[0], inst->srcs[1]);
-    break;
-*/
+  /*
+    case EZ_OP_CMP:
+      cmp(inst->dests[0], inst->srcs[0], inst->srcs[1]);
+      break;
+  */
   case EZ_OP_DIV:
     if (inst->dests.size() == 1)
       div(inst->dests[0], inst->srcs[0], inst->srcs[1]);

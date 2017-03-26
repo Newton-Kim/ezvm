@@ -45,6 +45,7 @@ private:
   ezTable<string, ezValue *> m_globals;
   ezASM *m_pasm;
   ezArchive *m_parchive;
+  // TODO:user defined dump should be pluggable.
   ezDump *m_pdump;
   ezGC m_gc;
   ezALU m_alu;

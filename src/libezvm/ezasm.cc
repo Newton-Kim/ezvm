@@ -50,7 +50,11 @@ void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
 
 void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
                          const ezAddress &rarg) {
-  ezInstruction *inst = new ezInstruction([](ezStackFrame* stk, ezInstruction& inst) {stk->cmp(inst.arg, inst.srcs[0], inst.srcs[1]);});
+  ezInstruction *inst =
+      new ezInstruction([](ezStackFrame *stk, ezInstruction &inst) {
+        stk->cmp(inst.arg, inst.srcs[0], inst.srcs[1]);
+        return EZ_STEP_CONTINUE;
+      });
   inst->cmd = EZ_OP_CMP;
   inst->arg = cond;
   inst->srcs.push_back(larg);
