@@ -76,4 +76,6 @@ public:
   * @param path is file name.
   */
   void dump(const string path);
+  void dump(ezFile &sink, ezOpCode op, ezAddress result, ezAddress lparam, ezAddress rparam);
+  void dump(ezFile &sink, ezOpCode op, ezAddress result, ezAddress cond, ezAddress lparam, ezAddress rparam);
 };

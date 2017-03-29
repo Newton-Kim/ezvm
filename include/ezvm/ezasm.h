@@ -67,10 +67,14 @@ private:
                                         const ezAddress cond,
                                         const ezAddress obj,
                                         const ezAddress offset);
-  void instruction_with_1_2_0_arguments(const ezOpCode op, const ezAddress dest,
+  void instruction_with_1_2_0_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+                                        const ezAddress dest,
                                         const ezAddress obj,
                                         const ezAddress offset);
-  void instruction_with_1_2_0_arguments(const ezOpCode op, const ezAddress dest,
+  void instruction_with_1_2_0_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+                                        const ezAddress dest,
                                         const ezAddress cond,
                                         const ezAddress obj,
                                         const ezAddress offset);

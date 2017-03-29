@@ -25,6 +25,7 @@
 #pragma once
 
 #include "ezvm/ezaddr.h"
+#include "ezvm/ezfile.h"
 #include <functional>
 #include <vector>
 
@@ -72,15 +73,18 @@ enum ezStepState {
 };
 
 class ezStackFrame;
+class ezDump;
 
 class ezInstruction {
 private:
-  function<ezStepState(ezStackFrame *stk, ezInstruction &arg)> m_func;
+  function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> m_func;
+  function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> m_dump;
 
 public:
   ezInstruction();
   ezInstruction(
-      function<ezStepState(ezStackFrame *stk, ezInstruction &arg)> func);
+      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump);
   // TODO:It should be replaced with the bind.
   const bool auto_cmd;
   ezOpCode cmd;
@@ -88,5 +92,6 @@ public:
   ezAddress arg;
   vector<ezAddress> srcs;
   vector<ezAddress> dests;
-  inline ezStepState process(ezStackFrame *stk) { return m_func(stk, *this); }
+  inline ezStepState process(ezStackFrame &stk) { return m_func(stk, *this); }
+  inline void dump(ezFile &sink, ezDump &dump) { m_dump(sink, dump, *this); }
 };

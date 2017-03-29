@@ -93,18 +93,23 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     sink.print("      .memsize: %lu\n", crsl->nmems);
     sink.print("      .jump table:\n");
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
-      sink.print("        [%lu]:%lu\n", i, crsl->jmptbl[i]);
+      sink.print("        [%lu]=%lu\n", i, crsl->jmptbl[i]);
     sink.print("      .jump symbol table:\n");
     for (map<string, size_t>::iterator it = crsl->local_symtab().begin();
          it != crsl->local_symtab().end(); it++)
-      sink.print("        %s->%lu\n", it->first.c_str(), it->second);
+      sink.print("        [%s]=%lu\n", it->first.c_str(), it->second);
     ezAddress addr;
     ezOpCode op;
     uint8_t arg[3];
     size_t len = crsl->instruction.size();
     for (size_t pc = 0; pc < len; pc++) {
+      sink.print("      %d:", pc);
+      if(crsl->instruction[pc]->auto_cmd) {
+        crsl->instruction[pc]->dump(sink, *this);
+        continue;
+      }
       op = (ezOpCode)crsl->instruction[pc]->cmd;
-      sink.print("      %d:%s", pc, opstr(op));
+      sink.print("%s", opstr(op));
       switch (op) {
       case EZ_OP_ADD:
       case EZ_OP_SUB:
@@ -247,4 +252,26 @@ const char *ezDump::opstr(ezOpCode op) {
     return "xor";
   }
   return "unknown";
+}
+
+void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress result, ezAddress lparam, ezAddress rparam){
+  sink.print("%s", opstr(op));
+  dump(sink, result);
+  sink.print(", ");
+  dump(sink, lparam);
+  sink.print(" ");
+  dump(sink, rparam);
+  sink.print("\n");
+}
+
+void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress result, ezAddress cond, ezAddress lparam, ezAddress rparam){
+  sink.print("%s", opstr(op));
+  dump(sink, result);
+  dump(sink, cond);
+  sink.print(" ");
+  sink.print(", ");
+  dump(sink, lparam);
+  sink.print(" ");
+  dump(sink, rparam);
+  sink.print("\n");
 }

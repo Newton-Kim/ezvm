@@ -135,8 +135,10 @@ private:
                        function<ezValue *(ezValue *)> binary_func);
   void unary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src,
                        function<ezValue *(ezValue *)> binary_func);
+public:
   void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+private:
   void bitwise_and(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_and(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                    ezAddress &src2);

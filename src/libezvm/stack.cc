@@ -464,7 +464,7 @@ ezStepState ezStackFrame::step(void) {
   ezStepState status = EZ_STEP_CONTINUE;
   uint8_t arg1, arg2, arg3;
   if (inst->auto_cmd)
-    return inst->process(this);
+    return inst->process(*this);
   switch (inst->cmd) {
   case EZ_OP_ADD:
     if (inst->dests.size() == 1)
