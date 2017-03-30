@@ -156,25 +156,25 @@ public:
   void bitwise_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                    ezAddress &src2);
-private:
+  void lsl(ezAddress &dest, ezAddress &src, ezAddress &offset);
+  void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
+  void lsr(ezAddress &dest, ezAddress &src, ezAddress &offset);
+  void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
   void beq(ezAddress &cond, size_t index);
   void bge(ezAddress &cond, size_t index);
   void blt(ezAddress &cond, size_t index);
   void bne(ezAddress &cond, size_t index);
   void bra(size_t index);
-  ezStepState call(ezAddress &func, vector<ezAddress> &args,
-                   vector<ezAddress> &rets);
-  void fgc(void);
-  void lsl(ezAddress &dest, ezAddress &src, ezAddress &offset);
-  void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
-  void lsr(ezAddress &dest, ezAddress &src, ezAddress &offset);
-  void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
-  void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
-  void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
   void neg(ezAddress &dest, ezAddress &src);
   void neg(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
+private:
+  ezStepState call(ezAddress &func, vector<ezAddress> &args,
+                   vector<ezAddress> &rets);
+  void fgc(void);
+  void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
+  void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
   void ret(vector<ezAddress> &srcs);
 
 public:

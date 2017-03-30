@@ -466,6 +466,7 @@ ezStepState ezStackFrame::step(void) {
   if (inst->auto_cmd)
     return inst->process(*this);
   switch (inst->cmd) {
+/*
   case EZ_OP_ADD:
     if (inst->dests.size() == 1)
       add(inst->dests[0], inst->srcs[0], inst->srcs[1]);
@@ -493,6 +494,7 @@ ezStepState ezStackFrame::step(void) {
   case EZ_OP_BRA:
     bra(inst->offset);
     break;
+*/
   case EZ_OP_CALL:
     status = call(inst->arg, inst->srcs, inst->dests);
     break;
@@ -500,15 +502,17 @@ ezStepState ezStackFrame::step(void) {
     case EZ_OP_CMP:
       cmp(inst->dests[0], inst->srcs[0], inst->srcs[1]);
       break;
-  */
   case EZ_OP_DIV:
     if (inst->dests.size() == 1)
       div(inst->dests[0], inst->srcs[0], inst->srcs[1]);
     else
       div(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
     break;
+  */
   case EZ_OP_FGC:
     fgc();
+    break;
+/*
   case EZ_OP_LSL:
     if (inst->dests.size() == 1)
       lsl(inst->dests[0], inst->srcs[0], inst->arg);
@@ -520,7 +524,6 @@ ezStepState ezStackFrame::step(void) {
       lsr(inst->dests[0], inst->srcs[0], inst->arg);
     else
       lsr(inst->dests[0], inst->dests[1], inst->srcs[0], inst->arg);
-    break;
     break;
   case EZ_OP_MOD:
     if (inst->dests.size() == 1)
@@ -534,9 +537,6 @@ ezStepState ezStackFrame::step(void) {
     else
       mul(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
     break;
-  case EZ_OP_MV:
-    mv(inst->dests, inst->srcs);
-    break;
   case EZ_OP_NEG:
     if (inst->dests.size() == 1)
       neg(inst->dests[0], inst->srcs[0]);
@@ -549,14 +549,19 @@ ezStepState ezStackFrame::step(void) {
     else
       bitwise_not(inst->dests[0], inst->dests[1], inst->srcs[0]);
     break;
+*/
+  case EZ_OP_MV:
+    mv(inst->dests, inst->srcs);
+    break;
+  case EZ_OP_RET:
+    ret(inst->dests);
+    break;
+/*
   case EZ_OP_OR:
     if (inst->dests.size() == 1)
       bitwise_or(inst->dests[0], inst->srcs[0], inst->srcs[1]);
     else
       bitwise_or(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
-    break;
-  case EZ_OP_RET:
-    ret(inst->dests);
     break;
   case EZ_OP_SUB:
     if (inst->dests.size() == 1)
@@ -570,6 +575,7 @@ ezStepState ezStackFrame::step(void) {
     else
       bitwise_xor(inst->dests[0], inst->dests[1], inst->srcs[0], inst->srcs[1]);
     break;
+*/
   }
   return status;
 }

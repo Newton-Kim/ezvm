@@ -56,29 +56,27 @@ private:
   * @brief is an instance of a carousel.
   */
   ezCarousel *m_carousel;
-  void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
+  void instruction_with_unary_argument(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+const ezAddress dest,
                                     const ezAddress src);
-  void instruction_with_an_argument(ezOpCode op, const ezAddress dest,
+  void instruction_with_unary_argument(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+const ezAddress dest,
                                     const ezAddress cond, const ezAddress src);
-  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest,
-                                        const ezAddress obj,
-                                        const ezAddress offset);
-  void instruction_with_1_1_1_arguments(const ezOpCode op, const ezAddress dest,
-                                        const ezAddress cond,
-                                        const ezAddress obj,
-                                        const ezAddress offset);
-  void instruction_with_1_2_0_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+  void instruction_with_binary_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
                                         const ezAddress dest,
                                         const ezAddress obj,
                                         const ezAddress offset);
-  void instruction_with_1_2_0_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+  void instruction_with_binary_arguments(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
                                         const ezAddress dest,
                                         const ezAddress cond,
                                         const ezAddress obj,
                                         const ezAddress offset);
-  void branch_instruction(ezOpCode op, const ezAddress cond, string label);
+  void branch_instruction(function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump, const ezAddress cond, string label);
 
 public:
   /**
