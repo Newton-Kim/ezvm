@@ -138,10 +138,25 @@ private:
 public:
   void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-private:
+  void cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2);
+  void div(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void div(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+  void mod(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void mod(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+  void mul(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void mul(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+  void sub(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void sub(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void bitwise_and(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_and(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                    ezAddress &src2);
+  void bitwise_or(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void bitwise_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                  ezAddress &src2);
+  void bitwise_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void bitwise_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                   ezAddress &src2);
+private:
   void beq(ezAddress &cond, size_t index);
   void bge(ezAddress &cond, size_t index);
   void blt(ezAddress &cond, size_t index);
@@ -149,37 +164,18 @@ private:
   void bra(size_t index);
   ezStepState call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
-
-public:
-  void cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2);
-
-private:
-  void div(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void div(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void fgc(void);
   void lsl(ezAddress &dest, ezAddress &src, ezAddress &offset);
   void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
   void lsr(ezAddress &dest, ezAddress &src, ezAddress &offset);
   void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src, ezAddress &offset);
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
-  void mod(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void mod(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void mul(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void mul(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
   void neg(ezAddress &dest, ezAddress &src);
   void neg(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void ret(vector<ezAddress> &srcs);
-  void sub(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void sub(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void bitwise_or(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void bitwise_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                  ezAddress &src2);
-  void bitwise_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void bitwise_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                   ezAddress &src2);
 
 public:
   /**
