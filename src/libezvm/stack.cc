@@ -36,6 +36,10 @@ ezStackFrame::ezStackFrame(ezCarousel *crsl,
       m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc),
       m_callee(NULL) {
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
+  m_memory.push_back(&(m_globals.m_memory));
+  m_memory.push_back(&m_constants);
+  m_memory.push_back(m_local);
+  m_memory.push_back(m_scope);
 }
 
 ezStackFrame::~ezStackFrame() {
@@ -44,34 +48,7 @@ ezStackFrame::~ezStackFrame() {
 }
 
 ezValue *ezStackFrame::addr2val(ezAddress addr) {
-  ezValue *v = NULL;
-  switch (addr.segment) {
-  case EZ_ASM_SEGMENT_CONSTANT:
-    if (addr.offset >= m_constants.size())
-      throw runtime_error("constant memory access violation");
-    v = m_constants[addr.offset];
-    break;
-  case EZ_ASM_SEGMENT_LOCAL: {
-    if (addr.offset >= m_local->size())
-      throw runtime_error("local memory access violation");
-    v = (*m_local)[addr.offset];
-  } break;
-  case EZ_ASM_SEGMENT_SCOPE:
-    if (!m_scope)
-      throw runtime_error("the function does not have a scope");
-    if (addr.offset >= m_scope->size())
-      throw runtime_error("scope memory access violation");
-    v = (*m_scope)[addr.offset];
-    break;
-  case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= m_globals.m_memory.size())
-      throw runtime_error("global memory access violation");
-    v = m_globals.m_memory[addr.offset];
-    break;
-  default:
-    throw runtime_error("out of segment boundary");
-  }
-  return v;
+  return m_memory[addr.segment]->operator[](addr.offset);
 }
 
 void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {

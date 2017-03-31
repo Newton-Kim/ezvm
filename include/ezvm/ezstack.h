@@ -79,6 +79,7 @@ private:
   */
   ezGC &m_gc;
   ezStackFrame *m_callee;
+  vector<vector<ezValue *> *> m_memory;
   /**
   * @brief fetches a value from an address.
   *
@@ -135,6 +136,7 @@ private:
                        function<ezValue *(ezValue *)> binary_func);
   void unary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src,
                        function<ezValue *(ezValue *)> binary_func);
+
 public:
   void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
@@ -174,6 +176,7 @@ public:
   ezStepState call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   void fgc(void);
+
 private:
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
 

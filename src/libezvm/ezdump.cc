@@ -207,30 +207,48 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   sink.print("%s", opstr(op));
   dump(sink, func);
   sink.print(",");
-  for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
-    dump(sink, *it);
+  if (srcs.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
+      dump(sink, *it);
   sink.print(",");
-  for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end(); it++)
-    dump(sink, *it);
+  if (dests.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
+         it++)
+      dump(sink, *it);
   sink.print("\n");
 }
 
 void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
                   vector<ezAddress> &param) {
   sink.print("%s", opstr(op));
-  for (vector<ezAddress>::iterator it = result.begin(); it != result.end();
-       it++)
-    dump(sink, *it);
+  if (result.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = result.begin(); it != result.end();
+         it++)
+      dump(sink, *it);
   sink.print(",");
-  for (vector<ezAddress>::iterator it = param.begin(); it != param.end(); it++)
-    dump(sink, *it);
+  if (param.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
+         it++)
+      dump(sink, *it);
   sink.print("\n");
 }
 
 void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param) {
   sink.print("%s", opstr(op));
-  for (vector<ezAddress>::iterator it = param.begin(); it != param.end(); it++)
-    dump(sink, *it);
+  if (param.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
+         it++)
+      dump(sink, *it);
   sink.print("\n");
 }
 
@@ -239,11 +257,13 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset) {
   dump(sink, cond);
   sink.print(",");
   sink.print(" %d", offset);
+  sink.print("\n");
 }
 
 void ezDump::dump(ezFile &sink, ezOpCode op, size_t offset) {
   sink.print("%s", opstr(op));
   sink.print(" %d", offset);
+  sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op) { sink.print("%s", opstr(op)); }
+void ezDump::dump(ezFile &sink, ezOpCode op) { sink.print("%s\n", opstr(op)); }
