@@ -169,13 +169,13 @@ public:
   void neg(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
-private:
+  void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
+  void ret(vector<ezAddress> &srcs);
   ezStepState call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   void fgc(void);
+private:
   void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
-  void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
-  void ret(vector<ezAddress> &srcs);
 
 public:
   /**

@@ -76,7 +76,10 @@ public:
   * @param path is file name.
   */
   void dump(const string path);
+  void dump(ezFile &sink, ezOpCode op, ezAddress& func, vector<ezAddress>& srcs, vector<ezAddress>& dests);
   void dump(ezFile &sink, ezOpCode op, vector<ezAddress>& result, vector<ezAddress>& param);
+  void dump(ezFile &sink, ezOpCode op, vector<ezAddress>& param);
   void dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset);
   void dump(ezFile &sink, ezOpCode op, size_t offset);
+  void dump(ezFile &sink, ezOpCode op);
 };
