@@ -136,6 +136,7 @@ private:
                        function<ezValue *(ezValue *)> binary_func);
   void unary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src,
                        function<ezValue *(ezValue *)> binary_func);
+  ezValue* test_equality(ezAddress& rst, ezAddress& lsrc, ezAddress& rsrc, function<ezValue *(ezCondition *)> func);
 
 public:
   void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
@@ -154,6 +155,18 @@ public:
                    ezAddress &src2);
   void bitwise_or(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                  ezAddress &src2);
+  void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                  ezAddress &src2);
+  void tge(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void tge(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                  ezAddress &src2);
+  void tlt(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void tlt(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                  ezAddress &src2);
+  void tne(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                   ezAddress &src2);
   void bitwise_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,

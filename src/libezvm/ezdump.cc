@@ -196,6 +196,14 @@ const char *ezDump::opstr(ezOpCode op) {
     return "ret";
   case EZ_OP_SUB:
     return "sub";
+  case EZ_OP_TEQ:
+    return "teq";
+  case EZ_OP_TGE:
+    return "tge";
+  case EZ_OP_TLT:
+    return "tlt";
+  case EZ_OP_TNE:
+    return "tne";
   case EZ_OP_XOR:
     return "xor";
   }
