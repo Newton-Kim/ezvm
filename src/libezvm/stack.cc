@@ -68,31 +68,7 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
 }
 
 void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
-  switch (addr.segment) {
-  case EZ_ASM_SEGMENT_CONSTANT:
-    throw runtime_error("cannot write to constant");
-    break;
-  case EZ_ASM_SEGMENT_LOCAL: {
-    if (addr.offset >= m_local->size())
-      throw runtime_error("local memory access violation");
-    (*m_local)[addr.offset] = v;
-  } break;
-  case EZ_ASM_SEGMENT_SCOPE:
-    if (!m_scope)
-      throw runtime_error("the function does not have a scope");
-    if (addr.offset >= m_scope->size())
-      throw runtime_error("scope memory access violation");
-    (*m_scope)[addr.offset] = v;
-    break;
-  case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= m_globals.m_memory.size())
-      throw runtime_error("global memory access violation");
-    m_globals.m_memory[addr.offset] = v;
-    break;
-    break;
-    throw runtime_error("out of segment boundary");
-    break;
-  }
+  m_memory[addr.segment]->operator[](addr.offset) = v;
   m_gc.pause();
   if (v != ezNull::instance())
     m_gc.add((ezGCObject *)v);
