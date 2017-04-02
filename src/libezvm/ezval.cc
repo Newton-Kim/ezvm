@@ -169,7 +169,11 @@ ezCarousel::ezCarousel(uint8_t args, size_t mems,
       m_local->m_memory.push_back(ezNull::instance()); // TODO:using stl APIs
   }
 }
-ezCarousel::~ezCarousel() {}
+ezCarousel::~ezCarousel() {
+  for (vector<ezInstruction *>::iterator it = instruction.begin();
+       it != instruction.end(); it++)
+    delete *it;
+}
 ezNativeCarousel::ezNativeCarousel() : ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {
   m_size = sizeof(*this);
 }

@@ -321,20 +321,16 @@ public:
   */
   void sub(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
-  void teq(const ezAddress dest, const ezAddress &lsrc,
-                   const ezAddress &rsrc);
+  void teq(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void teq(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
-  void tge(const ezAddress dest, const ezAddress &lsrc,
-                   const ezAddress &rsrc);
+  void tge(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tge(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
-  void tlt(const ezAddress dest, const ezAddress &lsrc,
-                   const ezAddress &rsrc);
+  void tlt(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tlt(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
-  void tne(const ezAddress dest, const ezAddress &lsrc,
-                   const ezAddress &rsrc);
+  void tne(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tne(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
   /**
