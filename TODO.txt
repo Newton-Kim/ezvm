@@ -1,7 +1,7 @@
 -1.Global should be reduced to an array.
 -2.The assembler should have reserved keywords of [rgc][0-9]+.
 -3.Mark and sweep garbage collector should be implemented.
-4.The instruction should not be decoded in a class.
+-4.The instruction should not be decoded in a class.
 -5.operations should be changed to 3 operand structure.
 6.triVM should be implemented.
 -7.ezALU should be intrinsic and ezUsrALU should be external.
@@ -9,12 +9,12 @@
 9.ezClass should be added.
 10.ezIO should be changed to a class.
 -11.Intrinsic functions shouldn't be constant.
-12.The memory spaces should be reorganized linear in the stack frame.
+-12.The memory spaces should be reorganized linear in the stack frame.
 -13.Instruction should be recognized by a flag.
 -14.Scope should be implemented.
-15.Thread should be an inheritance of ezValue.
-16.fgc (force garbage collection) should be implemented.
-17.priviledge queue is required.
+-15.Thread should be an inheritance of ezValue.
+-16.fgc (force garbage collection) should be implemented.
+-17.priviledge queue is required.
 18.thd (thead commoand), join (pending this thread for others) should be implemented.
 X19.complex number should be introduced.
 -20.nret should be removed.
