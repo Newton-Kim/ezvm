@@ -29,12 +29,18 @@
 
 using namespace std;
 
+/**
+* @brief ezGCClient is an abtract object which contains ezGCObject.
+*/
 class ezGCClient {
 public:
   virtual ~ezGCClient(){};
   virtual void on_mark(void) = 0;
 };
 
+/**
+* @brief ezGCObject is an abstract object which occupies an allocated heap memory. 
+*/
 class ezGCObject {
 private:
   bool m_mark;
@@ -45,15 +51,40 @@ protected:
 public:
   ezGCObject() : m_mark(false) {}
   virtual ~ezGCObject() {}
+/**
+* @brief returns current state of the mark.
+*
+* @return boolean value which implies wheather it is marked.
+*/
   inline bool marked(void) { return m_mark; }
+/**
+* @brief sets the mark true.
+*/
   inline void mark(void) { m_mark = true; }
+/**
+* @brief sets the mark false.
+*/
   inline void unmark(void) { m_mark = false; }
+/**
+* @brief returns the size of the object.
+*
+* @return is the size of the object.
+*/
   virtual size_t size(void) { return m_size; }
 };
 
+/**
+* @brief ezGC is a garbage collector.
+*/
 class ezGC {
 private:
+/**
+* @brief m_clients is an array of ezGCClients.
+*/
   vector<ezGCClient *> m_clients;
+/**
+* @brief m+memories is an array of ezGCObjects.
+*/
   list<ezGCObject *> m_memories;
   size_t m_size;
   size_t m_prev_size;
@@ -63,9 +94,28 @@ private:
 public:
   ezGC();
   ~ezGC();
+/**
+* @brief adds an instance of ezGCObject.
+*
+* @param v is an instance of ezGCObject.
+*/
   void add(ezGCObject *v);
+/**
+* @brief adds an instance of ezGCClient.
+*
+* @param t is an instance of ezGCClient.
+*/
   void subscribe(ezGCClient *t);
+/**
+* @brief forces to collect the garbage.
+*/
   void force(void);
+/**
+* @brief pends the garbage collection.
+*/
   void pause(void) { m_pause = true; }
+/**
+* @brief sets the garbage collection back to normal state.
+*/
   void resume(void) { m_pause = false; }
 };
