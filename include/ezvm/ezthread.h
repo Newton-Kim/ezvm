@@ -76,6 +76,7 @@ private:
   * @brief A garbage collector
   */
   ezGC &m_gc;
+  bool m_pop_stack;
   /**
   * @brief fetches a value from an address.
   *
@@ -84,6 +85,7 @@ private:
   * @return A value.
   */
   ezValue *addr2val(ezAddress addr);
+  void pop_stack(void);
 
 public:
   /**

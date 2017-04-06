@@ -84,7 +84,6 @@ private:
   * @brief A garbage collector
   */
   ezGC &m_gc;
-  ezStackFrame *m_callee;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   /**
@@ -210,5 +209,6 @@ public:
   */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
+  void update(ezStackFrame* sf);
   void on_mark(void);
 };

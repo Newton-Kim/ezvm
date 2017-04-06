@@ -31,7 +31,7 @@ ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
                    vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
                    ezThreadScheduler sched)
     : m_entry(entry), m_scheduler(sched), m_constants(constants),
-      m_globals(globals), m_alu(alu), m_gc(gc) {
+      m_globals(globals), m_alu(alu), m_gc(gc), m_pop_stack(false) {
   ezValue *v = addr2val(entry);
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
@@ -81,16 +81,30 @@ ezValue *ezThread::addr2val(ezAddress addr) {
   return v;
 }
 
+void ezThread::pop_stack(void) {
+  ezLog &log = ezLog::instance();
+  ezStackFrame * sf = m_stack.back();
+  log.verbose("stack %p has poped out", sf);
+  m_stack.pop_back();
+  if(m_stack.empty()) return;
+  sf = m_stack.back();
+  sf->update(sf);
+  delete sf;
+  m_pop_stack = false;
+}
+
 void ezThread::run(void) {
   if (m_stack.empty()) return;
   switch (m_scheduler) {
   case EZ_THREAD_SCHED_REALTIME:
-    do
+    do {
       m_stack.back()->step();
-    while (!m_stack.empty());
+      if(m_pop_stack) pop_stack();
+    } while (!m_stack.empty());
     break;
   case EZ_THREAD_SCHED_ROUNDROBIN:
     m_stack.back()->step();
+    if(m_pop_stack) pop_stack();
     break;
   }
 }
@@ -111,10 +125,6 @@ void ezThread::call(ezStackFrame* sf) {
 }
 
 void ezThread::end(void) {
-  ezLog &log = ezLog::instance();
-  ezStackFrame * sf = m_stack.back();
-  log.verbose("stack %p has poped out", sf);
-  m_stack.pop_back();
-  if(m_stack.empty()) delete sf;
+  m_pop_stack = true;
 }
 

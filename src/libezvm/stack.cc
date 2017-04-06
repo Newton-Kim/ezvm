@@ -34,7 +34,7 @@ ezStackFrame::ezStackFrame(ezCarousel *crsl, ezStackFrameCallback* callback,
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
       m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc),
-      m_callee(NULL), m_callback(callback) {
+      m_callback(callback) {
   if(!m_callback) throw runtime_error("callback is null.");
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
   m_memory.push_back(&(m_globals.m_memory));
@@ -440,17 +440,17 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 
 void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                                vector<ezAddress> &rets) {
-  m_callee = new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu, m_gc);
+  ezStackFrame* callee = new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu, m_gc);
   ezAddress addr;
   size_t min_args = (func->nargs > args.size()) ? args.size() : func->nargs;
   for (size_t i = 0; i < min_args; i++) {
     ezValue *v = addr2val(args[i]);
-    (*(m_callee->m_local))[i] = v;
+    (*(callee->m_local))[i] = v;
   }
   for (size_t i = 0; i < rets.size(); i++) {
-    m_callee->m_return_dest.push_back(rets[i]);
+    callee->m_return_dest.push_back(rets[i]);
   }
-  m_callback->call(m_callee);
+  m_callback->call(callee);
 }
 
 void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
@@ -466,20 +466,19 @@ void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
     val2addr(rets, vrets);
 }
 
-void ezStackFrame::step(void) {
-  if (m_callee) {
-    size_t rets = m_callee->m_returns.size();
-    size_t dests = m_callee->m_return_dest.size();
-    size_t cnt = (rets > dests) ? dests : rets;
-    for (size_t i = 0; i < cnt; i++)
-      val2addr(m_callee->m_return_dest[i], m_callee->m_returns[i]);
-    if (dests > rets) {
-      for (size_t i = cnt; i < dests; i++)
-        val2addr(m_callee->m_return_dest[i], ezNull::instance());
-    }
-    delete m_callee;
-    m_callee = NULL;
+void ezStackFrame::update(ezStackFrame* sf) {
+  size_t rets = sf->m_returns.size();
+  size_t dests = sf->m_return_dest.size();
+  size_t cnt = (rets > dests) ? dests : rets;
+  for (size_t i = 0; i < cnt; i++)
+    val2addr(sf->m_return_dest[i], sf->m_returns[i]);
+  if (dests > rets) {
+    for (size_t i = cnt; i < dests; i++)
+      val2addr(sf->m_return_dest[i], ezNull::instance());
   }
+}
+
+void ezStackFrame::step(void) {
   if (m_pc >= m_carousel->instruction.size()) {
     m_callback->end();
     return;
