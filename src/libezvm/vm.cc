@@ -63,16 +63,13 @@ void ezVM::run(void) {
       if (thd == NULL) {
         it = m_threads.erase(it);
       } else {
-        switch (thd->step()) {
-        case EZ_STEP_DONE:
+        thd->run();
+        if(thd->empty()) {
           it = m_threads.erase(it);
           delete thd;
-          break;
-        default:
-          it++;
-          break;
         }
       }
+      it++;
     }
   }
 }

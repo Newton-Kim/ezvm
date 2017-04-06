@@ -28,13 +28,14 @@
 #include <iostream>
 #include <stdexcept>
 
-ezStackFrame::ezStackFrame(ezCarousel *crsl,
+ezStackFrame::ezStackFrame(ezCarousel *crsl, ezStackFrameCallback* callback,
                            ezTable<string, ezValue *> &globals,
                            vector<ezValue *> &constants, ezALU &alu, ezGC &gc)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
       m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc),
-      m_callee(NULL) {
+      m_callee(NULL), m_callback(callback) {
+  if(!m_callback) throw runtime_error("callback is null.");
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
   m_memory.push_back(&(m_globals.m_memory));
   m_memory.push_back(&m_constants);
@@ -69,10 +70,8 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
 
 void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
   m_memory[addr.segment]->operator[](addr.offset) = v;
-  m_gc.pause();
   if (v != ezNull::instance())
     m_gc.add((ezGCObject *)v);
-  m_gc.resume();
 }
 
 void ezStackFrame::shift_operation(
@@ -423,27 +422,25 @@ void ezStackFrame::cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2) {
   val2addr(cond, rst);
 }
 
-ezStepState ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
+void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
                                vector<ezAddress> &rets) {
   ezValue *proc = addr2val(func);
-  ezStepState state = EZ_STEP_CONTINUE;
   switch (proc->type) {
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    state = call((ezNativeCarousel *)proc, args, rets);
+    call((ezNativeCarousel *)proc, args, rets);
     break;
   case EZ_VALUE_TYPE_CAROUSEL:
-    state = call((ezCarousel *)proc, args, rets);
+    call((ezCarousel *)proc, args, rets);
     break;
   default:
     throw runtime_error("function is not executable");
     break;
   }
-  return state;
 }
 
-ezStepState ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
+void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                                vector<ezAddress> &rets) {
-  m_callee = new ezStackFrame(func, m_globals, m_constants, m_alu, m_gc);
+  m_callee = new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu, m_gc);
   ezAddress addr;
   size_t min_args = (func->nargs > args.size()) ? args.size() : func->nargs;
   for (size_t i = 0; i < min_args; i++) {
@@ -453,10 +450,10 @@ ezStepState ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
   for (size_t i = 0; i < rets.size(); i++) {
     m_callee->m_return_dest.push_back(rets[i]);
   }
-  return EZ_STEP_CALL;
+  m_callback->call(m_callee);
 }
 
-ezStepState ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
+void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
                                vector<ezAddress> &rets) {
   vector<ezValue *> vargs;
   for (size_t i = 0; i < args.size(); i++) {
@@ -467,10 +464,9 @@ ezStepState ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
   func->run(vargs, vrets);
   if (rets.size())
     val2addr(rets, vrets);
-  return EZ_STEP_CONTINUE;
 }
 
-ezStepState ezStackFrame::step(void) {
+void ezStackFrame::step(void) {
   if (m_callee) {
     size_t rets = m_callee->m_returns.size();
     size_t dests = m_callee->m_return_dest.size();
@@ -484,12 +480,12 @@ ezStepState ezStackFrame::step(void) {
     delete m_callee;
     m_callee = NULL;
   }
-  if (m_pc >= m_carousel->instruction.size())
-    return EZ_STEP_DONE;
+  if (m_pc >= m_carousel->instruction.size()) {
+    m_callback->end();
+    return;
+  }
   ezInstruction *inst = m_carousel->instruction[m_pc++];
-  ezStepState status = EZ_STEP_CONTINUE;
-  uint8_t arg1, arg2, arg3;
-  return inst->process(*this);
+  inst->process(*this);
 }
 
 void ezStackFrame::on_mark(void) {

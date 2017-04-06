@@ -61,32 +61,17 @@ enum ezOpCode {
   EZ_OP_AUTO
 };
 
-/**
-* @brief ezStepState shows if the stack has procedures to run.
-*/
-enum ezStepState {
-  /**
-  * @brief means the stack has procedures to run.
-  */
-  EZ_STEP_CONTINUE,
-  /**
-  * @brief means the stack is empty and ready to be collected.
-  */
-  EZ_STEP_CALL,
-  EZ_STEP_DONE
-};
-
 class ezStackFrame;
 class ezDump;
 
 class ezInstruction {
 private:
-  function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> m_func;
+  function<void(ezStackFrame &stk, ezInstruction &arg)> m_func;
   function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> m_dump;
 
 public:
   ezInstruction(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump);
   // TODO:It should be replaced with the bind.
   //  const bool auto_cmd;
@@ -95,6 +80,6 @@ public:
   ezAddress arg;
   vector<ezAddress> srcs;
   vector<ezAddress> dests;
-  inline ezStepState process(ezStackFrame &stk) { return m_func(stk, *this); }
+  inline void process(ezStackFrame &stk) { m_func(stk, *this); }
   inline void dump(ezFile &sink, ezDump &dump) { m_dump(sink, dump, *this); }
 };

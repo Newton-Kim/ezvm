@@ -41,7 +41,7 @@ enum ezThreadScheduler { EZ_THREAD_SCHED_REALTIME, EZ_THREAD_SCHED_ROUNDROBIN };
 /**
 * @brief ezThread is a stack of the instances of ezStackFrame.
 */
-class ezThread {
+class ezThread : public ezStackFrameCallback {
 private:
   /**
   * @brief A procedure entry point
@@ -106,7 +106,9 @@ public:
   *
   * @return is a state which indicates if there is an instruction to run.
   */
-  ezStepState step(void);
-  ezStepState run(void);
+  void run(void);
   void on_mark(void);
+  void call(ezStackFrame* sf);
+  void end(void);
+  bool empty(void) { return m_stack.empty(); }
 };

@@ -37,7 +37,7 @@ ezThread::ezThread(ezAddress entry, ezTable<string, ezValue *> &globals,
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     ezStackFrame *sf =
-        new ezStackFrame(crsl, m_globals, m_constants, m_alu, m_gc);
+        new ezStackFrame(crsl, this, m_globals, m_constants, m_alu, m_gc);
     m_stack.push_back(sf);
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -56,31 +56,6 @@ ezThread::~ezThread() {
       delete sf;
     m_stack.pop_back();
   }
-}
-
-ezStepState ezThread::step(void) {
-  // It needs 3 steps to finalize a thread
-  if (m_stack.empty())
-    return EZ_STEP_DONE;
-  ezStackFrame *sf = m_stack.back();
-  ezLog &log = ezLog::instance();
-  ezStepState state = sf->step();
-  switch (state) {
-  case EZ_STEP_DONE:
-    log.verbose("stack %p has poped out", sf);
-    m_stack.pop_back();
-    if (m_stack.empty())
-      delete sf;
-    break;
-  case EZ_STEP_CALL: {
-    ezStackFrame *nsf = sf->callee();
-    if (!nsf)
-      throw("invalid call stack");
-    m_stack.push_back(nsf);
-  } break;
-  }
-  log.verbose("stack %p has turn", sf);
-  return EZ_STEP_CONTINUE;
 }
 
 ezValue *ezThread::addr2val(ezAddress addr) {
@@ -106,19 +81,18 @@ ezValue *ezThread::addr2val(ezAddress addr) {
   return v;
 }
 
-ezStepState ezThread::run(void) {
-  ezStepState state;
+void ezThread::run(void) {
+  if (m_stack.empty()) return;
   switch (m_scheduler) {
   case EZ_THREAD_SCHED_REALTIME:
     do
-      state = step();
-    while (state != EZ_STEP_DONE);
+      m_stack.back()->step();
+    while (!m_stack.empty());
     break;
   case EZ_THREAD_SCHED_ROUNDROBIN:
-    state = step();
+    m_stack.back()->step();
     break;
   }
-  return state;
 }
 
 void ezThread::on_mark(void) {
@@ -127,3 +101,20 @@ void ezThread::on_mark(void) {
     (*it)->on_mark();
   }
 }
+
+void ezThread::call(ezStackFrame* sf) {
+  ezLog &log = ezLog::instance();
+  if (!sf)
+    throw("invalid call stack");
+  m_stack.push_back(sf);
+  log.verbose("stack %p has turn", sf);
+}
+
+void ezThread::end(void) {
+  ezLog &log = ezLog::instance();
+  ezStackFrame * sf = m_stack.back();
+  log.verbose("stack %p has poped out", sf);
+  m_stack.pop_back();
+  if(m_stack.empty()) delete sf;
+}
+

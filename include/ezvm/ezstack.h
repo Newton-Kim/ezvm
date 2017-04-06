@@ -33,6 +33,12 @@
 
 using namespace std;
 
+class ezStackFrameCallback {
+public:
+  virtual void call(ezStackFrame* sf) = 0;
+  virtual void end(void) = 0;
+};
+
 /**
 * @brief contains data for representing a procedure in action.
 */
@@ -79,6 +85,7 @@ private:
   */
   ezGC &m_gc;
   ezStackFrame *m_callee;
+  ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   /**
   * @brief fetches a value from an address.
@@ -109,7 +116,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  ezStepState call(ezNativeCarousel *func, vector<ezAddress> &args,
+  void call(ezNativeCarousel *func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   /**
   * @brief invokes a carousel.
@@ -118,7 +125,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  ezStepState call(ezCarousel *func, vector<ezAddress> &args,
+  void call(ezCarousel *func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   void binary_operation(ezAddress &dest, ezAddress &src1, ezAddress &src2,
                         function<ezValue *(ezValue *, ezValue *)> binary_func);
@@ -183,7 +190,7 @@ public:
   void bitwise_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
   void ret(vector<ezAddress> &srcs);
-  ezStepState call(ezAddress &func, vector<ezAddress> &args,
+  void call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   void fgc(void);
 
@@ -196,13 +203,12 @@ public:
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel *crsl, ezTable<string, ezValue *> &globals,
+  ezStackFrame(ezCarousel *crsl, ezStackFrameCallback* callback, ezTable<string, ezValue *> &globals,
                vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
   /**
   * @brief is a destructor.
   */
   ~ezStackFrame();
-  ezStepState step(void); // the arguments are temporary ones.
-  ezStackFrame *callee(void) { return m_callee; }
+  void step(void); // the arguments are temporary ones.
   void on_mark(void);
 };

@@ -57,24 +57,24 @@ private:
   */
   ezCarousel *m_carousel;
   void instruction_with_unary_argument(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress dest, const ezAddress src);
   void instruction_with_unary_argument(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress dest, const ezAddress cond, const ezAddress src);
   void instruction_with_binary_arguments(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress dest, const ezAddress obj, const ezAddress offset);
   void instruction_with_binary_arguments(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress dest, const ezAddress cond, const ezAddress obj,
       const ezAddress offset);
   void branch_instruction(
-      function<ezStepState(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress cond, string label);
 
