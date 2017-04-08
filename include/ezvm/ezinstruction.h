@@ -55,10 +55,11 @@ enum ezOpCode {
   EZ_OP_SUB,
   EZ_OP_TEQ,
   EZ_OP_TGE,
+  EZ_OP_THD,
   EZ_OP_TLT,
   EZ_OP_TNE,
-  EZ_OP_XOR,
-  EZ_OP_AUTO
+  EZ_OP_WAIT,
+  EZ_OP_XOR
 };
 
 class ezStackFrame;

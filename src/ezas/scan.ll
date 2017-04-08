@@ -52,6 +52,7 @@ sp [ \t]
 "call" return CALL;
 "cmp" return CMP;
 "div" return DIV;
+"fgc" return FGC;
 "ld" return LD;
 "lsl" return LSL;
 "lsr" return LSR;
@@ -63,8 +64,9 @@ sp [ \t]
 "or" return OR;
 "ret" return RET;
 "sub" return SUB;
+"thd" return THD;
+"wait" return WAIT;
 "xor" return XOR;
-"fgc" return FGC;
 ".import" return IMPORT;
 ".entry" return ENTRY;
 ".proc" return PROC;
@@ -98,6 +100,6 @@ sp [ \t]
 	return ADDRESS;
 }
 {newline} return NEWLINE;
-"("|")"|":"|"," { yylval.c_value = yytext[0]; return yytext[0];}
+"("|")"|":"|";"|"," { yylval.c_value = yytext[0]; return yytext[0];}
 {sp} {}
 %%

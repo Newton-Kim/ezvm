@@ -191,6 +191,9 @@ public:
   void ret(vector<ezAddress> &srcs);
   void call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
+  void thd(ezAddress &func, vector<ezAddress> &args,
+                   vector<ezAddress> &rets);
+  void wait(ezAddress &handle);
   void fgc(void);
 
 private:

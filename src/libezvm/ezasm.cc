@@ -53,6 +53,32 @@ void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
   inst->dests = rets;
   m_carousel->instruction.push_back(inst);
 }
+void ezAsmProcedure::thd(const ezAddress &func, vector<ezAddress> &args,
+            vector<ezAddress> &rets){
+  ezInstruction *inst = new ezInstruction(
+      [](ezStackFrame &stk, ezInstruction &inst) {
+        stk.thd(inst.arg, inst.srcs, inst.dests);
+      },
+      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
+        dump.dump(sink, EZ_OP_THD, inst.arg, inst.srcs, inst.dests);
+      });
+  inst->arg = func;
+  inst->srcs = args;
+  inst->dests = rets;
+  m_carousel->instruction.push_back(inst);
+}
+
+void ezAsmProcedure::wait(const ezAddress &handle){
+  ezInstruction *inst = new ezInstruction(
+      [](ezStackFrame &stk, ezInstruction &inst) {
+        stk.wait(inst.arg);
+      },
+      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
+        dump.dump(sink, EZ_OP_WAIT, inst.arg);
+      });
+  inst->arg = handle;
+  m_carousel->instruction.push_back(inst);
+}
 
 void ezAsmProcedure::cmp(const ezAddress &cond, const ezAddress &larg,
                          const ezAddress &rarg) {

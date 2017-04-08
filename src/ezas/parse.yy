@@ -166,7 +166,7 @@ static int s_scpkey = -1;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR RET SUB XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR RET SUB THD WAIT XOR
 %token SYMBOL STRING NEWLINE INTEGER COMPLEX ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
@@ -242,6 +242,8 @@ line : %empty
 	| or 
 	| ret 
 	| sub 
+	| thd
+	| wait
 	| xor 
 	| label;
 
@@ -307,15 +309,15 @@ mul : MUL var ',' var var {
 	}
 	| MUL var var ',' var var {
 		s_proc_current->mul(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
-	}
+	};
 
 mv : MV addrs ',' vars {s_proc_current->mv(s_args_addr, s_args_var); s_args_addr.clear(); s_args_var.clear();};
 
 neg : NEG var ',' var {s_proc_current->neg(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset));}
-	| NEG var var ',' var {s_proc_current->neg(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset));}
+	| NEG var var ',' var {s_proc_current->neg(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset));};
 
 not : NOT var ',' var {s_proc_current->bitwise_not(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset));}
-	| NOT var var ',' var {s_proc_current->bitwise_not(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset));}
+	| NOT var var ',' var {s_proc_current->bitwise_not(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset));};
 
 or : OR var ',' var var {
 		s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));
@@ -324,26 +326,32 @@ or : OR var ',' var var {
 		s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
 	};
 
-ret : RET {s_proc_current->ret();} | RET vars {s_proc_current->ret(s_args_var); s_args_var.clear();}
+ret : RET {s_proc_current->ret();} | RET vars {s_proc_current->ret(s_args_var); s_args_var.clear();};
 
 sub : SUB var ',' var var {
 		s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));
 	}
 	| SUB var var ',' var var {
 		s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
-	}
+	};
+
+thd : THD fname '(' vars ')' addrs{s_proc_current->thd(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+
+wait : WAIT ADDRESS {
+		s_proc_current->wait(ezAddress($2.segment, $2.offset));
+	};
 
 xor : XOR var ',' var var {
 		s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));
 	}
 	| XOR var var ',' var var {
 		s_proc_current->bitwise_xor(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
-	}
+	};
 
-label : LABEL {s_proc_current->label($1);}
+label : LABEL {s_proc_current->label($1);};
 
 fname : SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
-	| ADDRESS {$$ = $1;}
+	| ADDRESS {$$ = $1;};
 
 addrs : %empty | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.offset));};
 

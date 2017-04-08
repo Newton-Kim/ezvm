@@ -93,7 +93,7 @@ public:
   */
   void grow(size_t mems);
   /**
-  * @brief creates a call instruction. See add of ezas.
+  * @brief creates a call instruction. See call of ezas.
   *
   * @param func An address of a function to call
   * @param args Arguments which are passed to the function
@@ -101,6 +101,16 @@ public:
   */
   void call(const ezAddress &func, vector<ezAddress> &args,
             vector<ezAddress> &rets);
+  /**
+  * @brief creates a thd instruction. See thd of ezas.
+  *
+  * @param func An address of a function to call
+  * @param args Arguments which are passed to the function
+  * @param rets An address to the handle (1st arguemtn) and addresses which the return values of the function are stored.
+  */
+  void thd(const ezAddress &func, vector<ezAddress> &args,
+            vector<ezAddress> &rets);
+  void wait(const ezAddress &handle);
   void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
   /**
   * @brief creates a mv instruction. See mv of ezas.

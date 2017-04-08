@@ -438,6 +438,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
   }
 }
 
+
 void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                                vector<ezAddress> &rets) {
   ezStackFrame* callee = new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu, m_gc);
@@ -464,6 +465,13 @@ void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
   func->run(vargs, vrets);
   if (rets.size())
     val2addr(rets, vrets);
+}
+
+void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
+                               vector<ezAddress> &rets) {
+}
+
+void ezStackFrame::wait(ezAddress &handle) {
 }
 
 void ezStackFrame::update(ezStackFrame* sf) {

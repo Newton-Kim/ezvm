@@ -1,0 +1,19 @@
+.entry _main
+
+.proc _count(4)
+	.memories 6
+	mv r4, r0
+	bra _loop_end
+	:loop_start
+	call _stdout (r3 r4)
+	add r4, r4 r2
+	:loop_end
+	cmp r4 r1
+	blt _loop_start
+
+.proc _main(0)
+	.memories 4
+	thd _count (1 100 2 "even:") r0
+	thd _count (1 100 3 "odd:") r1
+	wait r1
+

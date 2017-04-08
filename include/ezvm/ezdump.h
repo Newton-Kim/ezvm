@@ -82,6 +82,7 @@ public:
             vector<ezAddress> &param);
   void dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param);
   void dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset);
+  void dump(ezFile &sink, ezOpCode op, ezAddress handle);
   void dump(ezFile &sink, ezOpCode op, size_t offset);
   void dump(ezFile &sink, ezOpCode op);
 };

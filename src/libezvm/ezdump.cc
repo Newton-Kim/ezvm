@@ -200,6 +200,8 @@ const char *ezDump::opstr(ezOpCode op) {
     return "teq";
   case EZ_OP_TGE:
     return "tge";
+  case EZ_OP_THD:
+    return "thd";
   case EZ_OP_TLT:
     return "tlt";
   case EZ_OP_TNE:
@@ -265,6 +267,12 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset) {
   dump(sink, cond);
   sink.print(",");
   sink.print(" %d", offset);
+  sink.print("\n");
+}
+
+void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress handle) {
+  sink.print("%s", opstr(op));
+  dump(sink, handle);
   sink.print("\n");
 }
 
