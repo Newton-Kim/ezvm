@@ -468,7 +468,7 @@ void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
 }
 
 void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
-                               vector<ezAddress> &rets) {
+                               vector<ezAddress> &rets, ezAddress &handle) {
 }
 
 void ezStackFrame::wait(ezAddress &handle) {

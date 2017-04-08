@@ -192,7 +192,7 @@ public:
   void call(ezAddress &func, vector<ezAddress> &args,
                    vector<ezAddress> &rets);
   void thd(ezAddress &func, vector<ezAddress> &args,
-                   vector<ezAddress> &rets);
+                   vector<ezAddress> &rets, ezAddress &handle);
   void wait(ezAddress &handle);
   void fgc(void);
 

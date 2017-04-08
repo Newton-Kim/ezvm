@@ -79,6 +79,7 @@ public:
   //  ezOpCode cmd;
   size_t offset;
   ezAddress arg;
+  ezAddress handle;
   vector<ezAddress> srcs;
   vector<ezAddress> dests;
   inline void process(ezStackFrame &stk) { m_func(stk, *this); }

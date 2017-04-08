@@ -54,13 +54,13 @@ void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
   m_carousel->instruction.push_back(inst);
 }
 void ezAsmProcedure::thd(const ezAddress &func, vector<ezAddress> &args,
-            vector<ezAddress> &rets){
+            vector<ezAddress> &rets, const ezAddress &handle){
   ezInstruction *inst = new ezInstruction(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.thd(inst.arg, inst.srcs, inst.dests);
+        stk.thd(inst.arg, inst.srcs, inst.dests, inst.handle);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_THD, inst.arg, inst.srcs, inst.dests);
+        dump.dump(sink, EZ_OP_THD, inst.arg, inst.srcs, inst.dests, inst.handle);
       });
   inst->arg = func;
   inst->srcs = args;

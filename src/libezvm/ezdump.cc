@@ -232,6 +232,28 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   sink.print("\n");
 }
 
+void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
+                  vector<ezAddress> &srcs, vector<ezAddress> &dests, ezAddress &handle) {
+  sink.print("%s", opstr(op));
+  dump(sink, func);
+  sink.print(",");
+  if (srcs.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
+      dump(sink, *it);
+  sink.print(",");
+  if (dests.empty())
+    sink.print("null");
+  else
+    for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
+         it++)
+      dump(sink, *it);
+  sink.print(",");
+  dump(sink, handle);
+  sink.print("\n");
+}
+
 void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
                   vector<ezAddress> &param) {
   sink.print("%s", opstr(op));

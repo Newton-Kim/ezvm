@@ -335,7 +335,7 @@ sub : SUB var ',' var var {
 		s_proc_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
 	};
 
-thd : THD fname '(' vars ')' addrs{s_proc_current->thd(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+thd : THD fname '(' vars ';' addrs ')' ADDRESS{s_proc_current->thd(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr, ezAddress($8.segment, $8.offset)); s_args_addr.clear(); s_args_var.clear();};
 
 wait : WAIT ADDRESS {
 		s_proc_current->wait(ezAddress($2.segment, $2.offset));

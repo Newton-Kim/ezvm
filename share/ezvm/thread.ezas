@@ -11,7 +11,7 @@
 	blt r5 _loop_start
 .proc _main(0)
 	.memories 4
-	thd _count (1 100 2 "even:") r0
-	thd _count (1 100 3 "odd:") r1
+	thd _count (1 100 2 "even:";) r0
+	thd _count (1 100 3 "odd:";) r1
 	wait r1
 
