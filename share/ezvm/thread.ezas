@@ -1,5 +1,4 @@
 .entry _main
-
 .proc _count(4)
 	.memories 6
 	mv r4, r0
@@ -8,9 +7,8 @@
 	call _stdout (r3 r4)
 	add r4, r4 r2
 	:loop_end
-	cmp r4 r1
-	blt _loop_start
-
+	cmp r5, r4 r1
+	blt r5 _loop_start
 .proc _main(0)
 	.memories 4
 	thd _count (1 100 2 "even:") r0
