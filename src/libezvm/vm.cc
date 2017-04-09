@@ -24,6 +24,7 @@
 */
 #include "ezvm/ezlog.h"
 #include "ezvm/ezvm.h"
+#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 
@@ -50,9 +51,10 @@ ezVM::~ezVM() {
 }
 
 void ezVM::run(void) {
+  vector<ezAddress> args, rets;
   ezLog &log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
-  ezThread *thread = new ezThread(m_entry, m_globals, m_constants, m_alu, m_gc);
+  ezThread *thread = new ezThread(m_entry, args, rets, this, m_globals, m_constants, m_alu, m_gc);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
   while (!m_threads.empty()) {
@@ -106,3 +108,18 @@ void ezVM::on_mark(void) {
        it++)
     (*it)->on_mark();
 }
+
+size_t ezVM::thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets) {
+  ezLog &log = ezLog::instance();
+  log.verbose("%s", __PRETTY_FUNCTION__);
+  ezThread *thread = new ezThread(func, args, rets, this, m_globals, m_constants, m_alu, m_gc, EZ_THREAD_SCHED_ROUNDROBIN);
+  m_threads.push_back(thread);
+  log.debug("m_threads is %lu", m_threads.size());
+  return (size_t)thread;
+}
+
+bool ezVM::exist(size_t handle) {
+  auto it = find(m_threads.begin(), m_threads.end(), (ezThread*)handle);
+  return it != m_threads.end();
+}
+

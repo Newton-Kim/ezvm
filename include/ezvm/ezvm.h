@@ -38,7 +38,7 @@ using namespace std;
 /**
 * @brief ezVM is the VM class
 */
-class ezVM : public ezGCClient {
+class ezVM : public ezGCClient, ezThreadCallback {
 private:
   ezAddress m_entry;
   vector<ezValue *> m_constants;
@@ -59,4 +59,6 @@ public:
   ezArchive &archive(void);
   ezDump &dump(void);
   void on_mark(void);
+  size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
+  bool exist(size_t handle);
 };

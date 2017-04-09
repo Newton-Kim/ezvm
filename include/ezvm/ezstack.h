@@ -37,6 +37,8 @@ class ezStackFrameCallback {
 public:
   virtual void call(ezStackFrame* sf) = 0;
   virtual void end(void) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets) = 0;
+  virtual void wait(size_t handle) = 0;
 };
 
 /**

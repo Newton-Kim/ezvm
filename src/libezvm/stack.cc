@@ -469,9 +469,15 @@ void ezStackFrame::call(ezNativeCarousel *func, vector<ezAddress> &args,
 
 void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
                                vector<ezAddress> &rets, ezAddress &handle) {
+  size_t hthd = m_callback->thd(func, args, rets);
+  val2addr(handle, new ezInteger(hthd));
 }
 
 void ezStackFrame::wait(ezAddress &handle) {
+  ezValue* v = addr2val(handle);
+  if (v->type != EZ_VALUE_TYPE_INTEGER)
+    throw runtime_error("invalid handle");
+  m_callback->wait(((ezInteger*)v)->to_integer());
 }
 
 void ezStackFrame::update(ezStackFrame* sf) {
