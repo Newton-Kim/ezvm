@@ -101,16 +101,16 @@ public:
   *otherwise.
   */
   bool isnil(void) { return (m_fd) ? false : true; }
-/**
-* @brief increases the length of the indentation.
-*/
+  /**
+  * @brief increases the length of the indentation.
+  */
   void indent(void);
-/**
-* @brief decreases the length of the indentation.
-*/
+  /**
+  * @brief decreases the length of the indentation.
+  */
   void unindent(void);
-/**
-* @brief leaves indentation.
-*/
+  /**
+  * @brief leaves indentation.
+  */
   void indentation(void);
 };

@@ -27,13 +27,16 @@
 #include "ezvm/ezthread.h"
 #include <stdexcept>
 
-ezThread::ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets, ezThreadCallback* callback, ezTable<string, ezValue *> &globals,
+ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
+                   vector<ezAddress> &rets, ezThreadCallback *callback,
+                   ezTable<string, ezValue *> &globals,
                    vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
                    ezThreadScheduler sched)
     : m_entry(entry), m_scheduler(sched), m_constants(constants),
-      m_globals(globals), m_alu(alu), m_gc(gc), m_pop_stack(false),
-      m_wait(0), m_callback(callback) {
-  if(!callback) throw runtime_error("callback is missing.");
+      m_globals(globals), m_alu(alu), m_gc(gc), m_pop_stack(false), m_wait(0),
+      m_callback(callback) {
+  if (!callback)
+    throw runtime_error("callback is missing.");
   ezValue *v = addr2val(entry);
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
@@ -41,7 +44,7 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &
     ezStackFrame *sf =
         new ezStackFrame(crsl, this, m_globals, m_constants, m_alu, m_gc);
     m_stack.push_back(sf);
-    //TODO:arguments and returns should be updated
+    // TODO:arguments and returns should be updated
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
     ((ezNativeCarousel *)v)->run(m_args, m_rets);
@@ -86,10 +89,11 @@ ezValue *ezThread::addr2val(ezAddress addr) {
 
 void ezThread::pop_stack(void) {
   ezLog &log = ezLog::instance();
-  ezStackFrame * sf = m_stack.back();
+  ezStackFrame *sf = m_stack.back();
   log.verbose("stack %p has poped out", sf);
   m_stack.pop_back();
-  if(m_stack.empty()) return;
+  if (m_stack.empty())
+    return;
   sf = m_stack.back();
   sf->update(sf);
   delete sf;
@@ -97,22 +101,28 @@ void ezThread::pop_stack(void) {
 }
 
 void ezThread::run(void) {
-  if (m_stack.empty()) return;
+  if (m_stack.empty())
+    return;
   if (m_wait) {
-    if(m_callback->exist(m_wait)) return;
-    else m_wait = 0;
+    if (m_callback->exist(m_wait))
+      return;
+    else
+      m_wait = 0;
   }
   switch (m_scheduler) {
   case EZ_THREAD_SCHED_REALTIME:
     do {
       m_stack.back()->step();
-      if(m_wait) break;
-      if(m_pop_stack) pop_stack();
+      if (m_wait)
+        break;
+      if (m_pop_stack)
+        pop_stack();
     } while (!m_stack.empty());
     break;
   case EZ_THREAD_SCHED_ROUNDROBIN:
     m_stack.back()->step();
-    if(m_pop_stack) pop_stack();
+    if (m_pop_stack)
+      pop_stack();
     break;
   }
 }
@@ -124,7 +134,7 @@ void ezThread::on_mark(void) {
   }
 }
 
-void ezThread::call(ezStackFrame* sf) {
+void ezThread::call(ezStackFrame *sf) {
   ezLog &log = ezLog::instance();
   if (!sf)
     throw("invalid call stack");
@@ -132,14 +142,11 @@ void ezThread::call(ezStackFrame* sf) {
   log.verbose("stack %p has turn", sf);
 }
 
-void ezThread::end(void) {
-  m_pop_stack = true;
-}
+void ezThread::end(void) { m_pop_stack = true; }
 
-size_t ezThread::thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets) {
+size_t ezThread::thd(ezAddress &func, vector<ezAddress> &args,
+                     vector<ezAddress> &rets) {
   return m_callback->thd(func, args, rets);
 }
 
-void ezThread::wait(size_t handle) {
-  m_wait = handle;
-}
+void ezThread::wait(size_t handle) { m_wait = handle; }

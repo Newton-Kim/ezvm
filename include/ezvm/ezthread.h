@@ -40,7 +40,8 @@ enum ezThreadScheduler { EZ_THREAD_SCHED_REALTIME, EZ_THREAD_SCHED_ROUNDROBIN };
 
 class ezThreadCallback {
 public:
-  virtual size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezAddress> &args,
+                     vector<ezAddress> &rets) = 0;
   virtual bool exist(size_t handle) = 0;
 };
 
@@ -84,7 +85,7 @@ private:
   ezGC &m_gc;
   bool m_pop_stack;
   size_t m_wait;
-  ezThreadCallback* m_callback;
+  ezThreadCallback *m_callback;
   /**
   * @brief fetches a value from an address.
   *
@@ -104,7 +105,8 @@ public:
     * @param globals is a reference to a global memory.
     * @param constants is a reference to a constant memory.
   */
-  ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets, ezThreadCallback *callback, ezTable<string, ezValue *> &globals,
+  ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets,
+           ezThreadCallback *callback, ezTable<string, ezValue *> &globals,
            vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
            ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
   /**
@@ -118,7 +120,7 @@ public:
   */
   void run(void);
   void on_mark(void);
-  void call(ezStackFrame* sf);
+  void call(ezStackFrame *sf);
   void end(void);
   size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
   void wait(size_t handle);

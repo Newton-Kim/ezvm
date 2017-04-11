@@ -233,7 +233,8 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
 }
 
 void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
-                  vector<ezAddress> &srcs, vector<ezAddress> &dests, ezAddress &handle) {
+                  vector<ezAddress> &srcs, vector<ezAddress> &dests,
+                  ezAddress &handle) {
   sink.print("%s", opstr(op));
   dump(sink, func);
   sink.print(",");

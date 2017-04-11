@@ -106,10 +106,11 @@ public:
   *
   * @param func An address of a function to call
   * @param args Arguments which are passed to the function
-  * @param rets An address to the handle (1st arguemtn) and addresses which the return values of the function are stored.
+  * @param rets An address to the handle (1st arguemtn) and addresses which the
+  * return values of the function are stored.
   */
   void thd(const ezAddress &func, vector<ezAddress> &args,
-            vector<ezAddress> &rets, const ezAddress &handle);
+           vector<ezAddress> &rets, const ezAddress &handle);
   void wait(const ezAddress &handle);
   void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
   /**
