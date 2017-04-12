@@ -71,7 +71,7 @@ public:
   *
   * @return is the size of the object.
   */
-  virtual size_t size(void) { return m_size; }
+  inline size_t size(void) { return m_size; }
 };
 
 /**

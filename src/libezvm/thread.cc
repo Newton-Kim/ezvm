@@ -44,6 +44,7 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
     ezStackFrame *sf =
         new ezStackFrame(crsl, this, m_globals, m_constants, m_alu, m_gc);
     m_stack.push_back(sf);
+    m_gc.add(sf);
     // TODO:arguments and returns should be updated
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -58,8 +59,6 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
 ezThread::~ezThread() {
   while (!m_stack.empty()) {
     ezStackFrame *sf = m_stack.back();
-    if (sf)
-      delete sf;
     m_stack.pop_back();
   }
 }
@@ -96,7 +95,6 @@ void ezThread::pop_stack(void) {
     return;
   sf = m_stack.back();
   sf->update(sf);
-  delete sf;
   m_pop_stack = false;
 }
 
@@ -130,6 +128,7 @@ void ezThread::run(void) {
 void ezThread::on_mark(void) {
   for (vector<ezStackFrame *>::iterator it = m_stack.begin();
        it != m_stack.end(); it++) {
+    (*it)->mark();
     (*it)->on_mark();
   }
 }

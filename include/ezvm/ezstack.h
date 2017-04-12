@@ -45,7 +45,7 @@ public:
 /**
 * @brief contains data for representing a procedure in action.
 */
-class ezStackFrame {
+class ezStackFrame : public ezGCObject {
 private:
   /**
   * @brief is a program counter.
