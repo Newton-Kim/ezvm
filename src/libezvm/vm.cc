@@ -25,6 +25,7 @@
 #include "ezvm/ezlog.h"
 #include "ezvm/ezvm.h"
 #include "ezvm/ezgc.h"
+#include "ezvm/ezmemory.h"
 #include <algorithm>
 #include <iostream>
 #include <stdexcept>
@@ -34,6 +35,7 @@ using namespace std;
 ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL) {
   ezALU::initialize(usr_alu);
   ezGC::instance().subscribe(this);
+  ezGC::instance().subscribe(&ezMemory::instance());
 }
 
 /** \page thread-model Threading model
@@ -56,8 +58,7 @@ void ezVM::run(void) {
   vector<ezAddress> args, rets;
   ezLog &log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
-  ezThread *thread = new ezThread(m_entry, args, rets, this, m_globals,
-                                  m_constants);
+  ezThread *thread = new ezThread(m_entry, args, rets, this);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
   while (!m_threads.empty()) {
@@ -81,7 +82,7 @@ void ezVM::run(void) {
 
 ezASM &ezVM::assembler(void) {
   if (!m_pasm)
-    m_pasm = new ezASM(m_entry, m_constants, m_globals);
+    m_pasm = new ezASM(m_entry);
   return *m_pasm;
 }
 
@@ -93,20 +94,11 @@ ezArchive &ezVM::archive(void) {
 
 ezDump &ezVM::dump(void) {
   if (!m_pdump)
-    m_pdump = new ezDump(m_entry, m_constants, m_globals);
+    m_pdump = new ezDump(m_entry);
   return *m_pdump;
 }
 
 void ezVM::on_mark(void) {
-  for (vector<ezValue *>::iterator it = m_globals.memory().begin();
-       it != m_globals.memory().end(); it++) {
-    (*it)->mark();
-    if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL)
-      ((ezCarousel *)(*it))->on_mark();
-  }
-  for (vector<ezValue *>::iterator it = m_constants.begin();
-       it != m_constants.end(); it++)
-    (*it)->mark();
   for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
        it++)
     (*it)->on_mark();
@@ -117,8 +109,7 @@ size_t ezVM::thd(ezAddress &func, vector<ezAddress> &args,
   ezLog &log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
   ezThread *thread =
-      new ezThread(func, args, rets, this, m_globals, m_constants,
-                   EZ_THREAD_SCHED_ROUNDROBIN);
+      new ezThread(func, args, rets, this, EZ_THREAD_SCHED_ROUNDROBIN);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
   return (size_t)thread;

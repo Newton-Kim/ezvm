@@ -22,38 +22,22 @@
 * THE SOFTWARE.
 *
 */
-#pragma once
-#include "ezarchive.h"
-#include "ezasm.h"
-#include "ezdump.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include "ezval.h"
-#include <list>
-#include <string>
+#include "ezvm/ezmemory.h"
 
-using namespace std;
 
-/**
-* @brief ezVM is the VM class
-*/
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  ezArchive *m_parchive;
-  // TODO:user defined dump should be pluggable.
-  ezDump *m_pdump;
-  list<ezThread *> m_threads;
+ezMemory& ezMemory::instance(void) {
+  static ezMemory s_memory;
+  return s_memory;
+}
 
-public:
-  ezVM(ezUsrALU *usr_alu = NULL);
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  ezArchive &archive(void);
-  ezDump &dump(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
-  bool exist(size_t handle);
-};
+void ezMemory::on_mark(void) {
+  for (vector<ezValue *>::iterator it = m_globals.memory().begin();
+       it != m_globals.memory().end(); it++) {
+    (*it)->mark();
+    if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL)
+      ((ezCarousel *)(*it))->on_mark();
+  }
+  for (vector<ezValue *>::iterator it = m_constants.begin();
+       it != m_constants.end(); it++)
+    (*it)->mark();
+}

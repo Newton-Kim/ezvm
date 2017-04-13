@@ -9,6 +9,7 @@ libezvm_la_SOURCES=ezarchive.cc \
 		   ezval.cc \
 		   stack.cc \
 		   thread.cc \
+		   ezmemory.cc \
 		   vm.cc \
 		   utility/ezfile.cc \
 		   utility/ezlog.cc
@@ -24,6 +25,7 @@ include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
 		../../include/ezvm/ezlog.h \
+		../../include/ezvm/ezmemory.h \
 		../../include/ezvm/ezstack.h \
 		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \

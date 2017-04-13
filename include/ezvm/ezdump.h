@@ -42,14 +42,6 @@ private:
   */
   ezAddress &m_entry;
   /**
-  * @brief A reference to a constant segment
-  */
-  vector<ezValue *> &m_constants;
-  /**
-  * @brief A reference to a global segment
-  */
-  ezTable<string, ezValue *> &m_globals;
-  /**
   * @brief dumps the content of v to sink.
   *
   * @param sink is a file stream.
@@ -68,8 +60,7 @@ public:
     * @param constants is a reference to a constant memory.
     * @param globals is a reference to a global memory.
   */
-  ezDump(ezAddress &entry, vector<ezValue *> &constants,
-         ezTable<string, ezValue *> &globals);
+  ezDump(ezAddress &entry);
   /**
   * @brief dumps the state of ezVM to a file of path.
   *

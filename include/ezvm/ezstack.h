@@ -71,14 +71,6 @@ private:
   * @brief is a collection of addresses where the result values place.
   */
   vector<ezAddress> m_return_dest;
-  /**
-  * @brief A reference to a constant segment
-  */
-  vector<ezValue *> &m_constants;
-  /**
-  * @brief A reference to a global segment
-  */
-  ezTable<string, ezValue *> &m_globals;
   ezALU& m_alu;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
@@ -199,9 +191,7 @@ public:
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
-               ezTable<string, ezValue *> &globals,
-               vector<ezValue *> &constants);
+  ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback);
   /**
   * @brief is a destructor.
   */

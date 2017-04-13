@@ -24,13 +24,13 @@
 */
 #include "ezvm/ezdump.h"
 #include "ezvm/ezinstruction.h"
+#include "ezvm/ezmemory.h"
 #include <iostream>
 
 using namespace std;
 
-ezDump::ezDump(ezAddress &entry, vector<ezValue *> &constants,
-               ezTable<string, ezValue *> &globals)
-    : m_entry(entry), m_constants(constants), m_globals(globals) {}
+ezDump::ezDump(ezAddress &entry)
+    : m_entry(entry) {}
 
 void ezDump::dump(ezFile &sink, vector<ezAddress> &addrs) {
   if (addrs.size() == 0) {
@@ -124,17 +124,17 @@ void ezDump::dump(const string path) {
   sink.indentation();
   sink.print("memory:\n");
   sink.indent();
-  for (size_t i = 0; i < m_globals.size(); i++) {
+  for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
     sink.indentation();
     sink.print("[%lu]=", i);
-    dump(sink, m_globals[i]);
+    dump(sink, ezMemory::instance().globals()[i]);
   }
   sink.unindent();
   sink.indentation();
   sink.print("symtab:\n");
   sink.indent();
-  for (map<string, size_t>::iterator it = m_globals.symtab().begin();
-       it != m_globals.symtab().end(); it++) {
+  for (map<string, size_t>::iterator it = ezMemory::instance().globals().symtab().begin();
+       it != ezMemory::instance().globals().symtab().end(); it++) {
     sink.indentation();
     sink.print("[_%s]=%lu\n", it->first.c_str(), it->second);
   }
@@ -143,10 +143,10 @@ void ezDump::dump(const string path) {
   sink.print("\n");
   sink.print(".constant:\n");
   sink.indent();
-  for (size_t i = 0; i < m_constants.size(); i++) {
+  for (size_t i = 0; i < ezMemory::instance().constants().size(); i++) {
     sink.indentation();
     sink.print("[%lu]=", i);
-    dump(sink, m_constants[i]);
+    dump(sink, ezMemory::instance().constants()[i]);
   }
   sink.unindent();
   sink.print("\n");

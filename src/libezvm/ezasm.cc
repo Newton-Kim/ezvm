@@ -26,6 +26,7 @@
 #include "ezvm/ezdump.h"
 #include "ezvm/ezlog.h"
 #include "ezvm/ezstack.h"
+#include "ezvm/ezmemory.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -655,9 +656,8 @@ void ezAsmProcedure::label(string name) {
   m_carousel->jmptbl[index] = m_carousel->instruction.size();
 }
 
-ezASM::ezASM(ezAddress &entry, vector<ezValue *> &constants,
-             ezTable<string, ezValue *> &globals)
-    : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(ezGC::instance()) {}
+ezASM::ezASM(ezAddress &entry)
+    : m_entry(entry), m_constants(ezMemory::instance().constants()), m_globals(ezMemory::instance().globals()), m_gc(ezGC::instance()) {}
 
 ezASM::~ezASM() {}
 

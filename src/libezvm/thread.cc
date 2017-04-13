@@ -26,15 +26,13 @@
 #include "ezvm/ezlog.h"
 #include "ezvm/ezthread.h"
 #include "ezvm/ezgc.h"
+#include "ezvm/ezmemory.h"
 #include <stdexcept>
 
 ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
                    vector<ezAddress> &rets, ezThreadCallback *callback,
-                   ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants,
                    ezThreadScheduler sched)
-    : m_entry(entry), m_scheduler(sched), m_constants(constants),
-      m_globals(globals), m_pop_stack(false), m_wait(0),
+    : m_entry(entry), m_scheduler(sched), m_pop_stack(false), m_wait(0),
       m_callback(callback) {
   if (!callback)
     throw runtime_error("callback is missing.");
@@ -43,7 +41,7 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     ezStackFrame *sf =
-        new ezStackFrame(crsl, this, m_globals, m_constants);
+        new ezStackFrame(crsl, this);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
     // TODO:arguments and returns should be updated
@@ -65,21 +63,22 @@ ezThread::~ezThread() {
 }
 
 ezValue *ezThread::addr2val(ezAddress addr) {
+  //TODO:refactoring is required.
   ezValue *v = NULL;
   switch (addr.segment) {
   case EZ_ASM_SEGMENT_CONSTANT:
-    if (addr.offset >= m_constants.size())
+    if (addr.offset >= ezMemory::instance().constants().size())
       throw runtime_error("constant memory access violation");
-    v = m_constants[addr.offset];
+    v = ezMemory::instance().constants()[addr.offset];
     break;
   case EZ_ASM_SEGMENT_LOCAL:
   case EZ_ASM_SEGMENT_SCOPE:
     throw runtime_error("invalid segment for the thread");
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= m_globals.size())
+    if (addr.offset >= ezMemory::instance().globals().size())
       throw runtime_error("global memory access violation");
-    v = m_globals[addr.offset];
+    v = ezMemory::instance().globals()[addr.offset];
     break;
   default:
     throw runtime_error("out of segment boundary");

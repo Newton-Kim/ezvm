@@ -396,8 +396,7 @@ public:
   * @param constants is a reference to a constant memory.
   * @param globals is a reference to a global memory.
   */
-  ezASM(ezAddress &entry, vector<ezValue *> &constants,
-        ezTable<string, ezValue *> &globals);
+  ezASM(ezAddress &entry);
   /**
   * @brief is a destructor.
   */

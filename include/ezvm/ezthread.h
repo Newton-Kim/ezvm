@@ -56,10 +56,6 @@ private:
   ezAddress m_entry;
   ezThreadScheduler m_scheduler;
   /**
-  * @brief A reference to a constant segment
-  */
-  vector<ezValue *> &m_constants;
-  /**
   * @brief An arguments to a new stack frame
   */
   vector<ezValue *> m_args;
@@ -67,10 +63,6 @@ private:
   * @brief A return values from the stack frame on top
   */
   vector<ezValue *> m_rets;
-  /**
-  * @brief A reference to a global segment
-  */
-  ezTable<string, ezValue *> &m_globals;
   /**
   * @brief A stack of stack frames
   */
@@ -98,8 +90,7 @@ public:
     * @param constants is a reference to a constant memory.
   */
   ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets,
-           ezThreadCallback *callback, ezTable<string, ezValue *> &globals,
-           vector<ezValue *> &constants,
+           ezThreadCallback *callback,
            ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
   /**
   * @brief destroys the thread.

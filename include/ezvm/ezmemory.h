@@ -23,37 +23,18 @@
 *
 */
 #pragma once
-#include "ezarchive.h"
-#include "ezasm.h"
-#include "ezdump.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include "ezval.h"
-#include <list>
-#include <string>
 
-using namespace std;
+#include <ezvm/ezval.h>
+#include <ezvm/eztable.h>
+#include <ezvm/ezgc.h>
 
-/**
-* @brief ezVM is the VM class
-*/
-class ezVM : public ezGCClient, ezThreadCallback {
+class ezMemory : public ezGCClient{
 private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  ezArchive *m_parchive;
-  // TODO:user defined dump should be pluggable.
-  ezDump *m_pdump;
-  list<ezThread *> m_threads;
-
+  ezTable<string, ezValue*> m_globals;
+  vector<ezValue*> m_constants;
 public:
-  ezVM(ezUsrALU *usr_alu = NULL);
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  ezArchive &archive(void);
-  ezDump &dump(void);
+  static ezMemory& instance(void);
+  ezTable<string, ezValue*>& globals(void) { return m_globals;}
+  vector<ezValue*>& constants(void) {return m_constants; }
   void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
-  bool exist(size_t handle);
 };
