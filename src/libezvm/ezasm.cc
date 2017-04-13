@@ -715,7 +715,7 @@ size_t ezASM::global(const string value) {
   if (!m_globals.exist(value))
     m_globals.add(value, NULL);
   //    throw runtime_error("global symbol " + value + " is not found");
-  return m_globals.m_symtab[value];
+  return m_globals[value];
 }
 
 size_t ezASM::constant_null(void) {

@@ -38,7 +38,7 @@ ezStackFrame::ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
   if (!m_callback)
     throw runtime_error("callback is null.");
   ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
-  m_memory.push_back(&(m_globals.m_memory));
+  m_memory.push_back(&(m_globals.memory()));
   m_memory.push_back(&m_constants);
   m_memory.push_back(m_local);
   m_memory.push_back(m_scope);

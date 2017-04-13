@@ -33,13 +33,21 @@
 using namespace std;
 
 template <class K, class V> class ezTable : public ezGCObject {
-public:
+private:
   map<K, size_t> m_symtab;
   vector<V> m_memory;
+public:
   void reset(K key);
   size_t add(K key, V value);
+  void push_back(V value);
   bool exist(K key);
   bool is_null(K key);
+  size_t operator[](K key) {return m_symtab[key];}
+  V operator[](size_t index) {return m_memory[index];}
+  size_t size(void) {return m_memory.size();}
+  //TODO:why?
+  vector<V>& memory(void) {return m_memory;}
+  map<K, size_t>& symtab(void) {return m_symtab;}
 };
 
 template <class K, class V> void ezTable<K, V>::reset(K key) {
@@ -68,6 +76,10 @@ template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
   return offset;
 }
 
+template <class K, class V> void ezTable<K, V>::push_back(V value) {
+  m_memory.push_back(value);
+}
+
 template <class K, class V> bool ezTable<K, V>::is_null(K key) {
   if (m_symtab.end() == m_symtab.find(key))
     throw runtime_error("key doesn't exist");
@@ -78,3 +90,4 @@ template <class K, class V> bool ezTable<K, V>::exist(K key) {
   typename map<K, size_t>::iterator it = m_symtab.find(key);
   return (it != m_symtab.end());
 }
+

@@ -77,9 +77,9 @@ ezValue *ezThread::addr2val(ezAddress addr) {
     throw runtime_error("invalid segment for the thread");
     break;
   case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= m_globals.m_memory.size())
+    if (addr.offset >= m_globals.size())
       throw runtime_error("global memory access violation");
-    v = m_globals.m_memory[addr.offset];
+    v = m_globals[addr.offset];
     break;
   default:
     throw runtime_error("out of segment boundary");

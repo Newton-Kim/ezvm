@@ -124,17 +124,17 @@ void ezDump::dump(const string path) {
   sink.indentation();
   sink.print("memory:\n");
   sink.indent();
-  for (size_t i = 0; i < m_globals.m_memory.size(); i++) {
+  for (size_t i = 0; i < m_globals.size(); i++) {
     sink.indentation();
     sink.print("[%lu]=", i);
-    dump(sink, m_globals.m_memory[i]);
+    dump(sink, m_globals[i]);
   }
   sink.unindent();
   sink.indentation();
   sink.print("symtab:\n");
   sink.indent();
-  for (map<string, size_t>::iterator it = m_globals.m_symtab.begin();
-       it != m_globals.m_symtab.end(); it++) {
+  for (map<string, size_t>::iterator it = m_globals.symtab().begin();
+       it != m_globals.symtab().end(); it++) {
     sink.indentation();
     sink.print("[_%s]=%lu\n", it->first.c_str(), it->second);
   }

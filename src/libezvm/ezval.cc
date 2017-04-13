@@ -166,7 +166,7 @@ ezCarousel::ezCarousel(uint8_t args, size_t mems,
     // TODO:refactoring is required
     size_t memories = (nmems > nargs) ? nmems : nargs;
     for (size_t i = 0; i < memories; i++)
-      m_local->m_memory.push_back(ezNull::instance()); // TODO:using stl APIs
+      m_local->push_back(ezNull::instance()); // TODO:using stl APIs
   }
 }
 ezCarousel::~ezCarousel() {
@@ -187,7 +187,7 @@ void ezCarousel::on_mark(void) {
 vector<ezValue *> *ezCarousel::local_memory(void) {
   vector<ezValue *> *ret = NULL;
   if (m_local)
-    ret = &m_local->m_memory;
+    ret = &m_local->memory();
   else {
     ret = new vector<ezValue *>;
     size_t memories = (nmems > nargs) ? nmems : nargs;
@@ -198,9 +198,9 @@ vector<ezValue *> *ezCarousel::local_memory(void) {
 }
 
 map<string, size_t> &ezCarousel::local_symtab(void) {
-  return (m_local) ? m_local->m_symtab : m_symtab;
+  return (m_local) ? m_local->symtab() : m_symtab;
 }
 
 vector<ezValue *> *ezCarousel::scope_memory(void) {
-  return (m_scope) ? &m_scope->m_memory : NULL;
+  return (m_scope) ? &m_scope->memory() : NULL;
 }
