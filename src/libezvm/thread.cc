@@ -25,15 +25,16 @@
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezlog.h"
 #include "ezvm/ezthread.h"
+#include "ezvm/ezgc.h"
 #include <stdexcept>
 
 ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
                    vector<ezAddress> &rets, ezThreadCallback *callback,
                    ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu, ezGC &gc,
+                   vector<ezValue *> &constants, ezALU &alu,
                    ezThreadScheduler sched)
     : m_entry(entry), m_scheduler(sched), m_constants(constants),
-      m_globals(globals), m_alu(alu), m_gc(gc), m_pop_stack(false), m_wait(0),
+      m_globals(globals), m_alu(alu), m_pop_stack(false), m_wait(0),
       m_callback(callback) {
   if (!callback)
     throw runtime_error("callback is missing.");
@@ -42,9 +43,9 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     ezStackFrame *sf =
-        new ezStackFrame(crsl, this, m_globals, m_constants, m_alu, m_gc);
+        new ezStackFrame(crsl, this, m_globals, m_constants, m_alu);
     m_stack.push_back(sf);
-    m_gc.add(sf);
+    ezGC::instance().add(sf);
     // TODO:arguments and returns should be updated
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:

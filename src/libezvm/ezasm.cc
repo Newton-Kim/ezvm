@@ -656,8 +656,8 @@ void ezAsmProcedure::label(string name) {
 }
 
 ezASM::ezASM(ezAddress &entry, vector<ezValue *> &constants,
-             ezTable<string, ezValue *> &globals, ezGC &gc)
-    : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(gc) {}
+             ezTable<string, ezValue *> &globals)
+    : m_entry(entry), m_constants(constants), m_globals(globals), m_gc(ezGC::instance()) {}
 
 ezASM::~ezASM() {}
 

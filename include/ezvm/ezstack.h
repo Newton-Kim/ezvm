@@ -83,10 +83,6 @@ private:
   * @brief An arithematic logic unit
   */
   ezALU &m_alu;
-  /**
-  * @brief A garbage collector
-  */
-  ezGC &m_gc;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   /**
@@ -208,7 +204,7 @@ public:
   */
   ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
                ezTable<string, ezValue *> &globals,
-               vector<ezValue *> &constants, ezALU &alu, ezGC &gc);
+               vector<ezValue *> &constants, ezALU &alu);
   /**
   * @brief is a destructor.
   */

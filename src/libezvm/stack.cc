@@ -30,10 +30,10 @@
 
 ezStackFrame::ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
                            ezTable<string, ezValue *> &globals,
-                           vector<ezValue *> &constants, ezALU &alu, ezGC &gc)
+                           vector<ezValue *> &constants, ezALU &alu)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
-      m_constants(constants), m_globals(globals), m_alu(alu), m_gc(gc),
+      m_constants(constants), m_globals(globals), m_alu(alu),
       m_callback(callback) {
   if (!m_callback)
     throw runtime_error("callback is null.");
@@ -72,7 +72,7 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
 void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
   m_memory[addr.segment]->operator[](addr.offset) = v;
   if (v != ezNull::instance())
-    m_gc.add((ezGCObject *)v);
+    ezGC::instance().add((ezGCObject *)v);
 }
 
 void ezStackFrame::shift_operation(
@@ -385,7 +385,7 @@ void ezStackFrame::bitwise_not(ezAddress &dest, ezAddress &cond,
                   [&](ezValue *v) { return m_alu.bitwise_not(v); });
 }
 
-void ezStackFrame::fgc(void) { m_gc.force(); }
+void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
@@ -442,7 +442,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
   ezStackFrame *callee =
-      new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu, m_gc);
+      new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu);
   ezAddress addr;
   size_t min_args = (func->nargs > args.size()) ? args.size() : func->nargs;
   for (size_t i = 0; i < min_args; i++) {
