@@ -31,7 +31,8 @@
 
 using namespace std;
 
-ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL), m_alu(usr_alu) {
+ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL) {
+  ezALU::initialize(usr_alu);
   ezGC::instance().subscribe(this);
 }
 
@@ -56,7 +57,7 @@ void ezVM::run(void) {
   ezLog &log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
   ezThread *thread = new ezThread(m_entry, args, rets, this, m_globals,
-                                  m_constants, m_alu);
+                                  m_constants);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());
   while (!m_threads.empty()) {
@@ -116,7 +117,7 @@ size_t ezVM::thd(ezAddress &func, vector<ezAddress> &args,
   ezLog &log = ezLog::instance();
   log.verbose("%s", __PRETTY_FUNCTION__);
   ezThread *thread =
-      new ezThread(func, args, rets, this, m_globals, m_constants, m_alu,
+      new ezThread(func, args, rets, this, m_globals, m_constants,
                    EZ_THREAD_SCHED_ROUNDROBIN);
   m_threads.push_back(thread);
   log.debug("m_threads is %lu", m_threads.size());

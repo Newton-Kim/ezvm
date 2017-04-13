@@ -30,10 +30,10 @@
 
 ezStackFrame::ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
                            ezTable<string, ezValue *> &globals,
-                           vector<ezValue *> &constants, ezALU &alu)
+                           vector<ezValue *> &constants)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
-      m_constants(constants), m_globals(globals), m_alu(alu),
+      m_constants(constants), m_globals(globals), m_alu(ezALU::instance()),
       m_callback(callback) {
   if (!m_callback)
     throw runtime_error("callback is null.");
@@ -442,7 +442,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
   ezStackFrame *callee =
-      new ezStackFrame(func, m_callback, m_globals, m_constants, m_alu);
+      new ezStackFrame(func, m_callback, m_globals, m_constants);
   ezAddress addr;
   size_t min_args = (func->nargs > args.size()) ? args.size() : func->nargs;
   for (size_t i = 0; i < min_args; i++) {

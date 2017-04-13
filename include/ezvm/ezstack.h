@@ -79,10 +79,7 @@ private:
   * @brief A reference to a global segment
   */
   ezTable<string, ezValue *> &m_globals;
-  /**
-  * @brief An arithematic logic unit
-  */
-  ezALU &m_alu;
+  ezALU& m_alu;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   /**
@@ -204,7 +201,7 @@ public:
   */
   ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback,
                ezTable<string, ezValue *> &globals,
-               vector<ezValue *> &constants, ezALU &alu);
+               vector<ezValue *> &constants);
   /**
   * @brief is a destructor.
   */

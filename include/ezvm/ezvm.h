@@ -46,7 +46,6 @@ private:
   ezArchive *m_parchive;
   // TODO:user defined dump should be pluggable.
   ezDump *m_pdump;
-  ezALU m_alu;
   list<ezThread *> m_threads;
 
 public:

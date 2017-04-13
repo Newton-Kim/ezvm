@@ -76,4 +76,6 @@ public:
   ezValue *bitwise_and(ezValue *larg, ezValue *rarg);
   ezValue *bitwise_or(ezValue *larg, ezValue *rarg);
   ezValue *bitwise_xor(ezValue *larg, ezValue *rarg);
+  static void initialize(ezUsrALU * usr_alu);
+  static ezALU& instance(void);
 };

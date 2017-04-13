@@ -75,10 +75,6 @@ private:
   * @brief A stack of stack frames
   */
   vector<ezStackFrame *> m_stack;
-  /**
-  * @brief An arithematic logic unit
-  */
-  ezALU &m_alu;
   bool m_pop_stack;
   size_t m_wait;
   ezThreadCallback *m_callback;
@@ -103,7 +99,7 @@ public:
   */
   ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets,
            ezThreadCallback *callback, ezTable<string, ezValue *> &globals,
-           vector<ezValue *> &constants, ezALU &alu,
+           vector<ezValue *> &constants,
            ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
   /**
   * @brief destroys the thread.

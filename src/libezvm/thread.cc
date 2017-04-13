@@ -31,10 +31,10 @@
 ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
                    vector<ezAddress> &rets, ezThreadCallback *callback,
                    ezTable<string, ezValue *> &globals,
-                   vector<ezValue *> &constants, ezALU &alu,
+                   vector<ezValue *> &constants,
                    ezThreadScheduler sched)
     : m_entry(entry), m_scheduler(sched), m_constants(constants),
-      m_globals(globals), m_alu(alu), m_pop_stack(false), m_wait(0),
+      m_globals(globals), m_pop_stack(false), m_wait(0),
       m_callback(callback) {
   if (!callback)
     throw runtime_error("callback is missing.");
@@ -43,7 +43,7 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     ezStackFrame *sf =
-        new ezStackFrame(crsl, this, m_globals, m_constants, m_alu);
+        new ezStackFrame(crsl, this, m_globals, m_constants);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
     // TODO:arguments and returns should be updated
