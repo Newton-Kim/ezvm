@@ -187,7 +187,7 @@ void ezCarousel::on_mark(void) {
 vector<ezValue *> *ezCarousel::local_memory(void) {
   vector<ezValue *> *ret = NULL;
   if (m_local)
-    ret = &m_local->memory();
+    ret = &m_local->to_vector();
   else {
     ret = new vector<ezValue *>;
     size_t memories = (nmems > nargs) ? nmems : nargs;
@@ -197,10 +197,12 @@ vector<ezValue *> *ezCarousel::local_memory(void) {
   return ret;
 }
 
+/*
 map<string, size_t> &ezCarousel::local_symtab(void) {
   return (m_local) ? m_local->symtab() : m_symtab;
 }
+*/
 
 vector<ezValue *> *ezCarousel::scope_memory(void) {
-  return (m_scope) ? &m_scope->memory() : NULL;
+  return (m_scope) ? &m_scope->to_vector() : NULL;
 }

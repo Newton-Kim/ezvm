@@ -95,9 +95,11 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
       sink.print("        [%lu]=%lu\n", i, crsl->jmptbl[i]);
     sink.print("      .jump symbol table:\n");
-    for (map<string, size_t>::iterator it = crsl->local_symtab().begin();
-         it != crsl->local_symtab().end(); it++)
-      sink.print("        [%s]=%lu\n", it->first.c_str(), it->second);
+    vector<string> symbols;
+    crsl->jmptbl.symbols(symbols);
+    for (vector<string>::iterator it = symbols.begin();
+         it != symbols.end(); it++)
+      sink.print("        [%s]=%lu\n", *it, crsl->jmptbl[*it]);
     ezAddress addr;
     ezOpCode op;
     uint8_t arg[3];
@@ -133,10 +135,12 @@ void ezDump::dump(const string path) {
   sink.indentation();
   sink.print("symtab:\n");
   sink.indent();
-  for (map<string, size_t>::iterator it = ezMemory::instance().globals().symtab().begin();
-       it != ezMemory::instance().globals().symtab().end(); it++) {
+  vector<string> symbols;
+  ezMemory::instance().globals().symbols(symbols);
+  for (vector<string>::iterator it = symbols.begin();
+       it != symbols.end(); it++) {
     sink.indentation();
-    sink.print("[_%s]=%lu\n", it->first.c_str(), it->second);
+    sink.print("[_%s]=%lu\n", *it, ezMemory::instance().globals()[*it]);
   }
   sink.unindent();
   sink.unindent();

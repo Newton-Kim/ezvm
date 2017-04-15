@@ -579,12 +579,9 @@ void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
 }
 
 size_t ezAsmProcedure::label2index(string label) {
-  if (m_carousel->local_symtab().find(label) ==
-      m_carousel->local_symtab().end()) {
-    m_carousel->local_symtab()[label] = m_carousel->jmptbl.size();
-    m_carousel->jmptbl.push_back(0);
-  }
-  return m_carousel->local_symtab()[label];
+  if (!m_carousel->jmptbl.exist(label)) 
+    m_carousel->jmptbl.add(label,0);
+  return m_carousel->jmptbl[label];
 }
 
 void ezAsmProcedure::branch_instruction(
@@ -652,8 +649,7 @@ void ezAsmProcedure::bra(string label) {
 }
 
 void ezAsmProcedure::label(string name) {
-  size_t index = label2index(name);
-  m_carousel->jmptbl[index] = m_carousel->instruction.size();
+  m_carousel->jmptbl.add(name, m_carousel->instruction.size());
 }
 
 ezASM::ezASM(ezAddress &entry)

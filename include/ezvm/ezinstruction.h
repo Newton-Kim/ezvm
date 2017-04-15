@@ -74,9 +74,6 @@ public:
   ezInstruction(
       function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump);
-  // TODO:It should be replaced with the bind.
-  //  const bool auto_cmd;
-  //  ezOpCode cmd;
   size_t offset;
   ezAddress arg;
   ezAddress handle;
