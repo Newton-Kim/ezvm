@@ -24,8 +24,8 @@
 */
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezlog.h"
-#include "ezvm/ezstack.h"
 #include "ezvm/ezmemory.h"
+#include "ezvm/ezstack.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -439,8 +439,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 
 void ezStackFrame::call(ezCarousel *func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
-  ezStackFrame *callee =
-      new ezStackFrame(func, m_callback);
+  ezStackFrame *callee = new ezStackFrame(func, m_callback);
   ezAddress addr;
   size_t min_args = (func->nargs > args.size()) ? args.size() : func->nargs;
   for (size_t i = 0; i < min_args; i++) {

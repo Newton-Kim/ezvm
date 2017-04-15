@@ -62,7 +62,7 @@ void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }
 
 void ezGC::force(void) { collect(); }
 
-ezGC& ezGC::instance(void) {
+ezGC &ezGC::instance(void) {
   static ezGC s_ezGC;
   return s_ezGC;
 }

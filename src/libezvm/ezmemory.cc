@@ -24,8 +24,7 @@
 */
 #include "ezvm/ezmemory.h"
 
-
-ezMemory& ezMemory::instance(void) {
+ezMemory &ezMemory::instance(void) {
   static ezMemory s_memory;
   return s_memory;
 }

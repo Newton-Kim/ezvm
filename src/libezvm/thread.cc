@@ -22,11 +22,11 @@
 * THE SOFTWARE.
 *
 */
+#include "ezvm/ezgc.h"
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezlog.h"
-#include "ezvm/ezthread.h"
-#include "ezvm/ezgc.h"
 #include "ezvm/ezmemory.h"
+#include "ezvm/ezthread.h"
 #include <stdexcept>
 
 ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
@@ -40,8 +40,7 @@ ezThread::ezThread(ezAddress entry, vector<ezAddress> &args,
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
-    ezStackFrame *sf =
-        new ezStackFrame(crsl, this);
+    ezStackFrame *sf = new ezStackFrame(crsl, this);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
     // TODO:arguments and returns should be updated
@@ -63,7 +62,7 @@ ezThread::~ezThread() {
 }
 
 ezValue *ezThread::addr2val(ezAddress addr) {
-  //TODO:refactoring is required.
+  // TODO:refactoring is required.
   ezValue *v = NULL;
   switch (addr.segment) {
   case EZ_ASM_SEGMENT_CONSTANT:

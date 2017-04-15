@@ -25,8 +25,8 @@
 #include "ezvm/ezasm.h"
 #include "ezvm/ezdump.h"
 #include "ezvm/ezlog.h"
-#include "ezvm/ezstack.h"
 #include "ezvm/ezmemory.h"
+#include "ezvm/ezstack.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -579,8 +579,8 @@ void ezAsmProcedure::bitwise_xor(const ezAddress dest, const ezAddress cond,
 }
 
 size_t ezAsmProcedure::label2index(string label) {
-  if (!m_carousel->jmptbl.exist(label)) 
-    m_carousel->jmptbl.add(label,0);
+  if (!m_carousel->jmptbl.exist(label))
+    m_carousel->jmptbl.add(label, 0);
   return m_carousel->jmptbl[label];
 }
 
@@ -653,7 +653,8 @@ void ezAsmProcedure::label(string name) {
 }
 
 ezASM::ezASM(ezAddress &entry)
-    : m_entry(entry), m_constants(ezMemory::instance().constants()), m_globals(ezMemory::instance().globals()), m_gc(ezGC::instance()) {}
+    : m_entry(entry), m_constants(ezMemory::instance().constants()),
+      m_globals(ezMemory::instance().globals()), m_gc(ezGC::instance()) {}
 
 ezASM::~ezASM() {}
 

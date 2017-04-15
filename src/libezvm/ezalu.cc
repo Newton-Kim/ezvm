@@ -897,13 +897,14 @@ ezValue *ezALU::bitwise_xor(ezValue *larg, ezValue *rarg) {
   return xord[type](m_usr_alu, larg, rarg);
 }
 
-static ezALU* s_alu = NULL;
-void ezALU::initialize(ezUsrALU * usr_alu) {
-  if(!s_alu) s_alu = new ezALU(usr_alu);
+static ezALU *s_alu = NULL;
+void ezALU::initialize(ezUsrALU *usr_alu) {
+  if (!s_alu)
+    s_alu = new ezALU(usr_alu);
 }
 
-ezALU& ezALU::instance(void) {
-  if(!s_alu) throw runtime_error("yet to be initialized");
+ezALU &ezALU::instance(void) {
+  if (!s_alu)
+    throw runtime_error("yet to be initialized");
   return *s_alu;
 }
-

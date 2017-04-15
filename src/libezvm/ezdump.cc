@@ -29,8 +29,7 @@
 
 using namespace std;
 
-ezDump::ezDump(ezAddress &entry)
-    : m_entry(entry) {}
+ezDump::ezDump(ezAddress &entry) : m_entry(entry) {}
 
 void ezDump::dump(ezFile &sink, vector<ezAddress> &addrs) {
   if (addrs.size() == 0) {
@@ -97,8 +96,8 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     sink.print("      .jump symbol table:\n");
     vector<string> symbols;
     crsl->jmptbl.symbols(symbols);
-    for (vector<string>::iterator it = symbols.begin();
-         it != symbols.end(); it++)
+    for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
+         it++)
       sink.print("        [%s]=%lu\n", *it, crsl->jmptbl[*it]);
     ezAddress addr;
     ezOpCode op;
@@ -137,8 +136,8 @@ void ezDump::dump(const string path) {
   sink.indent();
   vector<string> symbols;
   ezMemory::instance().globals().symbols(symbols);
-  for (vector<string>::iterator it = symbols.begin();
-       it != symbols.end(); it++) {
+  for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
+       it++) {
     sink.indentation();
     sink.print("[_%s]=%lu\n", *it, ezMemory::instance().globals()[*it]);
   }
