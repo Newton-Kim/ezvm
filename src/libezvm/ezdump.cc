@@ -98,7 +98,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     crsl->jmptbl.symbols(symbols);
     for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
          it++)
-      sink.print("        [%s]=%lu\n", *it, crsl->jmptbl[*it]);
+      sink.print("        [%s]=%lu\n", (*it).c_str(), crsl->jmptbl[*it]);
     ezAddress addr;
     ezOpCode op;
     uint8_t arg[3];
@@ -139,7 +139,7 @@ void ezDump::dump(const string path) {
   for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
        it++) {
     sink.indentation();
-    sink.print("[_%s]=%lu\n", *it, ezMemory::instance().globals()[*it]);
+    sink.print("[_%s]=%lu\n", (*it).c_str(), ezMemory::instance().globals()[*it]);
   }
   sink.unindent();
   sink.unindent();
@@ -246,7 +246,7 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   else
     for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
       dump(sink, *it);
-  sink.print(",");
+  sink.print("; ");
   if (dests.empty())
     sink.print("null");
   else

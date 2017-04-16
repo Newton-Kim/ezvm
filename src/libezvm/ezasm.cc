@@ -67,6 +67,7 @@ void ezAsmProcedure::thd(const ezAddress &func, vector<ezAddress> &args,
   inst->arg = func;
   inst->srcs = args;
   inst->dests = rets;
+  inst->handle = handle;
   m_carousel->instruction.push_back(inst);
 }
 
