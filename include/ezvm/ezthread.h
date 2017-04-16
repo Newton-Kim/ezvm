@@ -40,8 +40,8 @@ enum ezThreadScheduler { EZ_THREAD_SCHED_REALTIME, EZ_THREAD_SCHED_ROUNDROBIN };
 
 class ezThreadCallback {
 public:
-  virtual size_t thd(ezAddress &func, vector<ezAddress> &args,
-                     vector<ezAddress> &rets) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezValue*> &args,
+                     vector<ezAddress> &rets, ezStackFrame* caller) = 0;
   virtual bool exist(size_t handle) = 0;
 };
 
@@ -56,18 +56,9 @@ private:
   ezAddress m_entry;
   ezThreadScheduler m_scheduler;
   /**
-  * @brief An arguments to a new stack frame
-  */
-  vector<ezValue *> m_args;
-  /**
-  * @brief A return values from the stack frame on top
-  */
-  vector<ezValue *> m_rets;
-  /**
   * @brief A stack of stack frames
   */
   vector<ezStackFrame *> m_stack;
-  bool m_pop_stack;
   size_t m_wait;
   ezThreadCallback *m_callback;
   /**
@@ -77,8 +68,8 @@ private:
   *
   * @return A value.
   */
+  ezStackFrame* m_caller;
   ezValue *addr2val(ezAddress addr);
-  void pop_stack(void);
 
 public:
   /**
@@ -89,9 +80,9 @@ public:
     * @param globals is a reference to a global memory.
     * @param constants is a reference to a constant memory.
   */
-  ezThread(ezAddress entry, vector<ezAddress> &args, vector<ezAddress> &rets,
+  ezThread(ezAddress entry, vector<ezValue*> &args, vector<ezAddress> &rets,
            ezThreadCallback *callback,
-           ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME);
+           ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME, ezStackFrame* caller = NULL);
   /**
   * @brief destroys the thread.
   */
@@ -104,8 +95,8 @@ public:
   void run(void);
   void on_mark(void);
   void call(ezStackFrame *sf);
-  void end(void);
-  size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
+  void end(vector<ezAddress> &dests, vector<ezValue*> &vals);
+  size_t thd(ezAddress &func, vector<ezValue*> &args, vector<ezAddress> &rets, ezStackFrame* caller);
   void wait(size_t handle);
   bool empty(void) { return m_stack.empty(); }
 };

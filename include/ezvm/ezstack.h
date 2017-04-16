@@ -36,9 +36,9 @@ using namespace std;
 class ezStackFrameCallback {
 public:
   virtual void call(ezStackFrame *sf) = 0;
-  virtual void end(void) = 0;
-  virtual size_t thd(ezAddress &func, vector<ezAddress> &args,
-                     vector<ezAddress> &rets) = 0;
+  virtual void end(vector<ezAddress> &dests, vector<ezValue*> &vals) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezValue*> &args,
+                     vector<ezAddress> &rets, ezStackFrame* caller) = 0;
   virtual void wait(size_t handle) = 0;
 };
 
@@ -74,6 +74,7 @@ private:
   ezALU& m_alu;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
+  void addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr);
   /**
   * @brief fetches a value from an address.
   *
@@ -103,7 +104,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezNativeCarousel *func, vector<ezAddress> &args,
+  void call(ezNativeCarousel *func, vector<ezValue *> &args,
             vector<ezAddress> &rets);
   /**
   * @brief invokes a carousel.
@@ -112,7 +113,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezCarousel *func, vector<ezAddress> &args, vector<ezAddress> &rets);
+  void call(ezCarousel *func, vector<ezValue*> &args, vector<ezAddress> &rets);
   void binary_operation(ezAddress &dest, ezAddress &src1, ezAddress &src2,
                         function<ezValue *(ezValue *, ezValue *)> binary_func);
   void binary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src1,
@@ -191,12 +192,13 @@ public:
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel *crsl, ezStackFrameCallback *callback);
+  ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
+                        vector<ezAddress> &rets, ezStackFrameCallback *callback);
   /**
   * @brief is a destructor.
   */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
-  void update(ezStackFrame *sf);
+  void update(vector<ezAddress> &dests, vector<ezValue*> &vals);
   void on_mark(void);
 };

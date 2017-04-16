@@ -54,6 +54,6 @@ public:
   ezArchive &archive(void);
   ezDump &dump(void);
   void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
+  size_t thd(ezAddress &func, vector<ezValue*> &args, vector<ezAddress> &rets, ezStackFrame* caller);
   bool exist(size_t handle);
 };
