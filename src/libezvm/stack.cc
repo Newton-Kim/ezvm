@@ -23,7 +23,6 @@
 *
 */
 #include "ezvm/ezinstruction.h"
-#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezstack.h"
 #include <iostream>
@@ -34,7 +33,6 @@ ezStackFrame::ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
       m_alu(ezALU::instance()), m_callback(callback) {
-  ezLog::instance().verbose("%s", __PRETTY_FUNCTION__);
   if (!m_callback)
     throw runtime_error("callback is null.");
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;

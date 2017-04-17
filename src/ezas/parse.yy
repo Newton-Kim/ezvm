@@ -24,7 +24,6 @@
 * 
 */
 #include "ezvm/ezvm.h"
-#include "ezvm/ezlog.h"
 #include "ezio.h"
 #include <iostream>
 #include <map>
@@ -189,7 +188,7 @@ static int s_scpkey = -1;
 %start program
 
 %%
-program : import entry procs {if(s_proc_current) delete s_proc_current; ezLog::instance().debug("pass!"); };
+program : import entry procs {if(s_proc_current) delete s_proc_current; };
 
 import : %empty | IMPORT SYMBOL NEWLINE {
 		//TODO:load a script ($2+'.ezas')

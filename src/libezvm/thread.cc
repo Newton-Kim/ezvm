@@ -24,7 +24,6 @@
 */
 #include "ezvm/ezgc.h"
 #include "ezvm/ezinstruction.h"
-#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezthread.h"
 #include <stdexcept>
@@ -113,17 +112,13 @@ void ezThread::on_mark(void) {
 }
 
 void ezThread::call(ezStackFrame *sf) {
-  ezLog &log = ezLog::instance();
   if (!sf)
     throw("invalid call stack");
   m_stack.push_back(sf);
-  log.verbose("stack %p has turn", sf);
 }
 
 void ezThread::end(vector<ezAddress> &dests, vector<ezValue*> &vals) {
-  ezLog &log = ezLog::instance();
   ezStackFrame *callee = m_stack.back();
-  log.verbose("stack %p has poped out", callee);
   m_stack.pop_back();
   if (m_stack.empty()) return;
   ezStackFrame *caller = m_stack.back();

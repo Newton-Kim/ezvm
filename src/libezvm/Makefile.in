@@ -136,7 +136,7 @@ libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezarchive.lo ezalu.lo ezgc.lo ezinstruction.lo \
 	ezasm.lo ezdump.lo ezval.lo stack.lo thread.lo ezmemory.lo \
-	vm.lo utility/ezfile.lo utility/ezlog.lo
+	vm.lo utility/ezfile.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -347,8 +347,7 @@ libezvm_la_SOURCES = ezarchive.cc \
 		   thread.cc \
 		   ezmemory.cc \
 		   vm.cc \
-		   utility/ezfile.cc \
-		   utility/ezlog.cc
+		   utility/ezfile.cc
 
 include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezalu.h \
@@ -358,7 +357,6 @@ include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezfile.h \
 		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
-		../../include/ezvm/ezlog.h \
 		../../include/ezvm/ezmemory.h \
 		../../include/ezvm/ezstack.h \
 		../../include/ezvm/eztable.h \
@@ -446,8 +444,6 @@ utility/$(DEPDIR)/$(am__dirstamp):
 	@: > utility/$(DEPDIR)/$(am__dirstamp)
 utility/ezfile.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
-utility/ezlog.lo: utility/$(am__dirstamp) \
-	utility/$(DEPDIR)/$(am__dirstamp)
 
 libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libezvm_la_LINK) -rpath $(libdir) $(libezvm_la_OBJECTS) $(libezvm_la_LIBADD) $(LIBS)
@@ -472,7 +468,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezlog.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

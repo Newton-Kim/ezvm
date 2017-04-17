@@ -22,7 +22,6 @@
 * THE SOFTWARE.
 *
 */
-#include "ezvm/ezlog.h"
 #include "ezvm/ezvm.h"
 #include "parse.hh"
 #include <cerrno>
@@ -93,7 +92,6 @@ int main(int argc, char *argv[]) {
         cerr << "error: logging target is missing" << endl;
         return 0;
       }
-      ezLog::initialize(optarg);
       break;
     case 'd':
       if (!optarg) {

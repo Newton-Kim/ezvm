@@ -24,7 +24,6 @@
 */
 #include "ezvm/ezasm.h"
 #include "ezvm/ezdump.h"
-#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezstack.h"
 #include <iostream>
@@ -660,7 +659,6 @@ ezASM::ezASM(ezAddress &entry)
 ezASM::~ezASM() {}
 
 void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
-  ezLog &log = ezLog::instance();
   if (!symtab || !constants)
     throw runtime_error("entry is not found");
   map<string, size_t> *offset_symtab = new map<string, size_t>;
@@ -668,7 +666,6 @@ void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
   for (size_t i = 0; constants[i] && symtab[i]; i++) {
     size_t offset = m_globals.add(symtab[i], constants[i]);
     m_gc.add((ezGCObject *)constants[i]);
-    ezLog::instance().debug("global[%lu] = %s", offset, symtab[i]);
   }
 }
 

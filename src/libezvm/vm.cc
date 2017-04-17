@@ -23,7 +23,6 @@
 *
 */
 #include "ezvm/ezgc.h"
-#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezvm.h"
 #include <algorithm>
@@ -57,16 +56,12 @@ ezVM::~ezVM() {
 void ezVM::run(void) {
   vector<ezValue*> args;
   vector<ezAddress> rets;
-  ezLog &log = ezLog::instance();
-  log.verbose("%s", __PRETTY_FUNCTION__);
   ezThread *thread = new ezThread(m_entry, args, rets, this);
   m_threads.push_back(thread);
-  log.debug("m_threads is %lu", m_threads.size());
   while (!m_threads.empty()) {
     list<ezThread *>::iterator it = m_threads.begin();
     while (it != m_threads.end()) {
       ezThread *thd = *it;
-      log.verbose("m_thread(%p) gets turn", thd);
       if (thd == NULL) {
         it = m_threads.erase(it);
       } else {
@@ -107,12 +102,9 @@ void ezVM::on_mark(void) {
 
 size_t ezVM::thd(ezAddress &func, vector<ezValue*> &args,
                  vector<ezAddress> &rets, ezStackFrame* caller) {
-  ezLog &log = ezLog::instance();
-  log.verbose("%s", __PRETTY_FUNCTION__);
   ezThread *thread =
       new ezThread(func, args, rets, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
   m_threads.push_back(thread);
-  log.debug("m_threads is %lu", m_threads.size());
   return (size_t)thread;
 }
 
