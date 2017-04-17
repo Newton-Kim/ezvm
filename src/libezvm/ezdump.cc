@@ -139,7 +139,8 @@ void ezDump::dump(const string path) {
   for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
        it++) {
     sink.indentation();
-    sink.print("[_%s]=%lu\n", (*it).c_str(), ezMemory::instance().globals()[*it]);
+    sink.print("[_%s]=%lu\n", (*it).c_str(),
+               ezMemory::instance().globals()[*it]);
   }
   sink.unindent();
   sink.unindent();

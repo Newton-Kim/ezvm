@@ -29,15 +29,18 @@
 #include <stdexcept>
 
 ezStackFrame::ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
-                        vector<ezAddress> &rets, ezStackFrameCallback *callback)
+                           vector<ezAddress> &rets,
+                           ezStackFrameCallback *callback)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
       m_alu(ezALU::instance()), m_callback(callback) {
   if (!m_callback)
     throw runtime_error("callback is null.");
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
-  for (size_t i = 0; i < min_args; i++) (*m_local)[i] = args[i];
-  for (size_t i = 0; i < rets.size(); i++) m_return_dest.push_back(rets[i]);
+  for (size_t i = 0; i < min_args; i++)
+    (*m_local)[i] = args[i];
+  for (size_t i = 0; i < rets.size(); i++)
+    m_return_dest.push_back(rets[i]);
   m_memory.push_back(&(ezMemory::instance().globals().to_vector()));
   m_memory.push_back(&ezMemory::instance().constants());
   m_memory.push_back(m_local);
@@ -50,7 +53,7 @@ ezStackFrame::~ezStackFrame() {
 }
 
 void ezStackFrame::addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr) {
-  for (size_t i = 0 ; i < addr.size() ; i++)
+  for (size_t i = 0; i < addr.size(); i++)
     vals.push_back(addr2val(addr[i]));
 }
 
@@ -428,7 +431,7 @@ void ezStackFrame::cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2) {
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
   ezValue *proc = addr2val(func);
-  vector<ezValue*> vargs;
+  vector<ezValue *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
@@ -449,7 +452,7 @@ void ezStackFrame::call(ezCarousel *func, vector<ezValue *> &args,
   m_callback->call(callee);
 }
 
-void ezStackFrame::call(ezNativeCarousel *func, vector<ezValue*> &args,
+void ezStackFrame::call(ezNativeCarousel *func, vector<ezValue *> &args,
                         vector<ezAddress> &rets) {
   vector<ezValue *> vrets;
   func->run(args, vrets);
@@ -472,7 +475,7 @@ void ezStackFrame::wait(ezAddress &handle) {
   m_callback->wait(((ezInteger *)v)->to_integer());
 }
 
-void ezStackFrame::update(vector<ezAddress> &dests, vector<ezValue*> &vals) {
+void ezStackFrame::update(vector<ezAddress> &dests, vector<ezValue *> &vals) {
   val2addr(dests, vals);
 }
 

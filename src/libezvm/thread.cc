@@ -28,11 +28,11 @@
 #include "ezvm/ezthread.h"
 #include <stdexcept>
 
-ezThread::ezThread(ezAddress entry, vector<ezValue*> &args,
+ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
                    vector<ezAddress> &rets, ezThreadCallback *callback,
-                   ezThreadScheduler sched, ezStackFrame* caller)
-    : m_entry(entry), m_scheduler(sched), m_wait(0),
-      m_callback(callback), m_caller(caller) {
+                   ezThreadScheduler sched, ezStackFrame *caller)
+    : m_entry(entry), m_scheduler(sched), m_wait(0), m_callback(callback),
+      m_caller(caller) {
   if (!callback)
     throw runtime_error("callback is missing.");
   ezValue *v = addr2val(entry);
@@ -44,9 +44,10 @@ ezThread::ezThread(ezAddress entry, vector<ezValue*> &args,
     ezGC::instance().add(sf);
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL: {
-    vector<ezValue*> vrets;
+    vector<ezValue *> vrets;
     ((ezNativeCarousel *)v)->run(args, vrets);
-    if(caller) caller->update(rets, vrets);
+    if (caller)
+      caller->update(rets, vrets);
   } break;
   default:
     throw("invalid value type");
@@ -54,7 +55,7 @@ ezThread::ezThread(ezAddress entry, vector<ezValue*> &args,
   }
 }
 
-ezThread::~ezThread() { }
+ezThread::~ezThread() {}
 
 ezValue *ezThread::addr2val(ezAddress addr) {
   // TODO:refactoring is required.
@@ -117,16 +118,17 @@ void ezThread::call(ezStackFrame *sf) {
   m_stack.push_back(sf);
 }
 
-void ezThread::end(vector<ezAddress> &dests, vector<ezValue*> &vals) {
+void ezThread::end(vector<ezAddress> &dests, vector<ezValue *> &vals) {
   ezStackFrame *callee = m_stack.back();
   m_stack.pop_back();
-  if (m_stack.empty()) return;
+  if (m_stack.empty())
+    return;
   ezStackFrame *caller = m_stack.back();
   caller->update(dests, vals);
 }
 
-size_t ezThread::thd(ezAddress &func, vector<ezValue*> &args,
-                     vector<ezAddress> &rets, ezStackFrame* caller) {
+size_t ezThread::thd(ezAddress &func, vector<ezValue *> &args,
+                     vector<ezAddress> &rets, ezStackFrame *caller) {
   return m_callback->thd(func, args, rets, caller);
 }
 

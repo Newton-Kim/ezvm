@@ -36,17 +36,18 @@ template <class K, class V> class ezTable : public ezGCObject {
 private:
   map<K, size_t> m_symtab;
   vector<V> m_memory;
+
 public:
   void reset(K key);
   size_t add(K key, V value);
   void push_back(V value);
   bool exist(K key);
   bool is_null(K key);
-  size_t operator[](K key) {return m_symtab[key];}
-  V operator[](size_t index) {return m_memory[index];}
-  size_t size(void) {return m_memory.size();}
-  vector<V>& to_vector(void) {return m_memory;}
-  void symbols(vector<K>& arr);
+  size_t operator[](K key) { return m_symtab[key]; }
+  V operator[](size_t index) { return m_memory[index]; }
+  size_t size(void) { return m_memory.size(); }
+  vector<V> &to_vector(void) { return m_memory; }
+  void symbols(vector<K> &arr);
 };
 
 template <class K, class V> void ezTable<K, V>::reset(K key) {
@@ -90,7 +91,8 @@ template <class K, class V> bool ezTable<K, V>::exist(K key) {
   return (it != m_symtab.end());
 }
 
-template <class K, class V> void ezTable<K, V>::symbols(vector<K>& arr) {
-  for (typename map<K, size_t>::iterator it = m_symtab.begin() ; it != m_symtab.end() ; it++)
+template <class K, class V> void ezTable<K, V>::symbols(vector<K> &arr) {
+  for (typename map<K, size_t>::iterator it = m_symtab.begin();
+       it != m_symtab.end(); it++)
     arr.push_back(it->first);
 }

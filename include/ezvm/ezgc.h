@@ -119,5 +119,5 @@ public:
   * @brief sets the garbage collection back to normal state.
   */
   void resume(void) { m_pause = false; }
-  static ezGC& instance(void);
+  static ezGC &instance(void);
 };

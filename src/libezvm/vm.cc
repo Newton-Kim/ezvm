@@ -54,7 +54,7 @@ ezVM::~ezVM() {
 }
 
 void ezVM::run(void) {
-  vector<ezValue*> args;
+  vector<ezValue *> args;
   vector<ezAddress> rets;
   ezThread *thread = new ezThread(m_entry, args, rets, this);
   m_threads.push_back(thread);
@@ -100,8 +100,8 @@ void ezVM::on_mark(void) {
     (*it)->on_mark();
 }
 
-size_t ezVM::thd(ezAddress &func, vector<ezValue*> &args,
-                 vector<ezAddress> &rets, ezStackFrame* caller) {
+size_t ezVM::thd(ezAddress &func, vector<ezValue *> &args,
+                 vector<ezAddress> &rets, ezStackFrame *caller) {
   ezThread *thread =
       new ezThread(func, args, rets, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
   m_threads.push_back(thread);
