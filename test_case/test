@@ -1,0 +1,10 @@
+#!/bin/bash
+
+TC_DIR=../share/ezvm
+EZAS=../src/ezas/ezas
+
+for f in `ls $TC_DIR`
+do
+	echo $f...
+	$EZAS $TC_DIR/$f > $f.outref
+done
