@@ -388,7 +388,7 @@ void ezAsmProcedure::sub(const ezAddress dest, const ezAddress &lsrc,
                          const ezAddress &rsrc) {
   instruction_with_binary_arguments(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.sub(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
+        stk.sub(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_SUB, inst.dests, inst.srcs);
@@ -400,7 +400,7 @@ void ezAsmProcedure::sub(const ezAddress dest, const ezAddress cond,
                          const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_binary_arguments(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.sub(inst.dests[0], inst.srcs[0], inst.srcs[1]);
+        stk.sub(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_SUB, inst.dests, inst.srcs);
