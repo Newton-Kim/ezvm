@@ -4,14 +4,14 @@
 	mv r0 r1, 1 2
 	div r2, r0 r1
 	call _stdout ( r2 "=" r0 "/" r1)
-	div r3, 1 2 3 4
+	div r3, 1 2
 	div r3, r3 3
 	div r3, r3 4
 	call _stdout ( r3 "=1/2/3/4")
 	mv r0 r1, 4 2
 	div r2, r0 r1
 	call _stdout ( r2 "=" r0 "/" r1)
-	div r3, 4 3 2 1
+	div r3, 4 3
 	div r3, r3 2
 	div r3, r3 1
 	call _stdout ( r3 "=4/3/2/1")
