@@ -54,7 +54,10 @@ ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
   m_size = sizeof(*this);
 }
 
-ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) { m_size = sizeof(*this); }
+ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
+  unmark();
+  m_size = sizeof(*this);
+}
 
 ezNull *ezNull::instance() {
   static ezNull null;

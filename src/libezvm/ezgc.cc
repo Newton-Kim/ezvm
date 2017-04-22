@@ -37,7 +37,7 @@ void ezGC::collect(void) {
   typename list<ezGCObject *>::iterator it = m_memories.begin();
   while(it != m_memories.end()) {
     ezGCObject *value = *it;
-    if (value->marked()) {
+    if (value->is_marked()) {
       value->unmark();
       it++;
     } else {
@@ -50,7 +50,7 @@ void ezGC::collect(void) {
 }
 
 void ezGC::add(ezGCObject *v) {
-  if (m_pause)
+  if (m_pause || !v->is_gray())
     return;
   v->unmark();
   m_size += v->size();

@@ -79,8 +79,7 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
 
 void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
   m_memory[addr.segment]->operator[](addr.offset) = v;
-  if (v != ezNull::instance())
-    ezGC::instance().add((ezGCObject *)v);
+  ezGC::instance().add((ezGCObject *)v);
 }
 
 void ezStackFrame::shift_operation(

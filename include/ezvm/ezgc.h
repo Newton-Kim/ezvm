@@ -38,34 +38,41 @@ public:
   virtual void on_mark(void) = 0;
 };
 
+enum ezGCObjectState{
+  EZGC_OBJECT_STATE_CLEARED = 0,
+  EZGC_OBJECT_STATE_MARKED,
+  EZGC_OBJECT_STATE_GRAY,
+};
+
 /**
 * @brief ezGCObject is an abstract object which occupies an allocated heap
 * memory.
 */
 class ezGCObject {
 private:
-  bool m_mark;
+  ezGCObjectState m_state;
 
 protected:
   size_t m_size;
 
 public:
-  ezGCObject() : m_mark(false) {}
+  ezGCObject() : m_state(EZGC_OBJECT_STATE_GRAY) {}
   virtual ~ezGCObject() {}
   /**
   * @brief returns current state of the mark.
   *
   * @return boolean value which implies wheather it is marked.
   */
-  inline bool marked(void) { return m_mark; }
+  inline bool is_marked(void) { return m_state == EZGC_OBJECT_STATE_MARKED; }
+  inline bool is_gray(void) { return m_state == EZGC_OBJECT_STATE_GRAY; }
   /**
   * @brief sets the mark true.
   */
-  inline void mark(void) { m_mark = true; }
+  inline void mark(void) { m_state = EZGC_OBJECT_STATE_MARKED; }
   /**
   * @brief sets the mark false.
   */
-  inline void unmark(void) { m_mark = false; }
+  inline void unmark(void) { m_state = EZGC_OBJECT_STATE_CLEARED; }
   /**
   * @brief returns the size of the object.
   *
