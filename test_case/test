@@ -6,5 +6,13 @@ EZAS=../src/ezas/ezas
 for f in `ls $TC_DIR`
 do
 	echo $f...
-	$EZAS $TC_DIR/$f > $f.outref
+	$EZAS $TC_DIR/$f > $f.out
+	if [ -z `diff $f.outref $f.out` ]
+	then
+		echo pass
+		rm $f.out
+	else
+		echo fail
+		diff $f.outref $f.out
+	fi
 done
