@@ -369,7 +369,7 @@ void ezAsmProcedure::ret(void) {
   ezInstruction *inst = new ezInstruction(
       [](ezStackFrame &stk, ezInstruction &inst) { stk.ret(inst.srcs); },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_RET, inst.srcs);
+        dump.dump(sink, EZ_OP_RET);
       });
   m_carousel->instruction.push_back(inst);
 }
@@ -380,7 +380,7 @@ void ezAsmProcedure::ret(vector<ezAddress> &src) {
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_RET, inst.srcs);
       });
-  inst->dests = src;
+  inst->srcs = src;
   m_carousel->instruction.push_back(inst);
 }
 

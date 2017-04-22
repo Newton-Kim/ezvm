@@ -62,7 +62,7 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
 
 void ezDump::dump(ezFile &sink, const ezValue *v) {
   if (!v) {
-    sink.print("null\n");
+    sink.print(" null\n");
     return;
   }
   switch (v->type) {
@@ -88,7 +88,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     break;
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
-    sink.print("(%d)\n", crsl->nargs);
+    sink.print("0x%x(%d)\n", crsl, crsl->nargs);
     sink.print("      .memsize: %lu\n", crsl->nmems);
     sink.print("      .jump table:\n");
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
@@ -109,7 +109,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     }
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    sink.print("(native)");
+    sink.print("0x%x(native)", v);
     break;
   }
   sink.print("\n");
@@ -222,13 +222,13 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   dump(sink, func);
   sink.print(",");
   if (srcs.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
       dump(sink, *it);
   sink.print(",");
   if (dests.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
          it++)
@@ -243,13 +243,13 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   dump(sink, func);
   sink.print(",");
   if (srcs.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
       dump(sink, *it);
   sink.print("; ");
   if (dests.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
          it++)
@@ -263,14 +263,14 @@ void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
                   vector<ezAddress> &param) {
   sink.print("%s", opstr(op));
   if (result.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = result.begin(); it != result.end();
          it++)
       dump(sink, *it);
   sink.print(",");
   if (param.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
          it++)
@@ -281,7 +281,7 @@ void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
 void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param) {
   sink.print("%s", opstr(op));
   if (param.empty())
-    sink.print("null");
+    sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
          it++)

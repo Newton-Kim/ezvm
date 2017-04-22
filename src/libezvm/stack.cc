@@ -401,6 +401,7 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
     v = addr2val(srcs[i]);
     m_returns.push_back(v);
   }
+  m_callback->end(m_return_dest, m_returns);
 }
 
 void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
@@ -430,6 +431,7 @@ void ezStackFrame::cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2) {
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
   ezValue *proc = addr2val(func);
+  cerr << (hex) << proc << (dec) << endl;
   vector<ezValue *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
