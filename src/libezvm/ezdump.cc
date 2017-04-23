@@ -134,7 +134,7 @@ void ezDump::dump(const string path) {
   sink.indentation();
   sink.print("symtab:\n");
   sink.indent();
-  vector<string> symbols;
+  vector<string> symbols(ezMemory::instance().globals().size());
   ezMemory::instance().globals().symbols(symbols);
   for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
        it++) {
