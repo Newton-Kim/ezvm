@@ -431,7 +431,6 @@ void ezStackFrame::cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2) {
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
   ezValue *proc = addr2val(func);
-  cerr << (hex) << proc << (dec) << endl;
   vector<ezValue *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
