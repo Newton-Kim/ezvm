@@ -36,7 +36,6 @@ ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
   if (!callback)
     throw runtime_error("callback is missing.");
   ezValue *v = addr2val(entry);
-  // TODO:arguments and returns should be updated
   switch (v->type) {
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezStackFrame *sf = new ezStackFrame((ezCarousel *)v, args, rets, this);
@@ -58,27 +57,12 @@ ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
 ezThread::~ezThread() {}
 
 ezValue *ezThread::addr2val(ezAddress addr) {
-  // TODO:refactoring is required.
   ezValue *v = NULL;
-  switch (addr.segment) {
-  case EZ_ASM_SEGMENT_CONSTANT:
-    if (addr.offset >= ezMemory::instance().constants().size())
-      throw runtime_error("constant memory access violation");
-    v = ezMemory::instance().constants()[addr.offset];
-    break;
-  case EZ_ASM_SEGMENT_LOCAL:
-  case EZ_ASM_SEGMENT_SCOPE:
-    throw runtime_error("invalid segment for the thread");
-    break;
-  case EZ_ASM_SEGMENT_GLOBAL:
-    if (addr.offset >= ezMemory::instance().globals().size())
-      throw runtime_error("global memory access violation");
-    v = ezMemory::instance().globals()[addr.offset];
-    break;
-  default:
-    throw runtime_error("out of segment boundary");
-  }
-  return v;
+  if (addr.segment != EZ_ASM_SEGMENT_GLOBAL) 
+    throw runtime_error("invalid segment");
+  if (addr.offset >= ezMemory::instance().globals().size())
+    throw runtime_error("global memory access violation");
+  return ezMemory::instance().globals()[addr.offset];
 }
 
 void ezThread::run(void) {
