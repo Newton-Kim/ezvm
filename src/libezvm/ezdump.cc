@@ -94,7 +94,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
       sink.print("        [%lu]=%lu\n", i, crsl->jmptbl[i]);
     sink.print("      .jump symbol table:\n");
-    vector<string> symbols;
+    vector<string> symbols(crsl->jmptbl.size());
     crsl->jmptbl.symbols(symbols);
     for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
          it++)
