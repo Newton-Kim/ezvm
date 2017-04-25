@@ -38,7 +38,7 @@ public:
   virtual void on_mark(void) = 0;
 };
 
-enum ezGCObjectState{
+enum ezGCObjectState {
   EZGC_OBJECT_STATE_CLEARED = 0,
   EZGC_OBJECT_STATE_MARKED,
   EZGC_OBJECT_STATE_GRAY,

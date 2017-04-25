@@ -35,7 +35,7 @@ void ezGC::collect(void) {
   }
 
   typename list<ezGCObject *>::iterator it = m_memories.begin();
-  while(it != m_memories.end()) {
+  while (it != m_memories.end()) {
     ezGCObject *value = *it;
     if (value->is_marked()) {
       value->unmark();
@@ -64,6 +64,6 @@ void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }
 void ezGC::force(void) { collect(); }
 
 ezGC &ezGC::instance(void) {
-  static ezGC* s_ezGC = new ezGC;
+  static ezGC *s_ezGC = new ezGC;
   return *s_ezGC;
 }
