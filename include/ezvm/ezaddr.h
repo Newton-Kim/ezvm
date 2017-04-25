@@ -27,31 +27,32 @@
 #include <cstdint>
 
 /**
-* @brief Constant segment: A value is set on compiling and cannot be altered.
+* @brief Constant segment: Constant values are set on compiling and cannot be
+* altered after.
 */
 #define EZ_ASM_SEGMENT_CONSTANT 1
 /**
-* @brief Local segment: A value which is accessible within a procedure only.
+* @brief Local segment: This segment is available within a procedure only.
 */
 #define EZ_ASM_SEGMENT_LOCAL 2
 /**
-* @brief Parent segment: A value which on the scope of a caller.
+* @brief Parent segment: The scope of a caller.
 */
 #define EZ_ASM_SEGMENT_SCOPE 3
 /**
-* @brief Global segment: A value can be altered and is accessible from all
+* @brief Global segment: Values are accessed globally. They are altered any
+* time.
 * scope.
 */
 #define EZ_ASM_SEGMENT_GLOBAL 0
 
 /**
-* @brief ezAddress is a class that describes an address of ezVM.
+* @brief ezAddress describes a memory address.
 */
 class ezAddress {
 public:
   /**
-  * @brief A default constructor: It points the first slot of the constant
-  * segment.
+  * @brief A default constructor.
   */
   ezAddress() : segment(EZ_ASM_SEGMENT_CONSTANT), offset(0) {}
   /**
