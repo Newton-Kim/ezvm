@@ -708,7 +708,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int argc, size_t mems,
 size_t ezASM::global(const string value) {
   //	vector<ezValue*>* offset = m_globals[0];
   if (!m_globals.exist(value))
-    m_globals.add(value, ezNull::instance());
+    m_globals.add(value, NULL);
   //    throw runtime_error("global symbol " + value + " is not found");
   return m_globals[value];
 }
