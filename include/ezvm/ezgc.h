@@ -96,7 +96,7 @@ private:
   list<ezGCObject *> m_memories;
   size_t m_size;
   size_t m_prev_size;
-  bool m_pause;
+  size_t m_pause_count;
   void collect(void);
 
 public:
@@ -121,10 +121,10 @@ public:
   /**
   * @brief pends the garbage collection.
   */
-  void pause(void) { m_pause = true; }
+  void pause(void);
   /**
   * @brief sets the garbage collection back to normal state.
   */
-  void resume(void) { m_pause = false; }
+  void resume(void);
   static ezGC &instance(void);
 };

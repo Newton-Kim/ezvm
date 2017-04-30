@@ -23,12 +23,15 @@
 *
 */
 #include "ezvm/ezgc.h"
+#include <iostream>
 
-ezGC::ezGC() : m_size(0), m_prev_size(0), m_pause(false) {}
+ezGC::ezGC() : m_size(0), m_prev_size(0), m_pause_count(0) {}
 
 ezGC::~ezGC() {}
 
 void ezGC::collect(void) {
+  if (m_pause_count > 0)
+    return;
   for (typename vector<ezGCClient *>::iterator it = m_clients.begin();
        it != m_clients.end(); it++) {
     (*it)->on_mark();
@@ -41,8 +44,10 @@ void ezGC::collect(void) {
       value->unmark();
       it++;
     } else {
+      typename list<ezGCObject *>::iterator oit = it;
+      it++;
       m_size -= value->size();
-      it = m_memories.erase(it);
+      m_memories.erase(oit);
       delete value;
     }
   }
@@ -50,7 +55,7 @@ void ezGC::collect(void) {
 }
 
 void ezGC::add(ezGCObject *v) {
-  if (m_pause || !v->is_gray())
+  if (!v->is_gray())
     return;
   v->unmark();
   m_size += v->size();
@@ -66,4 +71,13 @@ void ezGC::force(void) { collect(); }
 ezGC &ezGC::instance(void) {
   static ezGC *s_ezGC = new ezGC;
   return *s_ezGC;
+}
+
+void ezGC::pause(void) { m_pause_count++; }
+
+void ezGC::resume(void) {
+  if (m_pause_count > 0)
+    m_pause_count--;
+  if (!m_pause_count)
+    collect();
 }
