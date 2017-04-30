@@ -448,8 +448,10 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 
 void ezStackFrame::call(ezCarousel *func, vector<ezValue *> &args,
                         vector<ezAddress> &rets) {
+  ezGC::instance().pause();
   ezStackFrame *callee = new ezStackFrame(func, args, rets, m_callback);
   m_callback->call(callee);
+  ezGC::instance().resume();
 }
 
 void ezStackFrame::call(ezNativeCarousel *func, vector<ezValue *> &args,

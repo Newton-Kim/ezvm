@@ -56,8 +56,10 @@ ezVM::~ezVM() {
 void ezVM::run(void) {
   vector<ezValue *> args;
   vector<ezAddress> rets;
+  ezGC::instance().pause();
   ezThread *thread = new ezThread(m_entry, args, rets, this);
   m_threads.push_back(thread);
+  ezGC::instance().resume();
   while (!m_threads.empty()) {
     list<ezThread *>::iterator it = m_threads.begin();
     while (it != m_threads.end()) {
@@ -102,9 +104,11 @@ void ezVM::on_mark(void) {
 
 size_t ezVM::thd(ezAddress &func, vector<ezValue *> &args,
                  vector<ezAddress> &rets, ezStackFrame *caller) {
+  ezGC::instance().pause();
   ezThread *thread =
       new ezThread(func, args, rets, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
   m_threads.push_back(thread);
+  ezGC::instance().resume();
   return (size_t)thread;
 }
 
