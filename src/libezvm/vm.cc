@@ -31,7 +31,7 @@
 
 using namespace std;
 
-ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL) {
+ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL) {
   ezALU::initialize(usr_alu);
   ezGC::instance().subscribe(this);
   ezGC::instance().subscribe(&ezMemory::instance());
@@ -44,8 +44,6 @@ ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL), m_parchive(NULL) {
 ezVM::~ezVM() {
   if (m_pasm)
     delete m_pasm;
-  if (m_parchive)
-    delete m_parchive;
 
   for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
        it++)
@@ -82,12 +80,6 @@ ezASM &ezVM::assembler(void) {
   if (!m_pasm)
     m_pasm = new ezASM(m_entry);
   return *m_pasm;
-}
-
-ezArchive &ezVM::archive(void) {
-  if (!m_parchive)
-    m_parchive = new ezArchive();
-  return *m_parchive;
 }
 
 ezDump &ezVM::dump(void) {

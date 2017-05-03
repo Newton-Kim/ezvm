@@ -1,7 +1,6 @@
 lib_LTLIBRARIES=libezvm.la
 
-libezvm_la_SOURCES=ezarchive.cc \
-		   ezalu.cc \
+libezvm_la_SOURCES=ezalu.cc \
 		   ezgc.cc \
 		   ezinstruction.cc \
 		   ezasm.cc \
@@ -17,7 +16,6 @@ includedir=$(prefix)/include/ezvm
 
 include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezalu.h \
-		../../include/ezvm/ezarchive.h \
 		../../include/ezvm/ezasm.h \
 		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \

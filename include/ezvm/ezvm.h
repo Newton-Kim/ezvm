@@ -23,7 +23,6 @@
 *
 */
 #pragma once
-#include "ezarchive.h"
 #include "ezasm.h"
 #include "ezdump.h"
 #include "eztable.h"
@@ -41,7 +40,6 @@ class ezVM : public ezGCClient, ezThreadCallback {
 private:
   ezAddress m_entry;
   ezASM *m_pasm;
-  ezArchive *m_parchive;
   // TODO:user defined dump should be pluggable.
   ezDump *m_pdump;
   list<ezThread *> m_threads;
@@ -51,7 +49,6 @@ public:
   ~ezVM();
   void run(void);
   ezASM &assembler(void);
-  ezArchive &archive(void);
   ezDump &dump(void);
   void on_mark(void);
   size_t thd(ezAddress &func, vector<ezValue *> &args, vector<ezAddress> &rets,

@@ -380,7 +380,6 @@ int ezparse(FILE* fd, const string target, const string dump) {
 	if(!dump.empty()) 
 		s_vm.dump().dump(dump);
 	if(target.empty()) s_vm.run();
-	else s_vm.archive().save(target);
 	return ret;
 }
 
