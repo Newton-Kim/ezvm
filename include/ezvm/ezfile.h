@@ -38,7 +38,6 @@ private:
   * @brief is a file descriptor.
   */
   FILE *m_fd;
-  size_t m_indent;
 
 public:
   /**
@@ -101,16 +100,4 @@ public:
   *otherwise.
   */
   bool isnil(void) { return (m_fd) ? false : true; }
-  /**
-  * @brief increases the length of the indentation.
-  */
-  void indent(void);
-  /**
-  * @brief decreases the length of the indentation.
-  */
-  void unindent(void);
-  /**
-  * @brief leaves indentation.
-  */
-  void indentation(void);
 };

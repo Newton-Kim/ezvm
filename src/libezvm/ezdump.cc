@@ -62,57 +62,60 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
 
 void ezDump::dump(ezFile &sink, const ezValue *v) {
   if (!v) {
-    sink.print(" null\n");
+    sink.print(" (null)\n");
     return;
   }
   switch (v->type) {
   case EZ_VALUE_TYPE_NULL:
-    sink.print("(nil)");
+    sink.print("nil\n");
     break;
   case EZ_VALUE_TYPE_BOOL:
     if (((ezBool *)v)->to_bool() == true)
       sink.print("true");
     else
       sink.print("false");
+    sink.print("\n");
     break;
   case EZ_VALUE_TYPE_INTEGER:
-    sink.print("%d", ((ezInteger *)v)->to_integer());
+    sink.print("%d\n", ((ezInteger *)v)->to_integer());
     break;
   case EZ_VALUE_TYPE_COMPLEX: {
     double cr = ((ezComplex *)v)->to_complex().real();
     double ci = ((ezComplex *)v)->to_complex().imag();
-    sink.print("%f %s %fj", cr, (ci > 0 ? "+" : "-"), ci);
+    sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
   } break;
   case EZ_VALUE_TYPE_STRING:
-    sink.print("\"%s\"", ((ezString *)v)->to_string().c_str());
+    sink.print("\"%s\"\n", ((ezString *)v)->to_string().c_str());
     break;
   case EZ_VALUE_TYPE_CAROUSEL: {
     ezCarousel *crsl = (ezCarousel *)v;
     sink.print("0x%x(%d)\n", crsl, crsl->nargs);
-    sink.print("      .memsize: %lu\n", crsl->nmems);
-    sink.print("      .jump table:\n");
+    sink.print("  .memsize: %lu\n", crsl->nmems);
+    sink.print("  .jump table:\n");
     for (size_t i = 0; i < crsl->jmptbl.size(); i++)
-      sink.print("        [%lu]=%lu\n", i, crsl->jmptbl[i]);
-    sink.print("      .jump symbol table:\n");
-    vector<string> symbols(crsl->jmptbl.size());
+      sink.print("    [%lu]=%lu\n", i, crsl->jmptbl[i]);
+    sink.print("  .jump symbol table:\n");
+    vector<string> symbols;
     crsl->jmptbl.symbols(symbols);
     for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
          it++)
-      sink.print("        [%s]=%lu\n", (*it).c_str(), crsl->jmptbl[*it]);
+      sink.print("    [%s]=%lu\n", (*it).c_str(), crsl->jmptbl[*it]);
     ezAddress addr;
     ezOpCode op;
     uint8_t arg[3];
     size_t len = crsl->instruction.size();
     for (size_t pc = 0; pc < len; pc++) {
-      sink.print("      %d:", pc);
+      sink.print("  %d:", pc);
       crsl->instruction[pc]->dump(sink, *this);
     }
   } break;
   case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    sink.print("0x%x(native)", v);
+    sink.print("0x%x(native)\n", v);
+    break;
+  default:
+    sink.print("(unknown)\n");
     break;
   }
-  sink.print("\n");
 }
 
 void ezDump::dump(const string path) {
@@ -120,39 +123,26 @@ void ezDump::dump(const string path) {
   sink.print(".entry: ");
   dump(sink, m_entry);
   sink.print("\n");
-  sink.print(".global:\n");
-  sink.indent();
-  sink.indentation();
-  sink.print("memory:\n");
-  sink.indent();
+  sink.print("\n.global memory:\n");
   for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
-    sink.indentation();
     sink.print("[%lu]=", i);
     dump(sink, ezMemory::instance().globals()[i]);
   }
-  sink.unindent();
-  sink.indentation();
-  sink.print("symtab:\n");
-  sink.indent();
-  vector<string> symbols(ezMemory::instance().globals().size());
+  sink.print("\n");
+  sink.print(".global symtab:\n");
+  vector<string> symbols;
   ezMemory::instance().globals().symbols(symbols);
   for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
        it++) {
-    sink.indentation();
     sink.print("[_%s]=%lu\n", (*it).c_str(),
                ezMemory::instance().globals()[*it]);
   }
-  sink.unindent();
-  sink.unindent();
   sink.print("\n");
   sink.print(".constant:\n");
-  sink.indent();
   for (size_t i = 0; i < ezMemory::instance().constants().size(); i++) {
-    sink.indentation();
     sink.print("[%lu]=", i);
     dump(sink, ezMemory::instance().constants()[i]);
   }
-  sink.unindent();
   sink.print("\n");
 }
 
