@@ -79,8 +79,9 @@ public:
   }
 } s_default_alu;
 
-static ezValueType defaultCoercTable
-    [EZ_COERC_OPERATION_MAX][EZ_VALUE_TYPE_MAX][EZ_VALUE_TYPE_MAX] = {
+static ezValueType
+    defaultCoercTable[EZ_COERC_OPERATION_MAX + 1][EZ_VALUE_TYPE_MAX +
+                                                  1][EZ_VALUE_TYPE_MAX + 1] = {
         // EZ_COERC_OPERATION_ADDITION,
         {
             // EZ_VALUE_TYPE_NULL EZ_VALUE_TYPE_CONDITION, EZ_VALUE_TYPE_BOOL,
@@ -161,8 +162,8 @@ static ezValueType defaultCoercTable
              EZ_VALUE_TYPE_COMPLEX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX}, // EZ_VALUE_TYPE_COMPLEX,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_STRING, EZ_VALUE_TYPE_MAX,
-             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
+             EZ_VALUE_TYPE_STRING, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX}, // EZ_VALUE_TYPE_STRING,
             {EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
              EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX, EZ_VALUE_TYPE_MAX,
@@ -543,7 +544,7 @@ static ezValue *addd_string(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezString(larg->to_string() + rarg->to_string());
 }
 
-ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX + 1] = {
     addd_default, // EZ_VALUE_TYPE_NULL = 0,
     addd_default, // EZ_VALUE_TYPE_CONDITION,
     addd_default, // EZ_VALUE_TYPE_BOOL,
@@ -553,7 +554,8 @@ ARITHEMATIC_DUO addd[EZ_VALUE_TYPE_MAX] = {
     addd_string,  // EZ_VALUE_TYPE_STRING,
     addd_default, // EZ_VALUE_TYPE_CAROUSEL,
     addd_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    addd_default  // EZ_VALUE_TYPE_USER_DEFINED
+    addd_default, // EZ_VALUE_TYPE_USER_DEFINED
+    addd_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::add(ezValue *larg, ezValue *rarg) {
@@ -589,7 +591,7 @@ static ezValue *cmp_string(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezCondition(eq, ((sz < 0) ? true : false), false, false);
 }
 
-ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX + 1] = {
     cmp_default, // EZ_VALUE_TYPE_NULL = 0,
     cmp_default, // EZ_VALUE_TYPE_CONDITION,
     cmp_bool,    // EZ_VALUE_TYPE_BOOL,
@@ -599,7 +601,8 @@ ARITHEMATIC_DUO cmpf[EZ_VALUE_TYPE_MAX] = {
     cmp_string,  // EZ_VALUE_TYPE_STRING,
     cmp_default, // EZ_VALUE_TYPE_CAROUSEL,
     cmp_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    cmp_default  // EZ_VALUE_TYPE_USER_DEFINED
+    cmp_default, // EZ_VALUE_TYPE_USER_DEFINED
+    cmp_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::cmp(ezValue *larg, ezValue *rarg) {
@@ -624,7 +627,7 @@ static ezValue *subd_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezComplex(larg->to_complex() - rarg->to_complex());
 }
 
-ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX + 1] = {
     subd_default, // EZ_VALUE_TYPE_NULL = 0,
     subd_default, // EZ_VALUE_TYPE_CONDITION,
     subd_default, // EZ_VALUE_TYPE_BOOL,
@@ -634,7 +637,8 @@ ARITHEMATIC_DUO subd[EZ_VALUE_TYPE_MAX] = {
     subd_default, // EZ_VALUE_TYPE_STRING,
     subd_default, // EZ_VALUE_TYPE_CAROUSEL,
     subd_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    subd_default  // EZ_VALUE_TYPE_USER_DEFINED
+    subd_default, // EZ_VALUE_TYPE_USER_DEFINED
+    subd_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::sub(ezValue *larg, ezValue *rarg) {
@@ -655,7 +659,7 @@ static ezValue *modd_float(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezFloat(larg->to_integer() % rarg->to_integer());
 }
 
-ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX + 1] = {
     modd_default, // EZ_VALUE_TYPE_NULL = 0,
     modd_default, // EZ_VALUE_TYPE_CONDITION,
     modd_default, // EZ_VALUE_TYPE_BOOL,
@@ -665,7 +669,8 @@ ARITHEMATIC_DUO modd[EZ_VALUE_TYPE_MAX] = {
     modd_default, // EZ_VALUE_TYPE_STRING,
     modd_default, // EZ_VALUE_TYPE_CAROUSEL,
     modd_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    modd_default  // EZ_VALUE_TYPE_USER_DEFINED
+    modd_default, // EZ_VALUE_TYPE_USER_DEFINED
+    modd_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::mod(ezValue *larg, ezValue *rarg) {
@@ -690,7 +695,7 @@ static ezValue *muld_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezComplex(larg->to_complex() * rarg->to_complex());
 }
 
-ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX + 1] = {
     muld_default, // EZ_VALUE_TYPE_NULL = 0,
     muld_default, // EZ_VALUE_TYPE_CONDITION,
     muld_default, // EZ_VALUE_TYPE_BOOL,
@@ -700,7 +705,8 @@ ARITHEMATIC_DUO muld[EZ_VALUE_TYPE_MAX] = {
     muld_default, // EZ_VALUE_TYPE_STRING,
     muld_default, // EZ_VALUE_TYPE_CAROUSEL,
     muld_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    muld_default  // EZ_VALUE_TYPE_USER_DEFINED
+    muld_default, // EZ_VALUE_TYPE_USER_DEFINED
+    muld_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::mul(ezValue *larg, ezValue *rarg) {
@@ -725,7 +731,7 @@ static ezValue *divd_complex(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezComplex(larg->to_complex() / rarg->to_complex());
 }
 
-ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX + 1] = {
     divd_default, // EZ_VALUE_TYPE_NULL = 0,
     divd_default, // EZ_VALUE_TYPE_CONDITION,
     divd_default, // EZ_VALUE_TYPE_BOOL,
@@ -735,7 +741,8 @@ ARITHEMATIC_DUO divd[EZ_VALUE_TYPE_MAX] = {
     divd_default, // EZ_VALUE_TYPE_STRING,
     divd_default, // EZ_VALUE_TYPE_CAROUSEL,
     divd_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    divd_default  // EZ_VALUE_TYPE_USER_DEFINED
+    divd_default, // EZ_VALUE_TYPE_USER_DEFINED
+    divd_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::div(ezValue *larg, ezValue *rarg) {
@@ -760,7 +767,7 @@ static ezValue *neg_complex(ezUsrALU *alu, ezValue *arg) {
   return new ezComplex(-arg->to_complex());
 }
 
-ARITHEMATIC_UNI negf[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_UNI negf[EZ_VALUE_TYPE_MAX + 1] = {
     neg_default, // EZ_VALUE_TYPE_NULL = 0,
     neg_default, // EZ_VALUE_TYPE_CONDITION,
     neg_default, // EZ_VALUE_TYPE_BOOL,
@@ -770,7 +777,8 @@ ARITHEMATIC_UNI negf[EZ_VALUE_TYPE_MAX] = {
     neg_default, // EZ_VALUE_TYPE_STRING,
     neg_default, // EZ_VALUE_TYPE_CAROUSEL,
     neg_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    neg_default  // EZ_VALUE_TYPE_USER_DEFINED
+    neg_default, // EZ_VALUE_TYPE_USER_DEFINED
+    neg_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::neg(ezValue *arg) { return negf[arg->type](m_usr_alu, arg); }
@@ -787,7 +795,7 @@ static ezValue *not_integer(ezUsrALU *alu, ezValue *arg) {
   return new ezInteger(~arg->to_integer());
 }
 
-ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX + 1] = {
     not_default, // EZ_VALUE_TYPE_NULL = 0,
     not_default, // EZ_VALUE_TYPE_CONDITION,
     not_bool,    // EZ_VALUE_TYPE_BOOL,
@@ -797,7 +805,8 @@ ARITHEMATIC_UNI notf[EZ_VALUE_TYPE_MAX] = {
     not_default, // EZ_VALUE_TYPE_STRING,
     not_default, // EZ_VALUE_TYPE_CAROUSEL,
     not_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    not_default  // EZ_VALUE_TYPE_USER_DEFINED
+    not_default, // EZ_VALUE_TYPE_USER_DEFINED
+    not_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::bitwise_not(ezValue *arg) {
@@ -816,7 +825,7 @@ static ezValue *andd_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezInteger(larg->to_integer() & rarg->to_integer());
 }
 
-ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX + 1] = {
     andd_default, // EZ_VALUE_TYPE_NULL = 0,
     andd_default, // EZ_VALUE_TYPE_CONDITION,
     andd_bool,    // EZ_VALUE_TYPE_BOOL,
@@ -826,7 +835,8 @@ ARITHEMATIC_DUO andd[EZ_VALUE_TYPE_MAX] = {
     andd_default, // EZ_VALUE_TYPE_STRING,
     andd_default, // EZ_VALUE_TYPE_CAROUSEL,
     andd_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    andd_default  // EZ_VALUE_TYPE_USER_DEFINED
+    andd_default, // EZ_VALUE_TYPE_USER_DEFINED
+    andd_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::bitwise_and(ezValue *larg, ezValue *rarg) {
@@ -847,7 +857,7 @@ static ezValue *ord_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezInteger(larg->to_integer() | rarg->to_integer());
 }
 
-ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX + 1] = {
     ord_default, // EZ_VALUE_TYPE_NULL = 0,
     ord_default, // EZ_VALUE_TYPE_CONDITION,
     ord_bool,    // EZ_VALUE_TYPE_BOOL,
@@ -857,7 +867,8 @@ ARITHEMATIC_DUO ord[EZ_VALUE_TYPE_MAX] = {
     ord_default, // EZ_VALUE_TYPE_STRING,
     ord_default, // EZ_VALUE_TYPE_CAROUSEL,
     ord_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    ord_default  // EZ_VALUE_TYPE_USER_DEFINED
+    ord_default, // EZ_VALUE_TYPE_USER_DEFINED
+    ord_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::bitwise_or(ezValue *larg, ezValue *rarg) {
@@ -878,7 +889,7 @@ static ezValue *xord_integer(ezUsrALU *alu, ezValue *larg, ezValue *rarg) {
   return new ezInteger(larg->to_integer() ^ rarg->to_integer());
 }
 
-ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
+ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX + 1] = {
     xord_default, // EZ_VALUE_TYPE_NULL = 0,
     xord_default, // EZ_VALUE_TYPE_CONDITION,
     xord_bool,    // EZ_VALUE_TYPE_BOOL,
@@ -888,7 +899,8 @@ ARITHEMATIC_DUO xord[EZ_VALUE_TYPE_MAX] = {
     xord_default, // EZ_VALUE_TYPE_STRING,
     xord_default, // EZ_VALUE_TYPE_CAROUSEL,
     xord_default, // EZ_VALUE_TYPE_NATIVE_CAROUSEL
-    xord_default  // EZ_VALUE_TYPE_USER_DEFINED
+    xord_default, // EZ_VALUE_TYPE_USER_DEFINED
+    xord_default  // EZ_VALUE_TYPE_MAX
 };
 
 ezValue *ezALU::bitwise_xor(ezValue *larg, ezValue *rarg) {
