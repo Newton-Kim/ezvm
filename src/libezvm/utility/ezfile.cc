@@ -81,4 +81,3 @@ void ezFile::vprint(const char *fmt, va_list ap) {
     return;
   vfprintf(m_fd, fmt, ap);
 }
-

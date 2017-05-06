@@ -32,7 +32,8 @@ ezMemory &ezMemory::instance(void) {
 void ezMemory::on_mark(void) {
   for (vector<ezValue *>::iterator it = m_globals.to_vector().begin();
        it != m_globals.to_vector().end(); it++) {
-    if(*it == NULL) continue;
+    if (*it == NULL)
+      continue;
     (*it)->mark();
     if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL)
       ((ezCarousel *)(*it))->on_mark();
