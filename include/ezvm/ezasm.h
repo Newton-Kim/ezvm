@@ -92,6 +92,7 @@ public:
   * mems. the size is not changed.
   */
   void grow(size_t mems);
+  size_t local(const string value);
   /**
   * @brief creates a call instruction. See call of ezas.
   *
@@ -441,6 +442,7 @@ public:
   * @return
   */
   size_t global(const string value);
+  bool is_global(const string value);
   /**
   * @brief adds a null.
   *

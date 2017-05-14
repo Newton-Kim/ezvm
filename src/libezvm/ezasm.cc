@@ -39,6 +39,10 @@ void ezAsmProcedure::grow(size_t mems) {
     m_carousel->nmems = mems;
 }
 
+size_t ezAsmProcedure::local(const string value) {
+  //TODO:how to increase or set nmems and hash value.
+}
+
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
                           vector<ezAddress> &rets) {
   ezInstruction *inst = new ezInstruction(
@@ -711,6 +715,10 @@ size_t ezASM::global(const string value) {
     m_globals.add(value, NULL);
   //    throw runtime_error("global symbol " + value + " is not found");
   return m_globals[value];
+}
+
+bool ezASM::is_global(const string value) {
+  return m_globals.exist(value);
 }
 
 size_t ezASM::constant_null(void) {
