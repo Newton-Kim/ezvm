@@ -182,17 +182,16 @@ void ezCarousel::on_mark(void) {
 
 vector<ezValue *> *ezCarousel::local_memory(void) {
   vector<ezValue *> *ret = NULL;
+  size_t memories = (nmems > nargs) ? nmems : nargs;
   if (m_local) {
     if (0 == m_local->size()) {
       // TODO:refactoring is required
-      size_t memories = (nmems > nargs) ? nmems : nargs;
       for (size_t i = 0; i < memories; i++)
         m_local->push_back(ezNull::instance()); // TODO:using stl APIs
    }
     ret = &m_local->to_vector();
   } else {
     ret = new vector<ezValue *>;
-    size_t memories = (nmems > nargs) ? nmems : nargs;
     for (size_t i = 0; i < memories; i++)
       ret->push_back(ezNull::instance()); // TODO:using stl APIs
   }
