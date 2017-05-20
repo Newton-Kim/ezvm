@@ -34,8 +34,11 @@ using namespace std;
 
 ezAsmProcedure::ezAsmProcedure(ezCarousel *carousel) : m_carousel(carousel) {}
 
-void ezAsmProcedure::grow(size_t mems) {
-  if (m_carousel->nmems < mems)
+void ezAsmProcedure::args(size_t args) {
+    m_carousel->nargs = args;
+}
+
+void ezAsmProcedure::mems(size_t mems) {
     m_carousel->nmems = mems;
 }
 
@@ -677,8 +680,7 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 void ezASM::reset(const string name) { m_globals.reset(name); }
 
-ezAsmProcedure *ezASM::new_proc(const string name, int argc, size_t mems,
-                                int scpkey, int scope) {
+ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
   ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
     throw runtime_error("global symbol " + name + " already exists");
@@ -699,7 +701,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int argc, size_t mems,
     m_gc.add((ezGCObject *)m_scopes[scpkey]);
     p_scpkey = m_scopes[scpkey];
   }
-  ezCarousel *carousel = new ezCarousel(argc, mems, p_scpkey, p_scope);
+  ezCarousel *carousel = new ezCarousel(p_scpkey, p_scope);
   size_t offset = m_globals.add(name, carousel);
   m_gc.add((ezGCObject *)carousel);
   if (name == m_entry_string) {

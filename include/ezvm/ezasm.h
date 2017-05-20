@@ -85,13 +85,14 @@ public:
   * @param carousel is a pointer to a carousel.
   */
   ezAsmProcedure(ezCarousel *carousel);
+  void args(size_t args);
   /**
-  * @brief grows the local memory.
+  * @brief mems the local memory.
   *
   * @param mems is a new size. if the size of the local memory is greater than
   * mems. the size is not changed.
   */
-  void grow(size_t mems);
+  void mems(size_t mems);
   size_t local(const string value);
   /**
   * @brief creates a call instruction. See call of ezas.
@@ -432,8 +433,7 @@ public:
   *
   * @return is a pointer to the assember.
   */
-  ezAsmProcedure *new_proc(const string name, int argc, size_t mems, int scope,
-                           int scpkey);
+  ezAsmProcedure *new_proc(const string name, int scope, int scpkey);
   /**
   * @brief finds the offset of a global segment whose name is value.
   *

@@ -159,18 +159,11 @@ ezValue *ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);
 }
 
-ezCarousel::ezCarousel(uint8_t args, size_t mems,
-                       ezTable<string, ezValue *> *local,
+ezCarousel::ezCarousel(ezTable<string, ezValue *> *local,
                        ezTable<string, ezValue *> *scope)
-    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(args), nmems(mems), m_local(local),
+    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(0), nmems(0), m_local(local),
       m_scope(scope) {
   m_size = sizeof(*this);
-  if (m_local) {
-    // TODO:refactoring is required
-    size_t memories = (nmems > nargs) ? nmems : nargs;
-    for (size_t i = 0; i < memories; i++)
-      m_local->push_back(ezNull::instance()); // TODO:using stl APIs
-  }
 }
 ezCarousel::~ezCarousel() {
   for (vector<ezInstruction *>::iterator it = instruction.begin();
@@ -189,9 +182,15 @@ void ezCarousel::on_mark(void) {
 
 vector<ezValue *> *ezCarousel::local_memory(void) {
   vector<ezValue *> *ret = NULL;
-  if (m_local)
+  if (m_local) {
+    if (0 == m_local->size()) {
+      // TODO:refactoring is required
+      size_t memories = (nmems > nargs) ? nmems : nargs;
+      for (size_t i = 0; i < memories; i++)
+        m_local->push_back(ezNull::instance()); // TODO:using stl APIs
+   }
     ret = &m_local->to_vector();
-  else {
+  } else {
     ret = new vector<ezValue *>;
     size_t memories = (nmems > nargs) ? nmems : nargs;
     for (size_t i = 0; i < memories; i++)
