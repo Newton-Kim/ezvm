@@ -61,6 +61,18 @@ public:
   virtual ezValue *condition(void);
   virtual double to_float(void);
   virtual complex<double> to_complex(void);
+
+  virtual ezValue* add(ezValue* v);
+  virtual ezValue* subtract(ezValue* v);
+  virtual ezValue* multiply(ezValue* v);
+  virtual ezValue* divide(ezValue* v);
+  virtual ezValue* modulo(ezValue* v);
+  virtual ezValue* bitwise_and(ezValue* v);
+  virtual ezValue* bitwise_or(ezValue* v);
+  virtual ezValue* bitwise_xor(ezValue* v);
+  virtual ezValue* bitwise_not(void);
+  virtual ezValue* compare(ezValue* v);
+  virtual ezValue* negate(void);
 };
 
 class ezCondition : public ezValue {
@@ -90,6 +102,12 @@ public:
   ezValue *condition(void);
   double to_float(void);
   complex<double> to_complex(void);
+
+  ezValue* bitwise_and(ezValue* v);
+  ezValue* bitwise_or(ezValue* v);
+  ezValue* bitwise_xor(ezValue* v);
+  ezValue* bitwise_not(void);
+  ezValue* compare(ezValue* v);
 };
 
 class ezInteger : public ezValue {
@@ -104,6 +122,18 @@ public:
   ezValue *condition(void);
   double to_float(void);
   complex<double> to_complex(void);
+
+  ezValue* add(ezValue* v);
+  ezValue* subtract(ezValue* v);
+  ezValue* multiply(ezValue* v);
+  ezValue* divide(ezValue* v);
+  ezValue* modulo(ezValue* v);
+  ezValue* bitwise_and(ezValue* v);
+  ezValue* bitwise_or(ezValue* v);
+  ezValue* bitwise_xor(ezValue* v);
+  ezValue* bitwise_not(void);
+  ezValue* compare(ezValue* v);
+  ezValue* negate(void);
 };
 
 class ezFloat : public ezValue {
@@ -118,6 +148,14 @@ public:
   ezValue *condition(void);
   double to_float(void);
   complex<double> to_complex(void);
+
+  ezValue* add(ezValue* v);
+  ezValue* subtract(ezValue* v);
+  ezValue* multiply(ezValue* v);
+  ezValue* divide(ezValue* v);
+  ezValue* modulo(ezValue* v);
+  ezValue* compare(ezValue* v);
+  ezValue* negate(void);
 };
 
 class ezComplex : public ezValue {
@@ -129,6 +167,14 @@ public:
   string to_string(void);
   ezValue *condition(void);
   complex<double> to_complex(void);
+
+  ezValue* add(ezValue* v);
+  ezValue* subtract(ezValue* v);
+  ezValue* multiply(ezValue* v);
+  ezValue* divide(ezValue* v);
+  ezValue* modulo(ezValue* v);
+  ezValue* compare(ezValue* v);
+  ezValue* negate(void);
 };
 
 class ezString : public ezValue {
@@ -142,6 +188,9 @@ public:
   string to_string(void);
   ezValue *condition(void);
   double to_float(void);
+
+  ezValue* add(ezValue* v);
+  ezValue* compare(ezValue* v);
 };
 
 class ezCarousel : public ezValue, ezGCClient {

@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), m_value(val) {
   m_size = sizeof(*this);
 }
@@ -46,6 +45,52 @@ string ezInteger::to_string(void) {
 ezValue *ezInteger::condition(void) {
   return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
+}
+
+ezValue* ezInteger::add(ezValue* v) {
+  return new ezInteger(m_value + v->to_integer());
+}
+
+ezValue* ezInteger::subtract(ezValue* v) {
+  return new ezInteger(m_value - v->to_integer());
+}
+
+ezValue* ezInteger::multiply(ezValue* v) {
+  return new ezInteger(m_value * v->to_integer());
+}
+
+ezValue* ezInteger::divide(ezValue* v) {
+  return new ezInteger(m_value / v->to_integer());
+}
+
+ezValue* ezInteger::modulo(ezValue* v) {
+  return new ezInteger(m_value % v->to_integer());
+}
+
+ezValue* ezInteger::bitwise_and(ezValue* v) {
+  return new ezInteger(m_value & v->to_integer());
+}
+
+ezValue* ezInteger::bitwise_or(ezValue* v) {
+  return new ezInteger(m_value | v->to_integer());
+}
+
+ezValue* ezInteger::bitwise_xor(ezValue* v) {
+  return new ezInteger(m_value ^ v->to_integer());
+}
+
+ezValue* ezInteger::bitwise_not(void) {
+  return new ezInteger(~m_value);
+}
+
+ezValue* ezInteger::compare(ezValue* v) {
+  int v = m_value - v->to_integer();
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+                         false);
+}
+
+ezValue* ezInteger::negate(void) {
+  return new ezInteger(-m_value);
 }
 
 

@@ -25,7 +25,6 @@
 #pragma once
 
 #include "ezaddr.h"
-#include "ezalu.h"
 #include "ezval.h"
 #include <functional>
 #include <stack>
@@ -71,7 +70,6 @@ private:
   * @brief is a collection of addresses where the result values place.
   */
   vector<ezAddress> m_return_dest;
-  ezALU &m_alu;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   void addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr);

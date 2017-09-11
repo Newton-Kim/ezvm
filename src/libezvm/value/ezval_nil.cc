@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
   unmark();
   m_size = sizeof(*this);
@@ -37,5 +36,3 @@ ezNull *ezNull::instance() {
   static ezNull null;
   return &null;
 }
-
-

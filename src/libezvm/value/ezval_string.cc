@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezString::ezString(const string val)
     : ezValue(EZ_VALUE_TYPE_STRING), m_value(val) {
   m_size = sizeof(*this) + val.size() + 1;
@@ -48,4 +47,3 @@ string ezString::to_string(void) { return m_value; }
 ezValue *ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);
 }
-

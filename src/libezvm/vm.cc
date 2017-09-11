@@ -31,8 +31,7 @@
 
 using namespace std;
 
-ezVM::ezVM(ezUsrALU *usr_alu) : m_pasm(NULL) {
-  ezALU::initialize(usr_alu);
+ezVM::ezVM() : m_pasm(NULL) {
   ezGC::instance().subscribe(this);
   ezGC::instance().subscribe(&ezMemory::instance());
 }

@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezCarousel::ezCarousel(ezTable<string, ezValue *> *local,
                        ezTable<string, ezValue *> *scope)
     : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(0), nmems(0), m_local(local),
@@ -57,7 +56,7 @@ vector<ezValue *> *ezCarousel::local_memory(void) {
       // TODO:refactoring is required
       for (size_t i = 0; i < memories; i++)
         m_local->push_back(ezNull::instance()); // TODO:using stl APIs
-   }
+    }
     ret = &m_local->to_vector();
   } else {
     ret = new vector<ezValue *>;

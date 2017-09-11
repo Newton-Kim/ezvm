@@ -34,16 +34,12 @@ using namespace std;
 
 ezAsmProcedure::ezAsmProcedure(ezCarousel *carousel) : m_carousel(carousel) {}
 
-void ezAsmProcedure::args(size_t args) {
-    m_carousel->nargs = args;
-}
+void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 
-void ezAsmProcedure::mems(size_t mems) {
-    m_carousel->nmems = mems;
-}
+void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
 
 size_t ezAsmProcedure::local(const string value) {
-  //TODO:how to increase or set nmems and hash value.
+  // TODO:how to increase or set nmems and hash value.
 }
 
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
@@ -719,9 +715,7 @@ size_t ezASM::global(const string value) {
   return m_globals[value];
 }
 
-bool ezASM::is_global(const string value) {
-  return m_globals.exist(value);
-}
+bool ezASM::is_global(const string value) { return m_globals.exist(value); }
 
 size_t ezASM::constant_null(void) {
   for (size_t i = 0; i < m_constants.size(); i++) {

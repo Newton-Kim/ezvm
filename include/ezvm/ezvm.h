@@ -45,7 +45,7 @@ private:
   list<ezThread *> m_threads;
 
 public:
-  ezVM(ezUsrALU *usr_alu = NULL);
+  ezVM();
   ~ezVM();
   void run(void);
   ezASM &assembler(void);

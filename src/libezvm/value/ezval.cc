@@ -47,4 +47,46 @@ ezValue *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
+ezValue *ezValue::add(ezValue *v) {
+  throw runtime_error("addition is not supported");
+}
 
+ezValue *ezValue::subtract(ezValue *v) {
+  throw runtime_error("subtraction is not supported");
+}
+
+ezValue *ezValue::multiply(ezValue *v) {
+  throw runtime_error("multiplication is not supported");
+}
+
+ezValue *ezValue::divide(ezValue *v) {
+  throw runtime_error("division is not supported");
+}
+
+ezValue *ezValue::modulo(ezValue *v) {
+  throw runtime_error("modulo is not supported");
+}
+
+ezValue *ezValue::bitwise_and(ezValue *v) {
+  throw runtime_error("bitwise and is not supported");
+}
+
+ezValue *ezValue::bitwise_or(ezValue *v) {
+  throw runtime_error("bitwise or is not supported");
+}
+
+ezValue *ezValue::bitwise_xor(ezValue *v) {
+  throw runtime_error("bitwise xor is not supported");
+}
+
+ezValue *ezValue::bitwise_not(void) {
+  throw runtime_error("bitwise not is not supported");
+}
+
+ezValue *ezValue::compare(ezValue *v) {
+  throw runtime_error("comparison is not supported");
+}
+
+ezValue *ezValue::negate(void) {
+  throw runtime_error("negation is not supported");
+}

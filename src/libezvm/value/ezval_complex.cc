@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezComplex::ezComplex(complex<double> val)
     : ezValue(EZ_VALUE_TYPE_COMPLEX), m_value(val) {
   m_size = sizeof(*this);
@@ -43,5 +42,3 @@ ezValue *ezComplex::condition(void) {
   return new ezCondition(abs(m_value) ? false : true,
                          (abs(m_value) < 0) ? true : false, false, false);
 }
-
-

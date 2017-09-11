@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), m_value(val) {
   m_size = sizeof(*this);
 }
@@ -46,6 +45,36 @@ string ezFloat::to_string(void) {
 ezValue *ezFloat::condition(void) {
   return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
                          false, false);
+}
+
+ezValue* ezFloat::add(ezValue* v) {
+  return new ezFloat(m_value + v->to_float());
+}
+
+ezValue* ezFloat::subtract(ezValue* v) {
+  return new ezFloat(m_value - v->to_float());
+}
+
+ezValue* ezFloat::multiply(ezValue* v) {
+  return new ezFloat(m_value * v->to_float());
+}
+
+ezValue* ezFloat::divide(ezValue* v) {
+  return new ezFloat(m_value / v->to_float());
+}
+
+ezValue* ezFloat::modulo(ezValue* v) {
+  return new ezFloat(m_value % v->to_float());
+}
+
+ezValue* ezFloat::compare(ezValue* v) {
+  int v = m_value - v->to_float();
+  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+                         false);
+}
+
+ezValue* ezFloat::negate(void) {
+  return new ezFloat(-m_value);
 }
 
 

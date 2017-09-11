@@ -27,7 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
   m_size = sizeof(*this);
 }
@@ -46,4 +45,24 @@ ezValue *ezBool::condition(void) {
   return new ezCondition(!m_value, false, false, false);
 }
 
+ezValue* ezBool::bitwise_and(ezValue* v) {
+  return new ezBool(m_value & v->to_bool());
+}
+
+ezValue* ezBool::bitwise_or(ezValue* v) {
+  return new ezBool(m_value | v->to_bool());
+}
+
+ezValue* ezBool::bitwise_xor(ezValue* v) {
+  return new ezBool(m_value ^ v->to_bool());
+}
+
+ezValue* ezBool::bitwise_not(void) {
+  return new ezBool(!m_value);
+}
+
+ezValue* ezBool::compare(ezValue* v) {
+  return new ezCondition(!(m_value ^ v->to_bool()), false, false,
+                         false);
+}
 

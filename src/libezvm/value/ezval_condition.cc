@@ -33,5 +33,3 @@ ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
       carry(cry) {
   m_size = sizeof(*this);
 }
-
-

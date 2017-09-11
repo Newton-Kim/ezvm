@@ -33,7 +33,7 @@ ezStackFrame::ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
                            ezStackFrameCallback *callback)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
-      m_alu(ezALU::instance()), m_callback(callback) {
+      m_callback(callback) {
   if (!m_callback)
     throw runtime_error("callback is null.");
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
@@ -154,70 +154,70 @@ void ezStackFrame::binary_operation(
 
 void ezStackFrame::add(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->add(vr); });
 }
 
 void ezStackFrame::add(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   binary_operation(dest, cond, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.add(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->add(vr); });
 }
 
 void ezStackFrame::div(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.div(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->divide(vr); });
 }
 
 void ezStackFrame::div(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   binary_operation(dest, cond, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.div(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->divide(vr); });
 }
 
 void ezStackFrame::mod(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mod(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->modulo(vr); });
 }
 
 void ezStackFrame::mod(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   binary_operation(dest, cond, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mod(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->modulo(vr); });
 }
 
 void ezStackFrame::mul(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mul(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->multiply(vr); });
 }
 
 void ezStackFrame::mul(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   binary_operation(dest, cond, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.mul(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->multiply(vr); });
 }
 
 void ezStackFrame::sub(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.sub(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->subtract(vr); });
 }
 
 void ezStackFrame::sub(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   binary_operation(dest, cond, src1, src2,
-                   [&](ezValue *vl, ezValue *vr) { return m_alu.sub(vl, vr); });
+                   [&](ezValue *vl, ezValue *vr) { return vl->subtract(vr); });
 }
 
 void ezStackFrame::bitwise_and(ezAddress &dest, ezAddress &src1,
                                ezAddress &src2) {
   binary_operation(dest, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_and(vl, vr);
+    return vl->bitwise_and(vr);
   });
 }
 
 void ezStackFrame::bitwise_and(ezAddress &dest, ezAddress &cond,
                                ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, cond, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_and(vl, vr);
+    return vl->bitwise_and(vr);
   });
 }
 
@@ -258,14 +258,14 @@ void ezStackFrame::bra(size_t index) {
 void ezStackFrame::bitwise_or(ezAddress &dest, ezAddress &src1,
                               ezAddress &src2) {
   binary_operation(dest, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_or(vl, vr);
+    return vl->bitwise_or(vr);
   });
 }
 
 void ezStackFrame::bitwise_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                               ezAddress &src2) {
   binary_operation(dest, cond, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_or(vl, vr);
+    return vl->bitwise_or(vr);
   });
 }
 
@@ -275,7 +275,7 @@ ezValue *ezStackFrame::test_equality(ezAddress &rst, ezAddress &lsrc,
   ezValue *vr = NULL, *vl = NULL;
   vl = addr2val(lsrc);
   vr = addr2val(rsrc);
-  ezValue *cond = m_alu.cmp(vl, vr);
+  ezValue *cond = vl->compare(vr);
   val2addr(rst, func((ezCondition *)cond));
   return cond;
 }
@@ -345,14 +345,14 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
 void ezStackFrame::bitwise_xor(ezAddress &dest, ezAddress &src1,
                                ezAddress &src2) {
   binary_operation(dest, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_xor(vl, vr);
+    return vl->bitwise_xor(vr);
   });
 }
 
 void ezStackFrame::bitwise_xor(ezAddress &dest, ezAddress &cond,
                                ezAddress &src1, ezAddress &src2) {
   binary_operation(dest, cond, src1, src2, [&](ezValue *vl, ezValue *vr) {
-    return m_alu.bitwise_xor(vl, vr);
+    return vl->bitwise_xor(vr);
   });
 }
 
@@ -375,21 +375,21 @@ void ezStackFrame::unary_operation(ezAddress &dest, ezAddress &cond,
 }
 
 void ezStackFrame::neg(ezAddress &dest, ezAddress &src) {
-  unary_operation(dest, src, [&](ezValue *v) { return m_alu.neg(v); });
+  unary_operation(dest, src, [&](ezValue *v) { return v->negate(); });
 }
 
 void ezStackFrame::neg(ezAddress &dest, ezAddress &cond, ezAddress &src) {
-  unary_operation(dest, cond, src, [&](ezValue *v) { return m_alu.neg(v); });
+  unary_operation(dest, cond, src, [&](ezValue *v) { return v->negate(); });
 }
 
 void ezStackFrame::bitwise_not(ezAddress &dest, ezAddress &src) {
-  unary_operation(dest, src, [&](ezValue *v) { return m_alu.bitwise_not(v); });
+  unary_operation(dest, src, [&](ezValue *v) { return v->bitwise_not(); });
 }
 
 void ezStackFrame::bitwise_not(ezAddress &dest, ezAddress &cond,
                                ezAddress &src) {
   unary_operation(dest, cond, src,
-                  [&](ezValue *v) { return m_alu.bitwise_not(v); });
+                  [&](ezValue *v) { return v->bitwise_not(); });
 }
 
 void ezStackFrame::fgc(void) { ezGC::instance().force(); }
@@ -424,7 +424,7 @@ void ezStackFrame::cmp(ezAddress &cond, ezAddress &src1, ezAddress &src2) {
   ezValue *rst = NULL, *vr = NULL, *vl = NULL;
   vl = addr2val(src1);
   vr = addr2val(src2);
-  rst = m_alu.cmp(vl, vr);
+  rst = vl->compare(vr);
   val2addr(cond, rst);
 }
 
