@@ -135,8 +135,11 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezalu.lo ezgc.lo ezinstruction.lo ezasm.lo \
-	ezdump.lo ezval.lo stack.lo thread.lo ezmemory.lo vm.lo \
-	utility/ezfile.lo
+	ezdump.lo stack.lo thread.lo ezmemory.lo vm.lo value/ezval.lo \
+	value/ezval_bool.lo value/ezval_carousel.lo \
+	value/ezval_complex.lo value/ezval_condition.lo \
+	value/ezval_float.lo value/ezval_integer.lo value/ezval_nil.lo \
+	value/ezval_string.lo utility/ezfile.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -341,11 +344,19 @@ libezvm_la_SOURCES = ezalu.cc \
 		   ezinstruction.cc \
 		   ezasm.cc \
 		   ezdump.cc \
-		   ezval.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \
 		   vm.cc \
+		   value/ezval.cc \
+		   value/ezval_bool.cc \
+		   value/ezval_carousel.cc \
+		   value/ezval_complex.cc \
+		   value/ezval_condition.cc \
+		   value/ezval_float.cc \
+		   value/ezval_integer.cc \
+		   value/ezval_nil.cc \
+		   value/ezval_string.cc \
 		   utility/ezfile.cc
 
 include_HEADERS = ../../include/ezvm/ezaddr.h \
@@ -434,6 +445,29 @@ clean-libLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
+value/$(am__dirstamp):
+	@$(MKDIR_P) value
+	@: > value/$(am__dirstamp)
+value/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) value/$(DEPDIR)
+	@: > value/$(DEPDIR)/$(am__dirstamp)
+value/ezval.lo: value/$(am__dirstamp) value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_bool.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_carousel.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_complex.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_condition.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_float.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_integer.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_nil.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/ezval_string.lo: value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
 utility/$(am__dirstamp):
 	@$(MKDIR_P) utility
 	@: > utility/$(am__dirstamp)
@@ -450,6 +484,8 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f utility/*.$(OBJEXT)
 	-rm -f utility/*.lo
+	-rm -f value/*.$(OBJEXT)
+	-rm -f value/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -460,11 +496,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezgc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezinstruction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezmemory.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezval.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_bool.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_carousel.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_complex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_condition.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_float.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_integer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_nil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_string.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -496,6 +540,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf utility/.libs utility/_libs
+	-rm -rf value/.libs value/_libs
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
@@ -635,6 +680,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f utility/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utility/$(am__dirstamp)
+	-rm -f value/$(DEPDIR)/$(am__dirstamp)
+	-rm -f value/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -645,7 +692,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) utility/$(DEPDIR) value/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -691,7 +738,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) utility/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) utility/$(DEPDIR) value/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
