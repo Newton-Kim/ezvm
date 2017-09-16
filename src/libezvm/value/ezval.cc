@@ -90,3 +90,7 @@ ezValue *ezValue::compare(ezValue *v) {
 ezValue *ezValue::negate(void) {
   throw runtime_error("negation is not supported");
 }
+
+ezValue *ezValue::powv(ezValue *v) {
+  throw runtime_error("power is not supported");
+}

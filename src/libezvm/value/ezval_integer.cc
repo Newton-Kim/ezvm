@@ -93,4 +93,7 @@ ezValue* ezInteger::negate(void) {
   return new ezInteger(-m_value);
 }
 
+ezValue* ezInteger::powv(ezValue* v) {
+  return new ezInteger(pow(m_value, v->to_integer()));
+}
 

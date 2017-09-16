@@ -63,4 +63,6 @@ ezValue* ezComplex::negate(void) {
   return new ezComplex(-m_value);
 }
 
-
+ezValue* ezComplex::powv(ezValue* v) {
+  return new ezComplex(pow(m_value, v->to_complex()));
+}

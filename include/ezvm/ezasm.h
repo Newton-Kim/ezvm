@@ -166,6 +166,25 @@ public:
   void bitwise_and(const ezAddress dest, const ezAddress cond,
                    const ezAddress &lsrc, const ezAddress &rsrc);
   /**
+  * @brief creates an pow instruction. See pow of ezas.
+  *
+  * @param dest An address which the sum is stored.
+  * @param lsrc Addresses of base.
+  * @param rsrc Addresses of exponent.
+  */
+  void powv(const ezAddress dest, const ezAddress &lsrc,
+                   const ezAddress &rsrc);
+  /**
+  * @brief creates an add instruction. See pow of ezas.
+  *
+  * @param dest An address which the sum is stored.
+  * @param cond An address which the condition is stored.
+  * @param lsrc Addresses of base.
+  * @param rsrc Addresses of exponent.
+  */
+  void powv(const ezAddress dest, const ezAddress cond,
+           const ezAddress &lsrc, const ezAddress &rsrc);
+  /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *
   * @param cond is a condition left by respective instruction.

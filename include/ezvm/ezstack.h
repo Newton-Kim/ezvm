@@ -149,6 +149,8 @@ public:
   void bitwise_or(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void bitwise_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                   ezAddress &src2);
+  void powv(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void powv(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void tge(ezAddress &dest, ezAddress &src1, ezAddress &src2);
@@ -174,6 +176,8 @@ public:
   void bitwise_not(ezAddress &dest, ezAddress &src);
   void bitwise_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
+  void pow(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void pow(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void ret(vector<ezAddress> &srcs);
   void call(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets);
   void thd(ezAddress &func, vector<ezAddress> &args, vector<ezAddress> &rets,

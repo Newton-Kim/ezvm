@@ -62,6 +62,7 @@ sp [ \t]
 "neg" return NEG;
 "not" return NOT;
 "or" return OR;
+"pow" return POW;
 "ret" return RET;
 "sub" return SUB;
 "thd" return THD;

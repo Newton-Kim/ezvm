@@ -221,6 +221,18 @@ void ezStackFrame::bitwise_and(ezAddress &dest, ezAddress &cond,
   });
 }
 
+void ezStackFrame::powv(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
+  binary_operation(dest, src1, src2, [&](ezValue *vl, ezValue *vr) {
+    return vl->powv(vr);
+  });
+}
+
+void ezStackFrame::powv(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                       ezAddress &src2) {
+  binary_operation(dest, cond, src1, src2,
+                   [&](ezValue *vl, ezValue *vr) { return vl->powv(vr); });
+}
+
 void ezStackFrame::conditional_bra(ezAddress &cond, size_t index,
                                    function<bool(ezCondition *)> func) {
   ezValue *vcond = addr2val(cond);

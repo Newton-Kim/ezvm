@@ -368,6 +368,30 @@ void ezAsmProcedure::bitwise_not(const ezAddress dest, const ezAddress cond,
       dest, cond, org);
 }
 
+void ezAsmProcedure::powv(const ezAddress dest, const ezAddress &lsrc,
+                         const ezAddress &rsrc) {
+  instruction_with_binary_arguments(
+      [](ezStackFrame &stk, ezInstruction &inst) {
+        stk.powv(inst.dests[0], inst.srcs[0], inst.srcs[1]);
+      },
+      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
+        dump.dump(sink, EZ_OP_POW, inst.dests, inst.srcs);
+      },
+      dest, lsrc, rsrc);
+}
+
+void ezAsmProcedure::powv(const ezAddress dest, const ezAddress cond,
+                         const ezAddress &lsrc, const ezAddress &rsrc) {
+  instruction_with_binary_arguments(
+      [](ezStackFrame &stk, ezInstruction &inst) {
+        stk.powv(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
+      },
+      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
+        dump.dump(sink, EZ_OP_POW, inst.dests, inst.srcs);
+      },
+      dest, cond, lsrc, rsrc);
+}
+
 void ezAsmProcedure::ret(void) {
   ezInstruction *inst = new ezInstruction(
       [](ezStackFrame &stk, ezInstruction &inst) { stk.ret(inst.srcs); },

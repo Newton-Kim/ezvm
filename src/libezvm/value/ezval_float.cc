@@ -73,4 +73,6 @@ ezValue* ezFloat::negate(void) {
   return new ezFloat(-m_value);
 }
 
-
+ezValue* ezFloat::powv(ezValue* v) {
+  return new ezFloat(pow(m_value, v->to_float()));
+}

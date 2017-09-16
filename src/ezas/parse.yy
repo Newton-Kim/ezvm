@@ -165,7 +165,7 @@ static int s_scpkey = -1;
 %}
 
 %token PROC ENTRY IMPORT
-%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR RET SUB THD WAIT XOR
+%token ADD AND BEQ BGE BLT BNE BRA CALL CMP DIV FGC LD LSL LSR MOD MUL MV NEG NOT OR POW RET SUB THD WAIT XOR
 %token SYMBOL STRING NEWLINE INTEGER COMPLEX ADDRESS MEMORIES SCOPE SCOPE_KEY LABEL BOOLEAN
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
@@ -241,6 +241,7 @@ line : %empty
 	| neg
 	| not
 	| or 
+	| pow 
 	| ret 
 	| sub 
 	| thd
@@ -325,6 +326,13 @@ or : OR var ',' var var {
 	}
 	| OR var var ',' var var {
 		s_proc_current->bitwise_or(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
+	};
+
+pow : POW var ',' var var {
+		s_proc_current->powv(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));
+	}
+	| POW var var ',' var var {
+		s_proc_current->powv(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
 	};
 
 ret : RET {s_proc_current->ret();} | RET vars {s_proc_current->ret(s_args_var); s_args_var.clear();};

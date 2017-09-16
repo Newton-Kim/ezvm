@@ -67,6 +67,7 @@ public:
   virtual ezValue* multiply(ezValue* v);
   virtual ezValue* divide(ezValue* v);
   virtual ezValue* modulo(ezValue* v);
+  virtual ezValue* powv(ezValue* v);
   virtual ezValue* bitwise_and(ezValue* v);
   virtual ezValue* bitwise_or(ezValue* v);
   virtual ezValue* bitwise_xor(ezValue* v);
@@ -128,6 +129,7 @@ public:
   ezValue* multiply(ezValue* v);
   ezValue* divide(ezValue* v);
   ezValue* modulo(ezValue* v);
+  ezValue* powv(ezValue* v);
   ezValue* bitwise_and(ezValue* v);
   ezValue* bitwise_or(ezValue* v);
   ezValue* bitwise_xor(ezValue* v);
@@ -153,7 +155,7 @@ public:
   ezValue* subtract(ezValue* v);
   ezValue* multiply(ezValue* v);
   ezValue* divide(ezValue* v);
-  ezValue* modulo(ezValue* v);
+  ezValue* powv(ezValue* v);
   ezValue* compare(ezValue* v);
   ezValue* negate(void);
 };
@@ -172,6 +174,7 @@ public:
   ezValue* subtract(ezValue* v);
   ezValue* multiply(ezValue* v);
   ezValue* divide(ezValue* v);
+  ezValue* powv(ezValue* v);
   ezValue* negate(void);
 };
 
