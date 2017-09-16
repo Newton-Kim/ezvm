@@ -63,14 +63,10 @@ ezValue* ezFloat::divide(ezValue* v) {
   return new ezFloat(m_value / v->to_float());
 }
 
-ezValue* ezFloat::modulo(ezValue* v) {
-  return new ezFloat(m_value % v->to_float());
-}
-
 ezValue* ezFloat::compare(ezValue* v) {
-  int v = m_value - v->to_float();
-  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
-                         false);
+  double val = m_value - v->to_float();
+  return new ezCondition((val ? false : true), ((val < 0) ? true : false),
+                         false, false);
 }
 
 ezValue* ezFloat::negate(void) {

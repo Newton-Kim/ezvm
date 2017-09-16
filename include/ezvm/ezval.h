@@ -172,8 +172,6 @@ public:
   ezValue* subtract(ezValue* v);
   ezValue* multiply(ezValue* v);
   ezValue* divide(ezValue* v);
-  ezValue* modulo(ezValue* v);
-  ezValue* compare(ezValue* v);
   ezValue* negate(void);
 };
 

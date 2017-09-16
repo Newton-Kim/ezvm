@@ -84,8 +84,8 @@ ezValue* ezInteger::bitwise_not(void) {
 }
 
 ezValue* ezInteger::compare(ezValue* v) {
-  int v = m_value - v->to_integer();
-  return new ezCondition((v ? false : true), ((v < 0) ? true : false), false,
+  int val = m_value - v->to_integer();
+  return new ezCondition((val ? false : true), ((val < 0) ? true : false), false,
                          false);
 }
 

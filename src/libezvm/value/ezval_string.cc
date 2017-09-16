@@ -47,3 +47,15 @@ string ezString::to_string(void) { return m_value; }
 ezValue *ezString::condition(void) {
   return new ezCondition(m_value.empty(), false, false, false);
 }
+
+ezValue* ezString::add(ezValue* v) {
+  return new ezString(m_value + v->to_string());
+}
+
+ezValue* ezString::compare(ezValue* v) {
+  string vstr = v->to_string();
+  bool eq = (m_value == vstr);
+  int sz = m_value.size() - vstr.size();
+  return new ezCondition(eq, ((sz < 0) ? true : false), false, false);
+}
+

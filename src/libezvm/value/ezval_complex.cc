@@ -42,3 +42,25 @@ ezValue *ezComplex::condition(void) {
   return new ezCondition(abs(m_value) ? false : true,
                          (abs(m_value) < 0) ? true : false, false, false);
 }
+
+ezValue* ezComplex::add(ezValue* v) {
+  return new ezComplex(m_value + v->to_complex());
+}
+
+ezValue* ezComplex::subtract(ezValue* v) {
+  return new ezComplex(m_value - v->to_complex());
+}
+
+ezValue* ezComplex::multiply(ezValue* v) {
+  return new ezComplex(m_value * v->to_complex());
+}
+
+ezValue* ezComplex::divide(ezValue* v) {
+  return new ezComplex(m_value / v->to_complex());
+}
+
+ezValue* ezComplex::negate(void) {
+  return new ezComplex(-m_value);
+}
+
+
