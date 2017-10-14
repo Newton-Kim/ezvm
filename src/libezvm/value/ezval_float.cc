@@ -27,52 +27,177 @@
 #include <sstream>
 #include <stdexcept>
 
-ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), m_value(val) {
+static ezValue* fn_op_float_error(ezValue* vl, ezValue* vr) {
+  throw runtime_error("the operation with this type is not supported.");
+}
+
+static ezValue* fn_add_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value + ((ezInteger*)vr)->value);
+}
+
+static ezValue* fn_add_float_float(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value + ((ezFloat*)vr)->value);
+}
+
+static ezValue* fn_add_float_complex(ezValue* vl, ezValue* vr) {
+  complex<double> vp = ((ezComplex*)vr)->value;
+  return new ezComplex(complex<double>(((ezFloat*)vl)->value + vp.real(), vp.imag()));
+}
+
+static ezValue* fn_sub_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value - ((ezInteger*)vr)->value);
+}
+
+static ezValue* fn_sub_float_float(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value - ((ezFloat*)vr)->value);
+}
+
+static ezValue* fn_sub_float_complex(ezValue* vl, ezValue* vr) {
+  complex<double> vp = ((ezComplex*)vr)->value;
+  return new ezComplex(complex<double>(((ezFloat*)vl)->value - vp.real(), -vp.imag()));
+}
+
+static ezValue* fn_mul_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value * ((ezInteger*)vr)->value);
+}
+
+static ezValue* fn_mul_float_float(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value * ((ezFloat*)vr)->value);
+}
+
+static ezValue* fn_mul_float_complex(ezValue* vl, ezValue* vr) {
+  complex<double> vp = ((ezComplex*)vr)->value;
+  return new ezComplex(complex<double>(((ezFloat*)vl)->value * vp.real(), ((ezFloat*)vl)->value * vp.imag()));
+}
+
+static ezValue* fn_div_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value / ((ezInteger*)vr)->value);
+}
+
+static ezValue* fn_div_float_float(ezValue* vl, ezValue* vr) {
+  return new ezFloat(((ezFloat*)vl)->value / ((ezFloat*)vr)->value);
+}
+
+static ezValue* fn_div_float_complex(ezValue* vl, ezValue* vr) {
+  complex<double> vp(((ezFloat*)vl)->value, 0);
+  return new ezComplex(vp * ((ezComplex*)vr)->value);
+}
+
+static ezValue* fn_pow_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezFloat(pow(((ezFloat*)vl)->value, ((ezInteger*)vr)->value));
+}
+
+static ezValue* fn_pow_float_float(ezValue* vl, ezValue* vr) {
+  return new ezFloat(pow(((ezFloat*)vl)->value, ((ezFloat*)vr)->value));
+}
+
+static ezValue* fn_pow_float_complex(ezValue* vl, ezValue* vr) {
+  return new ezComplex(pow(((ezFloat*)vl)->value, ((ezComplex*)vr)->value));
+}
+
+static ezValue* fn_cmp_float_integer(ezValue* vl, ezValue* vr) {
+  return new ezBool(((ezFloat*)vl)->value == ((ezInteger*)vr)->value);
+}
+
+static ezValue* fn_cmp_float_float(ezValue* vl, ezValue* vr) {
+  return new ezBool(((ezFloat*)vl)->value == ((ezFloat*)vr)->value);
+}
+
+static fnBinaryOperation* fn_add_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_add_float_integer,
+  fn_add_float_float,
+  fn_add_float_complex,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static fnBinaryOperation* fn_sub_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_sub_float_integer,
+  fn_sub_float_float,
+  fn_sub_float_complex,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static fnBinaryOperation* fn_mul_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_mul_float_integer,
+  fn_mul_float_float,
+  fn_mul_float_complex,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static fnBinaryOperation* fn_div_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_div_float_integer,
+  fn_div_float_float,
+  fn_div_float_complex,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static fnBinaryOperation* fn_pow_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_pow_float_integer,
+  fn_pow_float_float,
+  fn_pow_float_complex,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static fnBinaryOperation* fn_cmp_float[] = {
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_cmp_float_integer,
+  fn_cmp_float_float,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error,
+  fn_op_float_error
+};
+
+static ezValue* fn_neg_float(ezValue* v) {
+  return new ezFloat(((ezFloat*)v)->value);
+}
+
+ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), value(val) {
   m_size = sizeof(*this);
-}
-bool ezFloat::to_bool(void) { return m_value ? true : false; }
-int ezFloat::to_integer(void) { return (int)m_value; }
-double ezFloat::to_float(void) { return m_value; }
-complex<double> ezFloat::to_complex(void) {
-  return complex<double>(m_value, 0);
-}
-string ezFloat::to_string(void) {
-  stringstream ss;
-  ss << m_value;
-  return ss.str();
+  m_fn_add = fn_add_float;
+  m_fn_sub = fn_sub_float;
+  m_fn_mul = fn_mul_float;
+  m_fn_div = fn_div_float;
+  m_fn_pow = fn_pow_float;
+  m_fn_cmp = fn_cmp_float;
+  m_fn_neg = fn_neg_float;
 }
 
 ezValue *ezFloat::condition(void) {
-  return new ezCondition(m_value ? false : true, (m_value < 0) ? true : false,
+  return new ezCondition(value ? false : true, (value < 0) ? true : false,
                          false, false);
 }
 
-ezValue* ezFloat::add(ezValue* v) {
-  return new ezFloat(m_value + v->to_float());
-}
-
-ezValue* ezFloat::subtract(ezValue* v) {
-  return new ezFloat(m_value - v->to_float());
-}
-
-ezValue* ezFloat::multiply(ezValue* v) {
-  return new ezFloat(m_value * v->to_float());
-}
-
-ezValue* ezFloat::divide(ezValue* v) {
-  return new ezFloat(m_value / v->to_float());
-}
-
-ezValue* ezFloat::compare(ezValue* v) {
-  double val = m_value - v->to_float();
-  return new ezCondition((val ? false : true), ((val < 0) ? true : false),
-                         false, false);
-}
-
-ezValue* ezFloat::negate(void) {
-  return new ezFloat(-m_value);
-}
-
-ezValue* ezFloat::powv(ezValue* v) {
-  return new ezFloat(pow(m_value, v->to_float()));
-}

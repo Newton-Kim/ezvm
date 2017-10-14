@@ -35,8 +35,8 @@ void ezMemory::on_mark(void) {
     if (*it == NULL)
       continue;
     (*it)->mark();
-    if ((*it)->type == EZ_VALUE_TYPE_CAROUSEL)
-      ((ezCarousel *)(*it))->on_mark();
+    if ((*it)->type == EZ_VALUE_TYPE_FUNCTION)
+      ((ezFunction *)(*it))->on_mark();
   }
   for (vector<ezValue *>::iterator it = m_constants.begin();
        it != m_constants.end(); it++)

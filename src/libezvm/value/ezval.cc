@@ -27,70 +27,108 @@
 #include <sstream>
 #include <stdexcept>
 
-ezValue::ezValue(const ezValueType tp) : type(tp) { m_size = sizeof(*this); }
+ezValue::ezValue(const ezValueType tp) :
+    m_fn_add(NULL),
+    m_fn_sub(NULL),
+    m_fn_mul(NULL),
+    m_fn_div(NULL),
+    m_fn_modulo(NULL),
+    m_fn_pow(NULL),
+    m_fn_b_and(NULL),
+    m_fn_b_or(NULL),
+    m_fn_b_xor(NULL),
+    m_fn_b_not(NULL),
+    m_fn_cmp(NULL),
+    m_fn_lsl(NULL),
+    m_fn_lsr(NULL),
+    m_fn_neg(NULL),
+    type(tp) { m_size = sizeof(*this); }
 ezValue::~ezValue() {}
 
-bool ezValue::to_bool(void) { throw runtime_error("unable to cast to bool"); }
-int ezValue::to_integer(void) {
-  throw runtime_error("unable to cast to integer");
-}
-double ezValue::to_float(void) {
-  throw runtime_error("unable to cast to float");
-}
-complex<double> ezValue::to_complex(void) {
-  throw runtime_error("unable to cast to complex");
-}
-string ezValue::to_string(void) {
-  throw runtime_error("unable to cast to string");
-}
 ezValue *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
 ezValue *ezValue::add(ezValue *v) {
-  throw runtime_error("addition is not supported");
+  if(!m_fn_add)
+    throw runtime_error("add operation is not supported");
+  return m_fn_add[v->type](this, v);
 }
 
 ezValue *ezValue::subtract(ezValue *v) {
-  throw runtime_error("subtraction is not supported");
+  if(!m_fn_sub)
+    throw runtime_error("sub operation is not supported");
+  return m_fn_sub[v->type](this, v);
 }
 
 ezValue *ezValue::multiply(ezValue *v) {
-  throw runtime_error("multiplication is not supported");
+  if(!m_fn_mul)
+    throw runtime_error("mul operation is not supported");
+  return m_fn_mul[v->type](this, v);
 }
 
 ezValue *ezValue::divide(ezValue *v) {
-  throw runtime_error("division is not supported");
+  if(!m_fn_div)
+    throw runtime_error("div operation is not supported");
+  return m_fn_div[v->type](this, v);
 }
 
 ezValue *ezValue::modulo(ezValue *v) {
-  throw runtime_error("modulo is not supported");
+  if(!m_fn_modulo)
+    throw runtime_error("mod operation is not supported");
+  return m_fn_modulo[v->type](this, v);
 }
 
 ezValue *ezValue::bitwise_and(ezValue *v) {
-  throw runtime_error("bitwise and is not supported");
+  if(!m_fn_b_and)
+    throw runtime_error("and operation is not supported");
+  return m_fn_b_and[v->type](this, v);
 }
 
 ezValue *ezValue::bitwise_or(ezValue *v) {
-  throw runtime_error("bitwise or is not supported");
+  if(!m_fn_b_or)
+    throw runtime_error("or operation is not supported");
+  return m_fn_b_or[v->type](this, v);
 }
 
 ezValue *ezValue::bitwise_xor(ezValue *v) {
-  throw runtime_error("bitwise xor is not supported");
+  if(!m_fn_b_xor)
+    throw runtime_error("xor operation is not supported");
+  return m_fn_b_xor[v->type](this, v);
 }
 
 ezValue *ezValue::bitwise_not(void) {
-  throw runtime_error("bitwise not is not supported");
+  if(!m_fn_b_not)
+    throw runtime_error("not operation is not supported");
+  return m_fn_b_not(this);
 }
 
 ezValue *ezValue::compare(ezValue *v) {
-  throw runtime_error("comparison is not supported");
+  if(!m_fn_cmp)
+    throw runtime_error("cmp operation is not supported");
+  return m_fn_cmp[v->type](this, v);
+}
+
+ezValue *ezValue::lsl(ezValue *v) {
+  if(!m_fn_lsl)
+    throw runtime_error("lsl operation is not supported");
+  return m_fn_lsl[v->type](this, v);
+}
+
+ezValue *ezValue::lsr(ezValue *v) {
+  if(!m_fn_lsr)
+    throw runtime_error("lsr operation is not supported");
+  return m_fn_lsr[v->type](this, v);
 }
 
 ezValue *ezValue::negate(void) {
-  throw runtime_error("negation is not supported");
+  if(!m_fn_neg)
+    throw runtime_error("neg operation is not supported");
+  return m_fn_neg(this);
 }
 
 ezValue *ezValue::powv(ezValue *v) {
-  throw runtime_error("power is not supported");
+  if(!m_fn_pow)
+    throw runtime_error("pow operation is not supported");
+  return m_fn_pow[v->type](this, v);
 }

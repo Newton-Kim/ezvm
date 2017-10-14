@@ -44,36 +44,55 @@ enum ezValueType {
   EZ_VALUE_TYPE_FLOAT,
   EZ_VALUE_TYPE_COMPLEX,
   EZ_VALUE_TYPE_STRING,
-  EZ_VALUE_TYPE_CAROUSEL,
-  EZ_VALUE_TYPE_NATIVE_CAROUSEL,
-  EZ_VALUE_TYPE_USER_DEFINED,
+  EZ_VALUE_TYPE_FUNCTION,
+  EZ_VALUE_TYPE_USER_DEFINED_FUNCTION,
+  EZ_VALUE_TYPE_USER_DEFINED_VALUE,
   EZ_VALUE_TYPE_MAX
 };
 
+class ezValue;
+
+typedef ezValue* fnBinaryOperation(ezValue*, ezValue*);
+typedef ezValue* fnUnaryOperation(ezValue*);
+
 class ezValue : public ezGCObject {
+protected:
+  fnBinaryOperation** m_fn_add;
+  fnBinaryOperation** m_fn_sub;
+  fnBinaryOperation** m_fn_mul;
+  fnBinaryOperation** m_fn_div;
+  fnBinaryOperation** m_fn_modulo;
+  fnBinaryOperation** m_fn_pow;
+  fnBinaryOperation** m_fn_b_and;
+  fnBinaryOperation** m_fn_b_or;
+  fnBinaryOperation** m_fn_b_xor;
+  fnUnaryOperation* m_fn_b_not;
+  fnBinaryOperation** m_fn_cmp;
+  fnBinaryOperation** m_fn_lsl;
+  fnBinaryOperation** m_fn_lsr;
+  fnUnaryOperation* m_fn_neg;
+
 public:
   const ezValueType type;
   ezValue(const ezValueType tp);
   virtual ~ezValue();
-  virtual bool to_bool(void);
-  virtual int to_integer(void);
-  virtual string to_string(void);
-  virtual ezValue *condition(void);
-  virtual double to_float(void);
-  virtual complex<double> to_complex(void);
 
-  virtual ezValue* add(ezValue* v);
-  virtual ezValue* subtract(ezValue* v);
-  virtual ezValue* multiply(ezValue* v);
-  virtual ezValue* divide(ezValue* v);
-  virtual ezValue* modulo(ezValue* v);
-  virtual ezValue* powv(ezValue* v);
-  virtual ezValue* bitwise_and(ezValue* v);
-  virtual ezValue* bitwise_or(ezValue* v);
-  virtual ezValue* bitwise_xor(ezValue* v);
-  virtual ezValue* bitwise_not(void);
-  virtual ezValue* compare(ezValue* v);
-  virtual ezValue* negate(void);
+  virtual ezValue *condition(void);
+
+  ezValue* add(ezValue* v);
+  ezValue* subtract(ezValue* v);
+  ezValue* multiply(ezValue* v);
+  ezValue* divide(ezValue* v);
+  ezValue* modulo(ezValue* v);
+  ezValue* powv(ezValue* v);
+  ezValue* bitwise_and(ezValue* v);
+  ezValue* bitwise_or(ezValue* v);
+  ezValue* bitwise_xor(ezValue* v);
+  ezValue* bitwise_not(void);
+  ezValue* compare(ezValue* v);
+  ezValue* lsl(ezValue* v);
+  ezValue* lsr(ezValue* v);
+  ezValue* negate(void);
 };
 
 class ezCondition : public ezValue {
@@ -92,109 +111,41 @@ public:
 };
 
 class ezBool : public ezValue {
-private:
-  bool m_value;
-
 public:
+  const bool value;
   ezBool(bool val);
-  bool to_bool(void);
-  int to_integer(void);
-  string to_string(void);
   ezValue *condition(void);
-  double to_float(void);
-  complex<double> to_complex(void);
-
-  ezValue* bitwise_and(ezValue* v);
-  ezValue* bitwise_or(ezValue* v);
-  ezValue* bitwise_xor(ezValue* v);
-  ezValue* bitwise_not(void);
-  ezValue* compare(ezValue* v);
 };
 
 class ezInteger : public ezValue {
-private:
-  int m_value;
-
 public:
+  const int value;
   ezInteger(int val);
-  bool to_bool(void);
-  int to_integer(void);
-  string to_string(void);
   ezValue *condition(void);
-  double to_float(void);
-  complex<double> to_complex(void);
-
-  ezValue* add(ezValue* v);
-  ezValue* subtract(ezValue* v);
-  ezValue* multiply(ezValue* v);
-  ezValue* divide(ezValue* v);
-  ezValue* modulo(ezValue* v);
-  ezValue* powv(ezValue* v);
-  ezValue* bitwise_and(ezValue* v);
-  ezValue* bitwise_or(ezValue* v);
-  ezValue* bitwise_xor(ezValue* v);
-  ezValue* bitwise_not(void);
-  ezValue* compare(ezValue* v);
-  ezValue* negate(void);
 };
 
 class ezFloat : public ezValue {
-private:
-  double m_value;
-
 public:
+  const double value;
   ezFloat(double val);
-  bool to_bool(void);
-  int to_integer(void);
-  string to_string(void);
   ezValue *condition(void);
-  double to_float(void);
-  complex<double> to_complex(void);
-
-  ezValue* add(ezValue* v);
-  ezValue* subtract(ezValue* v);
-  ezValue* multiply(ezValue* v);
-  ezValue* divide(ezValue* v);
-  ezValue* powv(ezValue* v);
-  ezValue* compare(ezValue* v);
-  ezValue* negate(void);
 };
 
 class ezComplex : public ezValue {
-private:
-  complex<double> m_value;
-
 public:
+  const complex<double> value;
   ezComplex(complex<double> val);
-  string to_string(void);
   ezValue *condition(void);
-  complex<double> to_complex(void);
-
-  ezValue* add(ezValue* v);
-  ezValue* subtract(ezValue* v);
-  ezValue* multiply(ezValue* v);
-  ezValue* divide(ezValue* v);
-  ezValue* powv(ezValue* v);
-  ezValue* negate(void);
 };
 
 class ezString : public ezValue {
-private:
-  string m_value;
-
 public:
+  const string value;
   ezString(const string val);
-  bool to_bool(void);
-  int to_integer(void);
-  string to_string(void);
   ezValue *condition(void);
-  double to_float(void);
-
-  ezValue* add(ezValue* v);
-  ezValue* compare(ezValue* v);
 };
 
-class ezCarousel : public ezValue, ezGCClient {
+class ezFunction : public ezValue, ezGCClient {
 private:
   ezTable<string, ezValue *> *m_scope;
   ezTable<string, ezValue *> *m_local;
@@ -202,9 +153,9 @@ private:
 public:
   uint8_t nargs;
   size_t nmems;
-  ezCarousel(ezTable<string, ezValue *> *local,
+  ezFunction(ezTable<string, ezValue *> *local,
              ezTable<string, ezValue *> *scope);
-  ~ezCarousel();
+  ~ezFunction();
   vector<ezInstruction *> instruction;
   ezTable<string, size_t> jmptbl;
   void on_mark(void);
@@ -213,9 +164,22 @@ public:
   bool is_local_scoped(void) { return (m_local) ? true : false; }
 };
 
-class ezNativeCarousel : public ezValue {
-private:
+class ezUserDefinedFunction : public ezValue {
 public:
-  ezNativeCarousel();
+  ezUserDefinedFunction();
+  virtual ~ezUserDefinedFunction(){}
+
   virtual void run(vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
+};
+
+class ezUserDefinedValue : public ezValue {
+public:
+  ezUserDefinedValue();
+  virtual ~ezUserDefinedValue();
+
+  virtual void coerc(bool v) = 0;
+  virtual void coerc(int v) = 0;
+  virtual void coerc(double v) = 0;
+  virtual void coerc(complex<double> v) = 0;
+  virtual void coerc(string v) = 0;
 };

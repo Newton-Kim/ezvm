@@ -28,7 +28,7 @@
 #include <sstream>
 #include <stdexcept>
 
-class ezIoPrint : public ezNativeCarousel {
+class ezIoPrint : public ezUserDefinedFunction {
 private:
   ostream &m_io;
 
@@ -37,7 +37,7 @@ public:
   void run(vector<ezValue *> &args, vector<ezValue *> &rets);
 };
 
-ezIoPrint::ezIoPrint(ostream &io) : ezNativeCarousel(), m_io(io) {}
+ezIoPrint::ezIoPrint(ostream &io) : ezUserDefinedFunction(), m_io(io) {}
 
 void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
   rets.clear();
@@ -47,23 +47,23 @@ void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
     ezValue *v = args[i];
     switch (v->type) {
     case EZ_VALUE_TYPE_INTEGER:
-      ss << ((ezInteger *)v)->to_integer();
+      ss << ((ezInteger *)v)->value;
       break;
     case EZ_VALUE_TYPE_FLOAT:
-      ss << ((ezFloat *)v)->to_float();
+      ss << ((ezFloat *)v)->value;
       break;
     case EZ_VALUE_TYPE_COMPLEX: {
-      complex<double> c = ((ezComplex *)v)->to_complex();
+      complex<double> c = ((ezComplex *)v)->value;
       ss << c.real();
       if (c.imag() > 0)
         ss << "+";
       ss << c.imag() << "j";
     } break;
     case EZ_VALUE_TYPE_STRING:
-      ss << ((ezString *)v)->to_string();
+      ss << ((ezString *)v)->value;
       break;
     case EZ_VALUE_TYPE_BOOL:
-      ss << (((ezBool *)v)->to_bool() ? "true" : "false");
+      ss << (((ezBool *)v)->value ? "true" : "false");
       break;
     default:
       ss << hex << (void *)v << dec;

@@ -70,25 +70,25 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
     sink.print("nil\n");
     break;
   case EZ_VALUE_TYPE_BOOL:
-    if (((ezBool *)v)->to_bool() == true)
+    if (((ezBool *)v)->value == true)
       sink.print("true");
     else
       sink.print("false");
     sink.print("\n");
     break;
   case EZ_VALUE_TYPE_INTEGER:
-    sink.print("%d\n", ((ezInteger *)v)->to_integer());
+    sink.print("%d\n", ((ezInteger *)v)->value);
     break;
   case EZ_VALUE_TYPE_COMPLEX: {
-    double cr = ((ezComplex *)v)->to_complex().real();
-    double ci = ((ezComplex *)v)->to_complex().imag();
+    double cr = ((ezComplex *)v)->value.real();
+    double ci = ((ezComplex *)v)->value.imag();
     sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
   } break;
   case EZ_VALUE_TYPE_STRING:
-    sink.print("\"%s\"\n", ((ezString *)v)->to_string().c_str());
+    sink.print("\"%s\"\n", ((ezString *)v)->value.c_str());
     break;
-  case EZ_VALUE_TYPE_CAROUSEL: {
-    ezCarousel *crsl = (ezCarousel *)v;
+  case EZ_VALUE_TYPE_FUNCTION: {
+    ezFunction *crsl = (ezFunction *)v;
     sink.print("0x%x(%d)\n", crsl, crsl->nargs);
     sink.print("  .memsize: %lu\n", crsl->nmems);
     sink.print("  .jump table:\n");
@@ -109,7 +109,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
       crsl->instruction[pc]->dump(sink, *this);
     }
   } break;
-  case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
+  case EZ_VALUE_TYPE_USER_DEFINED_FUNCTION:
     sink.print("0x%x(native)\n", v);
     break;
   default:

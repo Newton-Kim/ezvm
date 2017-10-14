@@ -32,7 +32,7 @@
 
 using namespace std;
 
-ezAsmProcedure::ezAsmProcedure(ezCarousel *carousel) : m_carousel(carousel) {}
+ezAsmProcedure::ezAsmProcedure(ezFunction *carousel) : m_carousel(carousel) {}
 
 void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 
@@ -721,7 +721,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
     m_gc.add((ezGCObject *)m_scopes[scpkey]);
     p_scpkey = m_scopes[scpkey];
   }
-  ezCarousel *carousel = new ezCarousel(p_scpkey, p_scope);
+  ezFunction *carousel = new ezFunction(p_scpkey, p_scope);
   size_t offset = m_globals.add(name, carousel);
   m_gc.add((ezGCObject *)carousel);
   if (name == m_entry_string) {
@@ -758,7 +758,7 @@ size_t ezASM::constant(const char *arg) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
     if (v->type == EZ_VALUE_TYPE_STRING &&
-        ((ezString *)v)->to_string() == value)
+        ((ezString *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -772,7 +772,7 @@ size_t ezASM::constant(const int value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
     if (v->type == EZ_VALUE_TYPE_INTEGER &&
-        ((ezInteger *)v)->to_integer() == value)
+        ((ezInteger *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -785,7 +785,7 @@ size_t ezASM::constant(const int value) {
 size_t ezASM::constant(const bool value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->to_bool() == value)
+    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -798,7 +798,7 @@ size_t ezASM::constant(const bool value) {
 size_t ezASM::constant(const double value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->to_float() == value)
+    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -812,7 +812,7 @@ size_t ezASM::constant(const complex<double> value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezValue *v = m_constants[i];
     if (v->type == EZ_VALUE_TYPE_COMPLEX &&
-        ((ezComplex *)v)->to_complex() == value)
+        ((ezComplex *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();

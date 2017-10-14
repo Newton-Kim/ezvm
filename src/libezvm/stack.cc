@@ -28,7 +28,7 @@
 #include <iostream>
 #include <stdexcept>
 
-ezStackFrame::ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
+ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezValue *> &args,
                            vector<ezAddress> &rets,
                            ezStackFrameCallback *callback)
     : m_pc(0), m_local(m_carousel->local_memory()),
@@ -105,27 +105,27 @@ void ezStackFrame::shift_operation(
 
 void ezStackFrame::lsl(ezAddress &dest, ezAddress &src, ezAddress &offset) {
   shift_operation(dest, src, offset, [](ezValue *obj, ezValue *offset) {
-    return new ezInteger(obj->to_integer() << offset->to_integer());
+    return obj->lsl(offset);
   });
 }
 
 void ezStackFrame::lsl(ezAddress &dest, ezAddress &cond, ezAddress &src,
                        ezAddress &offset) {
   shift_operation(dest, cond, src, offset, [](ezValue *obj, ezValue *offset) {
-    return new ezInteger(obj->to_integer() << offset->to_integer());
+    return obj->lsl(offset);
   });
 }
 
 void ezStackFrame::lsr(ezAddress &dest, ezAddress &src, ezAddress &offset) {
   shift_operation(dest, src, offset, [](ezValue *obj, ezValue *offset) {
-    return new ezInteger(obj->to_integer() >> offset->to_integer());
+    return obj->lsr(offset);
   });
 }
 
 void ezStackFrame::lsr(ezAddress &dest, ezAddress &cond, ezAddress &src,
                        ezAddress &offset) {
   shift_operation(dest, cond, src, offset, [](ezValue *obj, ezValue *offset) {
-    return new ezInteger(obj->to_integer() >> offset->to_integer());
+    return obj->lsr(offset);
   });
 }
 
@@ -446,11 +446,11 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
   vector<ezValue *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
-  case EZ_VALUE_TYPE_NATIVE_CAROUSEL:
-    call((ezNativeCarousel *)proc, vargs, rets);
+  case EZ_VALUE_TYPE_USER_DEFINED_FUNCTION:
+    call((ezUserDefinedFunction *)proc, vargs, rets);
     break;
-  case EZ_VALUE_TYPE_CAROUSEL:
-    call((ezCarousel *)proc, vargs, rets);
+  case EZ_VALUE_TYPE_FUNCTION:
+    call((ezFunction *)proc, vargs, rets);
     break;
   default:
     throw runtime_error("function is not executable");
@@ -458,7 +458,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
   }
 }
 
-void ezStackFrame::call(ezCarousel *func, vector<ezValue *> &args,
+void ezStackFrame::call(ezFunction *func, vector<ezValue *> &args,
                         vector<ezAddress> &rets) {
   ezGC::instance().pause();
   ezStackFrame *callee = new ezStackFrame(func, args, rets, m_callback);
@@ -466,7 +466,7 @@ void ezStackFrame::call(ezCarousel *func, vector<ezValue *> &args,
   ezGC::instance().resume();
 }
 
-void ezStackFrame::call(ezNativeCarousel *func, vector<ezValue *> &args,
+void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezValue *> &args,
                         vector<ezAddress> &rets) {
   vector<ezValue *> vrets;
   func->run(args, vrets);
@@ -486,7 +486,7 @@ void ezStackFrame::wait(ezAddress &handle) {
   ezValue *v = addr2val(handle);
   if (v->type != EZ_VALUE_TYPE_INTEGER)
     throw runtime_error("invalid handle");
-  m_callback->wait(((ezInteger *)v)->to_integer());
+  m_callback->wait(((ezInteger *)v)->value);
 }
 
 void ezStackFrame::update(vector<ezAddress> &dests, vector<ezValue *> &vals) {

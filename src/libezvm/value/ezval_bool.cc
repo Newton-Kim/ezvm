@@ -27,42 +27,58 @@
 #include <sstream>
 #include <stdexcept>
 
-ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), m_value(val) {
+static ezValue* fn_compare_bool_error(ezValue* vl, ezValue* vr) {
+  throw runtime_error("compare bool with given type is not supported");
+}
+
+static ezValue* fn_compare_bool_bool(ezValue* vl, ezValue* vr) {
+  bool bvl = ((ezBool*)vl)->value;
+  bool bvr = ((ezBool*)vr)->value;
+  return new ezBool(!(bvl ^ bvr));
+}
+
+static ezValue* fn_compare_bool_integer(ezValue* vl, ezValue* vr) {
+  bool bvl = ((ezBool*)vl)->value;
+  bool bvr = ((ezInteger*)vr)->value ? true : false;
+  return new ezBool(bvl == bvr);
+}
+
+static ezValue* fn_compare_bool_float(ezValue* vl, ezValue* vr) {
+  bool bvl = ((ezBool*)vl)->value;
+  bool bvr = ((ezFloat*)vr)->value ? true : false;
+  return new ezBool(bvl == bvr);
+}
+
+static ezValue* fn_compare_bool_complex(ezValue* vl, ezValue* vr) {
+  bool bvl = ((ezBool*)vl)->value;
+  bool bvr = abs(((ezFloat*)vr)->value) ? true : false;
+  return new ezBool(bvl == bvr);
+}
+
+static fnBinaryOperation* fn_compare_bool[] = {
+  fn_compare_bool_error,
+  fn_compare_bool_error,
+  fn_compare_bool_bool,
+  fn_compare_bool_integer,
+  fn_compare_bool_float,
+  fn_compare_bool_complex,
+  fn_compare_bool_error,
+  fn_compare_bool_error,
+  fn_compare_bool_error,
+  fn_compare_bool_error
+};
+
+static ezValue* fn_negate_bool(ezValue* v) {
+  return new ezBool(!((ezBool*)v)->value);
+}
+
+ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_size = sizeof(*this);
+  m_fn_cmp = fn_compare_bool;
+  m_fn_neg = fn_negate_bool;
 }
-bool ezBool::to_bool(void) { return m_value; }
-int ezBool::to_integer(void) { return m_value ? 1 : 0; }
-double ezBool::to_float(void) { return m_value ? 1. : 0; }
-complex<double> ezBool::to_complex(void) {
-  return complex<double>((m_value ? 1. : 0), 0);
-}
-string ezBool::to_string(void) {
-  string str;
-  str = m_value ? "true" : "false";
-  return str;
-}
+
 ezValue *ezBool::condition(void) {
-  return new ezCondition(!m_value, false, false, false);
-}
-
-ezValue* ezBool::bitwise_and(ezValue* v) {
-  return new ezBool(m_value & v->to_bool());
-}
-
-ezValue* ezBool::bitwise_or(ezValue* v) {
-  return new ezBool(m_value | v->to_bool());
-}
-
-ezValue* ezBool::bitwise_xor(ezValue* v) {
-  return new ezBool(m_value ^ v->to_bool());
-}
-
-ezValue* ezBool::bitwise_not(void) {
-  return new ezBool(!m_value);
-}
-
-ezValue* ezBool::compare(ezValue* v) {
-  return new ezCondition(!(m_value ^ v->to_bool()), false, false,
-                         false);
+  return new ezCondition(!value, false, false, false);
 }
 

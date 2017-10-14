@@ -53,7 +53,7 @@ private:
   /**
   * @brief is a pointer to a carousel.
   */
-  ezCarousel *m_carousel;
+  ezFunction *m_carousel;
   /**
   * @brief is a local segment.
   */
@@ -102,7 +102,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezNativeCarousel *func, vector<ezValue *> &args,
+  void call(ezUserDefinedFunction *func, vector<ezValue *> &args,
             vector<ezAddress> &rets);
   /**
   * @brief invokes a carousel.
@@ -111,7 +111,7 @@ private:
   * @param nargs is a number of arguments which follows the func.
   * @param nrets is a number of return addresses which follows the arguments.
   */
-  void call(ezCarousel *func, vector<ezValue *> &args, vector<ezAddress> &rets);
+  void call(ezFunction *func, vector<ezValue *> &args, vector<ezAddress> &rets);
   void binary_operation(ezAddress &dest, ezAddress &src1, ezAddress &src2,
                         function<ezValue *(ezValue *, ezValue *)> binary_func);
   void binary_operation(ezAddress &dest, ezAddress &cond, ezAddress &src1,
@@ -194,7 +194,7 @@ public:
   *
   * @param crsl is a pointer to a carousel.
   */
-  ezStackFrame(ezCarousel *crsl, vector<ezValue *> &args,
+  ezStackFrame(ezFunction *crsl, vector<ezValue *> &args,
                vector<ezAddress> &rets, ezStackFrameCallback *callback);
   /**
   * @brief is a destructor.

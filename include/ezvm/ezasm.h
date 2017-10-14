@@ -38,7 +38,7 @@
 using namespace std;
 
 /**
-* @brief ezAsmProcedure fills in the instance of ezCarousel with respective
+* @brief ezAsmProcedure fills in the instance of ezFunction with respective
 * instructions.
 */
 class ezAsmProcedure {
@@ -55,7 +55,7 @@ private:
   /**
   * @brief is an instance of a carousel.
   */
-  ezCarousel *m_carousel;
+  ezFunction *m_carousel;
   void instruction_with_unary_argument(
       function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
@@ -84,7 +84,7 @@ public:
   *
   * @param carousel is a pointer to a carousel.
   */
-  ezAsmProcedure(ezCarousel *carousel);
+  ezAsmProcedure(ezFunction *carousel);
   void args(size_t args);
   /**
   * @brief mems the local memory.

@@ -27,28 +27,28 @@
 #include <sstream>
 #include <stdexcept>
 
-ezCarousel::ezCarousel(ezTable<string, ezValue *> *local,
+ezFunction::ezFunction(ezTable<string, ezValue *> *local,
                        ezTable<string, ezValue *> *scope)
-    : ezValue(EZ_VALUE_TYPE_CAROUSEL), nargs(0), nmems(0), m_local(local),
+    : ezValue(EZ_VALUE_TYPE_FUNCTION), nargs(0), nmems(0), m_local(local),
       m_scope(scope) {
   m_size = sizeof(*this);
 }
-ezCarousel::~ezCarousel() {
+ezFunction::~ezFunction() {
   for (vector<ezInstruction *>::iterator it = instruction.begin();
        it != instruction.end(); it++)
     delete *it;
 }
-ezNativeCarousel::ezNativeCarousel() : ezValue(EZ_VALUE_TYPE_NATIVE_CAROUSEL) {
+ezUserDefinedFunction::ezUserDefinedFunction() : ezValue(EZ_VALUE_TYPE_USER_DEFINED_FUNCTION) {
   m_size = sizeof(*this);
 }
-void ezCarousel::on_mark(void) {
+void ezFunction::on_mark(void) {
   if (m_scope)
     m_scope->mark();
   if (m_local)
     m_local->mark();
 }
 
-vector<ezValue *> *ezCarousel::local_memory(void) {
+vector<ezValue *> *ezFunction::local_memory(void) {
   vector<ezValue *> *ret = NULL;
   size_t memories = (nmems > nargs) ? nmems : nargs;
   if (m_local) {
@@ -67,11 +67,11 @@ vector<ezValue *> *ezCarousel::local_memory(void) {
 }
 
 /*
-map<string, size_t> &ezCarousel::local_symtab(void) {
+map<string, size_t> &ezFunction::local_symtab(void) {
   return (m_local) ? m_local->symtab() : m_symtab;
 }
 */
 
-vector<ezValue *> *ezCarousel::scope_memory(void) {
+vector<ezValue *> *ezFunction::scope_memory(void) {
   return (m_scope) ? &m_scope->to_vector() : NULL;
 }

@@ -37,14 +37,14 @@ ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
     throw runtime_error("callback is missing.");
   ezValue *v = addr2val(entry);
   switch (v->type) {
-  case EZ_VALUE_TYPE_CAROUSEL: {
-    ezStackFrame *sf = new ezStackFrame((ezCarousel *)v, args, rets, this);
+  case EZ_VALUE_TYPE_FUNCTION: {
+    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, rets, this);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
   } break;
-  case EZ_VALUE_TYPE_NATIVE_CAROUSEL: {
+  case EZ_VALUE_TYPE_USER_DEFINED_FUNCTION: {
     vector<ezValue *> vrets;
-    ((ezNativeCarousel *)v)->run(args, vrets);
+    ((ezUserDefinedFunction *)v)->run(args, vrets);
     if (caller)
       caller->update(rets, vrets);
   } break;

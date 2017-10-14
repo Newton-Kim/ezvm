@@ -27,35 +27,76 @@
 #include <sstream>
 #include <stdexcept>
 
+static ezValue* fn_op_string_error(ezValue* vl, ezValue* vr) {
+  throw runtime_error("compare string with given type is not supported");
+}
+
+static ezValue* fn_add_string_integer(ezValue* vl, ezValue* vr) {
+  stringstream ss;
+  ss << ((ezString*)vl)->value;
+  ss << ((ezInteger*)vr)->value;
+  return new ezString(ss.str());
+}
+
+static ezValue* fn_add_string_float(ezValue* vl, ezValue* vr) {
+  stringstream ss;
+  ss << ((ezString*)vl)->value;
+  ss << ((ezFloat*)vr)->value;
+  return new ezString(ss.str());
+}
+
+static ezValue* fn_add_string_complex(ezValue* vl, ezValue* vr) {
+  stringstream ss;
+  ss << ((ezString*)vl)->value;
+  complex<double> vp = ((ezComplex*)vr)->value;
+  ss << vp.real();
+  if(vp.imag() >= 0) ss << "+";
+  ss << vp.imag() << "j";
+  return new ezString(ss.str());
+}
+
+static ezValue* fn_add_string_string(ezValue* vl, ezValue* vr) {
+  return new ezString(((ezString*)vl)->value + ((ezString*)vr)->value);
+}
+
+static ezValue* fn_compare_string_string(ezValue* vl, ezValue* vr) {
+  return new ezBool(((ezString*)vl)->value == ((ezString*)vr)->value);
+}
+
+static fnBinaryOperation* fn_add_string[] = {
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_add_string_integer,
+  fn_add_string_float,
+  fn_add_string_complex,
+  fn_add_string_string,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error
+};
+
+static fnBinaryOperation* fn_compare_string[] = {
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_compare_string_string,
+  fn_op_string_error,
+  fn_op_string_error,
+  fn_op_string_error
+};
+
 ezString::ezString(const string val)
-    : ezValue(EZ_VALUE_TYPE_STRING), m_value(val) {
+    : ezValue(EZ_VALUE_TYPE_STRING), value(val) {
   m_size = sizeof(*this) + val.size() + 1;
+  m_fn_add = fn_add_string;
+  m_fn_cmp = fn_compare_string;
 }
-bool ezString::to_bool(void) {
-  bool ret;
-  if (m_value == "true")
-    ret = true;
-  else if (m_value == "false")
-    ret = false;
-  else
-    throw runtime_error("unable to cast from string to bool");
-  return ret;
-}
-int ezString::to_integer(void) { return m_value.size() ? 1 : 0; }
-double ezString::to_float(void) { return m_value.size() ? 1. : 0; }
-string ezString::to_string(void) { return m_value; }
+
 ezValue *ezString::condition(void) {
-  return new ezCondition(m_value.empty(), false, false, false);
-}
-
-ezValue* ezString::add(ezValue* v) {
-  return new ezString(m_value + v->to_string());
-}
-
-ezValue* ezString::compare(ezValue* v) {
-  string vstr = v->to_string();
-  bool eq = (m_value == vstr);
-  int sz = m_value.size() - vstr.size();
-  return new ezCondition(eq, ((sz < 0) ? true : false), false, false);
+  return new ezCondition(value.empty(), false, false, false);
 }
 
