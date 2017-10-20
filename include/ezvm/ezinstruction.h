@@ -29,39 +29,8 @@
 #include <functional>
 #include <vector>
 
+//TODO:should be moved to respective cc file.
 using namespace std;
-
-enum ezOpCode {
-  EZ_OP_ADD = 0,
-  EZ_OP_AND,
-  EZ_OP_BEQ,
-  EZ_OP_BGE,
-  EZ_OP_BLT,
-  EZ_OP_BNE,
-  EZ_OP_BRA,
-  EZ_OP_CALL,
-  EZ_OP_CMP,
-  EZ_OP_DIV,
-  EZ_OP_FGC,
-  EZ_OP_LSL,
-  EZ_OP_LSR,
-  EZ_OP_MOD,
-  EZ_OP_MUL,
-  EZ_OP_MV,
-  EZ_OP_NEG,
-  EZ_OP_NOT,
-  EZ_OP_OR,
-  EZ_OP_POW,
-  EZ_OP_RET,
-  EZ_OP_SUB,
-  EZ_OP_TEQ,
-  EZ_OP_TGE,
-  EZ_OP_THD,
-  EZ_OP_TLT,
-  EZ_OP_TNE,
-  EZ_OP_WAIT,
-  EZ_OP_XOR
-};
 
 class ezStackFrame;
 class ezDump;

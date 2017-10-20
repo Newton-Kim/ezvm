@@ -38,7 +38,8 @@ ezFunction::~ezFunction() {
        it != instruction.end(); it++)
     delete *it;
 }
-ezUserDefinedFunction::ezUserDefinedFunction() : ezValue(EZ_VALUE_TYPE_USER_DEFINED_FUNCTION) {
+ezUserDefinedFunction::ezUserDefinedFunction()
+    : ezValue(EZ_VALUE_TYPE_USER_DEFINED_FUNCTION) {
   m_size = sizeof(*this);
 }
 void ezFunction::on_mark(void) {

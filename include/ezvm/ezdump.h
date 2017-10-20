@@ -50,7 +50,6 @@ private:
   void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, vector<ezAddress> &addrs);
   void dump(ezFile &sink, const ezValue *v);
-  const char *opstr(ezOpCode op);
 
 public:
   /**
@@ -67,15 +66,15 @@ public:
   * @param path is file name.
   */
   void dump(const string path);
-  void dump(ezFile &sink, ezOpCode op, ezAddress &func, vector<ezAddress> &srcs,
+  void dump(ezFile &sink, string op, ezAddress &func, vector<ezAddress> &srcs,
             vector<ezAddress> &dests);
-  void dump(ezFile &sink, ezOpCode op, ezAddress &func, vector<ezAddress> &srcs,
+  void dump(ezFile &sink, string op, ezAddress &func, vector<ezAddress> &srcs,
             vector<ezAddress> &dests, ezAddress &handle);
-  void dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
+  void dump(ezFile &sink, string op, vector<ezAddress> &result,
             vector<ezAddress> &param);
-  void dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param);
-  void dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset);
-  void dump(ezFile &sink, ezOpCode op, ezAddress handle);
-  void dump(ezFile &sink, ezOpCode op, size_t offset);
-  void dump(ezFile &sink, ezOpCode op);
+  void dump(ezFile &sink, string op, vector<ezAddress> &param);
+  void dump(ezFile &sink, string op, ezAddress cond, size_t offset);
+  void dump(ezFile &sink, string op, ezAddress handle);
+  void dump(ezFile &sink, string op, size_t offset);
+  void dump(ezFile &sink, string op);
 };

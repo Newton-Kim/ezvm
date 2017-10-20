@@ -101,7 +101,7 @@ void ezDump::dump(ezFile &sink, const ezValue *v) {
          it++)
       sink.print("    [%s]=%lu\n", (*it).c_str(), crsl->jmptbl[*it]);
     ezAddress addr;
-    ezOpCode op;
+    string op;
     uint8_t arg[3];
     size_t len = crsl->instruction.size();
     for (size_t pc = 0; pc < len; pc++) {
@@ -146,69 +146,9 @@ void ezDump::dump(const string path) {
   sink.print("\n");
 }
 
-const char *ezDump::opstr(ezOpCode op) {
-  switch (op) {
-  case EZ_OP_ADD:
-    return "add";
-  case EZ_OP_AND:
-    return "add";
-  case EZ_OP_BEQ:
-    return "beq";
-  case EZ_OP_BGE:
-    return "bge";
-  case EZ_OP_BLT:
-    return "blt";
-  case EZ_OP_BNE:
-    return "bne";
-  case EZ_OP_BRA:
-    return "bra";
-  case EZ_OP_CALL:
-    return "call";
-  case EZ_OP_CMP:
-    return "cmp";
-  case EZ_OP_DIV:
-    return "div";
-  case EZ_OP_FGC:
-    return "fgc";
-  case EZ_OP_LSL:
-    return "lsl";
-  case EZ_OP_LSR:
-    return "lsr";
-  case EZ_OP_MOD:
-    return "mod";
-  case EZ_OP_MUL:
-    return "mul";
-  case EZ_OP_MV:
-    return "mv";
-  case EZ_OP_NEG:
-    return "neg";
-  case EZ_OP_NOT:
-    return "not";
-  case EZ_OP_OR:
-    return "or";
-  case EZ_OP_RET:
-    return "ret";
-  case EZ_OP_SUB:
-    return "sub";
-  case EZ_OP_TEQ:
-    return "teq";
-  case EZ_OP_TGE:
-    return "tge";
-  case EZ_OP_THD:
-    return "thd";
-  case EZ_OP_TLT:
-    return "tlt";
-  case EZ_OP_TNE:
-    return "tne";
-  case EZ_OP_XOR:
-    return "xor";
-  }
-  return "unknown";
-}
-
-void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
+void ezDump::dump(ezFile &sink, string op, ezAddress &func,
                   vector<ezAddress> &srcs, vector<ezAddress> &dests) {
-  sink.print("%s", opstr(op));
+  sink.print("%s", op.c_str());
   dump(sink, func);
   sink.print(",");
   if (srcs.empty())
@@ -226,10 +166,10 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
+void ezDump::dump(ezFile &sink, string op, ezAddress &func,
                   vector<ezAddress> &srcs, vector<ezAddress> &dests,
                   ezAddress &handle) {
-  sink.print("%s", opstr(op));
+  sink.print("%s", op.c_str());
   dump(sink, func);
   sink.print(",");
   if (srcs.empty())
@@ -249,9 +189,9 @@ void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress &func,
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
+void ezDump::dump(ezFile &sink, string op, vector<ezAddress> &result,
                   vector<ezAddress> &param) {
-  sink.print("%s", opstr(op));
+  sink.print("%s", op.c_str());
   if (result.empty())
     sink.print(" null");
   else
@@ -268,8 +208,8 @@ void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &result,
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param) {
-  sink.print("%s", opstr(op));
+void ezDump::dump(ezFile &sink, string op, vector<ezAddress> &param) {
+  sink.print("%s", op.c_str());
   if (param.empty())
     sink.print(" null");
   else
@@ -279,24 +219,24 @@ void ezDump::dump(ezFile &sink, ezOpCode op, vector<ezAddress> &param) {
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress cond, size_t offset) {
-  sink.print("%s", opstr(op));
+void ezDump::dump(ezFile &sink, string op, ezAddress cond, size_t offset) {
+  sink.print("%s", op.c_str());
   dump(sink, cond);
   sink.print(",");
   sink.print(" %d", offset);
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, ezAddress handle) {
-  sink.print("%s", opstr(op));
+void ezDump::dump(ezFile &sink, string op, ezAddress handle) {
+  sink.print("%s", op.c_str());
   dump(sink, handle);
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op, size_t offset) {
-  sink.print("%s", opstr(op));
+void ezDump::dump(ezFile &sink, string op, size_t offset) {
+  sink.print("%s", op.c_str());
   sink.print(" %d", offset);
   sink.print("\n");
 }
 
-void ezDump::dump(ezFile &sink, ezOpCode op) { sink.print("%s\n", opstr(op)); }
+void ezDump::dump(ezFile &sink, string op) { sink.print("%s\n", op.c_str()); }
