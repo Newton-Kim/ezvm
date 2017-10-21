@@ -29,7 +29,7 @@
 #include <functional>
 #include <vector>
 
-//TODO:should be moved to respective cc file.
+// TODO:should be moved to respective cc file.
 using namespace std;
 
 class ezStackFrame;

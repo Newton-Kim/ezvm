@@ -172,8 +172,7 @@ public:
   * @param lsrc Addresses of base.
   * @param rsrc Addresses of exponent.
   */
-  void powv(const ezAddress dest, const ezAddress &lsrc,
-                   const ezAddress &rsrc);
+  void powv(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   /**
   * @brief creates an add instruction. See pow of ezas.
   *
@@ -182,8 +181,8 @@ public:
   * @param lsrc Addresses of base.
   * @param rsrc Addresses of exponent.
   */
-  void powv(const ezAddress dest, const ezAddress cond,
-           const ezAddress &lsrc, const ezAddress &rsrc);
+  void powv(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+            const ezAddress &rsrc);
   /**
   * @brief creates an conditional branching instruction. See beq of ezas.
   *

@@ -115,16 +115,18 @@ private:
   void conditional_bra(ezAddress &cond, size_t index,
                        function<bool(ezCondition *)> func);
   void test_equality(ezAddress &rst, ezAddress &lsrc, ezAddress &rsrc,
-                         function<ezValue *(ezCondition *)> func);
-  void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc, ezAddress &rsrc,
-                         function<ezValue *(ezCondition *)> func);
+                     function<ezValue *(ezCondition *)> func);
+  void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
+                     ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
 
 public:
-  void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                        ezAddress &src2);
+  void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &src1,
+               ezAddress &src2);
+  void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &cond,
+               ezAddress &src1, ezAddress &src2);
   void operate(ezUnaryOperation op, ezAddress &dest, ezAddress &src);
-  void operate(ezUnaryOperation op, ezAddress &dest, ezAddress &cond, ezAddress &src);
+  void operate(ezUnaryOperation op, ezAddress &dest, ezAddress &cond,
+               ezAddress &src);
 
   void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);

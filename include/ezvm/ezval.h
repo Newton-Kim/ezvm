@@ -72,16 +72,18 @@ enum ezBinaryOperation {
   EZ_BINARY_OPERATION_MAX
 };
 
-
 class ezValue;
 
-typedef ezValue* fnBinaryOperation(ezValue*, ezValue*);
-typedef ezValue* fnUnaryOperation(ezValue*);
+ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr);
+ezValue *fn_unary_generic_error(ezValue *v);
+
+typedef ezValue *fnBinaryOperation(ezValue *, ezValue *);
+typedef ezValue *fnUnaryOperation(ezValue *);
 
 class ezValue : public ezGCObject {
 protected:
-  fnBinaryOperation*** m_fn_binary;
-  fnUnaryOperation** m_fn_unary;
+  fnBinaryOperation ***m_fn_binary;
+  fnUnaryOperation **m_fn_unary;
 
 public:
   const ezValueType type;
@@ -90,8 +92,8 @@ public:
 
   virtual ezValue *condition(void);
 
-  ezValue* operate(ezBinaryOperation op, ezValue* v);
-  ezValue* operate(ezUnaryOperation op);
+  ezValue *operate(ezBinaryOperation op, ezValue *v);
+  ezValue *operate(ezUnaryOperation op);
 };
 
 class ezCondition : public ezValue {
@@ -115,8 +117,8 @@ public:
   ezBool(bool val);
   ezValue *condition(void);
 
-  static void set_operation(ezBinaryOperation op, fnBinaryOperation* fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation* fn);
+  static void set_operation(ezBinaryOperation op, ezValueType type, fnBinaryOperation *fn);
+  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
 };
 
 class ezInteger : public ezValue {
@@ -125,8 +127,8 @@ public:
   ezInteger(int val);
   ezValue *condition(void);
 
-  static void set_operation(ezBinaryOperation op, fnBinaryOperation* fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation* fn);
+  static void set_operation(ezBinaryOperation op, ezValueType type, fnBinaryOperation *fn);
+  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
 };
 
 class ezFloat : public ezValue {
@@ -135,8 +137,8 @@ public:
   ezFloat(double val);
   ezValue *condition(void);
 
-  static void set_operation(ezBinaryOperation op, fnBinaryOperation* fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation* fn);
+  static void set_operation(ezBinaryOperation op, ezValueType type, fnBinaryOperation *fn);
+  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
 };
 
 class ezComplex : public ezValue {
@@ -145,8 +147,8 @@ public:
   ezComplex(complex<double> val);
   ezValue *condition(void);
 
-  static void set_operation(ezBinaryOperation op, fnBinaryOperation* fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation* fn);
+  static void set_operation(ezBinaryOperation op, ezValueType type, fnBinaryOperation *fn);
+  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
 };
 
 class ezString : public ezValue {
@@ -155,8 +157,8 @@ public:
   ezString(const string val);
   ezValue *condition(void);
 
-  static void set_operation(ezBinaryOperation op, fnBinaryOperation* fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation* fn);
+  static void set_operation(ezBinaryOperation op, ezValueType type, fnBinaryOperation *fn);
+  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
 };
 
 class ezFunction : public ezValue, ezGCClient {
@@ -181,7 +183,7 @@ public:
 class ezUserDefinedFunction : public ezValue {
 public:
   ezUserDefinedFunction();
-  virtual ~ezUserDefinedFunction(){}
+  virtual ~ezUserDefinedFunction() {}
 
   virtual void run(vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
 };

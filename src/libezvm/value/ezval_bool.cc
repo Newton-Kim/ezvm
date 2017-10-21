@@ -27,10 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_compare_bool_error(ezValue *vl, ezValue *vr) {
-  throw runtime_error("compare bool with given type is not supported");
-}
-
 static ezValue *fn_compare_bool_bool(ezValue *vl, ezValue *vr) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezBool *)vr)->value;
@@ -55,30 +51,109 @@ static ezValue *fn_compare_bool_complex(ezValue *vl, ezValue *vr) {
   return new ezBool(bvl == bvr);
 }
 
-static fnBinaryOperation *fn_compare_bool[] = {
-    fn_compare_bool_error,   fn_compare_bool_error, fn_compare_bool_bool,
-    fn_compare_bool_integer, fn_compare_bool_float, fn_compare_bool_complex,
-    fn_compare_bool_error,   fn_compare_bool_error, fn_compare_bool_error,
-    fn_compare_bool_error};
+static fnBinaryOperation *fn_add_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static ezValue *fn_negate_bool(ezValue *v) {
+static fnBinaryOperation *fn_sub_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_mul_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_div_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_mod_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_pow_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_cmp_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_compare_bool_bool,
+    fn_compare_bool_integer, fn_compare_bool_float,   fn_compare_bool_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_b_and_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_b_or_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_b_xor_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_lsl_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation *fn_lsr_bool[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation **fn_binary_bool[EZ_BINARY_OPERATION_MAX] = {
+    fn_add_bool,  fn_cmp_bool,   fn_sub_bool, fn_mul_bool,
+    fn_div_bool,  fn_mod_bool,   fn_pow_bool, fn_b_and_bool,
+    fn_b_or_bool, fn_b_xor_bool, fn_lsl_bool, fn_lsr_bool};
+
+static ezValue *fn_neg_bool(ezValue *v) {
   return new ezBool(!((ezBool *)v)->value);
 }
 
+static fnUnaryOperation *fn_unary_bool[EZ_UNARY_OPERATION_MAX] = {
+    fn_neg_bool, fn_unary_generic_error};
+
 ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_size = sizeof(*this);
-  m_fn_binary[EZ_BINARY_OPERATION_COMPARISON] = fn_compare_bool;
-  m_fn_unary[EZ_UNARY_OPERATION_NEGATE] = fn_negate_bool;
+  m_fn_binary = fn_binary_bool;
+  m_fn_unary = fn_unary_bool;
 }
 
 ezValue *ezBool::condition(void) {
   return new ezCondition(!value, false, false, false);
 }
 
-void ezBool::set_operation(ezBinaryOperation op, fnBinaryOperation *fn) {
-  // TODO:how to implement
+void ezBool::set_operation(ezBinaryOperation op, ezValueType type,
+                           fnBinaryOperation *fn) {
+  if (!fn)
+    throw runtime_error("null function is not allowed");
+  fn_binary_bool[op][type] = fn;
 }
 
 void ezBool::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  // TODO:how to implement
+  if (!fn)
+    throw runtime_error("null function is not allowed");
+  fn_unary_bool[op] = fn;
 }

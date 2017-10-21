@@ -27,10 +27,6 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_op_integer_error(ezValue *vl, ezValue *vr) {
-  throw runtime_error("the operation with this type is not supported.");
-}
-
 static ezValue *fn_add_integer_integer(ezValue *vl, ezValue *vr) {
   return new ezInteger(((ezInteger *)vl)->value + ((ezInteger *)vr)->value);
 }
@@ -130,77 +126,82 @@ static ezValue *fn_cmp_integer_float(ezValue *vl, ezValue *vr) {
   return new ezBool(((ezInteger *)vl)->value == ((ezFloat *)vr)->value);
 }
 
-static fnBinaryOperation *fn_add_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_add_integer_integer, fn_add_integer_float, fn_add_integer_complex,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_add_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_add_integer_integer,  fn_add_integer_float,    fn_add_integer_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_sub_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_sub_integer_integer, fn_sub_integer_float, fn_sub_integer_complex,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_sub_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_sub_integer_integer,  fn_sub_integer_float,    fn_sub_integer_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_mul_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_mul_integer_integer, fn_mul_integer_float, fn_mul_integer_complex,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_mul_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_mul_integer_integer,  fn_mul_integer_float,    fn_mul_integer_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_div_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_div_integer_integer, fn_div_integer_float, fn_div_integer_complex,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_div_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_div_integer_integer,  fn_div_integer_float,    fn_div_integer_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_mod_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_mod_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_mod_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_mod_integer_integer,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_pow_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_pow_integer_integer, fn_pow_integer_float, fn_pow_integer_complex,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_pow_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_pow_integer_integer,  fn_pow_integer_float,    fn_pow_integer_complex,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_cmp_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_cmp_integer_integer, fn_cmp_integer_float, fn_op_integer_error,
-    fn_op_integer_error,    fn_op_integer_error,  fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_cmp_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_cmp_integer_integer,  fn_cmp_integer_float,    fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_b_and_integer[] = {
-    fn_op_integer_error,      fn_op_integer_error, fn_op_integer_error,
-    fn_b_and_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,      fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_b_and_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_b_and_integer_integer, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_b_or_integer[] = {
-    fn_op_integer_error,     fn_op_integer_error, fn_op_integer_error,
-    fn_b_or_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,     fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_b_or_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_b_or_integer_integer, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_b_xor_integer[] = {
-    fn_op_integer_error,      fn_op_integer_error, fn_op_integer_error,
-    fn_b_xor_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,      fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_b_xor_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_b_xor_integer_integer, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_lsl_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_lsl_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_lsl_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_lsl_integer_integer,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
-static fnBinaryOperation *fn_lsr_integer[] = {
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_lsr_integer_integer, fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error,    fn_op_integer_error, fn_op_integer_error,
-    fn_op_integer_error};
+static fnBinaryOperation *fn_lsr_integer[EZ_VALUE_TYPE_MAX] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_lsr_integer_integer,  fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
+
+static fnBinaryOperation **fn_binary_integer[EZ_BINARY_OPERATION_MAX] = {
+    fn_add_integer,  fn_cmp_integer,   fn_sub_integer, fn_mul_integer,
+    fn_div_integer,  fn_mod_integer,   fn_pow_integer, fn_b_and_integer,
+    fn_b_or_integer, fn_b_xor_integer, fn_lsl_integer, fn_lsr_integer};
 
 static ezValue *fn_b_not_integer(ezValue *v) {
   return new ezFloat(~((ezInteger *)v)->value);
@@ -210,25 +211,29 @@ static ezValue *fn_neg_integer(ezValue *v) {
   return new ezInteger(-((ezInteger *)v)->value);
 }
 
+static fnUnaryOperation *fn_unary_integer[EZ_UNARY_OPERATION_MAX] = {
+    fn_neg_integer, fn_b_not_integer};
+
 ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), value(val) {
   m_size = sizeof(*this);
-  m_fn_binary[EZ_BINARY_OPERATION_ADDITION] = fn_add_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_SUBTRACTION] = fn_sub_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_MULTIPLICATION] = fn_mul_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_DIVISION] = fn_div_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_MODULATION] = fn_mod_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_POW] = fn_pow_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_AND] = fn_b_and_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_OR] = fn_b_or_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_XOR] = fn_b_xor_integer;
-  m_fn_unary[EZ_UNARY_OPERATION_NOT] = fn_b_not_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_COMPARISON] = fn_cmp_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_LSL] = fn_lsl_integer;
-  m_fn_binary[EZ_BINARY_OPERATION_LSR] = fn_lsr_integer;
-  m_fn_unary[EZ_UNARY_OPERATION_NEGATE] = fn_neg_integer;
+  m_fn_binary = fn_binary_integer;
+  m_fn_unary = fn_unary_integer;
 }
 
 ezValue *ezInteger::condition(void) {
   return new ezCondition(value ? false : true, (value < 0) ? true : false,
                          false, false);
+}
+
+void ezInteger::set_operation(ezBinaryOperation op, ezValueType type,
+                              fnBinaryOperation *fn) {
+  if (!fn)
+    throw runtime_error("null function is not allowed");
+  fn_binary_integer[op][type] = fn;
+}
+
+void ezInteger::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
+  if (!fn)
+    throw runtime_error("null function is not allowed");
+  fn_unary_integer[op] = fn;
 }
