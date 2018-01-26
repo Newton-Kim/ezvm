@@ -382,6 +382,8 @@ public:
   */
   void bitwise_xor(const ezAddress dest, const ezAddress cond,
                    const ezAddress &lsrc, const ezAddress &rsrc);
+
+  void user_command(ezInstruction* inst);
 };
 
 /**

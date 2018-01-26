@@ -8,3 +8,4 @@ make install
 make dist
 copy the tar.gz file to ..
 dpkg-buildpackage -rfakeroot -b -us -uc
+

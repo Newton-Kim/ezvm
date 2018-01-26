@@ -731,6 +731,10 @@ void ezAsmProcedure::label(string name) {
   m_carousel->jmptbl.add(name, m_carousel->instruction.size());
 }
 
+void ezAsmProcedure::user_command(ezInstruction* inst) {
+  m_carousel->instruction.push_back(inst);
+}
+
 ezASM::ezASM(ezAddress &entry)
     : m_entry(entry), m_constants(ezMemory::instance().constants()),
       m_globals(ezMemory::instance().globals()), m_gc(ezGC::instance()) {}
