@@ -88,7 +88,7 @@ void ezStackFrame::operate(ezBinaryOperation op, ezAddress &dest,
   ezValue *vr = NULL, *vl = NULL;
   vl = addr2val(src1);
   vr = addr2val(src2);
-  rst = vl->operate(op, vr);
+  rst = (vl->type >= vr->type) ? vl->operate(op, vr) : vr->operate(op, vl, true);
   val2addr(dest, rst);
 }
 

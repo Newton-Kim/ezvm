@@ -125,8 +125,8 @@ ezValue *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
-ezValue *ezValue::operate(ezBinaryOperation op, ezValue *v) {
-  return m_fn_binary[op][v->type](this, v);
+ezValue *ezValue::operate(ezBinaryOperation op, ezValue *v, bool flip) {
+  return m_fn_binary[op][v->type](this, v, flip);
 }
 
 ezValue *ezValue::operate(ezUnaryOperation op) { return m_fn_unary[op](this); }

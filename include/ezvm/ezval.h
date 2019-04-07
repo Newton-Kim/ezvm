@@ -38,15 +38,15 @@ using namespace std;
 
 enum ezValueType {
   EZ_VALUE_TYPE_NULL = 0,
-  EZ_VALUE_TYPE_CONDITION,
   EZ_VALUE_TYPE_BOOL,
   EZ_VALUE_TYPE_INTEGER,
   EZ_VALUE_TYPE_FLOAT,
   EZ_VALUE_TYPE_COMPLEX,
   EZ_VALUE_TYPE_STRING,
-  EZ_VALUE_TYPE_FUNCTION,
-  EZ_VALUE_TYPE_USER_DEFINED_FUNCTION,
   EZ_VALUE_TYPE_USER_DEFINED_VALUE,
+  EZ_VALUE_TYPE_USER_DEFINED_FUNCTION,
+  EZ_VALUE_TYPE_CONDITION,
+  EZ_VALUE_TYPE_FUNCTION,
   EZ_VALUE_TYPE_MAX
 };
 
@@ -74,10 +74,10 @@ enum ezBinaryOperation {
 
 class ezValue;
 
-ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr);
+ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip);
 ezValue *fn_unary_generic_error(ezValue *v);
 
-typedef ezValue *fnBinaryOperation(ezValue *, ezValue *);
+typedef ezValue *fnBinaryOperation(ezValue *, ezValue *, bool flip);
 typedef ezValue *fnUnaryOperation(ezValue *);
 
 class ezValue : public ezGCObject {
@@ -92,7 +92,7 @@ public:
 
   virtual ezValue *condition(void);
 
-  ezValue *operate(ezBinaryOperation op, ezValue *v);
+  ezValue *operate(ezBinaryOperation op, ezValue *v, bool flip = false);
   ezValue *operate(ezUnaryOperation op);
 };
 

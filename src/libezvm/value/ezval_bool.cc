@@ -27,101 +27,65 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_compare_bool_bool(ezValue *vl, ezValue *vr) {
+static ezValue *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezBool *)vr)->value;
   return new ezBool(!(bvl ^ bvr));
 }
 
-static ezValue *fn_compare_bool_integer(ezValue *vl, ezValue *vr) {
+static ezValue *fn_compare_bool_integer(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezInteger *)vr)->value ? true : false;
   return new ezBool(bvl == bvr);
 }
 
-static ezValue *fn_compare_bool_float(ezValue *vl, ezValue *vr) {
+static ezValue *fn_compare_bool_float(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezFloat *)vr)->value ? true : false;
   return new ezBool(bvl == bvr);
 }
 
-static ezValue *fn_compare_bool_complex(ezValue *vl, ezValue *vr) {
+static ezValue *fn_compare_bool_complex(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = abs(((ezFloat *)vr)->value) ? true : false;
   return new ezBool(bvl == bvr);
 }
 
-static fnBinaryOperation *fn_add_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_add_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_sub_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_sub_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_mul_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_mul_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_div_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_div_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_mod_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_mod_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_pow_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_pow_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_cmp_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_compare_bool_bool,
-    fn_compare_bool_integer, fn_compare_bool_float,   fn_compare_bool_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_cmp_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_compare_bool_bool};
 
-static fnBinaryOperation *fn_b_and_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_b_and_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_b_or_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_b_or_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_b_xor_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_b_xor_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_lsl_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_lsl_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_lsr_bool[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_lsr_bool[EZ_VALUE_TYPE_BOOL + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error};
 
 static fnBinaryOperation **fn_binary_bool[EZ_BINARY_OPERATION_MAX] = {
     fn_add_bool,  fn_cmp_bool,   fn_sub_bool, fn_mul_bool,

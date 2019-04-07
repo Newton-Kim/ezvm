@@ -25,6 +25,7 @@
 */
 #include "ezvm/ezaddr.h"
 #include "parse.hh"
+#include <cstring>
 %}
 
 %option yylineno
