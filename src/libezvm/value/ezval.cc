@@ -27,7 +27,7 @@
 #include <sstream>
 #include <stdexcept>
 
-ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr) {
+ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip) {
   throw runtime_error("the operation with given type is not supported");
 }
 

@@ -27,157 +27,85 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_add_float_integer(ezValue *vl, ezValue *vr) {
+static ezValue *fn_add_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value + ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_add_float_float(ezValue *vl, ezValue *vr) {
+static ezValue *fn_add_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value + ((ezFloat *)vr)->value);
 }
 
-static ezValue *fn_add_float_complex(ezValue *vl, ezValue *vr) {
-  complex<double> vp = ((ezComplex *)vr)->value;
-  return new ezComplex(
-      complex<double>(((ezFloat *)vl)->value + vp.real(), vp.imag()));
+static ezValue *fn_sub_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? ((ezInteger*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_sub_float_integer(ezValue *vl, ezValue *vr) {
-  return new ezFloat(((ezFloat *)vl)->value - ((ezInteger *)vr)->value);
+static ezValue *fn_sub_float_float(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? ((ezFloat*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezFloat*)vr)->value;
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_sub_float_float(ezValue *vl, ezValue *vr) {
-  return new ezFloat(((ezFloat *)vl)->value - ((ezFloat *)vr)->value);
-}
-
-static ezValue *fn_sub_float_complex(ezValue *vl, ezValue *vr) {
-  complex<double> vp = ((ezComplex *)vr)->value;
-  return new ezComplex(
-      complex<double>(((ezFloat *)vl)->value - vp.real(), -vp.imag()));
-}
-
-static ezValue *fn_mul_float_integer(ezValue *vl, ezValue *vr) {
+static ezValue *fn_mul_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value * ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_mul_float_float(ezValue *vl, ezValue *vr) {
+static ezValue *fn_mul_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value * ((ezFloat *)vr)->value);
 }
 
-static ezValue *fn_mul_float_complex(ezValue *vl, ezValue *vr) {
-  complex<double> vp = ((ezComplex *)vr)->value;
-  return new ezComplex(complex<double>(((ezFloat *)vl)->value * vp.real(),
-                                       ((ezFloat *)vl)->value * vp.imag()));
+static ezValue *fn_div_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? ((ezInteger*)vr)->value / ((ezFloat*)vl)->value: ((ezFloat *)vl)->value / ((ezInteger*)vr)->value;
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_div_float_integer(ezValue *vl, ezValue *vr) {
-  return new ezFloat(((ezFloat *)vl)->value / ((ezInteger *)vr)->value);
+static ezValue *fn_div_float_float(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? ((ezFloat*)vr)->value / ((ezFloat*)vl)->value: ((ezFloat *)vl)->value / ((ezFloat*)vr)->value;
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_div_float_float(ezValue *vl, ezValue *vr) {
-  return new ezFloat(((ezFloat *)vl)->value / ((ezFloat *)vr)->value);
+static ezValue *fn_pow_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? pow(((ezInteger*)vr)->value, ((ezFloat*)vl)->value): pow(((ezFloat *)vl)->value, ((ezInteger *)vr)->value);
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_div_float_complex(ezValue *vl, ezValue *vr) {
-  complex<double> vp(((ezFloat *)vl)->value, 0);
-  return new ezComplex(vp * ((ezComplex *)vr)->value);
+static ezValue *fn_pow_float_float(ezValue *vl, ezValue *vr, bool flip) {
+  double ret = (flip) ? pow(((ezFloat*)vr)->value, ((ezFloat*)vl)->value): pow(((ezFloat *)vl)->value, ((ezFloat *)vr)->value);
+  return new ezFloat(ret);
 }
 
-static ezValue *fn_pow_float_integer(ezValue *vl, ezValue *vr) {
-  return new ezFloat(pow(((ezFloat *)vl)->value, ((ezInteger *)vr)->value));
-}
-
-static ezValue *fn_pow_float_float(ezValue *vl, ezValue *vr) {
-  return new ezFloat(pow(((ezFloat *)vl)->value, ((ezFloat *)vr)->value));
-}
-
-static ezValue *fn_pow_float_complex(ezValue *vl, ezValue *vr) {
-  return new ezComplex(pow(((ezFloat *)vl)->value, ((ezComplex *)vr)->value));
-}
-
-static ezValue *fn_cmp_float_integer(ezValue *vl, ezValue *vr) {
+static ezValue *fn_cmp_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezBool(((ezFloat *)vl)->value == ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_cmp_float_float(ezValue *vl, ezValue *vr) {
+static ezValue *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezBool(((ezFloat *)vl)->value == ((ezFloat *)vr)->value);
 }
 
-static fnBinaryOperation *fn_add_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_add_float_integer,    fn_add_float_float,      fn_add_float_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_add_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_add_float_integer,    fn_add_float_float};
 
-static fnBinaryOperation *fn_sub_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_sub_float_integer,    fn_sub_float_float,      fn_sub_float_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_sub_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_sub_float_integer,    fn_sub_float_float};
 
-static fnBinaryOperation *fn_mul_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_mul_float_integer,    fn_mul_float_float,      fn_mul_float_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_mul_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_mul_float_integer,    fn_mul_float_float};
 
-static fnBinaryOperation *fn_div_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_div_float_integer,    fn_div_float_float,      fn_div_float_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_div_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_div_float_integer,    fn_div_float_float};
 
-static fnBinaryOperation *fn_mod_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_default_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error};
 
-static fnBinaryOperation *fn_pow_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_pow_float_integer,    fn_pow_float_float,      fn_pow_float_complex,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_pow_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_pow_float_integer,    fn_pow_float_float};
 
-static fnBinaryOperation *fn_cmp_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_cmp_float_integer,    fn_cmp_float_float,      fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_and_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_or_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_xor_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsl_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsr_float[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
+static fnBinaryOperation *fn_cmp_float[EZ_VALUE_TYPE_FLOAT + 1] = {
+    fn_binary_generic_error, fn_binary_generic_error, fn_cmp_float_integer,    fn_cmp_float_float};
 
 static fnBinaryOperation **fn_binary_float[EZ_BINARY_OPERATION_MAX] = {
     fn_add_float,  fn_cmp_float,   fn_sub_float, fn_mul_float,
-    fn_div_float,  fn_mod_float,   fn_pow_float, fn_b_and_float,
-    fn_b_or_float, fn_b_xor_float, fn_lsl_float, fn_lsr_float};
+    fn_div_float,  fn_default_float,   fn_pow_float, fn_default_float,
+    fn_default_float, fn_default_float, fn_default_float, fn_default_float};
 
 static ezValue *fn_neg_float(ezValue *v) {
   return new ezFloat(((ezFloat *)v)->value);
