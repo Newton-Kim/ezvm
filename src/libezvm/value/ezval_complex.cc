@@ -109,7 +109,7 @@ static ezValue *fn_pow_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_cmp_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezBool(((ezComplex *)vl)->value == ((ezComplex *)vr)->value);
+  return new ezCondition(((ezComplex *)vl)->value == ((ezComplex *)vr)->value, false, false, false);
 }
 
 static fnBinaryOperation *fn_add_complex[EZ_VALUE_TYPE_COMPLEX + 1] = {

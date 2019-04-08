@@ -74,11 +74,13 @@ static ezValue *fn_pow_float_float(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_cmp_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezBool(((ezFloat *)vl)->value == ((ezInteger *)vr)->value);
+  double ret = (flip) ? ((ezInteger*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
+  return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
 static ezValue *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezBool(((ezFloat *)vl)->value == ((ezFloat *)vr)->value);
+  double ret = (flip) ? ((ezFloat*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezFloat*)vr)->value;
+  return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
 static fnBinaryOperation *fn_add_float[EZ_VALUE_TYPE_FLOAT + 1] = {

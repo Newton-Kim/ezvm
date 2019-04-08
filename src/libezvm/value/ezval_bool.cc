@@ -30,25 +30,7 @@
 static ezValue *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezBool *)vr)->value;
-  return new ezBool(!(bvl ^ bvr));
-}
-
-static ezValue *fn_compare_bool_integer(ezValue *vl, ezValue *vr, bool flip) {
-  bool bvl = ((ezBool *)vl)->value;
-  bool bvr = ((ezInteger *)vr)->value ? true : false;
-  return new ezBool(bvl == bvr);
-}
-
-static ezValue *fn_compare_bool_float(ezValue *vl, ezValue *vr, bool flip) {
-  bool bvl = ((ezBool *)vl)->value;
-  bool bvr = ((ezFloat *)vr)->value ? true : false;
-  return new ezBool(bvl == bvr);
-}
-
-static ezValue *fn_compare_bool_complex(ezValue *vl, ezValue *vr, bool flip) {
-  bool bvl = ((ezBool *)vl)->value;
-  bool bvr = abs(((ezFloat *)vr)->value) ? true : false;
-  return new ezBool(bvl == bvr);
+  return new ezCondition(!(bvl ^ bvr), false, false, false);
 }
 
 static fnBinaryOperation *fn_add_bool[EZ_VALUE_TYPE_BOOL + 1] = {

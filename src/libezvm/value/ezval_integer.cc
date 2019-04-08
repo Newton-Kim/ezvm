@@ -78,7 +78,8 @@ static ezValue *fn_pow_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_cmp_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezBool(((ezInteger *)vl)->value == ((ezInteger *)vr)->value);
+  int ret = (flip) ? ((ezInteger *)vr)->value - ((ezInteger *)vl)->value : ((ezInteger *)vl)->value - ((ezInteger *)vr)->value;
+  return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
 static fnBinaryOperation *fn_add_integer[EZ_VALUE_TYPE_INTEGER + 1] = {

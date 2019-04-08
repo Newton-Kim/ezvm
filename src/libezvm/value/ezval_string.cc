@@ -69,7 +69,7 @@ static ezValue *fn_add_string_string(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_compare_string_string(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezBool(((ezString *)vl)->value == ((ezString *)vr)->value);
+  return new ezCondition(((ezString *)vl)->value == ((ezString *)vr)->value, false, false, false);
 }
 
 static fnBinaryOperation *fn_add_string[EZ_VALUE_TYPE_MAX] = {
