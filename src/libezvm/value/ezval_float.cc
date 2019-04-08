@@ -1,27 +1,27 @@
 /* Copyright (C) 2015 Newton Kim
-*
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditiong:
-*
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*
-*/
+ *
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditiong:
+ *
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 #include "ezvm/ezval.h"
 #include <iostream>
 #include <sstream>
@@ -36,12 +36,14 @@ static ezValue *fn_add_float_float(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_sub_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezInteger*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
+  double ret = (flip) ? ((ezInteger *)vr)->value - ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
   return new ezFloat(ret);
 }
 
 static ezValue *fn_sub_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezFloat*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezFloat*)vr)->value;
+  double ret = (flip) ? ((ezFloat *)vr)->value - ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value - ((ezFloat *)vr)->value;
   return new ezFloat(ret);
 }
 
@@ -54,59 +56,72 @@ static ezValue *fn_mul_float_float(ezValue *vl, ezValue *vr, bool flip) {
 }
 
 static ezValue *fn_div_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezInteger*)vr)->value / ((ezFloat*)vl)->value: ((ezFloat *)vl)->value / ((ezInteger*)vr)->value;
+  double ret = (flip) ? ((ezInteger *)vr)->value / ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value / ((ezInteger *)vr)->value;
   return new ezFloat(ret);
 }
 
 static ezValue *fn_div_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezFloat*)vr)->value / ((ezFloat*)vl)->value: ((ezFloat *)vl)->value / ((ezFloat*)vr)->value;
+  double ret = (flip) ? ((ezFloat *)vr)->value / ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value / ((ezFloat *)vr)->value;
   return new ezFloat(ret);
 }
 
 static ezValue *fn_pow_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? pow(((ezInteger*)vr)->value, ((ezFloat*)vl)->value): pow(((ezFloat *)vl)->value, ((ezInteger *)vr)->value);
+  double ret = (flip) ? pow(((ezInteger *)vr)->value, ((ezFloat *)vl)->value)
+                      : pow(((ezFloat *)vl)->value, ((ezInteger *)vr)->value);
   return new ezFloat(ret);
 }
 
 static ezValue *fn_pow_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? pow(((ezFloat*)vr)->value, ((ezFloat*)vl)->value): pow(((ezFloat *)vl)->value, ((ezFloat *)vr)->value);
+  double ret = (flip) ? pow(((ezFloat *)vr)->value, ((ezFloat *)vl)->value)
+                      : pow(((ezFloat *)vl)->value, ((ezFloat *)vr)->value);
   return new ezFloat(ret);
 }
 
 static ezValue *fn_cmp_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezInteger*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
+  double ret = (flip) ? ((ezInteger *)vr)->value - ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
   return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
 static ezValue *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  double ret = (flip) ? ((ezFloat*)vr)->value - ((ezFloat*)vl)->value: ((ezFloat *)vl)->value - ((ezFloat*)vr)->value;
+  double ret = (flip) ? ((ezFloat *)vr)->value - ((ezFloat *)vl)->value
+                      : ((ezFloat *)vl)->value - ((ezFloat *)vr)->value;
   return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
 static fnBinaryOperation *fn_add_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_add_float_integer,    fn_add_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_add_float_integer,
+    fn_add_float_float};
 
 static fnBinaryOperation *fn_sub_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_sub_float_integer,    fn_sub_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_sub_float_integer,
+    fn_sub_float_float};
 
 static fnBinaryOperation *fn_mul_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_mul_float_integer,    fn_mul_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_mul_float_integer,
+    fn_mul_float_float};
 
 static fnBinaryOperation *fn_div_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_div_float_integer,    fn_div_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_div_float_integer,
+    fn_div_float_float};
 
 static fnBinaryOperation *fn_default_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error};
+    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
+    fn_binary_generic_error};
 
 static fnBinaryOperation *fn_pow_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_pow_float_integer,    fn_pow_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_pow_float_integer,
+    fn_pow_float_float};
 
 static fnBinaryOperation *fn_cmp_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_cmp_float_integer,    fn_cmp_float_float};
+    fn_binary_generic_error, fn_binary_generic_error, fn_cmp_float_integer,
+    fn_cmp_float_float};
 
 static fnBinaryOperation **fn_binary_float[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_float,  fn_cmp_float,   fn_sub_float, fn_mul_float,
-    fn_div_float,  fn_default_float,   fn_pow_float, fn_default_float,
+    fn_add_float,     fn_cmp_float,     fn_sub_float,     fn_mul_float,
+    fn_div_float,     fn_default_float, fn_pow_float,     fn_default_float,
     fn_default_float, fn_default_float, fn_default_float, fn_default_float};
 
 static ezValue *fn_neg_float(ezValue *v) {

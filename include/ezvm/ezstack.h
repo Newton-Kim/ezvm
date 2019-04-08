@@ -1,27 +1,27 @@
 /* Copyright (C) 2015 Newton Kim
-*
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditiong:
-*
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*
-*/
+ *
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditiong:
+ *
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 #pragma once
 
 #include "ezaddr.h"
@@ -42,75 +42,75 @@ public:
 };
 
 /**
-* @brief contains data for representing a procedure in action.
-*/
+ * @brief contains data for representing a procedure in action.
+ */
 class ezStackFrame : public ezGCObject {
 private:
   /**
-  * @brief is a program counter.
-  */
+   * @brief is a program counter.
+   */
   size_t m_pc;
   /**
-  * @brief is a pointer to a carousel.
-  */
+   * @brief is a pointer to a carousel.
+   */
   ezFunction *m_carousel;
   /**
-  * @brief is a local segment.
-  */
+   * @brief is a local segment.
+   */
   vector<ezValue *> *m_local;
   /**
-  * @brief is a scope segment.
-  */
+   * @brief is a scope segment.
+   */
   vector<ezValue *> *m_scope;
   /**
-  * @brief is a collection of return values.
-  */
+   * @brief is a collection of return values.
+   */
   vector<ezValue *> m_returns;
   /**
-  * @brief is a collection of addresses where the result values place.
-  */
+   * @brief is a collection of addresses where the result values place.
+   */
   vector<ezAddress> m_return_dest;
   ezStackFrameCallback *m_callback;
   vector<vector<ezValue *> *> m_memory;
   void addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr);
   /**
-  * @brief fetches a value from an address.
-  *
-  * @param addr is an address.
-  *
-  * @return A value.
-  */
+   * @brief fetches a value from an address.
+   *
+   * @param addr is an address.
+   *
+   * @return A value.
+   */
   ezValue *addr2val(ezAddress addr);
   /**
-  * @brief places a value at an address.
-  *
-  * @param addr is an address to place v.
-  * @param v is a value.
-  */
+   * @brief places a value at an address.
+   *
+   * @param addr is an address to place v.
+   * @param v is a value.
+   */
   void val2addr(ezAddress addr, ezValue *v);
   /**
-  * @brief places values at respective addresses.
-  *
-  * @param addr is an array of addresses.
-  * @param v is an array of values.
-  */
+   * @brief places values at respective addresses.
+   *
+   * @param addr is an array of addresses.
+   * @param v is an array of values.
+   */
   void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
   /**
-  * @brief invokes a native carousel.
-  *
-  * @param func is a pointer to a native carousel.
-  * @param nargs is a number of arguments which follows the func.
-  * @param nrets is a number of return addresses which follows the arguments.
-  */
+   * @brief invokes a native carousel.
+   *
+   * @param func is a pointer to a native carousel.
+   * @param nargs is a number of arguments which follows the func.
+   * @param nrets is a number of return addresses which follows the arguments.
+   */
   void call(ezUserDefinedFunction *func, vector<ezValue *> &args,
             vector<ezAddress> &rets);
   /**
-  * @brief invokes a carousel.
-  *
-  * @param func is a pointer to a native carousel.
-  * @param nargs is a number of arguments which follows the func.
-  * @param nrets is a number of return addresses which follows the arguments.
-  */
+   * @brief invokes a carousel.
+   *
+   * @param func is a pointer to a native carousel.
+   * @param nargs is a number of arguments which follows the func.
+   * @param nrets is a number of return addresses which follows the arguments.
+   */
   void call(ezFunction *func, vector<ezValue *> &args, vector<ezAddress> &rets);
   void conditional_bra(ezAddress &cond, size_t index,
                        function<bool(ezCondition *)> func);
@@ -154,15 +154,15 @@ private:
 
 public:
   /**
-  * @brief constructs the instance with a carousel.
-  *
-  * @param crsl is a pointer to a carousel.
-  */
+   * @brief constructs the instance with a carousel.
+   *
+   * @param crsl is a pointer to a carousel.
+   */
   ezStackFrame(ezFunction *crsl, vector<ezValue *> &args,
                vector<ezAddress> &rets, ezStackFrameCallback *callback);
   /**
-  * @brief is a destructor.
-  */
+   * @brief is a destructor.
+   */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
   void update(vector<ezAddress> &dests, vector<ezValue *> &vals);
