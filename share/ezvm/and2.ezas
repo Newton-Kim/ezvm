@@ -10,12 +10,3 @@
 	:int_zero
 	call _stdout ( r2 " is zero value")
 	:int_end
-	mv r0 r1 , true false
-	and r2, r0 r1
-	beq r3 _bool_zero
-	call _stdout ( r2 " is true")
-	bra _bool_end
-	:bool_zero
-	call _stdout ( r2 " is false")
-	:bool_end
-

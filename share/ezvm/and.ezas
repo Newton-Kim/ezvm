@@ -7,16 +7,3 @@
 	mv r0 r1 , 3 4
 	and r2, r0 r1
 	call _stdout ( r0 " and " r1 " == " r2)
-	mv r0 r1 , true false
-	and r2, r0 r1
-	call _stdout ( r0 " and " r1 " == " r2)
-	mv r0 r1 , false true
-	and r2, r0 r1
-	call _stdout ( r0 " and " r1 " == " r2)
-	mv r0 r1 , false false
-	and r2, r0 r1
-	call _stdout ( r0 " and " r1 " == " r2)
-	mv r0 r1 , true true
-	and r2, r0 r1
-	call _stdout ( r0 " and " r1 " == " r2)
-
