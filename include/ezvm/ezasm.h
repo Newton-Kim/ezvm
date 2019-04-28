@@ -56,6 +56,8 @@ private:
    * @brief is an instance of a carousel.
    */
   ezFunction *m_carousel;
+  size_t m_local_index;
+  map<string, size_t> m_locals;
   void instruction_with_unary_argument(
       function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,

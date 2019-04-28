@@ -35,88 +35,21 @@ ezValue *fn_unary_generic_error(ezValue *v) {
   throw runtime_error("the operation with given type is not supported");
 }
 
-static fnBinaryOperation *fn_add_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_sub_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_mul_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_div_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_mod_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_pow_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_cmp_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_and_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_or_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_xor_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsl_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsr_generic[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error};
-
-static fnBinaryOperation **fn_binary_generic[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_generic,  fn_cmp_generic,   fn_sub_generic, fn_mul_generic,
-    fn_div_generic,  fn_mod_generic,   fn_pow_generic, fn_b_and_generic,
-    fn_b_or_generic, fn_b_xor_generic, fn_lsl_generic, fn_lsr_generic};
+static fnBinaryOperation *fn_binary_generic[EZ_BINARY_OPERATION_MAX][EZ_VALUE_TYPE_MAX];
 
 static fnUnaryOperation *fn_unary_generic[EZ_UNARY_OPERATION_MAX] = {
     fn_unary_generic_error, fn_unary_generic_error};
 
 ezValue::ezValue(const ezValueType tp)
-    : m_fn_binary(fn_binary_generic), m_fn_unary(fn_unary_generic), type(tp) {
+    : m_fn_binary((fnBinaryOperation***)fn_binary_generic), m_fn_unary(fn_unary_generic), type(tp) {
+  static bool s_fn_operation_initialised = false;
+  if(false == s_fn_operation_initialised) {
+    for(unsigned int cnt_op = 0 ; cnt_op < EZ_BINARY_OPERATION_MAX ; cnt_op++) {
+      for(unsigned int cnt_v = 0 ; cnt_v < EZ_VALUE_TYPE_MAX ; cnt_v++) {
+        fn_binary_generic[cnt_op][cnt_v] = fn_binary_generic_error;
+      }
+    }
+  }
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}

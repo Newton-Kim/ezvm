@@ -62,14 +62,16 @@ using namespace std;
 #define EZ_OP_WAIT "wait"
 #define EZ_OP_XOR "xor"
 
-ezAsmProcedure::ezAsmProcedure(ezFunction *carousel) : m_carousel(carousel) {}
+ezAsmProcedure::ezAsmProcedure(ezFunction *carousel) : m_carousel(carousel), m_local_index(0) {}
 
 void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 
 void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
 
 size_t ezAsmProcedure::local(const string value) {
-  // TODO:how to increase or set nmems and hash value.
+  if (m_locals.end() == m_locals.find(value)) m_locals[value] = m_local_index++;
+  if (m_carousel->nmems < m_local_index) m_carousel->nmems = m_local_index;
+  return m_locals[value];
 }
 
 void ezAsmProcedure::call(const ezAddress &func, vector<ezAddress> &args,
