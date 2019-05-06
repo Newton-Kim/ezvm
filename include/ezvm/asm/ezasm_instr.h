@@ -24,48 +24,20 @@
  */
 #pragma once
 
-#include "ezaddr.h"
-#include "ezfile.h"
-#include "ezgc.h"
-#include "ezinstruction.h"
-#include "eztable.h"
-#include "ezval.h"
-#include <cstddef>
+#include "ezvm/ezaddr.h"
+#include "ezvm/ezfile.h"
+#include "ezvm/ezval.h"
+#include "ezvm/ezinstruction.h"
 #include <map>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-/**
- * @brief ezAsmProcedure fills in the instance of ezFunction with respective
- * instructions.
- */
-class ezAsmProcedure {
+class ezAsmInstruction {
+friend class ezAsmProcedure;
 private:
-  /**
-   * @brief converts a local variable to respective slot index of a local
-   * segment.
-   *
-   * @param label
-   *
-   * @return The offset of a local segment
-   */
-  size_t label2index(string label);
-  /**
-   * @brief is an instance of a carousel.
-   */
-  ezFunction *m_carousel;
-  size_t m_local_index;
-  map<string, size_t> m_locals;
-  void instruction_with_unary_argument(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress src);
-  void instruction_with_unary_argument(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress cond, const ezAddress src);
+  vector<ezInstruction *> m_instruction;
   void instruction_with_binary_arguments(
       function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
@@ -75,62 +47,21 @@ private:
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
       const ezAddress dest, const ezAddress cond, const ezAddress obj,
       const ezAddress offset);
+  void instruction_with_unary_argument(
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+      const ezAddress dest, const ezAddress src);
+  void instruction_with_unary_argument(
+      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
+      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
+      const ezAddress dest, const ezAddress cond, const ezAddress src);
   void branch_instruction(
       function<void(ezStackFrame &stk, ezInstruction &arg)> func,
       function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress cond, string label);
-
+      const ezAddress cond, size_t offset);
 public:
-  /**
-   * @brief is a constructor.
-   *
-   * @param carousel is a pointer to a carousel.
-   */
-  ezAsmProcedure(ezFunction *carousel);
-  void args(size_t args);
-  /**
-   * @brief mems the local memory.
-   *
-   * @param mems is a new size. if the size of the local memory is greater than
-   * mems. the size is not changed.
-   */
-  void mems(size_t mems);
-  size_t local(const string value);
-  /**
-   * @brief creates a call instruction. See call of ezas.
-   *
-   * @param func An address of a function to call
-   * @param args Arguments which are passed to the function
-   * @param rets Addresses which the return values of the function are stored.
-   */
-  void call(const ezAddress &func, vector<ezAddress> &args,
-            vector<ezAddress> &rets);
-  /**
-   * @brief creates a thd instruction. See thd of ezas.
-   *
-   * @param func An address of a function to call
-   * @param args Arguments which are passed to the function
-   * @param rets An address to the handle (1st arguemtn) and addresses which the
-   * return values of the function are stored.
-   */
-  void thd(const ezAddress &func, vector<ezAddress> &args,
-           vector<ezAddress> &rets, const ezAddress &handle);
-  void wait(const ezAddress &handle);
-  void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
-  /**
-   * @brief creates a mv instruction. See mv of ezas.
-   *
-   * @param dest Destination addresses which the values of src are stored.
-   * @param src Addresses of source values.
-   */
-  void mv(vector<ezAddress> &dest, vector<ezAddress> &src);
-  void mv(ezAddress &dest, ezAddress &src);
-  void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
-           const ezAddress offset);
-  void lsr(const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj,
-           const ezAddress offset);
+  ezAsmInstruction();
+  virtual ~ezAsmInstruction();
   /**
    * @brief creates an add instruction. See add of ezas.
    *
@@ -168,62 +99,60 @@ public:
   void bitwise_and(const ezAddress dest, const ezAddress cond,
                    const ezAddress &lsrc, const ezAddress &rsrc);
   /**
-   * @brief creates an pow instruction. See pow of ezas.
-   *
-   * @param dest An address which the sum is stored.
-   * @param lsrc Addresses of base.
-   * @param rsrc Addresses of exponent.
-   */
-  void powv(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
-  /**
-   * @brief creates an add instruction. See pow of ezas.
-   *
-   * @param dest An address which the sum is stored.
-   * @param cond An address which the condition is stored.
-   * @param lsrc Addresses of base.
-   * @param rsrc Addresses of exponent.
-   */
-  void powv(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
-            const ezAddress &rsrc);
-  /**
    * @brief creates an conditional branching instruction. See beq of ezas.
    *
    * @param cond is a condition left by respective instruction.
-   * @param label is a tag which the process count jumps when cond meets
+   * @param offset is a tag which the process count jumps when cond meets
    * zero-condition.
    */
-  void beq(const ezAddress cond, string label);
+  void beq(const ezAddress cond, size_t offset);
   /**
    * @brief creates an conditional branching instruction. See bge of ezas.
    *
    * @param cond is a condition left by respective instruction.
-   * @param label is a tag which the process count jumps when cond meets
+   * @param offset is a tag which the process count jumps when cond meets
    * greather or equal-condition.
    */
-  void bge(const ezAddress cond, string label);
+  void bge(const ezAddress cond, size_t offset);
   /**
    * @brief creates an conditional branching instruction. See blt of ezas.
    *
    * @param cond is a condition left by respective instruction.
-   * @param label is a tag which the process count jumps when cond meets
+   * @param offset is a tag which the process count jumps when cond meets
    * negative-condition.
    */
-  void blt(const ezAddress cond, string label);
+  void blt(const ezAddress cond, size_t offset);
   /**
    * @brief creates an conditional branching instruction. See bne of ezas.
    *
    * @param cond is a condition left by respective instruction.
-   * @param label is a tag which the process count jumps when cond meets
+   * @param offset is a tag which the process count jumps when cond meets
    * non-zero-condition.
    */
-  void bne(const ezAddress cond, string label);
+  void bne(const ezAddress cond, size_t offset);
   /**
    * @brief creates an unconditional branching instruction. See bra of ezas.
    *
-   * @param label is a tag which the process count jumps.
+   * @param offset is a tag which the process count jumps.
    */
-  void bra(string label);
+  void bra(size_t offset);
   /**
+   * @brief creates a call instruction. See call of ezas.
+   *
+   * @param func An address of a function to call
+   * @param args Arguments which are passed to the function
+   * @param rets Addresses which the return values of the function are stored.
+   */
+  void call(const ezAddress &func, vector<ezAddress> &args,
+            vector<ezAddress> &rets);
+  void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
+  /**
+   * @brief creates a mv instruction. See mv of ezas.
+   *
+   * @param dest Destination addresses which the values of src are stored.
+   * @param src Addresses of source values.
+   */
+ /**
    * @brief creates an div instruction. See div of ezas.
    *
    * @param dest An address which the product is stored.
@@ -243,11 +172,18 @@ public:
            const ezAddress &rsrc);
   void fgc(void);
   /**
-   * @brief tags the address with the name.
+   * @brief creates an pow instruction. See pow of ezas.
    *
-   * @param name is a symbol of the address.
+   * @param dest An address which the sum is stored.
+   * @param lsrc Addresses of base.
+   * @param rsrc Addresses of exponent.
    */
-  void label(string name);
+  void lsl(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void lsl(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+           const ezAddress offset);
+  void lsr(const ezAddress dest, const ezAddress obj, const ezAddress offset);
+  void lsr(const ezAddress dest, const ezAddress cond, const ezAddress obj,
+           const ezAddress offset);
   /**
    * @brief creates a mod instruction. See mod of ezas.
    *
@@ -284,6 +220,8 @@ public:
    */
   void mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
+  void mv(vector<ezAddress> &dest, vector<ezAddress> &src);
+  void mv(ezAddress &dest, ezAddress &src);
   /**
    * @brief creates a neg instruction. See neg of ezas.
    *
@@ -334,6 +272,17 @@ public:
    */
   void bitwise_or(const ezAddress dest, const ezAddress cond,
                   const ezAddress &lsrc, const ezAddress &rsrc);
+  void powv(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
+  /**
+   * @brief creates an add instruction. See pow of ezas.
+   *
+   * @param dest An address which the sum is stored.
+   * @param cond An address which the condition is stored.
+   * @param lsrc Addresses of base.
+   * @param rsrc Addresses of exponent.
+   */
+  void powv(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
+            const ezAddress &rsrc);
   void ret(void);
   void ret(vector<ezAddress> &src);
   /**
@@ -359,12 +308,23 @@ public:
   void tge(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tge(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
+  /**
+   * @brief creates a thd instruction. See thd of ezas.
+   *
+   * @param func An address of a function to call
+   * @param args Arguments which are passed to the function
+   * @param rets An address to the handle (1st arguemtn) and addresses which the
+   * return values of the function are stored.
+   */
+  void thd(const ezAddress &func, vector<ezAddress> &args,
+           vector<ezAddress> &rets, const ezAddress &handle);
   void tlt(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tlt(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
   void tne(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tne(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
+  void wait(const ezAddress &handle);
   /**
    * @brief creates a bitwise XOR instruction. See xor of ezas.
    *
@@ -383,133 +343,6 @@ public:
    */
   void bitwise_xor(const ezAddress dest, const ezAddress cond,
                    const ezAddress &lsrc, const ezAddress &rsrc);
-
   void user_command(ezInstruction *inst);
-};
-
-/**
- * @brief ezASM alters the states of ezVM.
- */
-class ezASM {
-private:
-  /**
-   * @brief A reference to a procedure entry point
-   */
-  ezAddress &m_entry;
-  /**
-   * @brief A symbol of the entry point
-   */
-  string m_entry_string;
-  /**
-   * @brief A reference to a constant segment
-   */
-  vector<ezValue *> &m_constants;
-  /**
-   * @brief A reference to a global segment
-   */
-  ezTable<string, ezValue *> &m_globals;
-  ezGC &m_gc;
-  map<size_t, ezTable<string, ezValue *> *> m_scopes;
-
-public:
-  /**
-   * @brief is a constructor.
-   *
-   * @param entry is a reference to an entry point.
-   * @param constants is a reference to a constant memory.
-   * @param globals is a reference to a global memory.
-   */
-  ezASM(ezAddress &entry);
-  /**
-   * @brief is a destructor.
-   */
-  ~ezASM();
-  /**
-   * @brief load intrinsic functions.
-   *
-   * @param symtab is an array of symbols respective to constants.
-   * @param constants is an array of intrinsic functions.
-   */
-  void load_intrinsics(char **symtab, ezValue **constants);
-  /**
-   * @brief sets an entry point.
-   *
-   * @param name is a symbol of the entry point.
-   */
-  void entry(const string name);
-  /**
-   * @brief sets the global memory slot.
-   *
-   * @param name is the name of the slot.
-   */
-  void reset(const string name);
-  /**
-   * @brief creates a new procedure and an assembler dedicated to the procedure.
-   *
-   * @param name is the symbol of a procedure.
-   * @param argc is the number of the arguments.
-   * @param mems is the size of memories.
-   * @param scope is the identifier of the scope.
-   * @param scpkey is the reference to the scope.
-   *
-   * @return is a pointer to the assember.
-   */
-  ezAsmProcedure *new_proc(const string name, int scope, int scpkey);
-  /**
-   * @brief finds the offset of a global segment whose name is value.
-   *
-   * @param value is a symbol.
-   *
-   * @return
-   */
-  size_t global(const string value);
-  bool is_global(const string value);
-  /**
-   * @brief adds a null.
-   *
-   * @param value is a null.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant_null(void);
-  /**
-   * @brief adds a constant string.
-   *
-   * @param value is a string.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const char *value);
-  /**
-   * @brief adds a constant integer number.
-   *
-   * @param value is an integer number.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const int value);
-  /**
-   * @brief adds a constant boolean.
-   *
-   * @param value is a boolean.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const bool value);
-  /**
-   * @brief adds a constant double.
-   *
-   * @param value is a double.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const double value);
-  /**
-   * @brief adds a constant complex.
-   *
-   * @param value is a complex.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const complex<double> value);
+  size_t size(void) { return m_instruction.size(); }
 };

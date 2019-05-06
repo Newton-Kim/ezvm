@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
       break;
     case 'd':
       if (!optarg) {
-        cerr << "error: logging target is missing" << endl;
+        cerr << "error: dumping target is missing" << endl;
         return 0;
       }
       dumpsink = optarg;

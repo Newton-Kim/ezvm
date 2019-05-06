@@ -22,36 +22,35 @@
  * THE SOFTWARE.
  *
  */
-#pragma once
-#include "asm/ezasm.h"
-#include "ezdump.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include "ezval.h"
-#include <list>
-#include <string>
+
+#include "ezvm/asm/ezasm_proc.h"
+#include "ezvm/ezdump.h"
+#include "ezvm/ezstack.h"
 
 using namespace std;
 
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  ezDump *m_pdump;
-  list<ezThread *> m_threads;
+ezAsmProcedure::ezAsmProcedure(ezFunction *carousel) : m_carousel(carousel), m_local_index(0) {}
 
-public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  ezDump &dump(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezValue *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-};
+void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
+
+void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
+
+size_t ezAsmProcedure::local(const string value) {
+  if (m_locals.end() == m_locals.find(value)) m_locals[value] = m_local_index++;
+  if (m_carousel->nmems < m_local_index) m_carousel->nmems = m_local_index;
+  return m_locals[value];
+}
+
+size_t ezAsmProcedure::label2index(string label) {
+  if (!m_carousel->jmptbl.exist(label))
+    m_carousel->jmptbl.add(label, 0);
+  return m_carousel->jmptbl[label];
+}
+
+void ezAsmProcedure::label(string name, size_t offset) {
+  m_carousel->jmptbl.add(name, offset);
+}
+
+void ezAsmProcedure::append_instruction(ezAsmInstruction* instr) {
+  m_carousel->instruction.insert(m_carousel->instruction.end(), instr->m_instruction.begin(), instr->m_instruction.end());
+}

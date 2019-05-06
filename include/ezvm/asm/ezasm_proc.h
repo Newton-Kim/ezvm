@@ -23,35 +23,59 @@
  *
  */
 #pragma once
-#include "asm/ezasm.h"
-#include "ezdump.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include "ezval.h"
-#include <list>
+
+#include "ezvm/asm/ezasm_instr.h"
+#include <map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 /**
- * @brief ezVM is the VM class
+ * @brief ezAsmProcedure fills in the instance of ezFunction with respective
+ * instructions.
  */
-class ezVM : public ezGCClient, ezThreadCallback {
+class ezAsmProcedure {
 private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  ezDump *m_pdump;
-  list<ezThread *> m_threads;
+  /**
+   * @brief is an instance of a carousel.
+   */
+  ezFunction *m_carousel;
+  size_t m_local_index;
+  map<string, size_t> m_locals;
 
 public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  ezDump &dump(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezValue *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
+  /**
+   * @brief is a constructor.
+   *
+   * @param carousel is a pointer to a carousel.
+   */
+  ezAsmProcedure(ezFunction *carousel);
+  void args(size_t args);
+  /**
+   * @brief mems the local memory.
+   *
+   * @param mems is a new size. if the size of the local memory is greater than
+   * mems. the size is not changed.
+   */
+  void mems(size_t mems);
+  size_t local(const string value);
+  /**
+   * @brief tags the address with the name.
+   *
+   * @param name is a symbol of the address.
+   * @param offset is an offset of the instruction array.
+   */
+  void label(string name, size_t offset);
+  /**
+   * @brief converts a local variable to respective slot index of a local
+   * segment.
+   *
+   * @param label
+   *
+   * @return The offset of a local segment
+   */
+  size_t label2index(string label);
+  void append_instruction(ezAsmInstruction* instr);
 };
+
