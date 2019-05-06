@@ -23,7 +23,7 @@ libezvm_la_SOURCES=ezgc.cc \
 
 includedir=$(prefix)/include/ezvm
 
-include_HEADERS=../../include/ezvm/ezaddr.h \
+nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
 		../../include/ezvm/asm/ezasm_proc.h \
 		../../include/ezvm/asm/ezasm.h \
