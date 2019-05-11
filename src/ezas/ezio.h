@@ -28,5 +28,5 @@
 
 class ezIO {
 public:
-  static void load(char ***symtab, ezValue ***constants);
+  static ezIntrinsicTable *load(void);
 };

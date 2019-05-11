@@ -36,6 +36,11 @@
 
 using namespace std;
 
+typedef struct ezTagIntrinsicTable {
+  const char* name;
+  ezValue* value;
+} ezIntrinsicTable;
+
 /**
  * @brief ezASM alters the states of ezVM.
  */
@@ -79,7 +84,7 @@ public:
    * @param symtab is an array of symbols respective to constants.
    * @param constants is an array of intrinsic functions.
    */
-  void load_intrinsics(char **symtab, ezValue **constants);
+  void load_intrinsics(ezIntrinsicTable *intrinsics);
   /**
    * @brief sets an entry point.
    *

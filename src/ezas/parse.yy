@@ -394,10 +394,8 @@ extern FILE * yyin;
 
 int ezparse(FILE* fd, const string target, const string dump) {
 	{
-		char **symtab = NULL;
-		ezValue **constant = NULL;
-		ezIO::load(&symtab, &constant);
-		s_vm.assembler().load_intrinsics(symtab, constant);
+		ezIntrinsicTable *intrinsics = ezIO::load();
+		s_vm.assembler().load_intrinsics(intrinsics);
 	}
 	yyin = fd;
 	int ret = yyparse();

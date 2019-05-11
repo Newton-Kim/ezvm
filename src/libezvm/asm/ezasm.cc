@@ -36,14 +36,14 @@ ezASM::ezASM(ezAddress &entry)
 
 ezASM::~ezASM() {}
 
-void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
-  if (!symtab || !constants)
+void ezASM::load_intrinsics(ezIntrinsicTable *intrinsics) {
+  if (!intrinsics)
     throw runtime_error("entry is not found");
   map<string, size_t> *offset_symtab = new map<string, size_t>;
   /*TODO:should it be put to constant?*/
-  for (size_t i = 0; constants[i] && symtab[i]; i++) {
-    size_t offset = m_globals.add(symtab[i], constants[i]);
-    m_gc.add((ezGCObject *)constants[i]);
+  for (size_t i = 0; intrinsics[i].name; i++) {
+    size_t offset = m_globals.add(intrinsics[i].name, intrinsics[i].value);
+    m_gc.add((ezGCObject *)intrinsics[i].value);
   }
 }
 
