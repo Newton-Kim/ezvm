@@ -23,67 +23,68 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_add_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezInteger(((ezInteger *)vl)->value + ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_sub_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value - ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value - ((ezInteger *)vr)->value;
   return new ezInteger(ret);
 }
 
-static ezValue *fn_mul_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezInteger(((ezInteger *)vl)->value * ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_div_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value / ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value / ((ezInteger *)vr)->value;
   return new ezInteger(ret);
 }
 
-static ezValue *fn_mod_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mod_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value % ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value % ((ezInteger *)vr)->value;
   return new ezInteger(ret);
 }
 
-static ezValue *fn_b_and_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_b_and_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezInteger(((ezInteger *)vl)->value & ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_b_or_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_b_or_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezInteger(((ezInteger *)vl)->value | ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_b_xor_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_b_xor_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezInteger(((ezInteger *)vl)->value ^ ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_lsl_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_lsl_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value << ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value << ((ezInteger *)vr)->value;
   return new ezInteger(ret);
 }
 
-static ezValue *fn_lsr_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_lsr_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value >> ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value >> ((ezInteger *)vr)->value;
   return new ezInteger(ret);
 }
 
-static ezValue *fn_pow_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? pow(((ezInteger *)vr)->value, ((ezInteger *)vl)->value)
                    : pow(((ezInteger *)vl)->value, ((ezInteger *)vr)->value);
   return new ezComplex(ret);
 }
 
-static ezValue *fn_cmp_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_cmp_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
   int ret = (flip) ? ((ezInteger *)vr)->value - ((ezInteger *)vl)->value
                    : ((ezInteger *)vl)->value - ((ezInteger *)vr)->value;
   return new ezCondition(ret == 0, ret < 0, false, false);
@@ -147,20 +148,8 @@ ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), value(val) {
   m_fn_unary = fn_unary_integer;
 }
 
-ezValue *ezInteger::condition(void) {
+ezObject *ezInteger::condition(void) {
   return new ezCondition(value ? false : true, (value < 0) ? true : false,
                          false, false);
 }
 
-void ezInteger::set_operation(ezBinaryOperation op, ezValueType type,
-                              fnBinaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_binary_integer[op][type] = fn;
-}
-
-void ezInteger::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_unary_integer[op] = fn;
-}

@@ -51,7 +51,7 @@ ezVM::~ezVM() {
 }
 
 void ezVM::run(void) {
-  vector<ezValue *> args;
+  vector<ezObject *> args;
   vector<ezAddress> rets;
   ezGC::instance().pause();
   ezThread *thread = new ezThread(m_entry, args, rets, this);
@@ -93,7 +93,7 @@ void ezVM::on_mark(void) {
     (*it)->on_mark();
 }
 
-size_t ezVM::thd(ezAddress &func, vector<ezValue *> &args,
+size_t ezVM::thd(ezAddress &func, vector<ezObject *> &args,
                  vector<ezAddress> &rets, ezStackFrame *caller) {
   ezGC::instance().pause();
   ezThread *thread =

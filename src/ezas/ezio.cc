@@ -23,7 +23,7 @@
  *
  */
 #include "ezio.h"
-#include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -34,17 +34,18 @@ private:
 
 public:
   ezIoPrint(ostream &io);
-  void run(vector<ezValue *> &args, vector<ezValue *> &rets);
+  void run(vector<ezObject *> &args, vector<ezObject *> &rets);
 };
 
 ezIoPrint::ezIoPrint(ostream &io) : ezUserDefinedFunction(), m_io(io) {}
 
-void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
+void ezIoPrint::run(vector<ezObject *> &args, vector<ezObject *> &rets) {
   rets.clear();
   stringstream ss;
   size_t len = args.size();
   for (size_t i = 0; i < len; i++) {
-    ezValue *v = args[i];
+    //TODO:typecheck
+    ezValue *v = (ezValue*)args[i];
     switch (v->type) {
     case EZ_VALUE_TYPE_INTEGER:
       ss << ((ezInteger *)v)->value;
@@ -73,10 +74,10 @@ void ezIoPrint::run(vector<ezValue *> &args, vector<ezValue *> &rets) {
   m_io << ss.str();
 }
 
-void ezIO::load(char ***symtab, ezValue ***constants) {
+void ezIO::load(char ***symtab, ezObject ***constants) {
   ezIoPrint *io_stdout = new ezIoPrint(cout), *io_stderr = new ezIoPrint(cerr);
   static const char *io_symtab[] = {"stdout", "stderr", NULL};
-  static ezValue *io_constants[] = {io_stdout, io_stderr, NULL};
+  static ezObject *io_constants[] = {io_stdout, io_stderr, NULL};
   *symtab = (char **)io_symtab;
   *constants = io_constants;
 }

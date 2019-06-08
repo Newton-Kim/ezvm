@@ -36,7 +36,7 @@ ezASM::ezASM(ezAddress &entry)
 
 ezASM::~ezASM() {}
 
-void ezASM::load_intrinsics(char **symtab, ezValue **constants) {
+void ezASM::load_intrinsics(char **symtab, ezObject **constants) {
   if (!symtab || !constants)
     throw runtime_error("entry is not found");
   map<string, size_t> *offset_symtab = new map<string, size_t>;
@@ -52,7 +52,7 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 void ezASM::reset(const string name) { m_globals.reset(name); }
 
 ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
-  ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
+  ezTable<string, ezObject *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
     throw runtime_error("global symbol " + name + " already exists");
   stringstream ss;
@@ -68,7 +68,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
       ss << "scope[" << scpkey << "] already exist";
       throw runtime_error(ss.str());
     }
-    m_scopes[scpkey] = new ezTable<string, ezValue *>;
+    m_scopes[scpkey] = new ezTable<string, ezObject *>;
     m_gc.add((ezGCObject *)m_scopes[scpkey]);
     p_scpkey = m_scopes[scpkey];
   }
@@ -94,12 +94,12 @@ bool ezASM::is_global(const string value) { return m_globals.exist(value); }
 
 size_t ezASM::constant_null(void) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_NULL)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_NULL)
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = ezNull::instance();
+  ezObject *v = ezNull::instance();
   m_constants.push_back(v);
   return idx;
 }
@@ -107,8 +107,8 @@ size_t ezASM::constant_null(void) {
 size_t ezASM::constant(const char *arg) {
   string value = arg;
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_STRING && ((ezString *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_STRING && ((ezString *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -120,8 +120,8 @@ size_t ezASM::constant(const char *arg) {
 
 size_t ezASM::constant(const int value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_INTEGER && ((ezInteger *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_INTEGER && ((ezInteger *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -133,8 +133,8 @@ size_t ezASM::constant(const int value) {
 
 size_t ezASM::constant(const bool value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -146,8 +146,8 @@ size_t ezASM::constant(const bool value) {
 
 size_t ezASM::constant(const double value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();
@@ -159,8 +159,8 @@ size_t ezASM::constant(const double value) {
 
 size_t ezASM::constant(const complex<double> value) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*) v)->id == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->value == value)
       return i;
   }
   size_t idx = m_constants.size();

@@ -22,14 +22,28 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezfunc.h"
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
+#pragma once
+#include "ezgc.h"
 
-ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
-                         const bool cry)
-    : ezObject(EZ_OBJECT_TYPE_CONDITION), zero(zr), negative(neg), overflow(ovf),
-      carry(cry) {
-  m_size = sizeof(*this);
-}
+enum ezObjectType {
+  EZ_OBJECT_TYPE_NULL = 0,
+  EZ_OBJECT_TYPE_CONDITION,
+  EZ_OBJECT_TYPE_FUNCTION,
+  EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION,
+  EZ_OBJECT_TYPE_VALUE,
+  EZ_OBJECT_TYPE_MAX
+};
+
+class ezObject : public ezGCObject {
+public:
+  const ezObjectType type;
+  ezObject (ezObjectType type);
+  virtual ~ezObject() {};
+};
+
+class ezNull : public ezObject {
+public:
+  ezNull();
+  static ezNull *instance(void);
+};
+

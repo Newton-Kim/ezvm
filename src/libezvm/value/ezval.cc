@@ -27,7 +27,7 @@
 #include <sstream>
 #include <stdexcept>
 
-ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip) {
+ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip) {
   throw runtime_error("the operation with given type is not supported");
 }
 
@@ -41,7 +41,7 @@ static fnUnaryOperation *fn_unary_generic[EZ_UNARY_OPERATION_MAX] = {
     fn_unary_generic_error, fn_unary_generic_error};
 
 ezValue::ezValue(const ezValueType tp)
-    : m_fn_binary((fnBinaryOperation***)fn_binary_generic), m_fn_unary(fn_unary_generic), type(tp) {
+    : m_fn_binary((fnBinaryOperation***)fn_binary_generic), m_fn_unary(fn_unary_generic), id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
   static bool s_fn_operation_initialised = false;
   if(false == s_fn_operation_initialised) {
     for(unsigned int cnt_op = 0 ; cnt_op < EZ_BINARY_OPERATION_MAX ; cnt_op++) {
@@ -54,12 +54,12 @@ ezValue::ezValue(const ezValueType tp)
 }
 ezValue::~ezValue() {}
 
-ezValue *ezValue::condition(void) {
+ezObject *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
-ezValue *ezValue::operate(ezBinaryOperation op, ezValue *v, bool flip) {
-  return m_fn_binary[op][v->type](this, v, flip);
+ezObject *ezValue::operate(ezBinaryOperation op, ezValue *v, bool flip) {
+  return m_fn_binary[op][v->id](this, v, flip);
 }
 
 ezValue *ezValue::operate(ezUnaryOperation op) { return m_fn_unary[op](this); }

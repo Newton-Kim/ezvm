@@ -28,7 +28,7 @@
 #include "ezgc.h"
 #include "ezstack.h"
 #include "eztable.h"
-#include "ezval.h"
+#include "ezobject.h"
 #include <cstddef>
 #include <functional>
 #include <vector>
@@ -39,7 +39,7 @@ enum ezThreadScheduler { EZ_THREAD_SCHED_REALTIME, EZ_THREAD_SCHED_ROUNDROBIN };
 
 class ezThreadCallback {
 public:
-  virtual size_t thd(ezAddress &func, vector<ezValue *> &args,
+  virtual size_t thd(ezAddress &func, vector<ezObject *> &args,
                      vector<ezAddress> &rets, ezStackFrame *caller) = 0;
   virtual bool exist(size_t handle) = 0;
 };
@@ -68,7 +68,7 @@ private:
    * @return A value.
    */
   ezStackFrame *m_caller;
-  ezValue *addr2val(ezAddress addr);
+  ezObject *addr2val(ezAddress addr);
 
 public:
   /**
@@ -79,7 +79,7 @@ public:
    * @param globals is a reference to a global memory.
    * @param constants is a reference to a constant memory.
    */
-  ezThread(ezAddress entry, vector<ezValue *> &args, vector<ezAddress> &rets,
+  ezThread(ezAddress entry, vector<ezObject *> &args, vector<ezAddress> &rets,
            ezThreadCallback *callback,
            ezThreadScheduler sched = EZ_THREAD_SCHED_REALTIME,
            ezStackFrame *caller = NULL);
@@ -95,8 +95,8 @@ public:
   void run(void);
   void on_mark(void);
   void call(ezStackFrame *sf);
-  void end(vector<ezAddress> &dests, vector<ezValue *> &vals);
-  size_t thd(ezAddress &func, vector<ezValue *> &args, vector<ezAddress> &rets,
+  void end(vector<ezAddress> &dests, vector<ezObject *> &vals);
+  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
              ezStackFrame *caller);
   void wait(size_t handle);
   bool empty(void) { return m_stack.empty(); }

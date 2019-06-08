@@ -28,7 +28,7 @@
 #include <iostream>
 #include <stdexcept>
 
-ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezValue *> &args,
+ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                            vector<ezAddress> &rets,
                            ezStackFrameCallback *callback)
     : m_pc(0), m_local(m_carousel->local_memory()),
@@ -52,20 +52,20 @@ ezStackFrame::~ezStackFrame() {
     delete m_local;
 }
 
-void ezStackFrame::addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr) {
+void ezStackFrame::addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr) {
   for (size_t i = 0; i < addr.size(); i++)
     vals.push_back(addr2val(addr[i]));
 }
 
-ezValue *ezStackFrame::addr2val(ezAddress addr) {
+ezObject *ezStackFrame::addr2val(ezAddress addr) {
   return m_memory[addr.segment]->operator[](addr.offset);
 }
 
-void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
+void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals) {
   size_t addr_sz = addr.size(), vals_sz = vals.size();
   size_t gcv = (addr_sz > vals_sz) ? vals_sz : addr_sz;
   for (size_t i = 0; i < gcv; i++) {
-    ezValue *v = vals[i];
+    ezObject *v = vals[i];
     val2addr(addr[i], v);
   }
   if (addr_sz > vals_sz) {
@@ -77,17 +77,17 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals) {
   }
 }
 
-void ezStackFrame::val2addr(ezAddress addr, ezValue *v) {
+void ezStackFrame::val2addr(ezAddress addr, ezObject *v) {
   m_memory[addr.segment]->operator[](addr.offset) = v;
   ezGC::instance().add((ezGCObject *)v);
 }
 
 void ezStackFrame::operate(ezBinaryOperation op, ezAddress &dest,
                            ezAddress &src1, ezAddress &src2) {
-  ezValue *rst = NULL;
+  ezObject *rst = NULL;
   ezValue *vr = NULL, *vl = NULL;
-  vl = addr2val(src1);
-  vr = addr2val(src2);
+  vl = (ezValue*)addr2val(src1);
+  vr = (ezValue*)addr2val(src2);
   rst =
       (vl->type >= vr->type) ? vl->operate(op, vr) : vr->operate(op, vl, true);
   val2addr(dest, rst);
@@ -95,19 +95,19 @@ void ezStackFrame::operate(ezBinaryOperation op, ezAddress &dest,
 
 void ezStackFrame::operate(ezBinaryOperation op, ezAddress &dest,
                            ezAddress &cond, ezAddress &src1, ezAddress &src2) {
-  ezValue *rst = NULL;
+  ezObject *rst = NULL;
   ezValue *vr = NULL, *vl = NULL;
-  vl = addr2val(src1);
-  vr = addr2val(src2);
+  vl = (ezValue*)addr2val(src1);
+  vr = (ezValue*)addr2val(src2);
   rst = vl->operate(op, vr);
   val2addr(dest, rst);
-  val2addr(cond, rst->condition());
+  val2addr(cond, ((ezValue*)rst)->condition());
 }
 
 void ezStackFrame::conditional_bra(ezAddress &cond, size_t index,
                                    function<bool(ezCondition *)> func) {
-  ezValue *vcond = addr2val(cond);
-  if (vcond->type != EZ_VALUE_TYPE_CONDITION)
+  ezObject *vcond = addr2val(cond);
+  if (vcond->type != EZ_OBJECT_TYPE_CONDITION)
     throw runtime_error("The operation doesn't see condition");
   if (func((ezCondition *)vcond))
     bra(index);
@@ -142,9 +142,9 @@ void ezStackFrame::test_equality(ezAddress &rst, ezAddress &lsrc,
                                  ezAddress &rsrc,
                                  function<ezValue *(ezCondition *)> func) {
   ezValue *vr = NULL, *vl = NULL;
-  vl = addr2val(lsrc);
-  vr = addr2val(rsrc);
-  ezValue *cond = vl->operate(EZ_BINARY_OPERATION_COMPARISON, vr);
+  vl = (ezValue*)addr2val(lsrc);
+  vr = (ezValue*)addr2val(rsrc);
+  ezObject *cond = vl->operate(EZ_BINARY_OPERATION_COMPARISON, vr);
   val2addr(rst, func((ezCondition *)cond));
   delete cond;
 }
@@ -153,9 +153,9 @@ void ezStackFrame::test_equality(ezAddress &rst, ezAddress &cond,
                                  ezAddress &lsrc, ezAddress &rsrc,
                                  function<ezValue *(ezCondition *)> func) {
   ezValue *vr = NULL, *vl = NULL;
-  vl = addr2val(lsrc);
-  vr = addr2val(rsrc);
-  ezValue *vcond = vl->operate(EZ_BINARY_OPERATION_COMPARISON, vr);
+  vl = (ezValue*)addr2val(lsrc);
+  vr = (ezValue*)addr2val(rsrc);
+  ezObject *vcond = vl->operate(EZ_BINARY_OPERATION_COMPARISON, vr);
   val2addr(rst, func((ezCondition *)vcond));
   val2addr(cond, vcond);
 }
@@ -217,7 +217,7 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
 void ezStackFrame::operate(ezUnaryOperation op, ezAddress &dest,
                            ezAddress &src) {
   ezValue *v = NULL, *rst = NULL;
-  v = addr2val(src);
+  v = (ezValue*)addr2val(src);
   rst = v->operate(op);
   val2addr(dest, rst);
 }
@@ -225,7 +225,7 @@ void ezStackFrame::operate(ezUnaryOperation op, ezAddress &dest,
 void ezStackFrame::operate(ezUnaryOperation op, ezAddress &dest,
                            ezAddress &cond, ezAddress &src) {
   ezValue *v = NULL, *rst = NULL;
-  v = addr2val(src);
+  v = (ezValue*)addr2val(src);
   rst = v->operate(op);
   val2addr(dest, rst);
   val2addr(cond, rst->condition());
@@ -235,7 +235,7 @@ void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
-  ezValue *v = NULL;
+  ezObject *v = NULL;
   for (size_t i = 0; i < srcs.size(); i++) {
     v = addr2val(srcs[i]);
     m_returns.push_back(v);
@@ -245,9 +245,9 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
 
 void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
   size_t cnt = (dests.size() > srcs.size()) ? srcs.size() : dests.size();
-  ezValue *v = NULL;
+  ezObject *v = NULL;
   size_t i = 0;
-  vector<ezValue *> q;
+  vector<ezObject *> q;
   addr2val(q, srcs);
   for (i = 0; i < cnt; i++) {
     val2addr(dests[i], q[i]);
@@ -261,14 +261,14 @@ void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
 
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
                         vector<ezAddress> &rets) {
-  ezValue *proc = addr2val(func);
-  vector<ezValue *> vargs;
+  ezObject *proc = addr2val(func);
+  vector<ezObject *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
-  case EZ_VALUE_TYPE_USER_DEFINED_FUNCTION:
+  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
     call((ezUserDefinedFunction *)proc, vargs, rets);
     break;
-  case EZ_VALUE_TYPE_FUNCTION:
+  case EZ_OBJECT_TYPE_FUNCTION:
     call((ezFunction *)proc, vargs, rets);
     break;
   default:
@@ -277,7 +277,7 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
   }
 }
 
-void ezStackFrame::call(ezFunction *func, vector<ezValue *> &args,
+void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args,
                         vector<ezAddress> &rets) {
   ezGC::instance().pause();
   ezStackFrame *callee = new ezStackFrame(func, args, rets, m_callback);
@@ -285,9 +285,9 @@ void ezStackFrame::call(ezFunction *func, vector<ezValue *> &args,
   ezGC::instance().resume();
 }
 
-void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezValue *> &args,
+void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args,
                         vector<ezAddress> &rets) {
-  vector<ezValue *> vrets;
+  vector<ezObject *> vrets;
   func->run(args, vrets);
   if (rets.size())
     val2addr(rets, vrets);
@@ -295,20 +295,20 @@ void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezValue *> &args,
 
 void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
                        vector<ezAddress> &rets, ezAddress &handle) {
-  vector<ezValue *> vargs;
+  vector<ezObject *> vargs;
   addr2val(vargs, args);
   size_t hthd = m_callback->thd(func, vargs, rets, this);
   val2addr(handle, new ezInteger(hthd));
 }
 
 void ezStackFrame::wait(ezAddress &handle) {
-  ezValue *v = addr2val(handle);
-  if (v->type != EZ_VALUE_TYPE_INTEGER)
+  ezObject *v = addr2val(handle);
+  if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id != EZ_VALUE_TYPE_INTEGER)
     throw runtime_error("invalid handle");
   m_callback->wait(((ezInteger *)v)->value);
 }
 
-void ezStackFrame::update(vector<ezAddress> &dests, vector<ezValue *> &vals) {
+void ezStackFrame::update(vector<ezAddress> &dests, vector<ezObject *> &vals) {
   val2addr(dests, vals);
 }
 
@@ -322,10 +322,10 @@ void ezStackFrame::step(void) {
 }
 
 void ezStackFrame::on_mark(void) {
-  for (vector<ezValue *>::iterator it = m_local->begin(); it != m_local->end();
+  for (vector<ezObject *>::iterator it = m_local->begin(); it != m_local->end();
        it++)
     (*it)->mark();
-  for (vector<ezValue *>::iterator it = m_returns.begin();
+  for (vector<ezObject *>::iterator it = m_returns.begin();
        it != m_returns.end(); it++)
     (*it)->mark();
 }

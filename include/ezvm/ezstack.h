@@ -26,6 +26,7 @@
 
 #include "ezaddr.h"
 #include "ezval.h"
+#include "ezfunc.h"
 #include <functional>
 #include <stack>
 #include <vector>
@@ -35,8 +36,8 @@ using namespace std;
 class ezStackFrameCallback {
 public:
   virtual void call(ezStackFrame *sf) = 0;
-  virtual void end(vector<ezAddress> &dests, vector<ezValue *> &vals) = 0;
-  virtual size_t thd(ezAddress &func, vector<ezValue *> &args,
+  virtual void end(vector<ezAddress> &dests, vector<ezObject *> &vals) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezObject *> &args,
                      vector<ezAddress> &rets, ezStackFrame *caller) = 0;
   virtual void wait(size_t handle) = 0;
 };
@@ -57,22 +58,22 @@ private:
   /**
    * @brief is a local segment.
    */
-  vector<ezValue *> *m_local;
+  vector<ezObject *> *m_local;
   /**
    * @brief is a scope segment.
    */
-  vector<ezValue *> *m_scope;
+  vector<ezObject *> *m_scope;
   /**
    * @brief is a collection of return values.
    */
-  vector<ezValue *> m_returns;
+  vector<ezObject *> m_returns;
   /**
    * @brief is a collection of addresses where the result values place.
    */
   vector<ezAddress> m_return_dest;
   ezStackFrameCallback *m_callback;
-  vector<vector<ezValue *> *> m_memory;
-  void addr2val(vector<ezValue *> &vals, vector<ezAddress> &addr);
+  vector<vector<ezObject *> *> m_memory;
+  void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
    * @brief fetches a value from an address.
    *
@@ -80,21 +81,21 @@ private:
    *
    * @return A value.
    */
-  ezValue *addr2val(ezAddress addr);
+  ezObject *addr2val(ezAddress addr);
   /**
    * @brief places a value at an address.
    *
    * @param addr is an address to place v.
    * @param v is a value.
    */
-  void val2addr(ezAddress addr, ezValue *v);
+  void val2addr(ezAddress addr, ezObject *v);
   /**
    * @brief places values at respective addresses.
    *
    * @param addr is an array of addresses.
    * @param v is an array of values.
    */
-  void val2addr(vector<ezAddress> &addr, vector<ezValue *> &vals);
+  void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
   /**
    * @brief invokes a native carousel.
    *
@@ -102,7 +103,7 @@ private:
    * @param nargs is a number of arguments which follows the func.
    * @param nrets is a number of return addresses which follows the arguments.
    */
-  void call(ezUserDefinedFunction *func, vector<ezValue *> &args,
+  void call(ezUserDefinedFunction *func, vector<ezObject *> &args,
             vector<ezAddress> &rets);
   /**
    * @brief invokes a carousel.
@@ -111,7 +112,7 @@ private:
    * @param nargs is a number of arguments which follows the func.
    * @param nrets is a number of return addresses which follows the arguments.
    */
-  void call(ezFunction *func, vector<ezValue *> &args, vector<ezAddress> &rets);
+  void call(ezFunction *func, vector<ezObject *> &args, vector<ezAddress> &rets);
   void conditional_bra(ezAddress &cond, size_t index,
                        function<bool(ezCondition *)> func);
   void test_equality(ezAddress &rst, ezAddress &lsrc, ezAddress &rsrc,
@@ -158,13 +159,13 @@ public:
    *
    * @param crsl is a pointer to a carousel.
    */
-  ezStackFrame(ezFunction *crsl, vector<ezValue *> &args,
+  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                vector<ezAddress> &rets, ezStackFrameCallback *callback);
   /**
    * @brief is a destructor.
    */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
-  void update(vector<ezAddress> &dests, vector<ezValue *> &vals);
+  void update(vector<ezAddress> &dests, vector<ezObject *> &vals);
   void on_mark(void);
 };

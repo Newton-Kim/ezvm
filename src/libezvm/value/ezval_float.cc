@@ -23,69 +23,70 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_add_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value + ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_add_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value + ((ezFloat *)vr)->value);
 }
 
-static ezValue *fn_sub_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezInteger *)vr)->value - ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
   return new ezFloat(ret);
 }
 
-static ezValue *fn_sub_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_float_float(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezFloat *)vr)->value - ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value - ((ezFloat *)vr)->value;
   return new ezFloat(ret);
 }
 
-static ezValue *fn_mul_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value * ((ezInteger *)vr)->value);
 }
 
-static ezValue *fn_mul_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezFloat(((ezFloat *)vl)->value * ((ezFloat *)vr)->value);
 }
 
-static ezValue *fn_div_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezInteger *)vr)->value / ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value / ((ezInteger *)vr)->value;
   return new ezFloat(ret);
 }
 
-static ezValue *fn_div_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_float_float(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezFloat *)vr)->value / ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value / ((ezFloat *)vr)->value;
   return new ezFloat(ret);
 }
 
-static ezValue *fn_pow_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? pow(((ezInteger *)vr)->value, ((ezFloat *)vl)->value)
                       : pow(((ezFloat *)vl)->value, ((ezInteger *)vr)->value);
   return new ezFloat(ret);
 }
 
-static ezValue *fn_pow_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_float_float(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? pow(((ezFloat *)vr)->value, ((ezFloat *)vl)->value)
                       : pow(((ezFloat *)vl)->value, ((ezFloat *)vr)->value);
   return new ezFloat(ret);
 }
 
-static ezValue *fn_cmp_float_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_cmp_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezInteger *)vr)->value - ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
   return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
-static ezValue *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezFloat *)vr)->value - ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value - ((ezFloat *)vr)->value;
   return new ezCondition(ret == 0, ret < 0, false, false);
@@ -137,20 +138,8 @@ ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), value(val) {
   m_fn_unary = fn_unary_float;
 }
 
-ezValue *ezFloat::condition(void) {
+ezObject *ezFloat::condition(void) {
   return new ezCondition(value ? false : true, (value < 0) ? true : false,
                          false, false);
 }
 
-void ezFloat::set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_binary_float[op][type] = fn;
-}
-
-void ezFloat::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_unary_float[op] = fn;
-}

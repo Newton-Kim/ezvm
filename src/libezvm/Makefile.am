@@ -11,6 +11,7 @@ libezvm_la_SOURCES=ezgc.cc \
 		   ezmemory.cc \
 		   vm.cc \
 		   value/ezval.cc \
+		   value/ezobj.cc \
 		   value/ezval_bool.cc \
 		   value/ezval_carousel.cc \
 		   value/ezval_complex.cc \

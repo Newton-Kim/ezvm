@@ -23,27 +23,28 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_add_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   return new ezComplex(
       complex<double>(vp.real() + ((ezInteger *)vr)->value, vp.imag()));
 }
 
-static ezValue *fn_add_complex_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   return new ezComplex(
       complex<double>(vp.real() + ((ezFloat *)vr)->value, vp.imag()));
 }
 
-static ezValue *fn_add_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(((ezComplex *)vl)->value + ((ezComplex *)vr)->value);
 }
 
-static ezValue *fn_sub_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   complex<double> ret =
       (flip) ? complex<double>(((ezInteger *)vr)->value - vp.real(), -vp.imag())
@@ -51,7 +52,7 @@ static ezValue *fn_sub_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(ret);
 }
 
-static ezValue *fn_sub_complex_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   complex<double> ret =
       (flip) ? complex<double>(((ezFloat *)vr)->value - vp.real(), -vp.imag())
@@ -59,7 +60,7 @@ static ezValue *fn_sub_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(ret);
 }
 
-static ezValue *fn_sub_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_sub_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> ret =
       (flip)
           ? complex<double>(((ezComplex *)vr)->value - ((ezComplex *)vl)->value)
@@ -68,23 +69,23 @@ static ezValue *fn_sub_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(ret);
 }
 
-static ezValue *fn_mul_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   return new ezComplex(complex<double>(vp.real() * ((ezInteger *)vr)->value,
                                        vp.imag() * ((ezInteger *)vr)->value));
 }
 
-static ezValue *fn_mul_complex_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   return new ezComplex(complex<double>(vp.real() * ((ezFloat *)vr)->value,
                                        vp.imag() * ((ezFloat *)vr)->value));
 }
 
-static ezValue *fn_mul_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_mul_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(((ezComplex *)vl)->value * ((ezComplex *)vr)->value);
 }
 
-static ezValue *fn_div_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   complex<double> ret =
       (flip) ? complex<double>(vp.real() * ((ezInteger *)vr)->value / abs(vp),
@@ -94,7 +95,7 @@ static ezValue *fn_div_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(ret);
 }
 
-static ezValue *fn_div_complex_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   complex<double> ret =
       (flip) ? complex<double>(vp.real() * ((ezFloat *)vr)->value / abs(vp),
@@ -104,35 +105,35 @@ static ezValue *fn_div_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezComplex(ret);
 }
 
-static ezValue *fn_div_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_div_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> ret =
       (flip) ? ((ezComplex *)vr)->value / ((ezComplex *)vl)->value
              : ((ezComplex *)vl)->value / ((ezComplex *)vr)->value;
   return new ezComplex(ret);
 }
 
-static ezValue *fn_pow_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> ret =
       (flip) ? pow(((ezInteger *)vr)->value, ((ezComplex *)vl)->value)
              : pow(((ezComplex *)vl)->value, ((ezInteger *)vr)->value);
   return new ezComplex(ret);
 }
 
-static ezValue *fn_pow_complex_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_complex_float(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> ret =
       (flip) ? pow(((ezFloat *)vr)->value, ((ezComplex *)vl)->value)
              : pow(((ezComplex *)vl)->value, ((ezFloat *)vr)->value);
   return new ezComplex(ret);
 }
 
-static ezValue *fn_pow_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_pow_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> ret =
       (flip) ? pow(((ezComplex *)vr)->value, ((ezComplex *)vl)->value)
              : pow(((ezComplex *)vl)->value, ((ezComplex *)vr)->value);
   return new ezComplex(ret);
 }
 
-static ezValue *fn_cmp_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_cmp_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(((ezComplex *)vl)->value == ((ezComplex *)vr)->value,
                          false, false, false);
 }
@@ -206,20 +207,8 @@ ezComplex::ezComplex(complex<double> val)
   m_fn_unary = fn_unary_complex;
 }
 
-ezValue *ezComplex::condition(void) {
+ezObject *ezComplex::condition(void) {
   return new ezCondition(abs(value) ? false : true,
                          (abs(value) < 0) ? true : false, false, false);
 }
 
-void ezComplex::set_operation(ezBinaryOperation op, ezValueType type,
-                              fnBinaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_binary_complex[op][type] = fn;
-}
-
-void ezComplex::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_unary_complex[op] = fn;
-}

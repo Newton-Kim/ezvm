@@ -25,6 +25,7 @@
 #pragma once
 
 #include "ezvm/asm/ezasm_instr.h"
+#include "ezvm/ezfunc.h"
 #include <map>
 #include <string>
 #include <vector>

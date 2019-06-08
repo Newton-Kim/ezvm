@@ -23,6 +23,7 @@
  *
  */
 #include "ezvm/ezmemory.h"
+#include "ezvm/ezfunc.h"
 
 ezMemory &ezMemory::instance(void) {
   static ezMemory s_memory;
@@ -30,15 +31,15 @@ ezMemory &ezMemory::instance(void) {
 }
 
 void ezMemory::on_mark(void) {
-  for (vector<ezValue *>::iterator it = m_globals.to_vector().begin();
+  for (vector<ezObject *>::iterator it = m_globals.to_vector().begin();
        it != m_globals.to_vector().end(); it++) {
     if (*it == NULL)
       continue;
     (*it)->mark();
-    if ((*it)->type == EZ_VALUE_TYPE_FUNCTION)
+    if ((*it)->type == EZ_OBJECT_TYPE_FUNCTION)
       ((ezFunction *)(*it))->on_mark();
   }
-  for (vector<ezValue *>::iterator it = m_constants.begin();
+  for (vector<ezObject *>::iterator it = m_constants.begin();
        it != m_constants.end(); it++)
     (*it)->mark();
 }

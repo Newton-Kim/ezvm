@@ -23,11 +23,12 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_add_string_integer(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_string_integer(ezValue *vl, ezValue *vr, bool flip) {
   stringstream ss;
   if (flip) {
     ss << ((ezInteger *)vr)->value;
@@ -39,7 +40,7 @@ static ezValue *fn_add_string_integer(ezValue *vl, ezValue *vr, bool flip) {
   return new ezString(ss.str());
 }
 
-static ezValue *fn_add_string_float(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_string_float(ezValue *vl, ezValue *vr, bool flip) {
   stringstream ss;
   if (flip) {
     ss << ((ezString *)vl)->value;
@@ -51,7 +52,7 @@ static ezValue *fn_add_string_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezString(ss.str());
 }
 
-static ezValue *fn_add_string_complex(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_string_complex(ezValue *vl, ezValue *vr, bool flip) {
   stringstream ss;
   if (!flip)
     ss << ((ezString *)vl)->value;
@@ -65,13 +66,13 @@ static ezValue *fn_add_string_complex(ezValue *vl, ezValue *vr, bool flip) {
   return new ezString(ss.str());
 }
 
-static ezValue *fn_add_string_string(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_add_string_string(ezValue *vl, ezValue *vr, bool flip) {
   string ret = (flip) ? ((ezString *)vr)->value + ((ezString *)vl)->value
                       : ((ezString *)vl)->value + ((ezString *)vr)->value;
   return new ezString(ret);
 }
 
-static ezValue *fn_compare_string_string(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_compare_string_string(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(((ezString *)vl)->value == ((ezString *)vr)->value,
                          false, false, false);
 }
@@ -107,19 +108,7 @@ ezString::ezString(const string val)
   m_fn_unary = fn_unary_string;
 }
 
-ezValue *ezString::condition(void) {
+ezObject *ezString::condition(void) {
   return new ezCondition(value.empty(), false, false, false);
 }
 
-void ezString::set_operation(ezBinaryOperation op, ezValueType type,
-                             fnBinaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_binary_string[op][type] = fn;
-}
-
-void ezString::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_unary_string[op] = fn;
-}

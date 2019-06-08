@@ -27,7 +27,7 @@
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezgc.h"
 #include "ezvm/eztable.h"
-#include "ezvm/ezval.h"
+#include "ezvm/ezobject.h"
 #include "ezasm_proc.h"
 #include <cstddef>
 #include <map>
@@ -52,13 +52,13 @@ private:
   /**
    * @brief A reference to a constant segment
    */
-  vector<ezValue *> &m_constants;
+  vector<ezObject *> &m_constants;
   /**
    * @brief A reference to a global segment
    */
-  ezTable<string, ezValue *> &m_globals;
+  ezTable<string, ezObject *> &m_globals;
   ezGC &m_gc;
-  map<size_t, ezTable<string, ezValue *> *> m_scopes;
+  map<size_t, ezTable<string, ezObject *> *> m_scopes;
 
 public:
   /**
@@ -79,7 +79,7 @@ public:
    * @param symtab is an array of symbols respective to constants.
    * @param constants is an array of intrinsic functions.
    */
-  void load_intrinsics(char **symtab, ezValue **constants);
+  void load_intrinsics(char **symtab, ezObject **constants);
   /**
    * @brief sets an entry point.
    *

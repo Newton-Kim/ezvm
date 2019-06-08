@@ -27,6 +27,7 @@
 #include "ezfile.h"
 #include "eztable.h"
 #include "ezval.h"
+#include "ezfunc.h"
 #include <string>
 #include <vector>
 
@@ -49,7 +50,7 @@ private:
    */
   void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, vector<ezAddress> &addrs);
-  void dump(ezFile &sink, const ezValue *v);
+  void dump(ezFile &sink, const ezObject *v);
 
 public:
   /**

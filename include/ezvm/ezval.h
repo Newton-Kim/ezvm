@@ -23,10 +23,7 @@
  *
  */
 #pragma once
-#include "ezaddr.h"
-#include "ezgc.h"
-#include "ezinstruction.h"
-#include "eztable.h"
+#include "ezobject.h"
 #include <complex>
 #include <cstddef>
 #include <cstdint>
@@ -37,15 +34,12 @@
 using namespace std;
 
 enum ezValueType {
-  EZ_VALUE_TYPE_NULL = 0,
+  EZ_VALUE_TYPE_UNDEFINED = 0,
   EZ_VALUE_TYPE_BOOL,
   EZ_VALUE_TYPE_INTEGER,
   EZ_VALUE_TYPE_FLOAT,
   EZ_VALUE_TYPE_COMPLEX,
   EZ_VALUE_TYPE_STRING,
-  EZ_VALUE_TYPE_USER_DEFINED_FUNCTION,
-  EZ_VALUE_TYPE_CONDITION,
-  EZ_VALUE_TYPE_FUNCTION,
   EZ_VALUE_TYPE_MAX
 };
 
@@ -73,127 +67,60 @@ enum ezBinaryOperation {
 
 class ezValue;
 
-ezValue *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip);
+ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip);
 ezValue *fn_unary_generic_error(ezValue *v);
 
-typedef ezValue *fnBinaryOperation(ezValue *, ezValue *, bool flip);
+typedef ezObject *fnBinaryOperation(ezValue *, ezValue *, bool flip);
 typedef ezValue *fnUnaryOperation(ezValue *);
 
-class ezValue : public ezGCObject {
+class ezValue : public ezObject {
 protected:
   fnBinaryOperation ***m_fn_binary;
   fnUnaryOperation **m_fn_unary;
 
 public:
-  const ezValueType type;
-  ezValue(const ezValueType tp);
+  const ezValueType id;
+  ezValue(const ezValueType id);
   virtual ~ezValue();
 
-  virtual ezValue *condition(void);
+  virtual ezObject *condition(void);
 
-  ezValue *operate(ezBinaryOperation op, ezValue *v, bool flip = false);
+  ezObject *operate(ezBinaryOperation op, ezValue *v, bool flip = false);
   ezValue *operate(ezUnaryOperation op);
-};
-
-class ezCondition : public ezValue {
-public:
-  const bool zero;
-  const bool negative;
-  const bool overflow;
-  const bool carry;
-  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
-};
-
-class ezNull : public ezValue {
-public:
-  ezNull();
-  static ezNull *instance(void);
 };
 
 class ezBool : public ezValue {
 public:
   const bool value;
   ezBool(bool val);
-  ezValue *condition(void);
-
-  static void set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
+  ezObject *condition(void);
 };
 
 class ezInteger : public ezValue {
 public:
   const int value;
   ezInteger(int val);
-  ezValue *condition(void);
-
-  static void set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
+  ezObject *condition(void);
 };
 
 class ezFloat : public ezValue {
 public:
   const double value;
   ezFloat(double val);
-  ezValue *condition(void);
-
-  static void set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
+  ezObject *condition(void);
 };
 
 class ezComplex : public ezValue {
 public:
   const complex<double> value;
   ezComplex(complex<double> val);
-  ezValue *condition(void);
-
-  static void set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
+  ezObject *condition(void);
 };
 
 class ezString : public ezValue {
 public:
   const string value;
   ezString(const string val);
-  ezValue *condition(void);
-
-  static void set_operation(ezBinaryOperation op, ezValueType type,
-                            fnBinaryOperation *fn);
-  static void set_operation(ezUnaryOperation op, fnUnaryOperation *fn);
+  ezObject *condition(void);
 };
 
-class ezFunction : public ezValue, ezGCClient {
-private:
-  ezTable<string, ezValue *> *m_scope;
-  ezTable<string, ezValue *> *m_local;
-
-public:
-  uint8_t nargs;
-  size_t nmems;
-  ezFunction(ezTable<string, ezValue *> *local,
-             ezTable<string, ezValue *> *scope);
-  ~ezFunction();
-  vector<ezInstruction *> instruction;
-  ezTable<string, size_t> jmptbl;
-  void on_mark(void);
-  vector<ezValue *> *local_memory(void);
-  vector<ezValue *> *scope_memory(void);
-  bool is_local_scoped(void) { return (m_local) ? true : false; }
-};
-
-class ezUserDefinedFunction : public ezValue {
-public:
-  ezUserDefinedFunction();
-  virtual ~ezUserDefinedFunction() {}
-
-  virtual void run(vector<ezValue *> &args, vector<ezValue *> &rets) = 0;
-};
-
-class ezUserDefinedValue : public ezValue {
-public:
-  ezUserDefinedValue();
-  virtual ~ezUserDefinedValue();
-};

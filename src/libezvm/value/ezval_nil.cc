@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "ezvm/ezobject.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
+ezNull::ezNull() : ezObject(EZ_OBJECT_TYPE_NULL) {
   unmark();
   m_size = sizeof(*this);
 }

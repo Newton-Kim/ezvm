@@ -22,14 +22,45 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezfunc.h"
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
+#pragma once
+#include "ezaddr.h"
+#include "ezinstruction.h"
+#include "eztable.h"
+#include "ezobject.h"
 
-ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
-                         const bool cry)
-    : ezObject(EZ_OBJECT_TYPE_CONDITION), zero(zr), negative(neg), overflow(ovf),
-      carry(cry) {
-  m_size = sizeof(*this);
-}
+class ezFunction : public ezObject {
+private:
+  ezTable<string, ezObject *> *m_scope;
+  ezTable<string, ezObject *> *m_local;
+
+public:
+  uint8_t nargs;
+  size_t nmems;
+  ezFunction(ezTable<string, ezObject *> *local,
+             ezTable<string, ezObject *> *scope);
+  ~ezFunction();
+  vector<ezInstruction *> instruction;
+  ezTable<string, size_t> jmptbl;
+  void on_mark(void);
+  vector<ezObject *> *local_memory(void);
+  vector<ezObject *> *scope_memory(void);
+  bool is_local_scoped(void) { return (m_local) ? true : false; }
+};
+
+class ezUserDefinedFunction : public ezObject{
+public:
+  ezUserDefinedFunction();
+  virtual ~ezUserDefinedFunction() {}
+
+  virtual void run(vector<ezObject *> &args, vector<ezObject *> &rets) = 0;
+};
+
+class ezCondition : public ezObject {
+public:
+  const bool zero;
+  const bool negative;
+  const bool overflow;
+  const bool carry;
+  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
+};
+

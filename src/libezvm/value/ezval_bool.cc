@@ -23,11 +23,12 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-static ezValue *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
+static ezObject *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
   bool bvl = ((ezBool *)vl)->value;
   bool bvr = ((ezBool *)vr)->value;
   return new ezCondition(!(bvl ^ bvr), false, false, false);
@@ -87,19 +88,7 @@ ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_fn_unary = fn_unary_bool;
 }
 
-ezValue *ezBool::condition(void) {
+ezObject *ezBool::condition(void) {
   return new ezCondition(!value, false, false, false);
 }
 
-void ezBool::set_operation(ezBinaryOperation op, ezValueType type,
-                           fnBinaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_binary_bool[op][type] = fn;
-}
-
-void ezBool::set_operation(ezUnaryOperation op, fnUnaryOperation *fn) {
-  if (!fn)
-    throw runtime_error("null function is not allowed");
-  fn_unary_bool[op] = fn;
-}
