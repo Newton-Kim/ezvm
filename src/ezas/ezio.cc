@@ -46,7 +46,7 @@ void ezIoPrint::run(vector<ezObject *> &args, vector<ezObject *> &rets) {
   for (size_t i = 0; i < len; i++) {
     //TODO:typecheck
     ezValue *v = (ezValue*)args[i];
-    switch (v->type) {
+    switch (v->id) {
     case EZ_VALUE_TYPE_INTEGER:
       ss << ((ezInteger *)v)->value;
       break;
