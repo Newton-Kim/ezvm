@@ -119,16 +119,23 @@ private:
                      function<ezValue *(ezCondition *)> func);
   void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
                      ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
+  void calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2, function<ezValue*(ezValue*, ezValue*)> func);
+  void calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2, function<ezValue*(ezValue*, ezValue*)> func);
+  void calculate_unary(ezAddress &dest, ezAddress &src, function<ezValue*(ezValue*)> func);
+  void calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src, function<ezValue*(ezValue*)> func);
 
 public:
   void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &src1,
                ezAddress &src2);
   void operate(ezBinaryOperation op, ezAddress &dest, ezAddress &cond,
                ezAddress &src1, ezAddress &src2);
-  void operate(ezUnaryOperation op, ezAddress &dest, ezAddress &src);
-  void operate(ezUnaryOperation op, ezAddress &dest, ezAddress &cond,
-               ezAddress &src);
 
+  void negate(ezAddress &dest, ezAddress &src);
+  void negate(ezAddress &dest, ezAddress &cond, ezAddress &src);
+  void b_not(ezAddress &dest, ezAddress &src);
+  void b_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
+  void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
+  void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void tge(ezAddress &dest, ezAddress &src1, ezAddress &src2);

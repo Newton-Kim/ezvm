@@ -28,58 +28,10 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezObject *fn_add_string_integer(ezValue *vl, ezValue *vr, bool flip) {
-  stringstream ss;
-  if (flip) {
-    ss << ((ezInteger *)vr)->value;
-    ss << ((ezString *)vl)->value;
-  } else {
-    ss << ((ezString *)vl)->value;
-    ss << ((ezInteger *)vr)->value;
-  }
-  return new ezString(ss.str());
-}
-
-static ezObject *fn_add_string_float(ezValue *vl, ezValue *vr, bool flip) {
-  stringstream ss;
-  if (flip) {
-    ss << ((ezString *)vl)->value;
-    ss << ((ezFloat *)vr)->value;
-  } else {
-    ss << ((ezString *)vl)->value;
-    ss << ((ezFloat *)vr)->value;
-  }
-  return new ezString(ss.str());
-}
-
-static ezObject *fn_add_string_complex(ezValue *vl, ezValue *vr, bool flip) {
-  stringstream ss;
-  if (!flip)
-    ss << ((ezString *)vl)->value;
-  complex<double> vp = ((ezComplex *)vr)->value;
-  ss << vp.real();
-  if (vp.imag() >= 0)
-    ss << "+";
-  ss << vp.imag() << "j";
-  if (flip)
-    ss << ((ezString *)vl)->value;
-  return new ezString(ss.str());
-}
-
-static ezObject *fn_add_string_string(ezValue *vl, ezValue *vr, bool flip) {
-  string ret = (flip) ? ((ezString *)vr)->value + ((ezString *)vl)->value
-                      : ((ezString *)vl)->value + ((ezString *)vr)->value;
-  return new ezString(ret);
-}
-
 static ezObject *fn_compare_string_string(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(((ezString *)vl)->value == ((ezString *)vr)->value,
                          false, false, false);
 }
-
-static fnBinaryOperation *fn_add_string[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_add_string_integer,
-    fn_add_string_float,     fn_add_string_complex,   fn_add_string_string};
 
 static fnBinaryOperation *fn_sub_string[EZ_VALUE_TYPE_MAX] = {
     fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
@@ -94,18 +46,26 @@ static fnBinaryOperation *fn_cmp_string[EZ_VALUE_TYPE_MAX] = {
     fn_binary_generic_error, fn_binary_generic_error, fn_compare_string_string};
 
 static fnBinaryOperation **fn_binary_string[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_string,     fn_cmp_string,     fn_default_string, fn_default_string,
+    fn_cmp_string,     fn_default_string, fn_default_string,
     fn_default_string, fn_default_string, fn_default_string, fn_default_string,
     fn_default_string, fn_default_string, fn_default_string, fn_default_string};
-
-static fnUnaryOperation *fn_unary_string[EZ_UNARY_OPERATION_MAX] = {
-    fn_unary_generic_error, fn_unary_generic_error};
 
 ezString::ezString(const string val)
     : ezValue(EZ_VALUE_TYPE_STRING), value(val) {
   m_size = sizeof(*this) + val.size() + 1;
   m_fn_binary = fn_binary_string;
-  m_fn_unary = fn_unary_string;
+}
+
+string ezString::to_string(void) {
+  return value;
+}
+
+ezValue* ezString::add(ezValue* v, bool flip) {
+  return new ezString(value + v->to_string());
+}
+
+ezObject* ezString::compare(ezValue* v, bool flip) {
+  return new ezCondition(v->id == EZ_VALUE_TYPE_STRING && value == v->to_string(), false, false, false);
 }
 
 ezObject *ezString::condition(void) {

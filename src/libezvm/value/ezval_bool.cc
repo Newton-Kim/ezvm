@@ -34,9 +34,6 @@ static ezObject *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(!(bvl ^ bvr), false, false, false);
 }
 
-static fnBinaryOperation *fn_add_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
 static fnBinaryOperation *fn_sub_bool[EZ_VALUE_TYPE_BOOL + 1] = {
     fn_binary_generic_error, fn_binary_generic_error};
 
@@ -71,24 +68,25 @@ static fnBinaryOperation *fn_lsr_bool[EZ_VALUE_TYPE_BOOL + 1] = {
     fn_binary_generic_error, fn_binary_generic_error};
 
 static fnBinaryOperation **fn_binary_bool[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_bool,  fn_cmp_bool,   fn_sub_bool, fn_mul_bool,
+    fn_cmp_bool,   fn_sub_bool, fn_mul_bool,
     fn_div_bool,  fn_mod_bool,   fn_pow_bool, fn_b_and_bool,
     fn_b_or_bool, fn_b_xor_bool, fn_lsl_bool, fn_lsr_bool};
-
-static ezValue *fn_neg_bool(ezValue *v) {
-  return new ezBool(!((ezBool *)v)->value);
-}
-
-static fnUnaryOperation *fn_unary_bool[EZ_UNARY_OPERATION_MAX] = {
-    fn_neg_bool, fn_unary_generic_error};
 
 ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_size = sizeof(*this);
   m_fn_binary = fn_binary_bool;
-  m_fn_unary = fn_unary_bool;
+}
+
+ezValue* ezBool::bitwise_not(void) {
+  return new ezBool(!value);
+}
+
+ezObject* ezBool::compare(ezValue *v, bool flip) {
+  return new ezCondition(!(value ^ v->to_bool()), false, false, false);
 }
 
 ezObject *ezBool::condition(void) {
   return new ezCondition(!value, false, false, false);
 }
 
+bool ezBool::to_bool(void) {return value;}

@@ -10,15 +10,15 @@ libezvm_la_SOURCES=ezgc.cc \
 		   thread.cc \
 		   ezmemory.cc \
 		   vm.cc \
+		   object/ezobj.cc \
+		   object/ezobj_function.cc \
+		   object/ezobj_condition.cc \
+		   object/ezobj_nil.cc \
 		   value/ezval.cc \
-		   value/ezobj.cc \
 		   value/ezval_bool.cc \
-		   value/ezval_carousel.cc \
 		   value/ezval_complex.cc \
-		   value/ezval_condition.cc \
 		   value/ezval_float.cc \
 		   value/ezval_integer.cc \
-		   value/ezval_nil.cc \
 		   value/ezval_string.cc \
 		   utility/ezfile.cc
 
@@ -37,6 +37,8 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \
 		../../include/ezvm/ezval.h \
+		../../include/ezvm/ezobject.h \
+		../../include/ezvm/ezfunc.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS=-I../../include -std=c++11

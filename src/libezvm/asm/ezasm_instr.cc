@@ -96,8 +96,7 @@ void ezAsmInstruction::add(const ezAddress dest, const ezAddress &lsrc,
                          const ezAddress &rsrc) {
   instruction_with_binary_arguments(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_BINARY_OPERATION_ADDITION, inst.dests[0], inst.srcs[0],
-                    inst.srcs[1]);
+        stk.add(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_ADD, inst.dests, inst.srcs);
@@ -109,8 +108,7 @@ void ezAsmInstruction::add(const ezAddress dest, const ezAddress cond,
                          const ezAddress &lsrc, const ezAddress &rsrc) {
   instruction_with_binary_arguments(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_BINARY_OPERATION_ADDITION, inst.dests[0], inst.dests[1],
-                    inst.srcs[0], inst.srcs[1]);
+        stk.add(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_ADD, inst.dests, inst.srcs);
@@ -397,7 +395,7 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
   instruction_with_unary_argument(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_UNARY_OPERATION_NEGATE, inst.dests[0], inst.srcs[0]);
+        stk.negate(inst.dests[0], inst.srcs[0]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_NEG, inst.dests, inst.srcs);
@@ -409,8 +407,7 @@ void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
                          const ezAddress org) {
   instruction_with_unary_argument(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_UNARY_OPERATION_NEGATE, inst.dests[0], inst.dests[1],
-                    inst.srcs[0]);
+        stk.negate(inst.dests[0], inst.dests[1], inst.srcs[0]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_NEG, inst.dests, inst.srcs);
@@ -421,7 +418,7 @@ void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {
   instruction_with_unary_argument(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_UNARY_OPERATION_NOT, inst.dests[0], inst.srcs[0]);
+        stk.b_not(inst.dests[0], inst.srcs[0]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_NOT, inst.dests, inst.srcs);
@@ -433,8 +430,7 @@ void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
                                  const ezAddress org) {
   instruction_with_unary_argument(
       [](ezStackFrame &stk, ezInstruction &inst) {
-        stk.operate(EZ_UNARY_OPERATION_NOT, inst.dests[0], inst.dests[1],
-                    inst.srcs[0]);
+        stk.b_not(inst.dests[0], inst.dests[1], inst.srcs[0]);
       },
       [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
         dump.dump(sink, EZ_OP_NOT, inst.dests, inst.srcs);

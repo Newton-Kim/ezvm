@@ -104,6 +104,14 @@ void ezStackFrame::operate(ezBinaryOperation op, ezAddress &dest,
   val2addr(cond, ((ezValue*)rst)->condition());
 }
 
+void ezStackFrame::add(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
+  calculate_binary(dest, src1, src2, [](ezValue* vl, ezValue* vr)->ezValue*{ return (vl->id >= vr->id) ? vl->add(vr) : vr->add(vl, true); });
+}
+
+void ezStackFrame::add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2) {
+  calculate_binary(dest, cond, src1, src2, [](ezValue* vl, ezValue* vr)->ezValue*{ return (vl->id >= vr->id) ? vl->add(vr) : vr->add(vl, true); });
+}
+
 void ezStackFrame::conditional_bra(ezAddress &cond, size_t index,
                                    function<bool(ezCondition *)> func) {
   ezObject *vcond = addr2val(cond);
@@ -214,21 +222,52 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
   });
 }
 
-void ezStackFrame::operate(ezUnaryOperation op, ezAddress &dest,
-                           ezAddress &src) {
-  ezValue *v = NULL, *rst = NULL;
-  v = (ezValue*)addr2val(src);
-  rst = v->operate(op);
+void ezStackFrame::calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2, function<ezValue*(ezValue*, ezValue*)> func) {
+  ezValue *vl = NULL, *vr = NULL, *rst = NULL;
+  vl = (ezValue*)addr2val(src1);
+  vr = (ezValue*)addr2val(src2);
+  rst = func(vl, vr);
   val2addr(dest, rst);
 }
 
-void ezStackFrame::operate(ezUnaryOperation op, ezAddress &dest,
-                           ezAddress &cond, ezAddress &src) {
-  ezValue *v = NULL, *rst = NULL;
-  v = (ezValue*)addr2val(src);
-  rst = v->operate(op);
+void ezStackFrame::calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2, function<ezValue*(ezValue*, ezValue*)> func) {
+  ezValue *vl = NULL, *vr = NULL, *rst = NULL;
+  vl = (ezValue*)addr2val(src1);
+  vr = (ezValue*)addr2val(src2);
+  rst = func(vl, vr);
   val2addr(dest, rst);
   val2addr(cond, rst->condition());
+}
+
+void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &src, function<ezValue*(ezValue*)> func) {
+  ezValue *v = NULL, *rst = NULL;
+  v = (ezValue*)addr2val(src);
+  rst = func(v);
+  val2addr(dest, rst);
+}
+
+void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src, function<ezValue*(ezValue*)> func) {
+  ezValue *v = NULL, *rst = NULL;
+  v = (ezValue*)addr2val(src);
+  rst = func(v);
+  val2addr(dest, rst);
+  val2addr(cond, rst->condition());
+}
+
+void ezStackFrame::negate(ezAddress &dest, ezAddress &src) {
+  calculate_unary(dest, src, [](ezValue* v)->ezValue* {return v->negate();});
+}
+
+void ezStackFrame::negate(ezAddress &dest, ezAddress &cond, ezAddress &src) {
+  calculate_unary(dest, cond, src, [](ezValue* v)->ezValue* {return v->negate();});
+}
+
+void ezStackFrame::b_not(ezAddress &dest, ezAddress &src) {
+  calculate_unary(dest, src, [](ezValue* v)->ezValue* {return v->bitwise_not();});
+}
+
+void ezStackFrame::b_not(ezAddress &dest, ezAddress &cond, ezAddress &src) {
+  calculate_unary(dest, src, [](ezValue* v)->ezValue* {return v->bitwise_not();});
 }
 
 void ezStackFrame::fgc(void) { ezGC::instance().force(); }

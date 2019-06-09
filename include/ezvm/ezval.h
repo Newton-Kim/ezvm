@@ -43,15 +43,8 @@ enum ezValueType {
   EZ_VALUE_TYPE_MAX
 };
 
-enum ezUnaryOperation {
-  EZ_UNARY_OPERATION_NEGATE = 0,
-  EZ_UNARY_OPERATION_NOT,
-  EZ_UNARY_OPERATION_MAX
-};
-
 enum ezBinaryOperation {
-  EZ_BINARY_OPERATION_ADDITION = 0,
-  EZ_BINARY_OPERATION_COMPARISON,
+  EZ_BINARY_OPERATION_COMPARISON = 0,
   EZ_BINARY_OPERATION_SUBTRACTION,
   EZ_BINARY_OPERATION_MULTIPLICATION,
   EZ_BINARY_OPERATION_DIVISION,
@@ -71,12 +64,10 @@ ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip);
 ezValue *fn_unary_generic_error(ezValue *v);
 
 typedef ezObject *fnBinaryOperation(ezValue *, ezValue *, bool flip);
-typedef ezValue *fnUnaryOperation(ezValue *);
 
 class ezValue : public ezObject {
 protected:
   fnBinaryOperation ***m_fn_binary;
-  fnUnaryOperation **m_fn_unary;
 
 public:
   const ezValueType id;
@@ -85,14 +76,38 @@ public:
 
   virtual ezObject *condition(void);
 
+  virtual bool to_bool(void);
+  virtual int to_int(void);
+  virtual double to_float(void);
+  virtual complex<double> to_complex(void);
+  virtual string to_string(void);
+
+  virtual ezValue* add(ezValue* v, bool flip = false);
+  virtual ezValue* subtract(ezValue* v, bool flip = false);
+  virtual ezValue* multiply(ezValue* v, bool flip = false);
+  virtual ezValue* divide(ezValue* v, bool flip = false);
+  virtual ezValue* modulate(ezValue* v, bool flip = false);
+  virtual ezValue* power(ezValue* v, bool flip = false);
+  virtual ezValue* bitwise_and(ezValue* v, bool flip = false);
+  virtual ezValue* bitwise_or(ezValue* v, bool flip = false);
+  virtual ezValue* bitwise_xor(ezValue* v, bool flip = false);
+  virtual ezValue* lsl(ezValue* v, bool flip = false);
+  virtual ezValue* lsr(ezValue* v, bool flip = false);
+  virtual ezObject* compare(ezValue* v, bool flip = false);
+  virtual ezValue* negate(void);
+  virtual ezValue* bitwise_not(void);
+
   ezObject *operate(ezBinaryOperation op, ezValue *v, bool flip = false);
-  ezValue *operate(ezUnaryOperation op);
 };
 
 class ezBool : public ezValue {
 public:
   const bool value;
   ezBool(bool val);
+  bool to_bool(void);
+  ezObject* compare(ezValue* v, bool flip = false);
+  ezValue* bitwise_not(void);
+  
   ezObject *condition(void);
 };
 
@@ -100,6 +115,24 @@ class ezInteger : public ezValue {
 public:
   const int value;
   ezInteger(int val);
+  int to_int(void);
+  double to_float(void);
+  complex<double> to_complex(void);
+  string to_string(void);
+  ezValue* add(ezValue* v, bool flip = false);
+  ezValue* subtract(ezValue* v, bool flip = false);
+  ezValue* multiply(ezValue* v, bool flip = false);
+  ezValue* divide(ezValue* v, bool flip = false);
+  ezValue* modulate(ezValue* v, bool flip = false);
+  ezValue* power(ezValue* v, bool flip = false);
+  ezValue* bitwise_and(ezValue* v, bool flip = false);
+  ezValue* bitwise_or(ezValue* v, bool flip = false);
+  ezValue* bitwise_xor(ezValue* v, bool flip = false);
+  ezValue* lsl(ezValue* v, bool flip = false);
+  ezValue* lsr(ezValue* v, bool flip = false);
+  ezObject* compare(ezValue* v, bool flip = false);
+  ezValue* negate(void);
+  ezValue* bitwise_not(void);
   ezObject *condition(void);
 };
 
@@ -107,6 +140,17 @@ class ezFloat : public ezValue {
 public:
   const double value;
   ezFloat(double val);
+  int to_int(void);
+  double to_float(void);
+  complex<double> to_complex(void);
+  string to_string(void);
+  ezValue* add(ezValue* v, bool flip = false);
+  ezValue* subtract(ezValue* v, bool flip = false);
+  ezValue* multiply(ezValue* v, bool flip = false);
+  ezValue* divide(ezValue* v, bool flip = false);
+  ezValue* power(ezValue* v, bool flip = false);
+  ezObject* compare(ezValue* v, bool flip = false);
+  ezValue* negate(void);
   ezObject *condition(void);
 };
 
@@ -114,6 +158,15 @@ class ezComplex : public ezValue {
 public:
   const complex<double> value;
   ezComplex(complex<double> val);
+  complex<double> to_complex(void);
+  string to_string(void);
+  ezValue* add(ezValue* v, bool flip = false);
+  ezValue* subtract(ezValue* v, bool flip = false);
+  ezValue* multiply(ezValue* v, bool flip = false);
+  ezValue* divide(ezValue* v, bool flip = false);
+  ezValue* power(ezValue* v, bool flip = false);
+  ezObject* compare(ezValue* v, bool flip = false);
+  ezValue* negate(void);
   ezObject *condition(void);
 };
 
@@ -121,6 +174,9 @@ class ezString : public ezValue {
 public:
   const string value;
   ezString(const string val);
+  string to_string(void);
+  ezValue* add(ezValue* v, bool flip = false);
+  ezObject* compare(ezValue* v, bool flip = false);
   ezObject *condition(void);
 };
 

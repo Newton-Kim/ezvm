@@ -28,22 +28,6 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezObject *fn_add_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
-  complex<double> vp = ((ezComplex *)vl)->value;
-  return new ezComplex(
-      complex<double>(vp.real() + ((ezInteger *)vr)->value, vp.imag()));
-}
-
-static ezObject *fn_add_complex_float(ezValue *vl, ezValue *vr, bool flip) {
-  complex<double> vp = ((ezComplex *)vl)->value;
-  return new ezComplex(
-      complex<double>(vp.real() + ((ezFloat *)vr)->value, vp.imag()));
-}
-
-static ezObject *fn_add_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezComplex(((ezComplex *)vl)->value + ((ezComplex *)vr)->value);
-}
-
 static ezObject *fn_sub_complex_integer(ezValue *vl, ezValue *vr, bool flip) {
   complex<double> vp = ((ezComplex *)vl)->value;
   complex<double> ret =
@@ -138,10 +122,6 @@ static ezObject *fn_cmp_complex_complex(ezValue *vl, ezValue *vr, bool flip) {
                          false, false, false);
 }
 
-static fnBinaryOperation *fn_add_complex[EZ_VALUE_TYPE_COMPLEX + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_add_complex_integer,
-    fn_add_complex_float, fn_add_complex_complex};
-
 static fnBinaryOperation *fn_sub_complex[EZ_VALUE_TYPE_COMPLEX + 1] = {
     fn_binary_generic_error, fn_binary_generic_error, fn_sub_complex_integer,
     fn_sub_complex_float, fn_sub_complex_complex};
@@ -187,24 +167,58 @@ static fnBinaryOperation *fn_lsr_complex[EZ_VALUE_TYPE_COMPLEX + 1] = {
     fn_binary_generic_error, fn_binary_generic_error};
 
 static fnBinaryOperation **fn_binary_complex[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_complex,  fn_cmp_complex,   fn_sub_complex, fn_mul_complex,
+    fn_cmp_complex,   fn_sub_complex, fn_mul_complex,
     fn_div_complex,  fn_mod_complex,   fn_pow_complex, fn_b_and_complex,
     fn_b_or_complex, fn_b_xor_complex, fn_lsl_complex, fn_lsr_complex};
-
-static ezValue *fn_neg_complex(ezValue *v) {
-  complex<double> vr(-((ezComplex *)v)->value.real(),
-                     -((ezComplex *)v)->value.imag());
-  return new ezComplex(vr);
-}
-
-static fnUnaryOperation *fn_unary_complex[EZ_UNARY_OPERATION_MAX] = {
-    fn_unary_generic_error, fn_neg_complex};
 
 ezComplex::ezComplex(complex<double> val)
     : ezValue(EZ_VALUE_TYPE_COMPLEX), value(val) {
   m_size = sizeof(*this);
   m_fn_binary = fn_binary_complex;
-  m_fn_unary = fn_unary_complex;
+}
+
+complex<double> ezComplex::to_complex(void) {
+  return value;
+}
+
+string ezComplex::to_string(void) {
+  stringstream ss;
+  ss << value.real();
+  if (value.imag() >= 0)
+    ss << "+";
+  ss << value.imag() << "j";
+  return ss.str();
+}
+
+ezValue* ezComplex::add(ezValue* v, bool flip) {
+  return new ezComplex(value + v->to_complex());
+}
+
+ezValue* ezComplex::subtract(ezValue* v, bool flip) {
+  complex<double> ret = (flip) ? v->to_complex() - value : value - v->to_complex();
+  return new ezComplex(ret);
+}
+
+ezValue* ezComplex::multiply(ezValue* v, bool flip) {
+  return new ezComplex(value * v->to_complex());
+}
+
+ezValue* ezComplex::divide(ezValue* v, bool flip) {
+  complex<double> ret = (flip) ? v->to_complex() / value : value / v->to_complex();
+  return new ezComplex(ret);
+}
+
+ezValue* ezComplex::power(ezValue* v, bool flip) {
+  complex<double> ret = (flip) ? pow(v->to_complex(), value) : pow(value, v->to_complex());
+  return new ezComplex(ret);
+}
+
+ezObject* ezComplex::compare(ezValue* v, bool flip) {
+  return new ezCondition(v->id == EZ_VALUE_TYPE_COMPLEX && value == v->to_complex(), false, false, false);
+}
+
+ezValue* ezComplex::negate(void) {
+  return new ezComplex(-value);
 }
 
 ezObject *ezComplex::condition(void) {

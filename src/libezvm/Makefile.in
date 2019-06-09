@@ -136,11 +136,11 @@ libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezgc.lo ezinstruction.lo asm/ezasm.lo \
 	asm/ezasm_proc.lo asm/ezasm_instr.lo ezdump.lo stack.lo \
-	thread.lo ezmemory.lo vm.lo value/ezval.lo value/ezobj.lo \
-	value/ezval_bool.lo value/ezval_carousel.lo \
-	value/ezval_complex.lo value/ezval_condition.lo \
-	value/ezval_float.lo value/ezval_integer.lo value/ezval_nil.lo \
-	value/ezval_string.lo utility/ezfile.lo
+	thread.lo ezmemory.lo vm.lo object/ezobj.lo \
+	object/ezobj_function.lo object/ezobj_condition.lo \
+	object/ezobj_nil.lo value/ezval.lo value/ezval_bool.lo \
+	value/ezval_complex.lo value/ezval_float.lo \
+	value/ezval_integer.lo value/ezval_string.lo utility/ezfile.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -169,14 +169,15 @@ am__depfiles_remade = ./$(DEPDIR)/ezdump.Plo ./$(DEPDIR)/ezgc.Plo \
 	./$(DEPDIR)/stack.Plo ./$(DEPDIR)/thread.Plo \
 	./$(DEPDIR)/vm.Plo asm/$(DEPDIR)/ezasm.Plo \
 	asm/$(DEPDIR)/ezasm_instr.Plo asm/$(DEPDIR)/ezasm_proc.Plo \
-	utility/$(DEPDIR)/ezfile.Plo value/$(DEPDIR)/ezobj.Plo \
+	object/$(DEPDIR)/ezobj.Plo \
+	object/$(DEPDIR)/ezobj_condition.Plo \
+	object/$(DEPDIR)/ezobj_function.Plo \
+	object/$(DEPDIR)/ezobj_nil.Plo utility/$(DEPDIR)/ezfile.Plo \
 	value/$(DEPDIR)/ezval.Plo value/$(DEPDIR)/ezval_bool.Plo \
-	value/$(DEPDIR)/ezval_carousel.Plo \
 	value/$(DEPDIR)/ezval_complex.Plo \
-	value/$(DEPDIR)/ezval_condition.Plo \
 	value/$(DEPDIR)/ezval_float.Plo \
 	value/$(DEPDIR)/ezval_integer.Plo \
-	value/$(DEPDIR)/ezval_nil.Plo value/$(DEPDIR)/ezval_string.Plo
+	value/$(DEPDIR)/ezval_string.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -363,15 +364,15 @@ libezvm_la_SOURCES = ezgc.cc \
 		   thread.cc \
 		   ezmemory.cc \
 		   vm.cc \
+		   object/ezobj.cc \
+		   object/ezobj_function.cc \
+		   object/ezobj_condition.cc \
+		   object/ezobj_nil.cc \
 		   value/ezval.cc \
-		   value/ezobj.cc \
 		   value/ezval_bool.cc \
-		   value/ezval_carousel.cc \
 		   value/ezval_complex.cc \
-		   value/ezval_condition.cc \
 		   value/ezval_float.cc \
 		   value/ezval_integer.cc \
-		   value/ezval_nil.cc \
 		   value/ezval_string.cc \
 		   utility/ezfile.cc
 
@@ -388,6 +389,8 @@ nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \
 		../../include/ezvm/ezval.h \
+		../../include/ezvm/ezobject.h \
+		../../include/ezvm/ezfunc.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS = -I../../include -std=c++11
@@ -471,6 +474,20 @@ asm/$(DEPDIR)/$(am__dirstamp):
 asm/ezasm.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
 asm/ezasm_proc.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
 asm/ezasm_instr.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
+object/$(am__dirstamp):
+	@$(MKDIR_P) object
+	@: > object/$(am__dirstamp)
+object/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) object/$(DEPDIR)
+	@: > object/$(DEPDIR)/$(am__dirstamp)
+object/ezobj.lo: object/$(am__dirstamp) \
+	object/$(DEPDIR)/$(am__dirstamp)
+object/ezobj_function.lo: object/$(am__dirstamp) \
+	object/$(DEPDIR)/$(am__dirstamp)
+object/ezobj_condition.lo: object/$(am__dirstamp) \
+	object/$(DEPDIR)/$(am__dirstamp)
+object/ezobj_nil.lo: object/$(am__dirstamp) \
+	object/$(DEPDIR)/$(am__dirstamp)
 value/$(am__dirstamp):
 	@$(MKDIR_P) value
 	@: > value/$(am__dirstamp)
@@ -478,20 +495,13 @@ value/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) value/$(DEPDIR)
 	@: > value/$(DEPDIR)/$(am__dirstamp)
 value/ezval.lo: value/$(am__dirstamp) value/$(DEPDIR)/$(am__dirstamp)
-value/ezobj.lo: value/$(am__dirstamp) value/$(DEPDIR)/$(am__dirstamp)
 value/ezval_bool.lo: value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_carousel.lo: value/$(am__dirstamp) \
-	value/$(DEPDIR)/$(am__dirstamp)
 value/ezval_complex.lo: value/$(am__dirstamp) \
-	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_condition.lo: value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
 value/ezval_float.lo: value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
 value/ezval_integer.lo: value/$(am__dirstamp) \
-	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_nil.lo: value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
 value/ezval_string.lo: value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
@@ -511,6 +521,8 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f asm/*.$(OBJEXT)
 	-rm -f asm/*.lo
+	-rm -f object/*.$(OBJEXT)
+	-rm -f object/*.lo
 	-rm -f utility/*.$(OBJEXT)
 	-rm -f utility/*.lo
 	-rm -f value/*.$(OBJEXT)
@@ -529,16 +541,16 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_instr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_proc.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_condition.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_function.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_nil.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezobj.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_bool.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_carousel.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_complex.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_condition.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_float.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_integer.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_nil.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_string.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -577,6 +589,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf asm/.libs asm/_libs
+	-rm -rf object/.libs object/_libs
 	-rm -rf utility/.libs utility/_libs
 	-rm -rf value/.libs value/_libs
 install-nobase_includeHEADERS: $(nobase_include_HEADERS)
@@ -724,6 +737,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f asm/$(DEPDIR)/$(am__dirstamp)
 	-rm -f asm/$(am__dirstamp)
+	-rm -f object/$(DEPDIR)/$(am__dirstamp)
+	-rm -f object/$(am__dirstamp)
 	-rm -f utility/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utility/$(am__dirstamp)
 	-rm -f value/$(DEPDIR)/$(am__dirstamp)
@@ -748,16 +763,16 @@ distclean: distclean-am
 	-rm -f asm/$(DEPDIR)/ezasm.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
+	-rm -f object/$(DEPDIR)/ezobj.Plo
+	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
+	-rm -f object/$(DEPDIR)/ezobj_function.Plo
+	-rm -f object/$(DEPDIR)/ezobj_nil.Plo
 	-rm -f utility/$(DEPDIR)/ezfile.Plo
-	-rm -f value/$(DEPDIR)/ezobj.Plo
 	-rm -f value/$(DEPDIR)/ezval.Plo
 	-rm -f value/$(DEPDIR)/ezval_bool.Plo
-	-rm -f value/$(DEPDIR)/ezval_carousel.Plo
 	-rm -f value/$(DEPDIR)/ezval_complex.Plo
-	-rm -f value/$(DEPDIR)/ezval_condition.Plo
 	-rm -f value/$(DEPDIR)/ezval_float.Plo
 	-rm -f value/$(DEPDIR)/ezval_integer.Plo
-	-rm -f value/$(DEPDIR)/ezval_nil.Plo
 	-rm -f value/$(DEPDIR)/ezval_string.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -814,16 +829,16 @@ maintainer-clean: maintainer-clean-am
 	-rm -f asm/$(DEPDIR)/ezasm.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
+	-rm -f object/$(DEPDIR)/ezobj.Plo
+	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
+	-rm -f object/$(DEPDIR)/ezobj_function.Plo
+	-rm -f object/$(DEPDIR)/ezobj_nil.Plo
 	-rm -f utility/$(DEPDIR)/ezfile.Plo
-	-rm -f value/$(DEPDIR)/ezobj.Plo
 	-rm -f value/$(DEPDIR)/ezval.Plo
 	-rm -f value/$(DEPDIR)/ezval_bool.Plo
-	-rm -f value/$(DEPDIR)/ezval_carousel.Plo
 	-rm -f value/$(DEPDIR)/ezval_complex.Plo
-	-rm -f value/$(DEPDIR)/ezval_condition.Plo
 	-rm -f value/$(DEPDIR)/ezval_float.Plo
 	-rm -f value/$(DEPDIR)/ezval_integer.Plo
-	-rm -f value/$(DEPDIR)/ezval_nil.Plo
 	-rm -f value/$(DEPDIR)/ezval_string.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

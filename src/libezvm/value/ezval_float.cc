@@ -28,14 +28,6 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezObject *fn_add_float_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezFloat(((ezFloat *)vl)->value + ((ezInteger *)vr)->value);
-}
-
-static ezObject *fn_add_float_float(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezFloat(((ezFloat *)vl)->value + ((ezFloat *)vr)->value);
-}
-
 static ezObject *fn_sub_float_integer(ezValue *vl, ezValue *vr, bool flip) {
   double ret = (flip) ? ((ezInteger *)vr)->value - ((ezFloat *)vl)->value
                       : ((ezFloat *)vl)->value - ((ezInteger *)vr)->value;
@@ -92,10 +84,6 @@ static ezObject *fn_cmp_float_float(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(ret == 0, ret < 0, false, false);
 }
 
-static fnBinaryOperation *fn_add_float[EZ_VALUE_TYPE_FLOAT + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_add_float_integer,
-    fn_add_float_float};
-
 static fnBinaryOperation *fn_sub_float[EZ_VALUE_TYPE_FLOAT + 1] = {
     fn_binary_generic_error, fn_binary_generic_error, fn_sub_float_integer,
     fn_sub_float_float};
@@ -121,21 +109,62 @@ static fnBinaryOperation *fn_cmp_float[EZ_VALUE_TYPE_FLOAT + 1] = {
     fn_cmp_float_float};
 
 static fnBinaryOperation **fn_binary_float[EZ_BINARY_OPERATION_MAX] = {
-    fn_add_float,     fn_cmp_float,     fn_sub_float,     fn_mul_float,
+    fn_cmp_float,     fn_sub_float,     fn_mul_float,
     fn_div_float,     fn_default_float, fn_pow_float,     fn_default_float,
     fn_default_float, fn_default_float, fn_default_float, fn_default_float};
-
-static ezValue *fn_neg_float(ezValue *v) {
-  return new ezFloat(((ezFloat *)v)->value);
-}
-
-static fnUnaryOperation *fn_unary_float[EZ_UNARY_OPERATION_MAX] = {
-    fn_unary_generic_error, fn_neg_float};
 
 ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), value(val) {
   m_size = sizeof(*this);
   m_fn_binary = fn_binary_float;
-  m_fn_unary = fn_unary_float;
+}
+
+int ezFloat::to_int(void) {
+  return value;
+}
+
+double ezFloat::to_float(void) {
+  return value;
+}
+
+complex<double> ezFloat::to_complex(void) {
+  return value;
+}
+
+string ezFloat::to_string(void) {
+  stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
+ezValue* ezFloat::add(ezValue* v, bool flip) {
+  return new ezFloat(value + v->to_float());
+}
+
+ezValue* ezFloat::subtract(ezValue* v, bool flip) {
+  double ret = (flip) ? v->to_float() - value : value - v->to_float();
+  return new ezFloat(ret);
+}
+
+ezValue* ezFloat::multiply(ezValue* v, bool flip) {
+  return new ezFloat(value * v->to_float());
+}
+
+ezValue* ezFloat::divide(ezValue* v, bool flip) {
+  double ret = (flip) ? v->to_float() / value : value / v->to_float();
+  return new ezFloat(ret);
+}
+
+ezValue* ezFloat::power(ezValue* v, bool flip) {
+  double ret = (flip) ? pow(v->to_float(), value) : pow(value, v->to_float());
+  return new ezFloat(ret);
+}
+
+ezObject* ezFloat::compare(ezValue* v, bool flip) {
+  return new ezCondition(v->id == EZ_VALUE_TYPE_FLOAT && value == v->to_float(), false, false, false);
+}
+
+ezValue* ezFloat::negate(void) {
+  return new ezFloat(-value);
 }
 
 ezObject *ezFloat::condition(void) {
