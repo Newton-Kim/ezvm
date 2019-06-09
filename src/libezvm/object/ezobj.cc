@@ -27,3 +27,6 @@
 
 ezObject::ezObject(ezObjectType tp) : type(tp) {
 }
+
+ezHandle::ezHandle(unsigned int identifier) : ezObject(EZ_OBJECT_TYPE_HANDLE), id(identifier) {
+}

@@ -152,6 +152,7 @@ public:
   void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void lsr(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+/*
   void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void tge(ezAddress &dest, ezAddress &src1, ezAddress &src2);
@@ -160,6 +161,7 @@ public:
   void tlt(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void tne(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void tne(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
+*/
   void beq(ezAddress &cond, size_t index);
   void bge(ezAddress &cond, size_t index);
   void blt(ezAddress &cond, size_t index);

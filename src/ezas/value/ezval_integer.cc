@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "eaval.h"
 #include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
@@ -119,3 +119,12 @@ ezObject *ezInteger::condition(void) {
                          false, false);
 }
 
+bool ezInteger::is_equal(ezValue*v) {
+  if(EZ_VALUE_TYPE_INTEGER != v->id) return false;
+  if(value != ((ezInteger*)v)->value) return false;
+  return true;
+}
+
+void ezInteger::dump(ezFile &sink) {
+    sink.print("%d\n", value);
+}

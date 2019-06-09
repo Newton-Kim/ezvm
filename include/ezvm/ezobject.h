@@ -30,6 +30,7 @@ enum ezObjectType {
   EZ_OBJECT_TYPE_CONDITION,
   EZ_OBJECT_TYPE_FUNCTION,
   EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION,
+  EZ_OBJECT_TYPE_HANDLE,
   EZ_OBJECT_TYPE_VALUE,
   EZ_OBJECT_TYPE_MAX
 };
@@ -47,3 +48,9 @@ public:
   static ezNull *instance(void);
 };
 
+class ezHandle : public ezObject {
+public:
+  unsigned int id;
+  ezHandle (unsigned int identifier);
+  virtual ~ezHandle() {};
+};

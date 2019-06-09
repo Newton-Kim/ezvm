@@ -25,6 +25,7 @@
 */
 #include "ezvm/ezvm.h"
 #include "ezio.h"
+#include "eaval.h"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -382,11 +383,11 @@ addrs : %empty | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.o
 
 vars : %empty | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
-var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezString($1));}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
-	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
-	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(complex<double>(0, $1));}
-	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezInteger($1));}
+	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezComplex(complex<double>(0, $1)));}
+	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezBool($1));}
 	| ADDRESS {$$ = $1;};
 %%
 

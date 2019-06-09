@@ -23,15 +23,12 @@
  *
  */
 #include "ezvm/ezval.h"
+#include "ezvm/ezfile.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip) {
-  throw runtime_error("the operation with given type is not supported");
-}
-
-ezValue::ezValue(const ezValueType tp) :id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
+ezValue::ezValue(const unsigned int tp) :id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}
@@ -116,3 +113,10 @@ ezValue* ezValue::bitwise_not(void) {
   throw runtime_error("unable to bitwise not this type");
 }
 
+bool ezValue::is_equal(ezValue* v) {
+  throw runtime_error("unable to test equality of this type");
+}
+
+void ezValue::dump(ezFile &sink) {
+  sink.print("(unknown)");
+}

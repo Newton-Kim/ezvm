@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "eaval.h"
 #include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
@@ -82,3 +82,14 @@ ezObject *ezComplex::condition(void) {
                          (abs(value) < 0) ? true : false, false, false);
 }
 
+bool ezComplex::is_equal(ezValue*v) {
+  if(EZ_VALUE_TYPE_COMPLEX != v->id) return false;
+  if(value != ((ezComplex*)v)->value) return false;
+  return true;
+}
+
+void ezComplex::dump(ezFile &sink) {
+    double cr = value.real();
+    double ci = value.imag();
+    sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
+}

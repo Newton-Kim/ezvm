@@ -235,6 +235,7 @@ void ezStackFrame::test_equality(ezAddress &rst, ezAddress &cond,
   val2addr(cond, vcond);
 }
 
+/*
 void ezStackFrame::teq(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   test_equality(dest, src1, src2, [](ezCondition *cond) {
     return (cond->zero) ? new ezBool(true) : new ezBool(false);
@@ -288,6 +289,7 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
     return (!cond->zero) ? new ezBool(true) : new ezBool(false);
   });
 }
+*/
 
 void ezStackFrame::calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2, function<ezValue*(ezValue*, ezValue*)> func) {
   ezValue *vl = NULL, *vr = NULL, *rst = NULL;
@@ -404,14 +406,14 @@ void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
   vector<ezObject *> vargs;
   addr2val(vargs, args);
   size_t hthd = m_callback->thd(func, vargs, rets, this);
-  val2addr(handle, new ezInteger(hthd));
+  val2addr(handle, new ezHandle(hthd));
 }
 
 void ezStackFrame::wait(ezAddress &handle) {
   ezObject *v = addr2val(handle);
-  if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id != EZ_VALUE_TYPE_INTEGER)
+  if (v->type != EZ_OBJECT_TYPE_HANDLE)
     throw runtime_error("invalid handle");
-  m_callback->wait(((ezInteger *)v)->value);
+  m_callback->wait(((ezHandle*)v)->id);
 }
 
 void ezStackFrame::update(vector<ezAddress> &dests, vector<ezObject *> &vals) {

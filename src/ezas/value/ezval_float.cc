@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "eaval.h"
 #include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
@@ -87,3 +87,11 @@ ezObject *ezFloat::condition(void) {
                          false, false);
 }
 
+bool ezFloat::is_equal(ezValue*v) {
+  if(EZ_VALUE_TYPE_FLOAT != v->id) return false;
+  if(value != ((ezFloat*)v)->value) return false;
+  return true;
+}
+
+void ezFloat::dump(ezFile &sink) {
+}

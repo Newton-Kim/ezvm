@@ -15,11 +15,6 @@ libezvm_la_SOURCES=ezgc.cc \
 		   object/ezobj_condition.cc \
 		   object/ezobj_nil.cc \
 		   value/ezval.cc \
-		   value/ezval_bool.cc \
-		   value/ezval_complex.cc \
-		   value/ezval_float.cc \
-		   value/ezval_integer.cc \
-		   value/ezval_string.cc \
 		   utility/ezfile.cc
 
 includedir=$(prefix)/include/ezvm

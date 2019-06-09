@@ -24,6 +24,7 @@
  */
 #include "ezio.h"
 #include "ezvm/ezfunc.h"
+#include "eaval.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>

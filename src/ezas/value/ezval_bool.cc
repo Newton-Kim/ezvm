@@ -22,30 +22,40 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "eaval.h"
 #include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-ezString::ezString(const string val)
-    : ezValue(EZ_VALUE_TYPE_STRING), value(val) {
-  m_size = sizeof(*this) + val.size() + 1;
+ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
+  m_size = sizeof(*this);
 }
 
-string ezString::to_string(void) {
-  return value;
+ezValue* ezBool::bitwise_not(void) {
+  return new ezBool(!value);
 }
 
-ezValue* ezString::add(ezValue* v, bool flip) {
-  return new ezString(value + v->to_string());
+ezObject* ezBool::compare(ezValue *v, bool flip) {
+  return new ezCondition(!(value ^ v->to_bool()), false, false, false);
 }
 
-ezObject* ezString::compare(ezValue* v, bool flip) {
-  return new ezCondition(v->id == EZ_VALUE_TYPE_STRING && value == v->to_string(), false, false, false);
+ezObject *ezBool::condition(void) {
+  return new ezCondition(!value, false, false, false);
 }
 
-ezObject *ezString::condition(void) {
-  return new ezCondition(value.empty(), false, false, false);
+bool ezBool::to_bool(void) {return value;}
+
+bool ezBool::is_equal(ezValue*v) {
+  if(EZ_VALUE_TYPE_BOOL != v->id) return false;
+  if(value != ((ezBool*)v)->value) return false;
+  return true;
 }
 
+void ezBool::dump(ezFile &sink) {
+    if (value == true)
+      sink.print("true");
+    else
+      sink.print("false");
+    sink.print("\n");
+}

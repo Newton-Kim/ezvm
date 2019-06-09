@@ -96,30 +96,7 @@ void ezDump::dump(ezFile &sink, const ezObject *o) {
     }
   } return;
   case EZ_OBJECT_TYPE_VALUE:
-    break;
-  }
-  ezValue* v = (ezValue*) o;
-  switch (v->id) {
-  case EZ_VALUE_TYPE_BOOL:
-    if (((ezBool *)v)->value == true)
-      sink.print("true");
-    else
-      sink.print("false");
-    sink.print("\n");
-    break;
-  case EZ_VALUE_TYPE_INTEGER:
-    sink.print("%d\n", ((ezInteger *)v)->value);
-    break;
-  case EZ_VALUE_TYPE_COMPLEX: {
-    double cr = ((ezComplex *)v)->value.real();
-    double ci = ((ezComplex *)v)->value.imag();
-    sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
-  } break;
-  case EZ_VALUE_TYPE_STRING:
-    sink.print("\"%s\"\n", ((ezString *)v)->value.c_str());
-    break;
-  default:
-    sink.print("(unknown)\n");
+    ((ezValue*)o)->dump(sink);
     break;
   }
 }

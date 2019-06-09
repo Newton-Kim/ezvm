@@ -24,7 +24,7 @@
  */
 #pragma once
 
-#include "ezvm/ezval.h"
+#include "ezvm/ezobject.h"
 
 class ezIO {
 public:

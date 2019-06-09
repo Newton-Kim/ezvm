@@ -516,6 +516,7 @@ void ezAsmInstruction::sub(const ezAddress dest, const ezAddress cond,
       dest, cond, lsrc, rsrc);
 }
 
+/*
 void ezAsmInstruction::teq(const ezAddress dest, const ezAddress &lsrc,
                          const ezAddress &rsrc) {
   instruction_with_binary_arguments(
@@ -563,6 +564,7 @@ void ezAsmInstruction::tge(const ezAddress dest, const ezAddress cond,
       },
       dest, cond, lsrc, rsrc);
 }
+*/
 
 void ezAsmInstruction::thd(const ezAddress &func, vector<ezAddress> &args,
                          vector<ezAddress> &rets, const ezAddress &handle) {
@@ -581,6 +583,7 @@ void ezAsmInstruction::thd(const ezAddress &func, vector<ezAddress> &args,
   m_instruction.push_back(inst);
 }
 
+/*
 void ezAsmInstruction::tlt(const ezAddress dest, const ezAddress &lsrc,
                          const ezAddress &rsrc) {
   instruction_with_binary_arguments(
@@ -628,6 +631,7 @@ void ezAsmInstruction::tne(const ezAddress dest, const ezAddress cond,
       },
       dest, cond, lsrc, rsrc);
 }
+*/
 
 void ezAsmInstruction::wait(const ezAddress &handle) {
   ezInstruction *inst = new ezInstruction(

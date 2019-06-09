@@ -24,33 +24,15 @@
  */
 #pragma once
 #include "ezobject.h"
+#include "ezfile.h"
 #include <complex>
-#include <cstddef>
-#include <cstdint>
-#include <map>
-#include <string>
-#include <vector>
 
 using namespace std;
 
-enum ezValueType {
-  EZ_VALUE_TYPE_UNDEFINED = 0,
-  EZ_VALUE_TYPE_BOOL,
-  EZ_VALUE_TYPE_INTEGER,
-  EZ_VALUE_TYPE_FLOAT,
-  EZ_VALUE_TYPE_COMPLEX,
-  EZ_VALUE_TYPE_STRING,
-  EZ_VALUE_TYPE_MAX
-};
-
-class ezValue;
-
 class ezValue : public ezObject {
-protected:
-
 public:
-  const ezValueType id;
-  ezValue(const ezValueType id);
+  const unsigned int id;
+  ezValue(const unsigned int id);
   virtual ~ezValue();
 
   virtual ezObject *condition(void);
@@ -75,85 +57,7 @@ public:
   virtual ezObject* compare(ezValue* v, bool flip = false);
   virtual ezValue* negate(void);
   virtual ezValue* bitwise_not(void);
-};
-
-class ezBool : public ezValue {
-public:
-  const bool value;
-  ezBool(bool val);
-  bool to_bool(void);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* bitwise_not(void);
-  
-  ezObject *condition(void);
-};
-
-class ezInteger : public ezValue {
-public:
-  const int value;
-  ezInteger(int val);
-  int to_int(void);
-  double to_float(void);
-  complex<double> to_complex(void);
-  string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* modulate(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezValue* bitwise_and(ezValue* v, bool flip = false);
-  ezValue* bitwise_or(ezValue* v, bool flip = false);
-  ezValue* bitwise_xor(ezValue* v, bool flip = false);
-  ezValue* lsl(ezValue* v, bool flip = false);
-  ezValue* lsr(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
-  ezValue* bitwise_not(void);
-  ezObject *condition(void);
-};
-
-class ezFloat : public ezValue {
-public:
-  const double value;
-  ezFloat(double val);
-  int to_int(void);
-  double to_float(void);
-  complex<double> to_complex(void);
-  string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
-  ezObject *condition(void);
-};
-
-class ezComplex : public ezValue {
-public:
-  const complex<double> value;
-  ezComplex(complex<double> val);
-  complex<double> to_complex(void);
-  string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
-  ezObject *condition(void);
-};
-
-class ezString : public ezValue {
-public:
-  const string value;
-  ezString(const string val);
-  string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezObject *condition(void);
+  virtual bool is_equal(ezValue* v);
+  virtual void dump(ezFile &sink);
 };
 

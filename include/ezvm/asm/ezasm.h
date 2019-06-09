@@ -122,43 +122,11 @@ public:
    */
   size_t constant_null(void);
   /**
-   * @brief adds a constant string.
+   * @brief adds a constant value object.
    *
    * @param value is a string.
    *
    * @return is an offset in a constant segment.
    */
-  size_t constant(const char *value);
-  /**
-   * @brief adds a constant integer number.
-   *
-   * @param value is an integer number.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const int value);
-  /**
-   * @brief adds a constant boolean.
-   *
-   * @param value is a boolean.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const bool value);
-  /**
-   * @brief adds a constant double.
-   *
-   * @param value is a double.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const double value);
-  /**
-   * @brief adds a constant complex.
-   *
-   * @param value is a complex.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const complex<double> value);
+  size_t constant(ezValue *value);
 };

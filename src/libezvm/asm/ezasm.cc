@@ -104,68 +104,15 @@ size_t ezASM::constant_null(void) {
   return idx;
 }
 
-size_t ezASM::constant(const char *arg) {
-  string value = arg;
+size_t ezASM::constant(ezValue *arg) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_STRING && ((ezString *)v)->value == value)
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue *)v)->is_equal(arg))
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = new ezString(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
+  m_constants.push_back(arg);
+  m_gc.add((ezGCObject *)arg);
   return idx;
 }
 
-size_t ezASM::constant(const int value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_INTEGER && ((ezInteger *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezInteger(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const bool value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezBool(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const double value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*)v)->id == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezFloat(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const complex<double> value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue*) v)->id == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezComplex(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
