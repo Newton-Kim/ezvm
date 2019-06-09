@@ -43,31 +43,10 @@ enum ezValueType {
   EZ_VALUE_TYPE_MAX
 };
 
-enum ezBinaryOperation {
-  EZ_BINARY_OPERATION_COMPARISON = 0,
-  EZ_BINARY_OPERATION_SUBTRACTION,
-  EZ_BINARY_OPERATION_MULTIPLICATION,
-  EZ_BINARY_OPERATION_DIVISION,
-  EZ_BINARY_OPERATION_MODULATION,
-  EZ_BINARY_OPERATION_POW,
-  EZ_BINARY_OPERATION_AND,
-  EZ_BINARY_OPERATION_OR,
-  EZ_BINARY_OPERATION_XOR,
-  EZ_BINARY_OPERATION_LSL,
-  EZ_BINARY_OPERATION_LSR,
-  EZ_BINARY_OPERATION_MAX
-};
-
 class ezValue;
-
-ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip);
-ezValue *fn_unary_generic_error(ezValue *v);
-
-typedef ezObject *fnBinaryOperation(ezValue *, ezValue *, bool flip);
 
 class ezValue : public ezObject {
 protected:
-  fnBinaryOperation ***m_fn_binary;
 
 public:
   const ezValueType id;
@@ -96,8 +75,6 @@ public:
   virtual ezObject* compare(ezValue* v, bool flip = false);
   virtual ezValue* negate(void);
   virtual ezValue* bitwise_not(void);
-
-  ezObject *operate(ezBinaryOperation op, ezValue *v, bool flip = false);
 };
 
 class ezBool : public ezValue {

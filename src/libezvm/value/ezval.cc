@@ -31,18 +31,7 @@ ezObject *fn_binary_generic_error(ezValue *vl, ezValue *vr, bool flip) {
   throw runtime_error("the operation with given type is not supported");
 }
 
-static fnBinaryOperation *fn_binary_generic[EZ_BINARY_OPERATION_MAX][EZ_VALUE_TYPE_MAX];
-
-ezValue::ezValue(const ezValueType tp)
-    : m_fn_binary((fnBinaryOperation***)fn_binary_generic), id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
-  static bool s_fn_operation_initialised = false;
-  if(false == s_fn_operation_initialised) {
-    for(unsigned int cnt_op = 0 ; cnt_op < EZ_BINARY_OPERATION_MAX ; cnt_op++) {
-      for(unsigned int cnt_v = 0 ; cnt_v < EZ_VALUE_TYPE_MAX ; cnt_v++) {
-        fn_binary_generic[cnt_op][cnt_v] = fn_binary_generic_error;
-      }
-    }
-  }
+ezValue::ezValue(const ezValueType tp) :id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}
@@ -125,9 +114,5 @@ ezValue* ezValue::negate(void) {
 
 ezValue* ezValue::bitwise_not(void) {
   throw runtime_error("unable to bitwise not this type");
-}
-
-ezObject *ezValue::operate(ezBinaryOperation op, ezValue *v, bool flip) {
-  return m_fn_binary[op][v->id](this, v, flip);
 }
 

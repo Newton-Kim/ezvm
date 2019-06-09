@@ -28,105 +28,8 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezObject *fn_sub_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value - ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value - ((ezInteger *)vr)->value;
-  return new ezInteger(ret);
-}
-
-static ezObject *fn_mul_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezInteger(((ezInteger *)vl)->value * ((ezInteger *)vr)->value);
-}
-
-static ezObject *fn_div_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value / ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value / ((ezInteger *)vr)->value;
-  return new ezInteger(ret);
-}
-
-static ezObject *fn_mod_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value % ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value % ((ezInteger *)vr)->value;
-  return new ezInteger(ret);
-}
-
-static ezObject *fn_b_and_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezInteger(((ezInteger *)vl)->value & ((ezInteger *)vr)->value);
-}
-
-static ezObject *fn_b_or_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezInteger(((ezInteger *)vl)->value | ((ezInteger *)vr)->value);
-}
-
-static ezObject *fn_b_xor_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezInteger(((ezInteger *)vl)->value ^ ((ezInteger *)vr)->value);
-}
-
-static ezObject *fn_lsl_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value << ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value << ((ezInteger *)vr)->value;
-  return new ezInteger(ret);
-}
-
-static ezObject *fn_lsr_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value >> ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value >> ((ezInteger *)vr)->value;
-  return new ezInteger(ret);
-}
-
-static ezObject *fn_pow_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? pow(((ezInteger *)vr)->value, ((ezInteger *)vl)->value)
-                   : pow(((ezInteger *)vl)->value, ((ezInteger *)vr)->value);
-  return new ezComplex(ret);
-}
-
-static ezObject *fn_cmp_integer_integer(ezValue *vl, ezValue *vr, bool flip) {
-  int ret = (flip) ? ((ezInteger *)vr)->value - ((ezInteger *)vl)->value
-                   : ((ezInteger *)vl)->value - ((ezInteger *)vr)->value;
-  return new ezCondition(ret == 0, ret < 0, false, false);
-}
-
-static fnBinaryOperation *fn_sub_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_sub_integer_integer};
-
-static fnBinaryOperation *fn_mul_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_mul_integer_integer};
-
-static fnBinaryOperation *fn_div_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_div_integer_integer};
-
-static fnBinaryOperation *fn_mod_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_mod_integer_integer};
-
-static fnBinaryOperation *fn_pow_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_pow_integer_integer};
-
-static fnBinaryOperation *fn_cmp_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_cmp_integer_integer};
-
-static fnBinaryOperation *fn_b_and_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_b_and_integer_integer};
-
-static fnBinaryOperation *fn_b_or_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_b_or_integer_integer};
-
-static fnBinaryOperation *fn_b_xor_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_b_xor_integer_integer};
-
-static fnBinaryOperation *fn_lsl_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_lsl_integer_integer};
-
-static fnBinaryOperation *fn_lsr_integer[EZ_VALUE_TYPE_INTEGER + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_lsr_integer_integer};
-
-static fnBinaryOperation **fn_binary_integer[EZ_BINARY_OPERATION_MAX + 1] = {
-    fn_cmp_integer,   fn_sub_integer, fn_mul_integer,
-    fn_div_integer,  fn_mod_integer,   fn_pow_integer, fn_b_and_integer,
-    fn_b_or_integer, fn_b_xor_integer, fn_lsl_integer, fn_lsr_integer};
-
 ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), value(val) {
   m_size = sizeof(*this);
-  m_fn_binary = fn_binary_integer;
 }
 
 int ezInteger::to_int(void) {
@@ -199,7 +102,8 @@ ezValue* ezInteger::lsr(ezValue* v, bool flip) {
 }
 
 ezObject* ezInteger::compare(ezValue* v, bool flip) {
-  return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && value == v->to_int(), false, false, false);
+  int diff = value - v->to_int();
+  return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && 0 == diff, (diff < 0) ? true : false, false, false);
 }
 
 ezValue* ezInteger::negate(void) {

@@ -34,47 +34,8 @@ static ezObject *fn_compare_bool_bool(ezValue *vl, ezValue *vr, bool flip) {
   return new ezCondition(!(bvl ^ bvr), false, false, false);
 }
 
-static fnBinaryOperation *fn_sub_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_mul_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_div_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_mod_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_pow_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_cmp_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_compare_bool_bool};
-
-static fnBinaryOperation *fn_b_and_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_or_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_b_xor_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsl_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_lsr_bool[EZ_VALUE_TYPE_BOOL + 1] = {
-    fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation **fn_binary_bool[EZ_BINARY_OPERATION_MAX] = {
-    fn_cmp_bool,   fn_sub_bool, fn_mul_bool,
-    fn_div_bool,  fn_mod_bool,   fn_pow_bool, fn_b_and_bool,
-    fn_b_or_bool, fn_b_xor_bool, fn_lsl_bool, fn_lsr_bool};
-
 ezBool::ezBool(bool val) : ezValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_size = sizeof(*this);
-  m_fn_binary = fn_binary_bool;
 }
 
 ezValue* ezBool::bitwise_not(void) {

@@ -28,32 +28,9 @@
 #include <sstream>
 #include <stdexcept>
 
-static ezObject *fn_compare_string_string(ezValue *vl, ezValue *vr, bool flip) {
-  return new ezCondition(((ezString *)vl)->value == ((ezString *)vr)->value,
-                         false, false, false);
-}
-
-static fnBinaryOperation *fn_sub_string[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_default_string[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error};
-
-static fnBinaryOperation *fn_cmp_string[EZ_VALUE_TYPE_MAX] = {
-    fn_binary_generic_error, fn_binary_generic_error, fn_binary_generic_error,
-    fn_binary_generic_error, fn_binary_generic_error, fn_compare_string_string};
-
-static fnBinaryOperation **fn_binary_string[EZ_BINARY_OPERATION_MAX] = {
-    fn_cmp_string,     fn_default_string, fn_default_string,
-    fn_default_string, fn_default_string, fn_default_string, fn_default_string,
-    fn_default_string, fn_default_string, fn_default_string, fn_default_string};
-
 ezString::ezString(const string val)
     : ezValue(EZ_VALUE_TYPE_STRING), value(val) {
   m_size = sizeof(*this) + val.size() + 1;
-  m_fn_binary = fn_binary_string;
 }
 
 string ezString::to_string(void) {
