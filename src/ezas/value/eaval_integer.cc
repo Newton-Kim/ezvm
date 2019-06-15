@@ -28,7 +28,7 @@
 #include <sstream>
 #include <stdexcept>
 
-ezInteger::ezInteger(int val) : ezValue(EZ_VALUE_TYPE_INTEGER), value(val) {
+ezInteger::ezInteger(int val) : eaValue(EZ_VALUE_TYPE_INTEGER), value(val) {
   m_size = sizeof(*this);
 }
 
@@ -51,58 +51,58 @@ string ezInteger::to_string(void) {
 }
 
 ezValue* ezInteger::add(ezValue* v, bool flip) {
-  return new ezInteger(value + v->to_int());
+  return new ezInteger(value + ((eaValue*)v)->to_int());
   throw runtime_error("unable to add this type");
 }
 
 ezValue* ezInteger::subtract(ezValue* v, bool flip) {
-  int ret = (flip) ? v->to_int() - value : value - v->to_int();
+  int ret = (flip) ? ((eaValue*)v)->to_int() - value : value - ((eaValue*)v)->to_int();
   return new ezInteger(ret);
 }
 
 ezValue* ezInteger::multiply(ezValue* v, bool flip) {
-  return new ezInteger(value * v->to_int());
+  return new ezInteger(value * ((eaValue*)v)->to_int());
 }
 
 ezValue* ezInteger::divide(ezValue* v, bool flip) {
-  int ret = (flip) ? v->to_int() / value : value / v->to_int();
+  int ret = (flip) ? ((eaValue*)v)->to_int() / value : value / ((eaValue*)v)->to_int();
   return new ezInteger(ret);
 }
 
 ezValue* ezInteger::modulate(ezValue* v, bool flip) {
-  int ret = (flip) ? v->to_int() % value : value % v->to_int();
+  int ret = (flip) ? ((eaValue*)v)->to_int() % value : value % ((eaValue*)v)->to_int();
   return new ezInteger(ret);
 }
 
 ezValue* ezInteger::power(ezValue* v, bool flip) {
-  int ret = (flip) ? pow(v->to_int(), value) : pow(value, v->to_int());
+  int ret = (flip) ? pow(((eaValue*)v)->to_int(), value) : pow(value, ((eaValue*)v)->to_int());
   return new ezInteger(ret);
 }
 
 ezValue* ezInteger::bitwise_and(ezValue* v, bool flip) {
-  return new ezInteger(value & v->to_int());
+  return new ezInteger(value & ((eaValue*)v)->to_int());
 }
 
 ezValue* ezInteger::bitwise_or(ezValue* v, bool flip) {
-  return new ezInteger(value | v->to_int());
+  return new ezInteger(value | ((eaValue*)v)->to_int());
 }
 
 ezValue* ezInteger::bitwise_xor(ezValue* v, bool flip) {
-  return new ezInteger(value ^ v->to_int());
+  return new ezInteger(value ^ ((eaValue*)v)->to_int());
 }
 
 ezValue* ezInteger::lsl(ezValue* v, bool flip) {
-  int ret = (flip) ? v->to_int() << value : value << v->to_int();
+  int ret = (flip) ? ((eaValue*)v)->to_int() << value : value << ((eaValue*)v)->to_int();
   return new ezInteger(ret);
 }
 
 ezValue* ezInteger::lsr(ezValue* v, bool flip) {
-  int ret = (flip) ? v->to_int() >> value : value >> v->to_int();
+  int ret = (flip) ? ((eaValue*)v)->to_int() >> value : value >> ((eaValue*)v)->to_int();
   return new ezInteger(ret);
 }
 
 ezObject* ezInteger::compare(ezValue* v, bool flip) {
-  int diff = value - v->to_int();
+  int diff = value - ((eaValue*)v)->to_int();
   return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && 0 == diff, (diff < 0) ? true : false, false, false);
 }
 

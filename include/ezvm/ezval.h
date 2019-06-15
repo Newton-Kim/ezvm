@@ -36,13 +36,6 @@ public:
   virtual ~ezValue();
 
   virtual ezObject *condition(void);
-
-  virtual bool to_bool(void);
-  virtual int to_int(void);
-  virtual double to_float(void);
-  virtual complex<double> to_complex(void);
-  virtual string to_string(void);
-
   virtual ezValue* add(ezValue* v, bool flip = false);
   virtual ezValue* subtract(ezValue* v, bool flip = false);
   virtual ezValue* multiply(ezValue* v, bool flip = false);

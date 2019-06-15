@@ -37,26 +37,6 @@ ezObject *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
-bool ezValue::to_bool(void) {
-  throw runtime_error("unable to cast to bool");
-}
-
-int ezValue::to_int(void) {
-  throw runtime_error("unable to cast to int");
-}
-
-double ezValue::to_float(void) {
-  throw runtime_error("unable to cast to float");
-}
-
-complex<double> ezValue::to_complex(void) {
-  throw runtime_error("unable to cast to complex");
-}
-
-string ezValue::to_string(void) {
-  throw runtime_error("unable to cast to string");
-}
-
 ezValue* ezValue::add(ezValue* v, bool flip) {
   throw runtime_error("unable to add this type");
 }

@@ -28,7 +28,7 @@
 #include <sstream>
 #include <stdexcept>
 
-ezFloat::ezFloat(double val) : ezValue(EZ_VALUE_TYPE_FLOAT), value(val) {
+ezFloat::ezFloat(double val) : eaValue(EZ_VALUE_TYPE_FLOAT), value(val) {
   m_size = sizeof(*this);
 }
 
@@ -51,30 +51,30 @@ string ezFloat::to_string(void) {
 }
 
 ezValue* ezFloat::add(ezValue* v, bool flip) {
-  return new ezFloat(value + v->to_float());
+  return new ezFloat(value + ((eaValue*)v)->to_float());
 }
 
 ezValue* ezFloat::subtract(ezValue* v, bool flip) {
-  double ret = (flip) ? v->to_float() - value : value - v->to_float();
+  double ret = (flip) ? ((eaValue*)v)->to_float() - value : value - ((eaValue*)v)->to_float();
   return new ezFloat(ret);
 }
 
 ezValue* ezFloat::multiply(ezValue* v, bool flip) {
-  return new ezFloat(value * v->to_float());
+  return new ezFloat(value * ((eaValue*)v)->to_float());
 }
 
 ezValue* ezFloat::divide(ezValue* v, bool flip) {
-  double ret = (flip) ? v->to_float() / value : value / v->to_float();
+  double ret = (flip) ? ((eaValue*)v)->to_float() / value : value / ((eaValue*)v)->to_float();
   return new ezFloat(ret);
 }
 
 ezValue* ezFloat::power(ezValue* v, bool flip) {
-  double ret = (flip) ? pow(v->to_float(), value) : pow(value, v->to_float());
+  double ret = (flip) ? pow(((eaValue*)v)->to_float(), value) : pow(value, ((eaValue*)v)->to_float());
   return new ezFloat(ret);
 }
 
 ezObject* ezFloat::compare(ezValue* v, bool flip) {
-  double diff = value - v->to_float();
+  double diff = value - ((eaValue*)v)->to_float();
   return new ezCondition(v->id == EZ_VALUE_TYPE_FLOAT && 0 == diff, (diff < 0) ? true : false, false, false);
 }
 

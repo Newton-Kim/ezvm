@@ -106,9 +106,10 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_ezas_OBJECTS = ezas.$(OBJEXT) ezio.$(OBJEXT) parse.$(OBJEXT) \
-	scan.$(OBJEXT) value/ezval_bool.$(OBJEXT) \
-	value/ezval_complex.$(OBJEXT) value/ezval_float.$(OBJEXT) \
-	value/ezval_integer.$(OBJEXT) value/ezval_string.$(OBJEXT)
+	scan.$(OBJEXT) value/eaval.$(OBJEXT) \
+	value/eaval_bool.$(OBJEXT) value/eaval_complex.$(OBJEXT) \
+	value/eaval_float.$(OBJEXT) value/eaval_integer.$(OBJEXT) \
+	value/eaval_string.$(OBJEXT)
 ezas_OBJECTS = $(am_ezas_OBJECTS)
 ezas_DEPENDENCIES = ../libezvm/libezvm.la
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -132,10 +133,11 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ezas.Po ./$(DEPDIR)/ezio.Po \
 	./$(DEPDIR)/parse.Po ./$(DEPDIR)/scan.Po \
-	value/$(DEPDIR)/ezval_bool.Po value/$(DEPDIR)/ezval_complex.Po \
-	value/$(DEPDIR)/ezval_float.Po \
-	value/$(DEPDIR)/ezval_integer.Po \
-	value/$(DEPDIR)/ezval_string.Po
+	value/$(DEPDIR)/eaval.Po value/$(DEPDIR)/eaval_bool.Po \
+	value/$(DEPDIR)/eaval_complex.Po \
+	value/$(DEPDIR)/eaval_float.Po \
+	value/$(DEPDIR)/eaval_integer.Po \
+	value/$(DEPDIR)/eaval_string.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -349,11 +351,12 @@ ezas_SOURCES = ezas.cc \
 		ezio.cc \
 		parse.yy \
 		scan.ll \
-		value/ezval_bool.cc \
-		value/ezval_complex.cc \
-		value/ezval_float.cc \
-		value/ezval_integer.cc \
-		value/ezval_string.cc
+		value/eaval.cc \
+		value/eaval_bool.cc \
+		value/eaval_complex.cc \
+		value/eaval_float.cc \
+		value/eaval_integer.cc \
+		value/eaval_string.cc
 
 ezas_LDADD = ../libezvm/libezvm.la -lfl
 AM_CPPFLAGS = -I../../include -std=c++11
@@ -452,15 +455,17 @@ value/$(am__dirstamp):
 value/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) value/$(DEPDIR)
 	@: > value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_bool.$(OBJEXT): value/$(am__dirstamp) \
+value/eaval.$(OBJEXT): value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_complex.$(OBJEXT): value/$(am__dirstamp) \
+value/eaval_bool.$(OBJEXT): value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_float.$(OBJEXT): value/$(am__dirstamp) \
+value/eaval_complex.$(OBJEXT): value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_integer.$(OBJEXT): value/$(am__dirstamp) \
+value/eaval_float.$(OBJEXT): value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
-value/ezval_string.$(OBJEXT): value/$(am__dirstamp) \
+value/eaval_integer.$(OBJEXT): value/$(am__dirstamp) \
+	value/$(DEPDIR)/$(am__dirstamp)
+value/eaval_string.$(OBJEXT): value/$(am__dirstamp) \
 	value/$(DEPDIR)/$(am__dirstamp)
 
 ezas$(EXEEXT): $(ezas_OBJECTS) $(ezas_DEPENDENCIES) $(EXTRA_ezas_DEPENDENCIES) 
@@ -478,11 +483,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezio.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_bool.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_complex.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_float.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_integer.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval_string.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_bool.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_complex.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_float.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_integer.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_string.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -666,11 +672,12 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ezio.Po
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
-	-rm -f value/$(DEPDIR)/ezval_bool.Po
-	-rm -f value/$(DEPDIR)/ezval_complex.Po
-	-rm -f value/$(DEPDIR)/ezval_float.Po
-	-rm -f value/$(DEPDIR)/ezval_integer.Po
-	-rm -f value/$(DEPDIR)/ezval_string.Po
+	-rm -f value/$(DEPDIR)/eaval.Po
+	-rm -f value/$(DEPDIR)/eaval_bool.Po
+	-rm -f value/$(DEPDIR)/eaval_complex.Po
+	-rm -f value/$(DEPDIR)/eaval_float.Po
+	-rm -f value/$(DEPDIR)/eaval_integer.Po
+	-rm -f value/$(DEPDIR)/eaval_string.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -720,11 +727,12 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ezio.Po
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
-	-rm -f value/$(DEPDIR)/ezval_bool.Po
-	-rm -f value/$(DEPDIR)/ezval_complex.Po
-	-rm -f value/$(DEPDIR)/ezval_float.Po
-	-rm -f value/$(DEPDIR)/ezval_integer.Po
-	-rm -f value/$(DEPDIR)/ezval_string.Po
+	-rm -f value/$(DEPDIR)/eaval.Po
+	-rm -f value/$(DEPDIR)/eaval_bool.Po
+	-rm -f value/$(DEPDIR)/eaval_complex.Po
+	-rm -f value/$(DEPDIR)/eaval_float.Po
+	-rm -f value/$(DEPDIR)/eaval_integer.Po
+	-rm -f value/$(DEPDIR)/eaval_string.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

@@ -29,7 +29,7 @@
 #include <stdexcept>
 
 ezComplex::ezComplex(complex<double> val)
-    : ezValue(EZ_VALUE_TYPE_COMPLEX), value(val) {
+    : eaValue(EZ_VALUE_TYPE_COMPLEX), value(val) {
   m_size = sizeof(*this);
 }
 
@@ -47,30 +47,30 @@ string ezComplex::to_string(void) {
 }
 
 ezValue* ezComplex::add(ezValue* v, bool flip) {
-  return new ezComplex(value + v->to_complex());
+  return new ezComplex(value + ((eaValue*)v)->to_complex());
 }
 
 ezValue* ezComplex::subtract(ezValue* v, bool flip) {
-  complex<double> ret = (flip) ? v->to_complex() - value : value - v->to_complex();
+  complex<double> ret = (flip) ? ((eaValue*)v)->to_complex() - value : value - ((eaValue*)v)->to_complex();
   return new ezComplex(ret);
 }
 
 ezValue* ezComplex::multiply(ezValue* v, bool flip) {
-  return new ezComplex(value * v->to_complex());
+  return new ezComplex(value * ((eaValue*)v)->to_complex());
 }
 
 ezValue* ezComplex::divide(ezValue* v, bool flip) {
-  complex<double> ret = (flip) ? v->to_complex() / value : value / v->to_complex();
+  complex<double> ret = (flip) ? ((eaValue*)v)->to_complex() / value : value / ((eaValue*)v)->to_complex();
   return new ezComplex(ret);
 }
 
 ezValue* ezComplex::power(ezValue* v, bool flip) {
-  complex<double> ret = (flip) ? pow(v->to_complex(), value) : pow(value, v->to_complex());
+  complex<double> ret = (flip) ? pow(((eaValue*)v)->to_complex(), value) : pow(value, ((eaValue*)v)->to_complex());
   return new ezComplex(ret);
 }
 
 ezObject* ezComplex::compare(ezValue* v, bool flip) {
-  return new ezCondition(v->id == EZ_VALUE_TYPE_COMPLEX && value == v->to_complex(), false, false, false);
+  return new ezCondition(v->id == EZ_VALUE_TYPE_COMPLEX && value == ((eaValue*)v)->to_complex(), false, false, false);
 }
 
 ezValue* ezComplex::negate(void) {

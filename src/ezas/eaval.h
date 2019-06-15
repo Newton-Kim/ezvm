@@ -33,7 +33,7 @@
 
 using namespace std;
 
-enum ezValueType {
+enum eaValueType {
   EZ_VALUE_TYPE_UNDEFINED = 0,
   EZ_VALUE_TYPE_BOOL,
   EZ_VALUE_TYPE_INTEGER,
@@ -43,7 +43,18 @@ enum ezValueType {
   EZ_VALUE_TYPE_MAX
 };
 
-class ezBool : public ezValue {
+class eaValue : public ezValue {
+public:
+  eaValue(const unsigned int id);
+  virtual bool to_bool(void);
+  virtual int to_int(void);
+  virtual double to_float(void);
+  virtual complex<double> to_complex(void);
+  virtual string to_string(void);
+
+};
+
+class ezBool : public eaValue {
 public:
   const bool value;
   ezBool(bool val);
@@ -55,7 +66,7 @@ public:
   void dump(ezFile &sink);
 };
 
-class ezInteger : public ezValue {
+class ezInteger : public eaValue {
 public:
   const int value;
   ezInteger(int val);
@@ -82,7 +93,7 @@ public:
   void dump(ezFile &sink);
 };
 
-class ezFloat : public ezValue {
+class ezFloat : public eaValue {
 public:
   const double value;
   ezFloat(double val);
@@ -102,7 +113,7 @@ public:
   void dump(ezFile &sink);
 };
 
-class ezComplex : public ezValue {
+class ezComplex : public eaValue {
 public:
   const complex<double> value;
   ezComplex(complex<double> val);
@@ -120,7 +131,7 @@ public:
   void dump(ezFile &sink);
 };
 
-class ezString : public ezValue {
+class ezString : public eaValue {
 public:
   const string value;
   ezString(const string val);
