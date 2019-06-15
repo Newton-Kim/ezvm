@@ -76,6 +76,10 @@ public:
   void dump(ezFile &sink, string op, vector<ezAddress> &param);
   void dump(ezFile &sink, string op, ezAddress cond, size_t offset);
   void dump(ezFile &sink, string op, ezAddress handle);
+  void unary(ezFile &sink, string op, ezAddress dest, ezAddress src);
+  void unary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress src);
+  void binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc, ezAddress rsrc);
+  void binary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress lsrc, ezAddress rsrc);
   void dump(ezFile &sink, string op, size_t offset);
   void dump(ezFile &sink, string op);
 };

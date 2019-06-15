@@ -223,3 +223,40 @@ void ezDump::dump(ezFile &sink, string op, size_t offset) {
 }
 
 void ezDump::dump(ezFile &sink, string op) { sink.print("%s\n", op.c_str()); }
+
+void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress src) {
+  sink.print("%s", op.c_str());
+  dump(sink, dest);
+  sink.print(",");
+  dump(sink, src);
+  sink.print("\n");
+}
+
+void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress src) {
+  sink.print("%s", op.c_str());
+  dump(sink, dest);
+  dump(sink, cond);
+  sink.print(",");
+  dump(sink, src);
+  sink.print("\n");
+}
+
+void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc, ezAddress rsrc) {
+  sink.print("%s", op.c_str());
+  dump(sink, dest);
+  sink.print(",");
+  dump(sink, lsrc);
+  dump(sink, rsrc);
+  sink.print("\n");
+}
+
+void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress lsrc, ezAddress rsrc) {
+  sink.print("%s", op.c_str());
+  dump(sink, dest);
+  dump(sink, cond);
+  sink.print(",");
+  dump(sink, lsrc);
+  dump(sink, rsrc);
+  sink.print("\n");
+}
+
