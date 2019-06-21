@@ -48,6 +48,9 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
   case EZ_ASM_SEGMENT_LOCAL:
     sink.print(" r");
     break;
+  case EZ_ASM_SEGMENT_TEMPORARY:
+    sink.print(" t");
+    break;
   case EZ_ASM_SEGMENT_SCOPE:
     sink.print(" s");
     break;
