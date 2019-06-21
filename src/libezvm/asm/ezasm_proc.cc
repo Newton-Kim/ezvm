@@ -35,6 +35,8 @@ void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 
 void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
 
+void ezAsmProcedure::temps(size_t temps) { m_carousel->ntemps = temps; }
+
 size_t ezAsmProcedure::local(const string value) {
   if (m_locals.end() == m_locals.find(value)) m_locals[value] = m_local_index++;
   if (m_carousel->nmems < m_local_index) m_carousel->nmems = m_local_index;

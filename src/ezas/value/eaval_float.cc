@@ -74,7 +74,7 @@ ezValue* ezFloat::power(ezValue* v, bool flip) {
 }
 
 ezObject* ezFloat::compare(ezValue* v, bool flip) {
-  double diff = value - ((eaValue*)v)->to_float();
+  double diff = flip ? ((eaValue*)v)->to_float() - value : value - ((eaValue*)v)->to_float();
   return new ezCondition(v->id == EZ_VALUE_TYPE_FLOAT && 0 == diff, (diff < 0) ? true : false, false, false);
 }
 

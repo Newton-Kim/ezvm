@@ -36,6 +36,7 @@ private:
 public:
   uint8_t nargs;
   size_t nmems;
+  size_t ntemps;
   ezFunction(ezTable<string, ezObject *> *local,
              ezTable<string, ezObject *> *scope);
   ~ezFunction();

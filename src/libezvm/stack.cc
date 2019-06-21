@@ -41,9 +41,11 @@ ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
     (*m_local)[i] = args[i];
   for (size_t i = 0; i < rets.size(); i++)
     m_return_dest.push_back(rets[i]);
+  m_temporary.reserve(m_carousel->ntemps);
   m_memory.push_back(&(ezMemory::instance().globals().to_vector()));
   m_memory.push_back(&ezMemory::instance().constants());
   m_memory.push_back(m_local);
+  m_memory.push_back(&m_temporary);
   m_memory.push_back(m_scope);
 }
 

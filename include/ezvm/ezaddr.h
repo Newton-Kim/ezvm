@@ -27,6 +27,12 @@
 #include <cstdint>
 
 /**
+ * @brief Global segment: Values are accessed globally. They are altered any
+ * time.
+ * scope.
+ */
+#define EZ_ASM_SEGMENT_GLOBAL 0
+/**
  * @brief Constant segment: Constant values are set on compiling and cannot be
  * altered after.
  */
@@ -36,15 +42,13 @@
  */
 #define EZ_ASM_SEGMENT_LOCAL 2
 /**
+ * @brief temporary segment: This segment is for temporary variables.
+ */
+#define EZ_ASM_SEGMENT_TEMPORARY 3
+/**
  * @brief Parent segment: The scope of a caller.
  */
-#define EZ_ASM_SEGMENT_SCOPE 3
-/**
- * @brief Global segment: Values are accessed globally. They are altered any
- * time.
- * scope.
- */
-#define EZ_ASM_SEGMENT_GLOBAL 0
+#define EZ_ASM_SEGMENT_SCOPE 4
 
 /**
  * @brief ezAddress describes a memory address.

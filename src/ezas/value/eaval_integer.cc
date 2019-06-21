@@ -102,7 +102,7 @@ ezValue* ezInteger::lsr(ezValue* v, bool flip) {
 }
 
 ezObject* ezInteger::compare(ezValue* v, bool flip) {
-  int diff = value - ((eaValue*)v)->to_int();
+  int diff = flip ? ((eaValue*)v)->to_int() - value : value - ((eaValue*)v)->to_int();
   return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && 0 == diff, (diff < 0) ? true : false, false, false);
 }
 

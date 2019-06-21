@@ -91,6 +91,9 @@ sp [ \t]
 		case 'r':
 			yylval.a_value.segment = EZ_ASM_SEGMENT_LOCAL;
 			break;
+		case 't':
+			yylval.a_value.segment = EZ_ASM_SEGMENT_TEMPORARY;
+			break;
 		case 's':
 			yylval.a_value.segment = EZ_ASM_SEGMENT_SCOPE;
 			break;

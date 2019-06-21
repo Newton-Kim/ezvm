@@ -60,6 +60,13 @@ public:
    * mems. the size is not changed.
    */
   void mems(size_t mems);
+  /**
+   * @brief temps the local memory.
+   *
+   * @param temps is a new size. if the size of the local memory is greater than
+   * temps. the size is not changed.
+   */
+  void temps(size_t temps);
   size_t local(const string value);
   /**
    * @brief tags the address with the name.

@@ -60,6 +60,10 @@ private:
    */
   vector<ezObject *> *m_local;
   /**
+   * @brief is a temporary segment.
+   */
+  vector<ezObject *> m_temporary;
+  /**
    * @brief is a scope segment.
    */
   vector<ezObject *> *m_scope;
