@@ -196,6 +196,7 @@ program : import entry procs {
 				s_proc_current->append_instruction(s_instr_current);
 				delete s_instr_current;
 			}
+			s_proc_current->validate();
 			delete s_proc_current;
 		}
 	};
@@ -219,6 +220,7 @@ proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 				s_proc_current->append_instruction(s_instr_current);
 				delete s_instr_current;
 			}
+			s_proc_current->validate();
 			delete s_proc_current;
 		}
 		s_instr_current = new ezAsmInstruction;

@@ -29,6 +29,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -44,6 +45,9 @@ private:
   ezFunction *m_carousel;
   size_t m_local_index;
   map<string, size_t> m_locals;
+  list<string> m_unresolved;
+
+  bool search_unresolved(string label);
 
 public:
   /**
@@ -85,5 +89,6 @@ public:
    */
   size_t label2index(string label);
   void append_instruction(ezAsmInstruction* instr);
+  void validate(void);
 };
 
