@@ -25,8 +25,8 @@
 #pragma once
 #include "ezaddr.h"
 #include "ezinstruction.h"
-#include "eztable.h"
 #include "ezobject.h"
+#include "eztable.h"
 
 class ezFunction : public ezObject {
 private:
@@ -48,7 +48,7 @@ public:
   bool is_local_scoped(void) { return (m_local) ? true : false; }
 };
 
-class ezUserDefinedFunction : public ezObject{
+class ezUserDefinedFunction : public ezObject {
 public:
   ezUserDefinedFunction();
   virtual ~ezUserDefinedFunction() {}
@@ -64,4 +64,3 @@ public:
   const bool carry;
   ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
 };
-

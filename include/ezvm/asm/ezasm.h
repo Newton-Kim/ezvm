@@ -24,11 +24,11 @@
  */
 #pragma once
 
+#include "ezasm_proc.h"
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezgc.h"
-#include "ezvm/eztable.h"
 #include "ezvm/ezobject.h"
-#include "ezasm_proc.h"
+#include "ezvm/eztable.h"
 #include <cstddef>
 #include <map>
 #include <string>

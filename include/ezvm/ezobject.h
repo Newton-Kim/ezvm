@@ -38,8 +38,8 @@ enum ezObjectType {
 class ezObject : public ezGCObject {
 public:
   const ezObjectType type;
-  ezObject (ezObjectType type);
-  virtual ~ezObject() {};
+  ezObject(ezObjectType type);
+  virtual ~ezObject(){};
 };
 
 class ezNull : public ezObject {
@@ -51,6 +51,6 @@ public:
 class ezHandle : public ezObject {
 public:
   unsigned int id;
-  ezHandle (unsigned int identifier);
-  virtual ~ezHandle() {};
+  ezHandle(unsigned int identifier);
+  virtual ~ezHandle(){};
 };

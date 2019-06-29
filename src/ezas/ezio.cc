@@ -23,8 +23,8 @@
  *
  */
 #include "ezio.h"
-#include "ezvm/ezfunc.h"
 #include "eaval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -45,8 +45,8 @@ void ezIoPrint::run(vector<ezObject *> &args, vector<ezObject *> &rets) {
   stringstream ss;
   size_t len = args.size();
   for (size_t i = 0; i < len; i++) {
-    //TODO:typecheck
-    ezValue *v = (ezValue*)args[i];
+    // TODO:typecheck
+    ezValue *v = (ezValue *)args[i];
     switch (v->id) {
     case EZ_VALUE_TYPE_INTEGER:
       ss << ((ezInteger *)v)->value;

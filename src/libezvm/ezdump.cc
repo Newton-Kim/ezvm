@@ -97,9 +97,10 @@ void ezDump::dump(ezFile &sink, const ezObject *o) {
       sink.print("  %d:", pc);
       crsl->instruction[pc]->dump(sink, *this);
     }
-  } return;
+  }
+    return;
   case EZ_OBJECT_TYPE_VALUE:
-    ((ezValue*)o)->dump(sink);
+    ((ezValue *)o)->dump(sink);
     break;
   }
 }
@@ -235,7 +236,8 @@ void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress src) {
   sink.print("\n");
 }
 
-void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress src) {
+void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress cond,
+                   ezAddress src) {
   sink.print("%s", op.c_str());
   dump(sink, dest);
   dump(sink, cond);
@@ -244,7 +246,8 @@ void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAd
   sink.print("\n");
 }
 
-void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc, ezAddress rsrc) {
+void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc,
+                    ezAddress rsrc) {
   sink.print("%s", op.c_str());
   dump(sink, dest);
   sink.print(",");
@@ -253,7 +256,8 @@ void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc, ezA
   sink.print("\n");
 }
 
-void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezAddress lsrc, ezAddress rsrc) {
+void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond,
+                    ezAddress lsrc, ezAddress rsrc) {
   sink.print("%s", op.c_str());
   dump(sink, dest);
   dump(sink, cond);
@@ -262,4 +266,3 @@ void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond, ezA
   dump(sink, rsrc);
   sink.print("\n");
 }
-

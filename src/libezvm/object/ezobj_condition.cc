@@ -29,7 +29,7 @@
 
 ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
                          const bool cry)
-    : ezObject(EZ_OBJECT_TYPE_CONDITION), zero(zr), negative(neg), overflow(ovf),
-      carry(cry) {
+    : ezObject(EZ_OBJECT_TYPE_CONDITION), zero(zr), negative(neg),
+      overflow(ovf), carry(cry) {
   m_size = sizeof(*this);
 }

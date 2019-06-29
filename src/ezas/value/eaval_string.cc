@@ -33,28 +33,28 @@ ezString::ezString(const string val)
   m_size = sizeof(*this) + val.size() + 1;
 }
 
-string ezString::to_string(void) {
-  return value;
+string ezString::to_string(void) { return value; }
+
+ezValue *ezString::add(ezValue *v, bool flip) {
+  return new ezString(value + ((eaValue *)v)->to_string());
 }
 
-ezValue* ezString::add(ezValue* v, bool flip) {
-  return new ezString(value + ((eaValue*)v)->to_string());
-}
-
-ezObject* ezString::compare(ezValue* v, bool flip) {
-  return new ezCondition(v->id == EZ_VALUE_TYPE_STRING && value == ((eaValue*)v)->to_string(), false, false, false);
+ezObject *ezString::compare(ezValue *v, bool flip) {
+  return new ezCondition(v->id == EZ_VALUE_TYPE_STRING &&
+                             value == ((eaValue *)v)->to_string(),
+                         false, false, false);
 }
 
 ezObject *ezString::condition(void) {
   return new ezCondition(value.empty(), false, false, false);
 }
 
-bool ezString::is_equal(ezValue*v) {
-  if(EZ_VALUE_TYPE_STRING != v->id) return false;
-  if(value != ((ezString*)v)->value) return false;
+bool ezString::is_equal(ezValue *v) {
+  if (EZ_VALUE_TYPE_STRING != v->id)
+    return false;
+  if (value != ((ezString *)v)->value)
+    return false;
   return true;
 }
 
-void ezString::dump(ezFile &sink) {
-    sink.print("\"%s\"\n", value.c_str());
-}
+void ezString::dump(ezFile &sink) { sink.print("\"%s\"\n", value.c_str()); }

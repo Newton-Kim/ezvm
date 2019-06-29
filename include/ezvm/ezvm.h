@@ -25,9 +25,9 @@
 #pragma once
 #include "asm/ezasm.h"
 #include "ezdump.h"
+#include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
-#include "ezobject.h"
 #include <list>
 #include <string>
 

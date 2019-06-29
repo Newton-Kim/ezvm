@@ -25,8 +25,8 @@
 #pragma once
 
 #include <ezvm/ezgc.h>
-#include <ezvm/eztable.h>
 #include <ezvm/ezobject.h>
+#include <ezvm/eztable.h>
 
 class ezMemory : public ezGCClient {
 private:

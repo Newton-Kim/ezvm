@@ -115,4 +115,3 @@ size_t ezASM::constant(ezValue *arg) {
   m_gc.add((ezGCObject *)arg);
   return idx;
 }
-

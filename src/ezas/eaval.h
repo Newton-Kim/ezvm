@@ -51,7 +51,6 @@ public:
   virtual double to_float(void);
   virtual complex<double> to_complex(void);
   virtual string to_string(void);
-
 };
 
 class ezBool : public eaValue {
@@ -59,10 +58,10 @@ public:
   const bool value;
   ezBool(bool val);
   bool to_bool(void);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* bitwise_not(void);
+  ezObject *compare(ezValue *v, bool flip = false);
+  ezValue *bitwise_not(void);
   ezObject *condition(void);
-  bool is_equal(ezValue* v);
+  bool is_equal(ezValue *v);
   void dump(ezFile &sink);
 };
 
@@ -74,22 +73,22 @@ public:
   double to_float(void);
   complex<double> to_complex(void);
   string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* modulate(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezValue* bitwise_and(ezValue* v, bool flip = false);
-  ezValue* bitwise_or(ezValue* v, bool flip = false);
-  ezValue* bitwise_xor(ezValue* v, bool flip = false);
-  ezValue* lsl(ezValue* v, bool flip = false);
-  ezValue* lsr(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
-  ezValue* bitwise_not(void);
+  ezValue *add(ezValue *v, bool flip = false);
+  ezValue *subtract(ezValue *v, bool flip = false);
+  ezValue *multiply(ezValue *v, bool flip = false);
+  ezValue *divide(ezValue *v, bool flip = false);
+  ezValue *modulate(ezValue *v, bool flip = false);
+  ezValue *power(ezValue *v, bool flip = false);
+  ezValue *bitwise_and(ezValue *v, bool flip = false);
+  ezValue *bitwise_or(ezValue *v, bool flip = false);
+  ezValue *bitwise_xor(ezValue *v, bool flip = false);
+  ezValue *lsl(ezValue *v, bool flip = false);
+  ezValue *lsr(ezValue *v, bool flip = false);
+  ezObject *compare(ezValue *v, bool flip = false);
+  ezValue *negate(void);
+  ezValue *bitwise_not(void);
   ezObject *condition(void);
-  bool is_equal(ezValue* v);
+  bool is_equal(ezValue *v);
   void dump(ezFile &sink);
 };
 
@@ -101,15 +100,15 @@ public:
   double to_float(void);
   complex<double> to_complex(void);
   string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
+  ezValue *add(ezValue *v, bool flip = false);
+  ezValue *subtract(ezValue *v, bool flip = false);
+  ezValue *multiply(ezValue *v, bool flip = false);
+  ezValue *divide(ezValue *v, bool flip = false);
+  ezValue *power(ezValue *v, bool flip = false);
+  ezObject *compare(ezValue *v, bool flip = false);
+  ezValue *negate(void);
   ezObject *condition(void);
-  bool is_equal(ezValue* v);
+  bool is_equal(ezValue *v);
   void dump(ezFile &sink);
 };
 
@@ -119,15 +118,15 @@ public:
   ezComplex(complex<double> val);
   complex<double> to_complex(void);
   string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezValue* subtract(ezValue* v, bool flip = false);
-  ezValue* multiply(ezValue* v, bool flip = false);
-  ezValue* divide(ezValue* v, bool flip = false);
-  ezValue* power(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
-  ezValue* negate(void);
+  ezValue *add(ezValue *v, bool flip = false);
+  ezValue *subtract(ezValue *v, bool flip = false);
+  ezValue *multiply(ezValue *v, bool flip = false);
+  ezValue *divide(ezValue *v, bool flip = false);
+  ezValue *power(ezValue *v, bool flip = false);
+  ezObject *compare(ezValue *v, bool flip = false);
+  ezValue *negate(void);
   ezObject *condition(void);
-  bool is_equal(ezValue* v);
+  bool is_equal(ezValue *v);
   void dump(ezFile &sink);
 };
 
@@ -136,10 +135,9 @@ public:
   const string value;
   ezString(const string val);
   string to_string(void);
-  ezValue* add(ezValue* v, bool flip = false);
-  ezObject* compare(ezValue* v, bool flip = false);
+  ezValue *add(ezValue *v, bool flip = false);
+  ezObject *compare(ezValue *v, bool flip = false);
   ezObject *condition(void);
-  bool is_equal(ezValue* v);
+  bool is_equal(ezValue *v);
   void dump(ezFile &sink);
 };
-

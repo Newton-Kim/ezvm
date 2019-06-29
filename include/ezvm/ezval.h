@@ -23,8 +23,8 @@
  *
  */
 #pragma once
-#include "ezobject.h"
 #include "ezfile.h"
+#include "ezobject.h"
 #include <complex>
 
 using namespace std;
@@ -36,21 +36,20 @@ public:
   virtual ~ezValue();
 
   virtual ezObject *condition(void);
-  virtual ezValue* add(ezValue* v, bool flip = false);
-  virtual ezValue* subtract(ezValue* v, bool flip = false);
-  virtual ezValue* multiply(ezValue* v, bool flip = false);
-  virtual ezValue* divide(ezValue* v, bool flip = false);
-  virtual ezValue* modulate(ezValue* v, bool flip = false);
-  virtual ezValue* power(ezValue* v, bool flip = false);
-  virtual ezValue* bitwise_and(ezValue* v, bool flip = false);
-  virtual ezValue* bitwise_or(ezValue* v, bool flip = false);
-  virtual ezValue* bitwise_xor(ezValue* v, bool flip = false);
-  virtual ezValue* lsl(ezValue* v, bool flip = false);
-  virtual ezValue* lsr(ezValue* v, bool flip = false);
-  virtual ezObject* compare(ezValue* v, bool flip = false);
-  virtual ezValue* negate(void);
-  virtual ezValue* bitwise_not(void);
-  virtual bool is_equal(ezValue* v);
+  virtual ezValue *add(ezValue *v, bool flip = false);
+  virtual ezValue *subtract(ezValue *v, bool flip = false);
+  virtual ezValue *multiply(ezValue *v, bool flip = false);
+  virtual ezValue *divide(ezValue *v, bool flip = false);
+  virtual ezValue *modulate(ezValue *v, bool flip = false);
+  virtual ezValue *power(ezValue *v, bool flip = false);
+  virtual ezValue *bitwise_and(ezValue *v, bool flip = false);
+  virtual ezValue *bitwise_or(ezValue *v, bool flip = false);
+  virtual ezValue *bitwise_xor(ezValue *v, bool flip = false);
+  virtual ezValue *lsl(ezValue *v, bool flip = false);
+  virtual ezValue *lsr(ezValue *v, bool flip = false);
+  virtual ezObject *compare(ezValue *v, bool flip = false);
+  virtual ezValue *negate(void);
+  virtual ezValue *bitwise_not(void);
+  virtual bool is_equal(ezValue *v);
   virtual void dump(ezFile &sink);
 };
-

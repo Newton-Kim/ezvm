@@ -26,10 +26,10 @@
 
 #include "ezvm/asm/ezasm_instr.h"
 #include "ezvm/ezfunc.h"
+#include <list>
 #include <map>
 #include <string>
 #include <vector>
-#include <list>
 
 using namespace std;
 
@@ -88,7 +88,6 @@ public:
    * @return The offset of a local segment
    */
   size_t label2index(string label);
-  void append_instruction(ezAsmInstruction* instr);
+  void append_instruction(ezAsmInstruction *instr);
   void validate(void);
 };
-

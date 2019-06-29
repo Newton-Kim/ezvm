@@ -32,17 +32,11 @@ ezInteger::ezInteger(int val) : eaValue(EZ_VALUE_TYPE_INTEGER), value(val) {
   m_size = sizeof(*this);
 }
 
-int ezInteger::to_int(void) {
-  return value;
-}
+int ezInteger::to_int(void) { return value; }
 
-double ezInteger::to_float(void) {
-  return value;
-}
+double ezInteger::to_float(void) { return value; }
 
-complex<double> ezInteger::to_complex(void) {
-  return value;
-}
+complex<double> ezInteger::to_complex(void) { return value; }
 
 string ezInteger::to_string(void) {
   stringstream ss;
@@ -50,81 +44,85 @@ string ezInteger::to_string(void) {
   return ss.str();
 }
 
-ezValue* ezInteger::add(ezValue* v, bool flip) {
-  return new ezInteger(value + ((eaValue*)v)->to_int());
+ezValue *ezInteger::add(ezValue *v, bool flip) {
+  return new ezInteger(value + ((eaValue *)v)->to_int());
   throw runtime_error("unable to add this type");
 }
 
-ezValue* ezInteger::subtract(ezValue* v, bool flip) {
-  int ret = (flip) ? ((eaValue*)v)->to_int() - value : value - ((eaValue*)v)->to_int();
+ezValue *ezInteger::subtract(ezValue *v, bool flip) {
+  int ret = (flip) ? ((eaValue *)v)->to_int() - value
+                   : value - ((eaValue *)v)->to_int();
   return new ezInteger(ret);
 }
 
-ezValue* ezInteger::multiply(ezValue* v, bool flip) {
-  return new ezInteger(value * ((eaValue*)v)->to_int());
+ezValue *ezInteger::multiply(ezValue *v, bool flip) {
+  return new ezInteger(value * ((eaValue *)v)->to_int());
 }
 
-ezValue* ezInteger::divide(ezValue* v, bool flip) {
-  int ret = (flip) ? ((eaValue*)v)->to_int() / value : value / ((eaValue*)v)->to_int();
+ezValue *ezInteger::divide(ezValue *v, bool flip) {
+  int ret = (flip) ? ((eaValue *)v)->to_int() / value
+                   : value / ((eaValue *)v)->to_int();
   return new ezInteger(ret);
 }
 
-ezValue* ezInteger::modulate(ezValue* v, bool flip) {
-  int ret = (flip) ? ((eaValue*)v)->to_int() % value : value % ((eaValue*)v)->to_int();
+ezValue *ezInteger::modulate(ezValue *v, bool flip) {
+  int ret = (flip) ? ((eaValue *)v)->to_int() % value
+                   : value % ((eaValue *)v)->to_int();
   return new ezInteger(ret);
 }
 
-ezValue* ezInteger::power(ezValue* v, bool flip) {
-  int ret = (flip) ? pow(((eaValue*)v)->to_int(), value) : pow(value, ((eaValue*)v)->to_int());
+ezValue *ezInteger::power(ezValue *v, bool flip) {
+  int ret = (flip) ? pow(((eaValue *)v)->to_int(), value)
+                   : pow(value, ((eaValue *)v)->to_int());
   return new ezInteger(ret);
 }
 
-ezValue* ezInteger::bitwise_and(ezValue* v, bool flip) {
-  return new ezInteger(value & ((eaValue*)v)->to_int());
+ezValue *ezInteger::bitwise_and(ezValue *v, bool flip) {
+  return new ezInteger(value & ((eaValue *)v)->to_int());
 }
 
-ezValue* ezInteger::bitwise_or(ezValue* v, bool flip) {
-  return new ezInteger(value | ((eaValue*)v)->to_int());
+ezValue *ezInteger::bitwise_or(ezValue *v, bool flip) {
+  return new ezInteger(value | ((eaValue *)v)->to_int());
 }
 
-ezValue* ezInteger::bitwise_xor(ezValue* v, bool flip) {
-  return new ezInteger(value ^ ((eaValue*)v)->to_int());
+ezValue *ezInteger::bitwise_xor(ezValue *v, bool flip) {
+  return new ezInteger(value ^ ((eaValue *)v)->to_int());
 }
 
-ezValue* ezInteger::lsl(ezValue* v, bool flip) {
-  int ret = (flip) ? ((eaValue*)v)->to_int() << value : value << ((eaValue*)v)->to_int();
+ezValue *ezInteger::lsl(ezValue *v, bool flip) {
+  int ret = (flip) ? ((eaValue *)v)->to_int() << value
+                   : value << ((eaValue *)v)->to_int();
   return new ezInteger(ret);
 }
 
-ezValue* ezInteger::lsr(ezValue* v, bool flip) {
-  int ret = (flip) ? ((eaValue*)v)->to_int() >> value : value >> ((eaValue*)v)->to_int();
+ezValue *ezInteger::lsr(ezValue *v, bool flip) {
+  int ret = (flip) ? ((eaValue *)v)->to_int() >> value
+                   : value >> ((eaValue *)v)->to_int();
   return new ezInteger(ret);
 }
 
-ezObject* ezInteger::compare(ezValue* v, bool flip) {
-  int diff = flip ? ((eaValue*)v)->to_int() - value : value - ((eaValue*)v)->to_int();
-  return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && 0 == diff, (diff < 0) ? true : false, false, false);
+ezObject *ezInteger::compare(ezValue *v, bool flip) {
+  int diff = flip ? ((eaValue *)v)->to_int() - value
+                  : value - ((eaValue *)v)->to_int();
+  return new ezCondition(v->id == EZ_VALUE_TYPE_INTEGER && 0 == diff,
+                         (diff < 0) ? true : false, false, false);
 }
 
-ezValue* ezInteger::negate(void) {
-  return new ezInteger(-value);
-}
+ezValue *ezInteger::negate(void) { return new ezInteger(-value); }
 
-ezValue* ezInteger::bitwise_not(void) {
-  return new ezInteger(~value);
-}
+ezValue *ezInteger::bitwise_not(void) { return new ezInteger(~value); }
 
 ezObject *ezInteger::condition(void) {
   return new ezCondition(value ? false : true, (value < 0) ? true : false,
                          false, false);
 }
 
-bool ezInteger::is_equal(ezValue*v) {
-  if(EZ_VALUE_TYPE_INTEGER != v->id) return false;
-  if(value != ((ezInteger*)v)->value) return false;
+bool ezInteger::is_equal(ezValue *v) {
+  if (EZ_VALUE_TYPE_INTEGER != v->id)
+    return false;
+  if (value != ((ezInteger *)v)->value)
+    return false;
   return true;
 }
 
-void ezInteger::dump(ezFile &sink) {
-    sink.print("%d\n", value);
-}
+void ezInteger::dump(ezFile &sink) { sink.print("%d\n", value); }

@@ -26,8 +26,8 @@
 
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezfile.h"
-#include "ezvm/ezval.h"
 #include "ezvm/ezinstruction.h"
+#include "ezvm/ezval.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -35,9 +35,11 @@
 using namespace std;
 
 class ezAsmInstruction {
-friend class ezAsmProcedure;
+  friend class ezAsmProcedure;
+
 private:
   vector<ezInstruction *> m_instruction;
+
 public:
   ezAsmInstruction();
   virtual ~ezAsmInstruction();
@@ -131,7 +133,7 @@ public:
    * @param dest Destination addresses which the values of src are stored.
    * @param src Addresses of source values.
    */
- /**
+  /**
    * @brief creates an div instruction. See div of ezas.
    *
    * @param dest An address which the product is stored.

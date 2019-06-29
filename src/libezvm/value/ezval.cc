@@ -28,7 +28,8 @@
 #include <sstream>
 #include <stdexcept>
 
-ezValue::ezValue(const unsigned int tp) :id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
+ezValue::ezValue(const unsigned int tp)
+    : id(tp), ezObject(EZ_OBJECT_TYPE_VALUE) {
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}
@@ -37,66 +38,64 @@ ezObject *ezValue::condition(void) {
   throw runtime_error("not subject to a condition");
 }
 
-ezValue* ezValue::add(ezValue* v, bool flip) {
+ezValue *ezValue::add(ezValue *v, bool flip) {
   throw runtime_error("unable to add this type");
 }
 
-ezValue* ezValue::subtract(ezValue* v, bool flip) {
+ezValue *ezValue::subtract(ezValue *v, bool flip) {
   throw runtime_error("unable to subtract this type");
 }
 
-ezValue* ezValue::multiply(ezValue* v, bool flip) {
+ezValue *ezValue::multiply(ezValue *v, bool flip) {
   throw runtime_error("unable to multiply this type");
 }
 
-ezValue* ezValue::divide(ezValue* v, bool flip) {
+ezValue *ezValue::divide(ezValue *v, bool flip) {
   throw runtime_error("unable to divide this type");
 }
 
-ezValue* ezValue::modulate(ezValue* v, bool flip) {
+ezValue *ezValue::modulate(ezValue *v, bool flip) {
   throw runtime_error("unable to modulate this type");
 }
 
-ezValue* ezValue::power(ezValue* v, bool flip) {
+ezValue *ezValue::power(ezValue *v, bool flip) {
   throw runtime_error("unable to power this type");
 }
 
-ezValue* ezValue::bitwise_and(ezValue* v, bool flip) {
+ezValue *ezValue::bitwise_and(ezValue *v, bool flip) {
   throw runtime_error("unable to bitwise and this type");
 }
 
-ezValue* ezValue::bitwise_or(ezValue* v, bool flip) {
+ezValue *ezValue::bitwise_or(ezValue *v, bool flip) {
   throw runtime_error("unable to bitwise or this type");
 }
 
-ezValue* ezValue::bitwise_xor(ezValue* v, bool flip) {
+ezValue *ezValue::bitwise_xor(ezValue *v, bool flip) {
   throw runtime_error("unable to bitwise xor this type");
 }
 
-ezValue* ezValue::lsl(ezValue* v, bool flip) {
+ezValue *ezValue::lsl(ezValue *v, bool flip) {
   throw runtime_error("unable to left shift this type");
 }
 
-ezValue* ezValue::lsr(ezValue* v, bool flip) {
+ezValue *ezValue::lsr(ezValue *v, bool flip) {
   throw runtime_error("unable to right shift this type");
 }
 
-ezObject* ezValue::compare(ezValue* v, bool flip) {
+ezObject *ezValue::compare(ezValue *v, bool flip) {
   throw runtime_error("unable to compare this type");
 }
 
-ezValue* ezValue::negate(void) {
+ezValue *ezValue::negate(void) {
   throw runtime_error("unable to negate this type");
 }
 
-ezValue* ezValue::bitwise_not(void) {
+ezValue *ezValue::bitwise_not(void) {
   throw runtime_error("unable to bitwise not this type");
 }
 
-bool ezValue::is_equal(ezValue* v) {
+bool ezValue::is_equal(ezValue *v) {
   throw runtime_error("unable to test equality of this type");
 }
 
-void ezValue::dump(ezFile &sink) {
-  sink.print("(unknown)");
-}
+void ezValue::dump(ezFile &sink) { sink.print("(unknown)"); }

@@ -29,8 +29,8 @@
 
 ezFunction::ezFunction(ezTable<string, ezObject *> *local,
                        ezTable<string, ezObject *> *scope)
-    : ezObject(EZ_OBJECT_TYPE_FUNCTION), nargs(0), nmems(0), ntemps(0), m_local(local),
-      m_scope(scope) {
+    : ezObject(EZ_OBJECT_TYPE_FUNCTION), nargs(0), nmems(0), ntemps(0),
+      m_local(local), m_scope(scope) {
   m_size = sizeof(*this);
 }
 ezFunction::~ezFunction() {

@@ -26,9 +26,9 @@
 
 #include "ezaddr.h"
 #include "ezgc.h"
+#include "ezobject.h"
 #include "ezstack.h"
 #include "eztable.h"
-#include "ezobject.h"
 #include <cstddef>
 #include <functional>
 #include <vector>
