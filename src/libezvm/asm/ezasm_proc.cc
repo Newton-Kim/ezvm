@@ -24,7 +24,6 @@
  */
 
 #include "ezvm/asm/ezasm_proc.h"
-#include "ezvm/ezdump.h"
 #include "ezvm/ezstack.h"
 
 using namespace std;

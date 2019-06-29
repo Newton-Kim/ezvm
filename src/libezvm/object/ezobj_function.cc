@@ -23,7 +23,6 @@
  *
  */
 #include "ezvm/ezfunc.h"
-#include "ezvm/ezdump.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>

@@ -105,7 +105,7 @@ bool ezVM::exist(size_t handle) {
 void ezVM::dump(string path) {
   ezFile sink(path, "wb");
   sink.print(".entry: ");
-  dump(sink, m_entry);
+  m_entry.dump(sink);
   sink.print("\n");
   sink.print("\n.global memory:\n");
   for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {

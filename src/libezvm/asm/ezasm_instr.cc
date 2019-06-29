@@ -1,38 +1,7 @@
 #include "ezvm/asm/ezasm_instr.h"
-#include "ezvm/ezdump.h"
 #include "ezvm/ezstack.h"
 
 using namespace std;
-
-#define EZ_OP_ADD "add"
-#define EZ_OP_AND "and"
-#define EZ_OP_BEQ "beq"
-#define EZ_OP_BGE "bge"
-#define EZ_OP_BLT "blt"
-#define EZ_OP_BNE "bne"
-#define EZ_OP_BRA "bra"
-#define EZ_OP_CALL "call"
-#define EZ_OP_CMP "cmp"
-#define EZ_OP_DIV "div"
-#define EZ_OP_FGC "fgc"
-#define EZ_OP_LSL "lsl"
-#define EZ_OP_LSR "lsr"
-#define EZ_OP_MOD "mod"
-#define EZ_OP_MUL "mul"
-#define EZ_OP_MV "mv"
-#define EZ_OP_NEG "neg"
-#define EZ_OP_NOT "not"
-#define EZ_OP_OR "or"
-#define EZ_OP_POW "pow"
-#define EZ_OP_RET "ret"
-#define EZ_OP_SUB "sub"
-#define EZ_OP_TEQ "teq"
-#define EZ_OP_TGE "tge"
-#define EZ_OP_THD "thd"
-#define EZ_OP_TLT "tlt"
-#define EZ_OP_TNE "tne"
-#define EZ_OP_WAIT "wait"
-#define EZ_OP_XOR "xor"
 
 ezAsmInstruction::ezAsmInstruction() {}
 ezAsmInstruction::~ezAsmInstruction() {}
@@ -283,7 +252,6 @@ void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,
         : m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.cmp(m_cond, m_lsrc, m_rsrc); }
     void dump(ezFile &sink) {
-      ezDump::instance()->binary(sink, EZ_OP_CMP, m_cond, m_lsrc, m_rsrc);
       sink.print("cmp");
       m_cond.dump(sink);
       sink.print(",");
@@ -847,7 +815,6 @@ void ezAsmInstruction::ret(vector<ezAddress> &src) {
     ezInstrRet(vector<ezAddress> &src) : m_rets(src) {}
     void process(ezStackFrame &stk) { stk.ret(m_rets); }
     void dump(ezFile &sink) {
-      ezDump::instance()->dump(sink, EZ_OP_RET, m_rets);
       sink.print("ret");
       if(m_rets.empty())
         sink.print(" null");

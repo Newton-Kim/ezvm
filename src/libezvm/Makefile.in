@@ -135,8 +135,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezgc.lo asm/ezasm.lo asm/ezasm_proc.lo \
-	asm/ezasm_instr.lo ezdump.lo stack.lo thread.lo ezmemory.lo \
-	vm.lo object/ezobj.lo object/ezobj_function.lo \
+	asm/ezasm_instr.lo stack.lo thread.lo ezmemory.lo vm.lo \
+	object/ezobj.lo object/ezobj_function.lo \
 	object/ezobj_condition.lo object/ezobj_nil.lo value/ezval.lo \
 	utility/ezfile.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
@@ -162,11 +162,11 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/ezdump.Plo ./$(DEPDIR)/ezgc.Plo \
-	./$(DEPDIR)/ezmemory.Plo ./$(DEPDIR)/stack.Plo \
-	./$(DEPDIR)/thread.Plo ./$(DEPDIR)/vm.Plo \
-	asm/$(DEPDIR)/ezasm.Plo asm/$(DEPDIR)/ezasm_instr.Plo \
-	asm/$(DEPDIR)/ezasm_proc.Plo object/$(DEPDIR)/ezobj.Plo \
+am__depfiles_remade = ./$(DEPDIR)/ezgc.Plo ./$(DEPDIR)/ezmemory.Plo \
+	./$(DEPDIR)/stack.Plo ./$(DEPDIR)/thread.Plo \
+	./$(DEPDIR)/vm.Plo asm/$(DEPDIR)/ezasm.Plo \
+	asm/$(DEPDIR)/ezasm_instr.Plo asm/$(DEPDIR)/ezasm_proc.Plo \
+	object/$(DEPDIR)/ezobj.Plo \
 	object/$(DEPDIR)/ezobj_condition.Plo \
 	object/$(DEPDIR)/ezobj_function.Plo \
 	object/$(DEPDIR)/ezobj_nil.Plo utility/$(DEPDIR)/ezfile.Plo \
@@ -351,7 +351,6 @@ libezvm_la_SOURCES = ezgc.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
-		   ezdump.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \
@@ -367,7 +366,6 @@ nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
 		../../include/ezvm/asm/ezasm_proc.h \
 		../../include/ezvm/asm/ezasm.h \
-		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \
 		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
@@ -508,7 +506,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezdump.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezgc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezmemory.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@ # am--include-marker
@@ -724,8 +721,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/ezdump.Plo
-	-rm -f ./$(DEPDIR)/ezgc.Plo
+		-rm -f ./$(DEPDIR)/ezgc.Plo
 	-rm -f ./$(DEPDIR)/ezmemory.Plo
 	-rm -f ./$(DEPDIR)/stack.Plo
 	-rm -f ./$(DEPDIR)/thread.Plo
@@ -784,8 +780,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/ezdump.Plo
-	-rm -f ./$(DEPDIR)/ezgc.Plo
+		-rm -f ./$(DEPDIR)/ezgc.Plo
 	-rm -f ./$(DEPDIR)/ezmemory.Plo
 	-rm -f ./$(DEPDIR)/stack.Plo
 	-rm -f ./$(DEPDIR)/thread.Plo

@@ -4,7 +4,6 @@ libezvm_la_SOURCES=ezgc.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
-		   ezdump.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \
@@ -22,7 +21,6 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
 		../../include/ezvm/asm/ezasm_proc.h \
 		../../include/ezvm/asm/ezasm.h \
-		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \
 		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
