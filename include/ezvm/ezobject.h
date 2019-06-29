@@ -24,6 +24,7 @@
  */
 #pragma once
 #include "ezgc.h"
+#include "ezfile.h"
 
 enum ezObjectType {
   EZ_OBJECT_TYPE_NULL = 0,
@@ -40,12 +41,14 @@ public:
   const ezObjectType type;
   ezObject(ezObjectType type);
   virtual ~ezObject(){};
+  virtual void dump(ezFile &sink);
 };
 
 class ezNull : public ezObject {
 public:
   ezNull();
   static ezNull *instance(void);
+  void dump(ezFile &sink);
 };
 
 class ezHandle : public ezObject {
@@ -53,4 +56,5 @@ public:
   unsigned int id;
   ezHandle(unsigned int identifier);
   virtual ~ezHandle(){};
+  void dump(ezFile &sink);
 };

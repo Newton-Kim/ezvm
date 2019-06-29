@@ -24,7 +24,6 @@
  */
 #pragma once
 #include "asm/ezasm.h"
-#include "ezdump.h"
 #include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
@@ -41,7 +40,6 @@ private:
   ezAddress m_entry;
   ezASM *m_pasm;
   // TODO:user defined dump should be pluggable.
-  ezDump *m_pdump;
   list<ezThread *> m_threads;
 
 public:
@@ -49,7 +47,6 @@ public:
   ~ezVM();
   void run(void);
   ezASM &assembler(void);
-  ezDump &dump(void);
   void on_mark(void);
   size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
              ezStackFrame *caller);

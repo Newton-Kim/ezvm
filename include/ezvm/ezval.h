@@ -23,7 +23,6 @@
  *
  */
 #pragma once
-#include "ezfile.h"
 #include "ezobject.h"
 #include <complex>
 
@@ -51,5 +50,4 @@ public:
   virtual ezValue *negate(void);
   virtual ezValue *bitwise_not(void);
   virtual bool is_equal(ezValue *v);
-  virtual void dump(ezFile &sink);
 };

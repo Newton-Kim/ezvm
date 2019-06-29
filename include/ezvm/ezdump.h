@@ -39,10 +39,6 @@ using namespace std;
 class ezDump {
 private:
   /**
-   * @brief A reference to a procedure entry point
-   */
-  ezAddress &m_entry;
-  /**
    * @brief dumps the content of v to sink.
    *
    * @param sink is a file stream.
@@ -50,7 +46,7 @@ private:
    */
   void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, vector<ezAddress> &addrs);
-  void dump(ezFile &sink, const ezObject *v);
+  void dump(ezFile &sink, ezObject *v);
 
 public:
   /**
@@ -60,7 +56,7 @@ public:
    * @param constants is a reference to a constant memory.
    * @param globals is a reference to a global memory.
    */
-  ezDump(ezAddress &entry);
+  ezDump();
   /**
    * @brief dumps the state of ezVM to a file of path.
    *
@@ -85,4 +81,5 @@ public:
               ezAddress lsrc, ezAddress rsrc);
   void dump(ezFile &sink, string op, size_t offset);
   void dump(ezFile &sink, string op);
+  static ezDump* instance(void);
 };

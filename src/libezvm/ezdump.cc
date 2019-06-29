@@ -29,7 +29,7 @@
 
 using namespace std;
 
-ezDump::ezDump(ezAddress &entry) : m_entry(entry) {}
+ezDump::ezDump() {}
 
 void ezDump::dump(ezFile &sink, vector<ezAddress> &addrs) {
   if (addrs.size() == 0) {
@@ -63,52 +63,20 @@ void ezDump::dump(ezFile &sink, const ezAddress addr) {
   sink.print("%u", addr.offset);
 }
 
-void ezDump::dump(ezFile &sink, const ezObject *o) {
+void ezDump::dump(ezFile &sink, ezObject *o) {
   if (!o) {
-    sink.print(" (null)\n");
+    sink.print(" (NULL)\n");
     return;
   }
-
-  switch (o->type) {
-  case EZ_OBJECT_TYPE_NULL:
-    sink.print("nil\n");
-    return;
-  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
-    sink.print("0x%x(native)\n", o);
-    return;
-  case EZ_OBJECT_TYPE_FUNCTION: {
-    ezFunction *crsl = (ezFunction *)o;
-    sink.print("0x%x(%d)\n", crsl, crsl->nargs);
-    sink.print("  .memsize: %lu\n", crsl->nmems);
-    sink.print("  .jump table:\n");
-    for (size_t i = 0; i < crsl->jmptbl.size(); i++)
-      sink.print("    [%lu]=%lu\n", i, crsl->jmptbl[i]);
-    sink.print("  .jump symbol table:\n");
-    vector<string> symbols;
-    crsl->jmptbl.symbols(symbols);
-    for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
-         it++)
-      sink.print("    [%s]=%lu\n", (*it).c_str(), crsl->jmptbl[*it]);
-    ezAddress addr;
-    string op;
-    uint8_t arg[3];
-    size_t len = crsl->instruction.size();
-    for (size_t pc = 0; pc < len; pc++) {
-      sink.print("  %d:", pc);
-      crsl->instruction[pc]->dump(sink, *this);
-    }
-  }
-    return;
-  case EZ_OBJECT_TYPE_VALUE:
-    ((ezValue *)o)->dump(sink);
-    break;
-  }
+  o->dump(sink);
 }
 
 void ezDump::dump(const string path) {
   ezFile sink(path, "wb");
+/*TODO: send it to the ezVM::dump
   sink.print(".entry: ");
   dump(sink, m_entry);
+*/
   sink.print("\n");
   sink.print("\n.global memory:\n");
   for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
@@ -265,4 +233,9 @@ void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond,
   dump(sink, lsrc);
   dump(sink, rsrc);
   sink.print("\n");
+}
+
+ezDump* ezDump::instance(void) {
+  static ezDump s_dump;
+  return &s_dump;
 }

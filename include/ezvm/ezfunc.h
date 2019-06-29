@@ -46,6 +46,7 @@ public:
   vector<ezObject *> *local_memory(void);
   vector<ezObject *> *scope_memory(void);
   bool is_local_scoped(void) { return (m_local) ? true : false; }
+  void dump(ezFile &sink);
 };
 
 class ezUserDefinedFunction : public ezObject {
@@ -54,6 +55,7 @@ public:
   virtual ~ezUserDefinedFunction() {}
 
   virtual void run(vector<ezObject *> &args, vector<ezObject *> &rets) = 0;
+  void dump(ezFile &sink) {sink.print("0x%x(native)\n", this);}
 };
 
 class ezCondition : public ezObject {
@@ -63,4 +65,5 @@ public:
   const bool overflow;
   const bool carry;
   ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
+  void dump(ezFile &sink);
 };

@@ -50,8 +50,8 @@ void ezAsmInstruction::add(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.add(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_ADD, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_ADD, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrAdd(dest, lsrc, rsrc));
@@ -71,8 +71,8 @@ void ezAsmInstruction::add(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.add(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_ADD, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_ADD, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrAddWithCond(dest, cond, lsrc, rsrc));
@@ -91,8 +91,8 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.b_and(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_AND, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_AND, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrAnd(dest, lsrc, rsrc));
@@ -115,8 +115,8 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress cond,
     void process(ezStackFrame &stk) {
       stk.b_and(m_dest, m_cond, m_lsrc, m_rsrc);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_AND, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_AND, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrAndWithCond(dest, cond, lsrc, rsrc));
@@ -132,8 +132,8 @@ void ezAsmInstruction::beq(const ezAddress cond, size_t offset) {
     ezInstrBeq(const ezAddress cond, size_t offset)
         : m_cond(cond), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.beq(m_cond, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_BEQ, m_cond, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_BEQ, m_cond, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrBeq(cond, offset));
@@ -149,8 +149,8 @@ void ezAsmInstruction::bge(const ezAddress cond, size_t offset) {
     ezInstrBge(const ezAddress cond, size_t offset)
         : m_cond(cond), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.bge(m_cond, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_BGE, m_cond, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_BGE, m_cond, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrBge(cond, offset));
@@ -166,8 +166,8 @@ void ezAsmInstruction::blt(const ezAddress cond, size_t offset) {
     ezInstrBlt(const ezAddress cond, size_t offset)
         : m_cond(cond), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.blt(m_cond, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_BLT, m_cond, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_BLT, m_cond, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrBlt(cond, offset));
@@ -183,8 +183,8 @@ void ezAsmInstruction::bne(const ezAddress cond, size_t offset) {
     ezInstrBlt(const ezAddress cond, size_t offset)
         : m_cond(cond), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.bne(m_cond, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_BNE, m_cond, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_BNE, m_cond, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrBlt(cond, offset));
@@ -198,8 +198,8 @@ void ezAsmInstruction::bra(size_t offset) {
   public:
     ezInstrBra(size_t offset) : m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.bra(m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_BRA, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_BRA, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrBra(offset));
@@ -218,8 +218,8 @@ void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args,
                 vector<ezAddress> &rets)
         : m_func(func), m_args(args), m_rets(rets) {}
     void process(ezStackFrame &stk) { stk.call(m_func, m_args, m_rets); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_CALL, m_func, m_args, m_rets);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_CALL, m_func, m_args, m_rets);
     }
   };
   m_instruction.push_back(new ezInstrCall(func, args, rets));
@@ -238,8 +238,8 @@ void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,
                const ezAddress &rsrc)
         : m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.cmp(m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_CMP, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_CMP, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrCmp(cond, larg, rarg));
@@ -258,8 +258,8 @@ void ezAsmInstruction::div(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.div(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_DIV, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_DIV, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrDiv(dest, lsrc, rsrc));
@@ -279,8 +279,8 @@ void ezAsmInstruction::div(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.div(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_DIV, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_DIV, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrDivWithCond(dest, cond, lsrc, rsrc));
@@ -291,7 +291,7 @@ void ezAsmInstruction::fgc(void) {
   public:
     ezInstrFgc() {}
     void process(ezStackFrame &stk) { stk.fgc(); }
-    void dump(ezFile &sink, ezDump &dump) { dump.dump(sink, EZ_OP_FGC); }
+    void dump(ezFile &sink) { ezDump::instance()->dump(sink, EZ_OP_FGC); }
   };
   m_instruction.push_back(new ezInstrFgc());
 }
@@ -309,8 +309,8 @@ void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress obj,
                const ezAddress &offset)
         : m_dest(dest), m_obj(obj), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.lsl(m_dest, m_obj, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_LSL, m_dest, m_obj, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_LSL, m_dest, m_obj, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrLsl(dest, obj, offset));
@@ -332,8 +332,8 @@ void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress cond,
     void process(ezStackFrame &stk) {
       stk.lsl(m_dest, m_cond, m_obj, m_offset);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_LSL, m_dest, m_cond, m_obj, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_LSL, m_dest, m_cond, m_obj, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrLslWithCond(dest, cond, obj, offset));
@@ -352,8 +352,8 @@ void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress obj,
                const ezAddress &offset)
         : m_dest(dest), m_obj(obj), m_offset(offset) {}
     void process(ezStackFrame &stk) { stk.lsr(m_dest, m_obj, m_offset); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_LSR, m_dest, m_obj, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_LSR, m_dest, m_obj, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrLsr(dest, obj, offset));
@@ -375,8 +375,8 @@ void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress cond,
     void process(ezStackFrame &stk) {
       stk.lsr(m_dest, m_cond, m_obj, m_offset);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_LSR, m_dest, m_cond, m_obj, m_offset);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_LSR, m_dest, m_cond, m_obj, m_offset);
     }
   };
   m_instruction.push_back(new ezInstrLsrWithCond(dest, cond, obj, offset));
@@ -395,8 +395,8 @@ void ezAsmInstruction::mod(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.mod(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_ADD, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_ADD, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrMod(dest, lsrc, rsrc));
@@ -416,8 +416,8 @@ void ezAsmInstruction::mod(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.mod(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_MOD, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_MOD, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrModWithCond(dest, cond, lsrc, rsrc));
@@ -436,8 +436,8 @@ void ezAsmInstruction::mul(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.mul(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_MUL, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_MUL, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrMul(dest, lsrc, rsrc));
@@ -457,8 +457,8 @@ void ezAsmInstruction::mul(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.mul(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_MUL, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_MUL, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrMulWithCond(dest, cond, lsrc, rsrc));
@@ -474,8 +474,8 @@ void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
     ezInstrMv(vector<ezAddress> &dest, vector<ezAddress> &src)
         : m_dest(dest), m_src(src) {}
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_MV, m_dest, m_src);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_MV, m_dest, m_src);
     }
   };
   m_instruction.push_back(new ezInstrMv(dest, src));
@@ -493,8 +493,8 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
       m_src.push_back(src);
     }
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_MV, m_dest, m_src);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_MV, m_dest, m_src);
     }
   };
   m_instruction.push_back(new ezInstrMv(dest, src));
@@ -510,8 +510,8 @@ void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
     ezInstrNeg(const ezAddress dest, const ezAddress org)
         : m_dest(dest), m_org(org) {}
     void process(ezStackFrame &stk) { stk.negate(m_dest, m_org); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.unary(sink, EZ_OP_NEG, m_dest, m_org);
+    void dump(ezFile &sink) {
+      ezDump::instance()->unary(sink, EZ_OP_NEG, m_dest, m_org);
     }
   };
   m_instruction.push_back(new ezInstrNeg(dest, org));
@@ -529,8 +529,8 @@ void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
     ezInstrNeg(const ezAddress dest, const ezAddress cond, const ezAddress org)
         : m_dest(dest), m_cond(cond), m_org(org) {}
     void process(ezStackFrame &stk) { stk.negate(m_dest, m_cond, m_org); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.unary(sink, EZ_OP_NEG, m_dest, m_cond, m_org);
+    void dump(ezFile &sink) {
+      ezDump::instance()->unary(sink, EZ_OP_NEG, m_dest, m_cond, m_org);
     }
   };
   m_instruction.push_back(new ezInstrNeg(dest, cond, org));
@@ -546,8 +546,8 @@ void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {
     ezInstrNot(const ezAddress dest, const ezAddress org)
         : m_dest(dest), m_org(org) {}
     void process(ezStackFrame &stk) { stk.b_not(m_dest, m_org); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.unary(sink, EZ_OP_NOT, m_dest, m_org);
+    void dump(ezFile &sink) {
+      ezDump::instance()->unary(sink, EZ_OP_NOT, m_dest, m_org);
     }
   };
   m_instruction.push_back(new ezInstrNot(dest, org));
@@ -565,8 +565,8 @@ void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
     ezInstrNot(const ezAddress dest, const ezAddress cond, const ezAddress org)
         : m_dest(dest), m_cond(cond), m_org(org) {}
     void process(ezStackFrame &stk) { stk.b_not(m_dest, m_cond, m_org); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.unary(sink, EZ_OP_NOT, m_dest, m_cond, m_org);
+    void dump(ezFile &sink) {
+      ezDump::instance()->unary(sink, EZ_OP_NOT, m_dest, m_cond, m_org);
     }
   };
   m_instruction.push_back(new ezInstrNot(dest, cond, org));
@@ -585,8 +585,8 @@ void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
               const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.b_or(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_OR, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_OR, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrOr(dest, lsrc, rsrc));
@@ -609,8 +609,8 @@ void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress cond,
     void process(ezStackFrame &stk) {
       stk.b_or(m_dest, m_cond, m_lsrc, m_rsrc);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_OR, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_OR, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrOrWithCond(dest, cond, lsrc, rsrc));
@@ -629,8 +629,8 @@ void ezAsmInstruction::powv(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.pwr(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_POW, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_POW, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrPow(dest, lsrc, rsrc));
@@ -650,8 +650,8 @@ void ezAsmInstruction::powv(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.pwr(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_POW, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_POW, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrPowWithCond(dest, cond, lsrc, rsrc));
@@ -665,7 +665,7 @@ void ezAsmInstruction::ret(void) {
   public:
     ezInstrRet() {}
     void process(ezStackFrame &stk) { stk.ret(m_rets); }
-    void dump(ezFile &sink, ezDump &dump) { dump.dump(sink, EZ_OP_RET); }
+    void dump(ezFile &sink) { ezDump::instance()->dump(sink, EZ_OP_RET); }
   };
   m_instruction.push_back(new ezInstrRet());
 }
@@ -678,8 +678,8 @@ void ezAsmInstruction::ret(vector<ezAddress> &src) {
   public:
     ezInstrRet(vector<ezAddress> &src) : m_rets(src) {}
     void process(ezStackFrame &stk) { stk.ret(m_rets); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_RET, m_rets);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_RET, m_rets);
     }
   };
   m_instruction.push_back(new ezInstrRet(src));
@@ -698,8 +698,8 @@ void ezAsmInstruction::sub(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.sub(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_SUB, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_SUB, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrSub(dest, lsrc, rsrc));
@@ -719,8 +719,8 @@ void ezAsmInstruction::sub(const ezAddress dest, const ezAddress cond,
                        const ezAddress &lsrc, const ezAddress &rsrc)
         : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.sub(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_SUB, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_SUB, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrSubWithCond(dest, cond, lsrc, rsrc));
@@ -733,8 +733,8 @@ void ezAsmInstruction::teq(const ezAddress dest, const ezAddress &lsrc,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.teq(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TEQ, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TEQ, inst.dests, inst.srcs);
       },
       dest, lsrc, rsrc);
 }
@@ -745,8 +745,8 @@ void ezAsmInstruction::teq(const ezAddress dest, const ezAddress cond,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.teq(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TEQ, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TEQ, inst.dests, inst.srcs);
       },
       dest, cond, lsrc, rsrc);
 }
@@ -757,8 +757,8 @@ void ezAsmInstruction::tge(const ezAddress dest, const ezAddress &lsrc,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tge(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TGE, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TGE, inst.dests, inst.srcs);
       },
       dest, lsrc, rsrc);
 }
@@ -769,8 +769,8 @@ void ezAsmInstruction::tge(const ezAddress dest, const ezAddress cond,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tge(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TGE, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TGE, inst.dests, inst.srcs);
       },
       dest, cond, lsrc, rsrc);
 }
@@ -792,8 +792,8 @@ void ezAsmInstruction::thd(const ezAddress &func, vector<ezAddress> &args,
     void process(ezStackFrame &stk) {
       stk.thd(m_func, m_args, m_rets, m_handle);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_THD, m_func, m_args, m_rets, m_handle);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_THD, m_func, m_args, m_rets, m_handle);
     }
   };
   m_instruction.push_back(new ezInstrThd(func, args, rets, handle));
@@ -806,8 +806,8 @@ void ezAsmInstruction::tlt(const ezAddress dest, const ezAddress &lsrc,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tlt(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TLT, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TLT, inst.dests, inst.srcs);
       },
       dest, lsrc, rsrc);
 }
@@ -818,8 +818,8 @@ void ezAsmInstruction::tlt(const ezAddress dest, const ezAddress cond,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tlt(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TLT, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TLT, inst.dests, inst.srcs);
       },
       dest, cond, lsrc, rsrc);
 }
@@ -830,8 +830,8 @@ void ezAsmInstruction::tne(const ezAddress dest, const ezAddress &lsrc,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tne(inst.dests[0], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TNE, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TNE, inst.dests, inst.srcs);
       },
       dest, lsrc, rsrc);
 }
@@ -842,8 +842,8 @@ void ezAsmInstruction::tne(const ezAddress dest, const ezAddress cond,
       [](ezStackFrame &stk, ezInstruction &inst) {
         stk.tne(inst.dests[0], inst.dests[1], inst.srcs[0], inst.srcs[1]);
       },
-      [](ezFile &sink, ezDump &dump, ezInstruction &inst) {
-        dump.dump(sink, EZ_OP_TNE, inst.dests, inst.srcs);
+      [](ezFile &sink, ezInstruction &inst) {
+        ezDump::instance()->dump(sink, EZ_OP_TNE, inst.dests, inst.srcs);
       },
       dest, cond, lsrc, rsrc);
 }
@@ -857,8 +857,8 @@ void ezAsmInstruction::wait(const ezAddress &handle) {
   public:
     ezInstrWait(const ezAddress handle) : m_handle(handle) {}
     void process(ezStackFrame &stk) { stk.wait(m_handle); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.dump(sink, EZ_OP_WAIT, m_handle);
+    void dump(ezFile &sink) {
+      ezDump::instance()->dump(sink, EZ_OP_WAIT, m_handle);
     }
   };
   m_instruction.push_back(new ezInstrWait(handle));
@@ -877,8 +877,8 @@ void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress &lsrc,
                const ezAddress &rsrc)
         : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
     void process(ezStackFrame &stk) { stk.b_xor(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_XOR, m_dest, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_XOR, m_dest, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrXor(dest, lsrc, rsrc));
@@ -901,8 +901,8 @@ void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress cond,
     void process(ezStackFrame &stk) {
       stk.b_xor(m_dest, m_cond, m_lsrc, m_rsrc);
     }
-    void dump(ezFile &sink, ezDump &dump) {
-      dump.binary(sink, EZ_OP_XOR, m_dest, m_cond, m_lsrc, m_rsrc);
+    void dump(ezFile &sink) {
+      ezDump::instance()->binary(sink, EZ_OP_XOR, m_dest, m_cond, m_lsrc, m_rsrc);
     }
   };
   m_instruction.push_back(new ezInstrXorWithCond(dest, cond, lsrc, rsrc));

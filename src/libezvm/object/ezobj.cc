@@ -27,5 +27,11 @@
 
 ezObject::ezObject(ezObjectType tp) : type(tp) {}
 
+void ezObject::dump(ezFile &sink) { sink.print("(unknown)"); }
+
 ezHandle::ezHandle(unsigned int identifier)
     : ezObject(EZ_OBJECT_TYPE_HANDLE), id(identifier) {}
+
+void ezHandle::dump(ezFile &sink) {
+  sink.print("H(%d)\n", id);
+}

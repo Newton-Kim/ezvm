@@ -98,4 +98,3 @@ bool ezValue::is_equal(ezValue *v) {
   throw runtime_error("unable to test equality of this type");
 }
 
-void ezValue::dump(ezFile &sink) { sink.print("(unknown)"); }

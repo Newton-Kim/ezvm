@@ -24,6 +24,7 @@
 * 
 */
 #include "ezvm/ezvm.h"
+#include "ezvm/ezdump.h"
 #include "ezio.h"
 #include "eaval.h"
 #include <iostream>
@@ -406,8 +407,10 @@ int ezparse(FILE* fd, const string target, const string dump) {
 	int ret = yyparse();
 	if(ret) return ret;
 	yyin = NULL;
-	if(!dump.empty()) 
-		s_vm.dump().dump(dump);
+	if(!dump.empty()) {
+		ezDump* dumper = ezDump::instance();
+		dumper->dump(dump);
+	}
 	if(target.empty()) s_vm.run();
 	return ret;
 }

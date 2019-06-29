@@ -81,12 +81,6 @@ ezASM &ezVM::assembler(void) {
   return *m_pasm;
 }
 
-ezDump &ezVM::dump(void) {
-  if (!m_pdump)
-    m_pdump = new ezDump(m_entry);
-  return *m_pdump;
-}
-
 void ezVM::on_mark(void) {
   for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
        it++)

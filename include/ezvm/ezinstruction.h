@@ -33,10 +33,9 @@
 using namespace std;
 
 class ezStackFrame;
-class ezDump;
 
 class ezInstruction {
 public:
   virtual void process(ezStackFrame &stk) = 0;
-  virtual void dump(ezFile &sink, ezDump &dump) = 0;
+  virtual void dump(ezFile &sink) = 0;
 };
