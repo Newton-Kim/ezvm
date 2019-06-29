@@ -101,3 +101,32 @@ bool ezVM::exist(size_t handle) {
   auto it = find(m_threads.begin(), m_threads.end(), (ezThread *)handle);
   return it != m_threads.end();
 }
+
+void ezVM::dump(string path) {
+  ezFile sink(path, "wb");
+  sink.print(".entry: ");
+  dump(sink, m_entry);
+  sink.print("\n");
+  sink.print("\n.global memory:\n");
+  for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
+    sink.print("[%lu]=", i);
+    ezMemory::instance().globals()[i]->dump(sink);
+  }
+  sink.print("\n");
+  sink.print(".global symtab:\n");
+  vector<string> symbols;
+  ezMemory::instance().globals().symbols(symbols);
+  for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
+       it++) {
+    sink.print("[_%s]=%lu\n", (*it).c_str(),
+               ezMemory::instance().globals()[*it]);
+  }
+  sink.print("\n");
+  sink.print(".constant:\n");
+  for (size_t i = 0; i < ezMemory::instance().constants().size(); i++) {
+    sink.print("[%lu]=", i);
+    sink, ezMemory::instance().constants()[i]->dump(sink);
+  }
+  sink.print("\n");
+}
+

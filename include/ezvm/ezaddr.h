@@ -23,6 +23,7 @@
  *
  */
 #pragma once
+#include "ezfile.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -81,4 +82,26 @@ public:
    * @brief An offset of the segment.
    */
   size_t offset;
+  void dump(ezFile &sink) {
+  switch (segment) {
+  case EZ_ASM_SEGMENT_CONSTANT:
+    sink.print(" c");
+    break;
+  case EZ_ASM_SEGMENT_LOCAL:
+    sink.print(" r");
+    break;
+  case EZ_ASM_SEGMENT_TEMPORARY:
+    sink.print(" t");
+    break;
+  case EZ_ASM_SEGMENT_SCOPE:
+    sink.print(" s");
+    break;
+  case EZ_ASM_SEGMENT_GLOBAL:
+    sink.print(" g");
+    break;
+  default:
+    sink.print(" %d", segment);
+  }
+  sink.print("%u", offset);
+  }
 };

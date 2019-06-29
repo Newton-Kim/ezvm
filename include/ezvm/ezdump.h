@@ -44,9 +44,7 @@ private:
    * @param sink is a file stream.
    * @param v is a value.
    */
-  void dump(ezFile &sink, const ezAddress addr);
   void dump(ezFile &sink, vector<ezAddress> &addrs);
-  void dump(ezFile &sink, ezObject *v);
 
 public:
   /**

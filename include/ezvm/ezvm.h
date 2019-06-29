@@ -51,4 +51,5 @@ public:
   size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
              ezStackFrame *caller);
   bool exist(size_t handle);
+  void dump(string path);
 };

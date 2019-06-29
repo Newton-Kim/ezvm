@@ -37,87 +37,29 @@ void ezDump::dump(ezFile &sink, vector<ezAddress> &addrs) {
     return;
   }
   for (vector<ezAddress>::iterator it = addrs.begin(); it != addrs.end(); it++)
-    dump(sink, *it);
-}
-
-void ezDump::dump(ezFile &sink, const ezAddress addr) {
-  switch (addr.segment) {
-  case EZ_ASM_SEGMENT_CONSTANT:
-    sink.print(" c");
-    break;
-  case EZ_ASM_SEGMENT_LOCAL:
-    sink.print(" r");
-    break;
-  case EZ_ASM_SEGMENT_TEMPORARY:
-    sink.print(" t");
-    break;
-  case EZ_ASM_SEGMENT_SCOPE:
-    sink.print(" s");
-    break;
-  case EZ_ASM_SEGMENT_GLOBAL:
-    sink.print(" g");
-    break;
-  default:
-    sink.print(" %d", addr.segment);
-  }
-  sink.print("%u", addr.offset);
-}
-
-void ezDump::dump(ezFile &sink, ezObject *o) {
-  if (!o) {
-    sink.print(" (NULL)\n");
-    return;
-  }
-  o->dump(sink);
+    (*it).dump(sink);
 }
 
 void ezDump::dump(const string path) {
-  ezFile sink(path, "wb");
-/*TODO: send it to the ezVM::dump
-  sink.print(".entry: ");
-  dump(sink, m_entry);
-*/
-  sink.print("\n");
-  sink.print("\n.global memory:\n");
-  for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
-    sink.print("[%lu]=", i);
-    dump(sink, ezMemory::instance().globals()[i]);
-  }
-  sink.print("\n");
-  sink.print(".global symtab:\n");
-  vector<string> symbols;
-  ezMemory::instance().globals().symbols(symbols);
-  for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
-       it++) {
-    sink.print("[_%s]=%lu\n", (*it).c_str(),
-               ezMemory::instance().globals()[*it]);
-  }
-  sink.print("\n");
-  sink.print(".constant:\n");
-  for (size_t i = 0; i < ezMemory::instance().constants().size(); i++) {
-    sink.print("[%lu]=", i);
-    dump(sink, ezMemory::instance().constants()[i]);
-  }
-  sink.print("\n");
 }
 
 void ezDump::dump(ezFile &sink, string op, ezAddress &func,
                   vector<ezAddress> &srcs, vector<ezAddress> &dests) {
   sink.print("%s", op.c_str());
-  dump(sink, func);
+  func.dump(sink);
   sink.print(",");
   if (srcs.empty())
     sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print(",");
   if (dests.empty())
     sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
          it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print("\n");
 }
 
@@ -125,22 +67,22 @@ void ezDump::dump(ezFile &sink, string op, ezAddress &func,
                   vector<ezAddress> &srcs, vector<ezAddress> &dests,
                   ezAddress &handle) {
   sink.print("%s", op.c_str());
-  dump(sink, func);
+  func.dump(sink);
   sink.print(",");
   if (srcs.empty())
     sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = srcs.begin(); it != srcs.end(); it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print("; ");
   if (dests.empty())
     sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = dests.begin(); it != dests.end();
          it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print(",");
-  dump(sink, handle);
+  handle.dump(sink);
   sink.print("\n");
 }
 
@@ -152,14 +94,14 @@ void ezDump::dump(ezFile &sink, string op, vector<ezAddress> &result,
   else
     for (vector<ezAddress>::iterator it = result.begin(); it != result.end();
          it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print(",");
   if (param.empty())
     sink.print(" null");
   else
     for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
          it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print("\n");
 }
 
@@ -170,13 +112,13 @@ void ezDump::dump(ezFile &sink, string op, vector<ezAddress> &param) {
   else
     for (vector<ezAddress>::iterator it = param.begin(); it != param.end();
          it++)
-      dump(sink, *it);
+      (*it).dump(sink);
   sink.print("\n");
 }
 
 void ezDump::dump(ezFile &sink, string op, ezAddress cond, size_t offset) {
   sink.print("%s", op.c_str());
-  dump(sink, cond);
+  cond.dump(sink);
   sink.print(",");
   sink.print(" %d", offset);
   sink.print("\n");
@@ -184,7 +126,7 @@ void ezDump::dump(ezFile &sink, string op, ezAddress cond, size_t offset) {
 
 void ezDump::dump(ezFile &sink, string op, ezAddress handle) {
   sink.print("%s", op.c_str());
-  dump(sink, handle);
+  handle.dump(sink);
   sink.print("\n");
 }
 
@@ -198,40 +140,40 @@ void ezDump::dump(ezFile &sink, string op) { sink.print("%s\n", op.c_str()); }
 
 void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress src) {
   sink.print("%s", op.c_str());
-  dump(sink, dest);
+  dest.dump(sink);
   sink.print(",");
-  dump(sink, src);
+  src.dump(sink);
   sink.print("\n");
 }
 
 void ezDump::unary(ezFile &sink, string op, ezAddress dest, ezAddress cond,
                    ezAddress src) {
   sink.print("%s", op.c_str());
-  dump(sink, dest);
-  dump(sink, cond);
+  dest.dump(sink);
+  cond.dump(sink);
   sink.print(",");
-  dump(sink, src);
+  src.dump(sink);
   sink.print("\n");
 }
 
 void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress lsrc,
                     ezAddress rsrc) {
   sink.print("%s", op.c_str());
-  dump(sink, dest);
+  dest.dump(sink);
   sink.print(",");
-  dump(sink, lsrc);
-  dump(sink, rsrc);
+  lsrc.dump(sink);
+  rsrc.dump(sink);
   sink.print("\n");
 }
 
 void ezDump::binary(ezFile &sink, string op, ezAddress dest, ezAddress cond,
                     ezAddress lsrc, ezAddress rsrc) {
   sink.print("%s", op.c_str());
-  dump(sink, dest);
-  dump(sink, cond);
+  dest.dump(sink);
+  cond.dump(sink);
   sink.print(",");
-  dump(sink, lsrc);
-  dump(sink, rsrc);
+  lsrc.dump(sink);
+  rsrc.dump(sink);
   sink.print("\n");
 }
 
