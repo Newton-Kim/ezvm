@@ -205,4 +205,5 @@ public:
   void step(void); // the arguments are temporary ones.
   void update(vector<ezAddress> &dests, vector<ezObject *> &vals);
   void on_mark(void);
+  void dump(ezFile &sink);
 };

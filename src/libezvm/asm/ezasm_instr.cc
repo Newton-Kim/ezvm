@@ -221,6 +221,7 @@ void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args,
     void dump(ezFile &sink) {
       sink.print("call");
       m_func.dump(sink);
+      sink.print(",");
       if(m_args.empty())
         sink.print(" null");
       else
@@ -257,6 +258,7 @@ void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,
       sink.print(",");
       m_lsrc.dump(sink);
       m_rsrc.dump(sink);
+      sink.print("\n");
     }
   };
   m_instruction.push_back(new ezInstrCmp(cond, larg, rarg));
@@ -547,7 +549,7 @@ void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
         : m_dest(dest), m_src(src) {}
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
     void dump(ezFile &sink) {
-      sink.print("call");
+      sink.print("mv");
       if(m_dest.empty())
         sink.print(" null");
       else
@@ -578,7 +580,7 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
     }
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
     void dump(ezFile &sink) {
-      sink.print("call");
+      sink.print("mv");
       if(m_dest.empty())
         sink.print(" null");
       else

@@ -520,3 +520,21 @@ void ezStackFrame::on_mark(void) {
        it != m_returns.end(); it++)
     (*it)->mark();
 }
+
+void ezStackFrame::dump(ezFile &sink) {
+  sink.print("    .stk_0x%x:\n", this);
+  sink.print("      PC:%lu\n", m_pc);
+  sink.print("      context:0x%x\n", m_carousel);
+  sink.print("      .local memory:\n");
+  size_t i = 0;
+  for(vector<ezObject*>::iterator it = m_local->begin() ; it != m_local->end() ; it++) {
+    sink.print("        [%d]:", i++);
+    (*it)->dump(sink);
+  }
+  sink.print("      .temporary memory:\n");
+  i = 0;
+  for(vector<ezObject*>::iterator it = m_temporary.begin() ; it != m_temporary.end() ; it++) {
+    sink.print("        [%d]:", i++);
+    (*it)->dump(sink);
+  }
+}

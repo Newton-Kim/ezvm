@@ -100,4 +100,5 @@ public:
              ezStackFrame *caller);
   void wait(size_t handle);
   bool empty(void) { return m_stack.empty(); }
+  void dump(ezFile &sink);
 };

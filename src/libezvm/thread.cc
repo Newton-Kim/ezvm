@@ -117,3 +117,22 @@ size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args,
 }
 
 void ezThread::wait(size_t handle) { m_wait = handle; }
+
+
+void ezThread::dump(ezFile &sink) {
+  sink.print("  .thd_0x%x\n", this);
+  sink.print("    scheduler:");
+  switch(m_scheduler) {
+    case EZ_THREAD_SCHED_ROUNDROBIN:
+      sink.print("ROUNDROBIN");
+      break;
+    case EZ_THREAD_SCHED_REALTIME:
+      sink.print("REALTIME");
+      break;
+  }
+  sink.print("\n");
+  for (vector<ezStackFrame *>::iterator it = m_stack.begin();
+       it != m_stack.end(); it++) {
+    (*it)->dump(sink);
+  }
+}

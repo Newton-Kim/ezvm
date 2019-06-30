@@ -128,5 +128,9 @@ void ezVM::dump(string path) {
     sink, ezMemory::instance().constants()[i]->dump(sink);
   }
   sink.print("\n");
+  sink.print(".call stack:\n");
+  for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
+       it++)
+    (*it)->dump(sink);
 }
 
