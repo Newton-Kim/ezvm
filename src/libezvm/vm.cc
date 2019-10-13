@@ -108,9 +108,13 @@ void ezVM::dump(string path) {
   m_entry.dump(sink);
   sink.print("\n");
   sink.print("\n.global memory:\n");
-  for (size_t i = 0; i < ezMemory::instance().globals().size(); i++) {
+  ezTable<string, ezObject*> globals = ezMemory::instance().globals();
+  size_t sz = globals.size();
+  sink.print("  .size:%d\n", sz);
+  for (size_t i = 0; i < sz; i++) {
     sink.print("[%lu]=", i);
-    ezMemory::instance().globals()[i]->dump(sink);
+    if(globals[i]) globals[i]->dump(sink);
+    else sink.print("null\n");
   }
   sink.print("\n");
   sink.print(".global symtab:\n");
