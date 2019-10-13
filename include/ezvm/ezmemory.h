@@ -25,17 +25,17 @@
 #pragma once
 
 #include <ezvm/ezgc.h>
+#include <ezvm/ezobject.h>
 #include <ezvm/eztable.h>
-#include <ezvm/ezval.h>
 
 class ezMemory : public ezGCClient {
 private:
-  ezTable<string, ezValue *> m_globals;
-  vector<ezValue *> m_constants;
+  ezTable<string, ezObject *> m_globals;
+  vector<ezObject *> m_constants;
 
 public:
   static ezMemory &instance(void);
-  ezTable<string, ezValue *> &globals(void) { return m_globals; }
-  vector<ezValue *> &constants(void) { return m_constants; }
+  ezTable<string, ezObject *> &globals(void) { return m_globals; }
+  vector<ezObject *> &constants(void) { return m_constants; }
   void on_mark(void);
 };

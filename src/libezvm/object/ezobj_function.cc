@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-ezFunction::ezFunction(ezTable<string, ezValue *> *local,
-                       ezTable<string, ezValue *> *scope)
-    : ezValue(EZ_VALUE_TYPE_FUNCTION), nargs(0), nmems(0), m_local(local),
-      m_scope(scope) {
+ezFunction::ezFunction(ezTable<string, ezObject *> *local,
+                       ezTable<string, ezObject *> *scope)
+    : ezObject(EZ_OBJECT_TYPE_FUNCTION), nargs(0), nmems(0), ntemps(0),
+      m_local(local), m_scope(scope) {
   m_size = sizeof(*this);
 }
 ezFunction::~ezFunction() {
@@ -39,7 +39,7 @@ ezFunction::~ezFunction() {
     delete *it;
 }
 ezUserDefinedFunction::ezUserDefinedFunction()
-    : ezValue(EZ_VALUE_TYPE_USER_DEFINED_FUNCTION) {
+    : ezObject(EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION) {
   m_size = sizeof(*this);
 }
 void ezFunction::on_mark(void) {
@@ -49,8 +49,8 @@ void ezFunction::on_mark(void) {
     m_local->mark();
 }
 
-vector<ezValue *> *ezFunction::local_memory(void) {
-  vector<ezValue *> *ret = NULL;
+vector<ezObject *> *ezFunction::local_memory(void) {
+  vector<ezObject *> *ret = NULL;
   size_t memories = (nmems > nargs) ? nmems : nargs;
   if (m_local) {
     if (0 == m_local->size()) {
@@ -60,7 +60,7 @@ vector<ezValue *> *ezFunction::local_memory(void) {
     }
     ret = &m_local->to_vector();
   } else {
-    ret = new vector<ezValue *>;
+    ret = new vector<ezObject *>;
     for (size_t i = 0; i < memories; i++)
       ret->push_back(ezNull::instance()); // TODO:using stl APIs
   }
@@ -73,6 +73,28 @@ map<string, size_t> &ezFunction::local_symtab(void) {
 }
 */
 
-vector<ezValue *> *ezFunction::scope_memory(void) {
+vector<ezObject *> *ezFunction::scope_memory(void) {
   return (m_scope) ? &m_scope->to_vector() : NULL;
+}
+
+void ezFunction::dump(ezFile &sink) {
+  sink.print("0x%x(%d)\n", this, nargs);
+  sink.print("  .memsize: %lu\n", nmems);
+  sink.print("  .jump table:\n");
+  for (size_t i = 0; i < jmptbl.size(); i++)
+    sink.print("    [%lu]=%lu\n", i, jmptbl[i]);
+  sink.print("  .jump symbol table:\n");
+  vector<string> symbols;
+  jmptbl.symbols(symbols);
+  for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
+       it++)
+    sink.print("    [%s]=%lu\n", (*it).c_str(), jmptbl[*it]);
+  ezAddress addr;
+  string op;
+  uint8_t arg[3];
+  size_t len = instruction.size();
+  for (size_t pc = 0; pc < len; pc++) {
+    sink.print("  %d:", pc);
+    instruction[pc]->dump(sink);
+  }
 }

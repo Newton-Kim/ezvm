@@ -36,14 +36,14 @@ ezASM::ezASM(ezAddress &entry)
 
 ezASM::~ezASM() {}
 
-void ezASM::load_intrinsics(ezIntrinsicTable *intrinsics) {
-  if (!intrinsics)
+void ezASM::load_intrinsics(char **symtab, ezObject **constants) {
+  if (!symtab || !constants)
     throw runtime_error("entry is not found");
   map<string, size_t> *offset_symtab = new map<string, size_t>;
   /*TODO:should it be put to constant?*/
-  for (size_t i = 0; intrinsics[i].name; i++) {
-    size_t offset = m_globals.add(intrinsics[i].name, intrinsics[i].value);
-    m_gc.add((ezGCObject *)intrinsics[i].value);
+  for (size_t i = 0; constants[i] && symtab[i]; i++) {
+    size_t offset = m_globals.add(symtab[i], constants[i]);
+    m_gc.add((ezGCObject *)constants[i]);
   }
 }
 
@@ -52,7 +52,7 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 void ezASM::reset(const string name) { m_globals.reset(name); }
 
 ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
-  ezTable<string, ezValue *> *p_scope = NULL, *p_scpkey = NULL;
+  ezTable<string, ezObject *> *p_scope = NULL, *p_scpkey = NULL;
   if (m_globals.exist(name) && !m_globals.is_null(name))
     throw runtime_error("global symbol " + name + " already exists");
   stringstream ss;
@@ -68,7 +68,7 @@ ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
       ss << "scope[" << scpkey << "] already exist";
       throw runtime_error(ss.str());
     }
-    m_scopes[scpkey] = new ezTable<string, ezValue *>;
+    m_scopes[scpkey] = new ezTable<string, ezObject *>;
     m_gc.add((ezGCObject *)m_scopes[scpkey]);
     p_scpkey = m_scopes[scpkey];
   }
@@ -94,78 +94,24 @@ bool ezASM::is_global(const string value) { return m_globals.exist(value); }
 
 size_t ezASM::constant_null(void) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_NULL)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_NULL)
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = ezNull::instance();
+  ezObject *v = ezNull::instance();
   m_constants.push_back(v);
   return idx;
 }
 
-size_t ezASM::constant(const char *arg) {
-  string value = arg;
+size_t ezASM::constant(ezValue *arg) {
   for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_STRING && ((ezString *)v)->value == value)
+    ezObject *v = m_constants[i];
+    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue *)v)->is_equal(arg))
       return i;
   }
   size_t idx = m_constants.size();
-  ezValue *v = new ezString(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const int value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_INTEGER && ((ezInteger *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezInteger(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const bool value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_BOOL && ((ezBool *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezBool(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const double value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_FLOAT && ((ezFloat *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezFloat(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
-  return idx;
-}
-
-size_t ezASM::constant(const complex<double> value) {
-  for (size_t i = 0; i < m_constants.size(); i++) {
-    ezValue *v = m_constants[i];
-    if (v->type == EZ_VALUE_TYPE_COMPLEX && ((ezComplex *)v)->value == value)
-      return i;
-  }
-  size_t idx = m_constants.size();
-  ezValue *v = new ezComplex(value);
-  m_constants.push_back(v);
-  m_gc.add((ezGCObject *)v);
+  m_constants.push_back(arg);
+  m_gc.add((ezGCObject *)arg);
   return idx;
 }

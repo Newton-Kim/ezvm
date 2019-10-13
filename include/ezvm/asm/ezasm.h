@@ -24,22 +24,17 @@
  */
 #pragma once
 
+#include "ezasm_proc.h"
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezgc.h"
+#include "ezvm/ezobject.h"
 #include "ezvm/eztable.h"
-#include "ezvm/ezval.h"
-#include "ezasm_proc.h"
 #include <cstddef>
 #include <map>
 #include <string>
 #include <vector>
 
 using namespace std;
-
-typedef struct ezTagIntrinsicTable {
-  const char* name;
-  ezValue* value;
-} ezIntrinsicTable;
 
 /**
  * @brief ezASM alters the states of ezVM.
@@ -57,13 +52,13 @@ private:
   /**
    * @brief A reference to a constant segment
    */
-  vector<ezValue *> &m_constants;
+  vector<ezObject *> &m_constants;
   /**
    * @brief A reference to a global segment
    */
-  ezTable<string, ezValue *> &m_globals;
+  ezTable<string, ezObject *> &m_globals;
   ezGC &m_gc;
-  map<size_t, ezTable<string, ezValue *> *> m_scopes;
+  map<size_t, ezTable<string, ezObject *> *> m_scopes;
 
 public:
   /**
@@ -84,7 +79,7 @@ public:
    * @param symtab is an array of symbols respective to constants.
    * @param constants is an array of intrinsic functions.
    */
-  void load_intrinsics(ezIntrinsicTable *intrinsics);
+  void load_intrinsics(char **symtab, ezObject **constants);
   /**
    * @brief sets an entry point.
    *
@@ -127,43 +122,11 @@ public:
    */
   size_t constant_null(void);
   /**
-   * @brief adds a constant string.
+   * @brief adds a constant value object.
    *
    * @param value is a string.
    *
    * @return is an offset in a constant segment.
    */
-  size_t constant(const char *value);
-  /**
-   * @brief adds a constant integer number.
-   *
-   * @param value is an integer number.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const int value);
-  /**
-   * @brief adds a constant boolean.
-   *
-   * @param value is a boolean.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const bool value);
-  /**
-   * @brief adds a constant double.
-   *
-   * @param value is a double.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const double value);
-  /**
-   * @brief adds a constant complex.
-   *
-   * @param value is a complex.
-   *
-   * @return is an offset in a constant segment.
-   */
-  size_t constant(const complex<double> value);
+  size_t constant(ezValue *value);
 };

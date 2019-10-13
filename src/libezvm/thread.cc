@@ -28,22 +28,22 @@
 #include "ezvm/ezthread.h"
 #include <stdexcept>
 
-ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
+ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
                    vector<ezAddress> &rets, ezThreadCallback *callback,
                    ezThreadScheduler sched, ezStackFrame *caller)
     : m_entry(entry), m_scheduler(sched), m_wait(0), m_callback(callback),
       m_caller(caller) {
   if (!callback)
     throw runtime_error("callback is missing.");
-  ezValue *v = addr2val(entry);
+  ezObject *v = addr2val(entry);
   switch (v->type) {
-  case EZ_VALUE_TYPE_FUNCTION: {
+  case EZ_OBJECT_TYPE_FUNCTION: {
     ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, rets, this);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
   } break;
-  case EZ_VALUE_TYPE_USER_DEFINED_FUNCTION: {
-    vector<ezValue *> vrets;
+  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION: {
+    vector<ezObject *> vrets;
     ((ezUserDefinedFunction *)v)->run(args, vrets);
     if (caller)
       caller->update(rets, vrets);
@@ -56,8 +56,8 @@ ezThread::ezThread(ezAddress entry, vector<ezValue *> &args,
 
 ezThread::~ezThread() {}
 
-ezValue *ezThread::addr2val(ezAddress addr) {
-  ezValue *v = NULL;
+ezObject *ezThread::addr2val(ezAddress addr) {
+  ezObject *v = NULL;
   if (addr.segment != EZ_ASM_SEGMENT_GLOBAL)
     throw runtime_error("invalid segment");
   if (addr.offset >= ezMemory::instance().globals().size())
@@ -102,7 +102,7 @@ void ezThread::call(ezStackFrame *sf) {
   m_stack.push_back(sf);
 }
 
-void ezThread::end(vector<ezAddress> &dests, vector<ezValue *> &vals) {
+void ezThread::end(vector<ezAddress> &dests, vector<ezObject *> &vals) {
   ezStackFrame *callee = m_stack.back();
   m_stack.pop_back();
   if (m_stack.empty())
@@ -111,9 +111,28 @@ void ezThread::end(vector<ezAddress> &dests, vector<ezValue *> &vals) {
   caller->update(dests, vals);
 }
 
-size_t ezThread::thd(ezAddress &func, vector<ezValue *> &args,
+size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args,
                      vector<ezAddress> &rets, ezStackFrame *caller) {
   return m_callback->thd(func, args, rets, caller);
 }
 
 void ezThread::wait(size_t handle) { m_wait = handle; }
+
+
+void ezThread::dump(ezFile &sink) {
+  sink.print("  .thd_0x%x\n", this);
+  sink.print("    scheduler:");
+  switch(m_scheduler) {
+    case EZ_THREAD_SCHED_ROUNDROBIN:
+      sink.print("ROUNDROBIN");
+      break;
+    case EZ_THREAD_SCHED_REALTIME:
+      sink.print("REALTIME");
+      break;
+  }
+  sink.print("\n");
+  for (vector<ezStackFrame *>::iterator it = m_stack.begin();
+       it != m_stack.end(); it++) {
+    (*it)->dump(sink);
+  }
+}

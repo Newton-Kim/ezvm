@@ -1,24 +1,18 @@
 lib_LTLIBRARIES=libezvm.la
 
 libezvm_la_SOURCES=ezgc.cc \
-		   ezinstruction.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
-		   ezdump.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \
 		   vm.cc \
+		   object/ezobj.cc \
+		   object/ezobj_function.cc \
+		   object/ezobj_condition.cc \
+		   object/ezobj_nil.cc \
 		   value/ezval.cc \
-		   value/ezval_bool.cc \
-		   value/ezval_carousel.cc \
-		   value/ezval_complex.cc \
-		   value/ezval_condition.cc \
-		   value/ezval_float.cc \
-		   value/ezval_integer.cc \
-		   value/ezval_nil.cc \
-		   value/ezval_string.cc \
 		   utility/ezfile.cc
 
 includedir=$(prefix)/include/ezvm
@@ -27,7 +21,6 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
 		../../include/ezvm/asm/ezasm_proc.h \
 		../../include/ezvm/asm/ezasm.h \
-		../../include/ezvm/ezdump.h \
 		../../include/ezvm/ezfile.h \
 		../../include/ezvm/ezgc.h \
 		../../include/ezvm/ezinstruction.h \
@@ -36,7 +29,9 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/eztable.h \
 		../../include/ezvm/ezthread.h \
 		../../include/ezvm/ezval.h \
+		../../include/ezvm/ezobject.h \
+		../../include/ezvm/ezfunc.h \
 		../../include/ezvm/ezvm.h
 
-AM_CPPFLAGS=-I../../include -std=c++11
+AM_CPPFLAGS=-I../../include -std=c++11 -gstabs
 libezvm_la_LDFLAGS=-version-info 1:0:0

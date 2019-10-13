@@ -22,17 +22,18 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezval.h"
+#include "ezvm/ezfunc.h"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-ezNull::ezNull() : ezValue(EZ_VALUE_TYPE_NULL) {
-  unmark();
+ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
+                         const bool cry)
+    : ezObject(EZ_OBJECT_TYPE_CONDITION), zero(zr), negative(neg),
+      overflow(ovf), carry(cry) {
   m_size = sizeof(*this);
 }
 
-ezNull *ezNull::instance() {
-  static ezNull null;
-  return &null;
+void ezCondition::dump(ezFile &sink) {
+  sink.print("C{z:%d, n:%d, o:%d, c:%d}\n", zero, negative, overflow, carry);
 }

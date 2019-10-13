@@ -23,9 +23,16 @@
  *
  */
 #pragma once
+#include "ezfile.h"
 #include <cstddef>
 #include <cstdint>
 
+/**
+ * @brief Global segment: Values are accessed globally. They are altered any
+ * time.
+ * scope.
+ */
+#define EZ_ASM_SEGMENT_GLOBAL 0
 /**
  * @brief Constant segment: Constant values are set on compiling and cannot be
  * altered after.
@@ -36,15 +43,13 @@
  */
 #define EZ_ASM_SEGMENT_LOCAL 2
 /**
+ * @brief temporary segment: This segment is for temporary variables.
+ */
+#define EZ_ASM_SEGMENT_TEMPORARY 3
+/**
  * @brief Parent segment: The scope of a caller.
  */
-#define EZ_ASM_SEGMENT_SCOPE 3
-/**
- * @brief Global segment: Values are accessed globally. They are altered any
- * time.
- * scope.
- */
-#define EZ_ASM_SEGMENT_GLOBAL 0
+#define EZ_ASM_SEGMENT_SCOPE 4
 
 /**
  * @brief ezAddress describes a memory address.
@@ -77,4 +82,26 @@ public:
    * @brief An offset of the segment.
    */
   size_t offset;
+  void dump(ezFile &sink) {
+  switch (segment) {
+  case EZ_ASM_SEGMENT_CONSTANT:
+    sink.print(" c");
+    break;
+  case EZ_ASM_SEGMENT_LOCAL:
+    sink.print(" r");
+    break;
+  case EZ_ASM_SEGMENT_TEMPORARY:
+    sink.print(" t");
+    break;
+  case EZ_ASM_SEGMENT_SCOPE:
+    sink.print(" s");
+    break;
+  case EZ_ASM_SEGMENT_GLOBAL:
+    sink.print(" g");
+    break;
+  default:
+    sink.print(" %d", segment);
+  }
+  sink.print("%u", offset);
+  }
 };

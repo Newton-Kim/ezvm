@@ -23,33 +23,38 @@
  *
  */
 #pragma once
-#include "asm/ezasm.h"
-#include "ezobject.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include <list>
-#include <string>
+#include "ezgc.h"
+#include "ezfile.h"
 
-using namespace std;
+enum ezObjectType {
+  EZ_OBJECT_TYPE_NULL = 0,
+  EZ_OBJECT_TYPE_CONDITION,
+  EZ_OBJECT_TYPE_FUNCTION,
+  EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION,
+  EZ_OBJECT_TYPE_HANDLE,
+  EZ_OBJECT_TYPE_VALUE,
+  EZ_OBJECT_TYPE_MAX
+};
 
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  list<ezThread *> m_threads;
-
+class ezObject : public ezGCObject {
 public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-  void dump(string path);
+  const ezObjectType type;
+  ezObject(ezObjectType type);
+  virtual ~ezObject(){};
+  virtual void dump(ezFile &sink);
+};
+
+class ezNull : public ezObject {
+public:
+  ezNull();
+  static ezNull *instance(void);
+  void dump(ezFile &sink);
+};
+
+class ezHandle : public ezObject {
+public:
+  unsigned int id;
+  ezHandle(unsigned int identifier);
+  virtual ~ezHandle(){};
+  void dump(ezFile &sink);
 };

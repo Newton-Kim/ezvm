@@ -25,6 +25,7 @@
 */
 #include "ezvm/ezvm.h"
 #include "ezio.h"
+#include "eaval.h"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -195,6 +196,7 @@ program : import entry procs {
 				s_proc_current->append_instruction(s_instr_current);
 				delete s_instr_current;
 			}
+			s_proc_current->validate();
 			delete s_proc_current;
 		}
 	};
@@ -218,6 +220,7 @@ proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 				s_proc_current->append_instruction(s_instr_current);
 				delete s_instr_current;
 			}
+			s_proc_current->validate();
 			delete s_proc_current;
 		}
 		s_instr_current = new ezAsmInstruction;
@@ -382,11 +385,11 @@ addrs : %empty | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.o
 
 vars : %empty | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
-var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezString($1));}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
-	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
-	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(complex<double>(0, $1));}
-	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant($1);}
+	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezInteger($1));}
+	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezComplex(complex<double>(0, $1)));}
+	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezBool($1));}
 	| ADDRESS {$$ = $1;};
 %%
 
@@ -394,15 +397,18 @@ extern FILE * yyin;
 
 int ezparse(FILE* fd, const string target, const string dump) {
 	{
-		ezIntrinsicTable *intrinsics = ezIO::load();
-		s_vm.assembler().load_intrinsics(intrinsics);
+		char **symtab = NULL;
+		ezObject **constant = NULL;
+		ezIO::load(&symtab, &constant);
+		s_vm.assembler().load_intrinsics(symtab, constant);
 	}
 	yyin = fd;
 	int ret = yyparse();
 	if(ret) return ret;
 	yyin = NULL;
-	if(!dump.empty()) 
-		s_vm.dump().dump(dump);
+	if(!dump.empty()) {
+		s_vm.dump(dump);
+	}
 	if(target.empty()) s_vm.run();
 	return ret;
 }

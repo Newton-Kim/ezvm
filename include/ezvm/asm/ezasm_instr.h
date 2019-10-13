@@ -26,8 +26,8 @@
 
 #include "ezvm/ezaddr.h"
 #include "ezvm/ezfile.h"
-#include "ezvm/ezval.h"
 #include "ezvm/ezinstruction.h"
+#include "ezvm/ezval.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -35,30 +35,11 @@
 using namespace std;
 
 class ezAsmInstruction {
-friend class ezAsmProcedure;
+  friend class ezAsmProcedure;
+
 private:
   vector<ezInstruction *> m_instruction;
-  void instruction_with_binary_arguments(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress obj, const ezAddress offset);
-  void instruction_with_binary_arguments(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress cond, const ezAddress obj,
-      const ezAddress offset);
-  void instruction_with_unary_argument(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress src);
-  void instruction_with_unary_argument(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress dest, const ezAddress cond, const ezAddress src);
-  void branch_instruction(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump,
-      const ezAddress cond, size_t offset);
+
 public:
   ezAsmInstruction();
   virtual ~ezAsmInstruction();
@@ -152,7 +133,7 @@ public:
    * @param dest Destination addresses which the values of src are stored.
    * @param src Addresses of source values.
    */
- /**
+  /**
    * @brief creates an div instruction. See div of ezas.
    *
    * @param dest An address which the product is stored.

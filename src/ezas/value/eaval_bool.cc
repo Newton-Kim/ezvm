@@ -22,34 +22,41 @@
  * THE SOFTWARE.
  *
  */
-#pragma once
-#include "asm/ezasm.h"
-#include "ezobject.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include <list>
-#include <string>
+#include "eaval.h"
+#include "ezvm/ezfunc.h"
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-using namespace std;
+ezBool::ezBool(bool val) : eaValue(EZ_VALUE_TYPE_BOOL), value(val) {
+  m_size = sizeof(*this);
+}
 
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  list<ezThread *> m_threads;
+ezValue *ezBool::bitwise_not(void) { return new ezBool(!value); }
 
-public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-  void dump(string path);
-};
+ezObject *ezBool::compare(ezValue *v, bool flip) {
+  return new ezCondition(!(value ^ ((eaValue *)v)->to_bool()), false, false,
+                         false);
+}
+
+ezObject *ezBool::condition(void) {
+  return new ezCondition(!value, false, false, false);
+}
+
+bool ezBool::to_bool(void) { return value; }
+
+bool ezBool::is_equal(ezValue *v) {
+  if (EZ_VALUE_TYPE_BOOL != v->id)
+    return false;
+  if (value != ((ezBool *)v)->value)
+    return false;
+  return true;
+}
+
+void ezBool::dump(ezFile &sink) {
+  if (value == true)
+    sink.print("true");
+  else
+    sink.print("false");
+  sink.print("\n");
+}

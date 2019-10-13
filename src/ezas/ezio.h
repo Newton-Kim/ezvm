@@ -24,9 +24,9 @@
  */
 #pragma once
 
-#include "ezvm/ezval.h"
+#include "ezvm/ezobject.h"
 
 class ezIO {
 public:
-  static ezIntrinsicTable *load(void);
+  static void load(char ***symtab, ezObject ***constants);
 };

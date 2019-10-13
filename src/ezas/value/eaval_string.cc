@@ -22,34 +22,39 @@
  * THE SOFTWARE.
  *
  */
-#pragma once
-#include "asm/ezasm.h"
-#include "ezobject.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include <list>
-#include <string>
+#include "eaval.h"
+#include "ezvm/ezfunc.h"
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-using namespace std;
+ezString::ezString(const string val)
+    : eaValue(EZ_VALUE_TYPE_STRING), value(val) {
+  m_size = sizeof(*this) + val.size() + 1;
+}
 
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  list<ezThread *> m_threads;
+string ezString::to_string(void) { return value; }
 
-public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-  void dump(string path);
-};
+ezValue *ezString::add(ezValue *v, bool flip) {
+  return new ezString(value + ((eaValue *)v)->to_string());
+}
+
+ezObject *ezString::compare(ezValue *v, bool flip) {
+  return new ezCondition(v->id == EZ_VALUE_TYPE_STRING &&
+                             value == ((eaValue *)v)->to_string(),
+                         false, false, false);
+}
+
+ezObject *ezString::condition(void) {
+  return new ezCondition(value.empty(), false, false, false);
+}
+
+bool ezString::is_equal(ezValue *v) {
+  if (EZ_VALUE_TYPE_STRING != v->id)
+    return false;
+  if (value != ((ezString *)v)->value)
+    return false;
+  return true;
+}
+
+void ezString::dump(ezFile &sink) { sink.print("\"%s\"\n", value.c_str()); }

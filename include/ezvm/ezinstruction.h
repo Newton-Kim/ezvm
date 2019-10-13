@@ -33,22 +33,9 @@
 using namespace std;
 
 class ezStackFrame;
-class ezDump;
 
 class ezInstruction {
-private:
-  function<void(ezStackFrame &stk, ezInstruction &arg)> m_func;
-  function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> m_dump;
-
 public:
-  ezInstruction(
-      function<void(ezStackFrame &stk, ezInstruction &arg)> func,
-      function<void(ezFile &sink, ezDump &dump, ezInstruction &arg)> dump);
-  size_t offset;
-  ezAddress arg;
-  ezAddress handle;
-  vector<ezAddress> srcs;
-  vector<ezAddress> dests;
-  inline void process(ezStackFrame &stk) { m_func(stk, *this); }
-  inline void dump(ezFile &sink, ezDump &dump) { m_dump(sink, dump, *this); }
+  virtual void process(ezStackFrame &stk) = 0;
+  virtual void dump(ezFile &sink) = 0;
 };

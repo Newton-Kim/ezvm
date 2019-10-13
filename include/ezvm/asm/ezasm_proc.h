@@ -25,6 +25,8 @@
 #pragma once
 
 #include "ezvm/asm/ezasm_instr.h"
+#include "ezvm/ezfunc.h"
+#include <list>
 #include <map>
 #include <string>
 #include <vector>
@@ -43,6 +45,9 @@ private:
   ezFunction *m_carousel;
   size_t m_local_index;
   map<string, size_t> m_locals;
+  list<string> m_unresolved;
+
+  bool search_unresolved(string label);
 
 public:
   /**
@@ -59,6 +64,13 @@ public:
    * mems. the size is not changed.
    */
   void mems(size_t mems);
+  /**
+   * @brief temps the local memory.
+   *
+   * @param temps is a new size. if the size of the local memory is greater than
+   * temps. the size is not changed.
+   */
+  void temps(size_t temps);
   size_t local(const string value);
   /**
    * @brief tags the address with the name.
@@ -76,6 +88,6 @@ public:
    * @return The offset of a local segment
    */
   size_t label2index(string label);
-  void append_instruction(ezAsmInstruction* instr);
+  void append_instruction(ezAsmInstruction *instr);
+  void validate(void);
 };
-

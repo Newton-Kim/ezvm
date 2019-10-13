@@ -22,34 +22,16 @@
  * THE SOFTWARE.
  *
  */
-#pragma once
-#include "asm/ezasm.h"
-#include "ezobject.h"
-#include "eztable.h"
-#include "ezthread.h"
-#include <list>
-#include <string>
 
-using namespace std;
+#include "ezvm/ezobject.h"
 
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
-private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  list<ezThread *> m_threads;
+ezObject::ezObject(ezObjectType tp) : type(tp) {}
 
-public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
-  void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-  void dump(string path);
-};
+void ezObject::dump(ezFile &sink) { sink.print("(unknown)"); }
+
+ezHandle::ezHandle(unsigned int identifier)
+    : ezObject(EZ_OBJECT_TYPE_HANDLE), id(identifier) {}
+
+void ezHandle::dump(ezFile &sink) {
+  sink.print("H(%d)\n", id);
+}

@@ -23,33 +23,47 @@
  *
  */
 #pragma once
-#include "asm/ezasm.h"
+#include "ezaddr.h"
+#include "ezinstruction.h"
 #include "ezobject.h"
 #include "eztable.h"
-#include "ezthread.h"
-#include <list>
-#include <string>
 
-using namespace std;
-
-/**
- * @brief ezVM is the VM class
- */
-class ezVM : public ezGCClient, ezThreadCallback {
+class ezFunction : public ezObject {
 private:
-  ezAddress m_entry;
-  ezASM *m_pasm;
-  // TODO:user defined dump should be pluggable.
-  list<ezThread *> m_threads;
+  ezTable<string, ezObject *> *m_scope;
+  ezTable<string, ezObject *> *m_local;
 
 public:
-  ezVM();
-  ~ezVM();
-  void run(void);
-  ezASM &assembler(void);
+  uint8_t nargs;
+  size_t nmems;
+  size_t ntemps;
+  ezFunction(ezTable<string, ezObject *> *local,
+             ezTable<string, ezObject *> *scope);
+  ~ezFunction();
+  vector<ezInstruction *> instruction;
+  ezTable<string, size_t> jmptbl;
   void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
-  bool exist(size_t handle);
-  void dump(string path);
+  vector<ezObject *> *local_memory(void);
+  vector<ezObject *> *scope_memory(void);
+  bool is_local_scoped(void) { return (m_local) ? true : false; }
+  void dump(ezFile &sink);
+};
+
+class ezUserDefinedFunction : public ezObject {
+public:
+  ezUserDefinedFunction();
+  virtual ~ezUserDefinedFunction() {}
+
+  virtual void run(vector<ezObject *> &args, vector<ezObject *> &rets) = 0;
+  void dump(ezFile &sink) {sink.print("0x%x(native)\n", this);}
+};
+
+class ezCondition : public ezObject {
+public:
+  const bool zero;
+  const bool negative;
+  const bool overflow;
+  const bool carry;
+  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
+  void dump(ezFile &sink);
 };

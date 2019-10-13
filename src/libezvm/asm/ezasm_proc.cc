@@ -24,33 +24,61 @@
  */
 
 #include "ezvm/asm/ezasm_proc.h"
-#include "ezvm/ezdump.h"
 #include "ezvm/ezstack.h"
 
 using namespace std;
 
-ezAsmProcedure::ezAsmProcedure(ezFunction *carousel) : m_carousel(carousel), m_local_index(0) {}
+ezAsmProcedure::ezAsmProcedure(ezFunction *carousel)
+    : m_carousel(carousel), m_local_index(0) {}
 
 void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 
 void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
 
+void ezAsmProcedure::temps(size_t temps) { m_carousel->ntemps = temps; }
+
 size_t ezAsmProcedure::local(const string value) {
-  if (m_locals.end() == m_locals.find(value)) m_locals[value] = m_local_index++;
-  if (m_carousel->nmems < m_local_index) m_carousel->nmems = m_local_index;
+  if (m_locals.end() == m_locals.find(value))
+    m_locals[value] = m_local_index++;
+  if (m_carousel->nmems < m_local_index)
+    m_carousel->nmems = m_local_index;
   return m_locals[value];
 }
 
+bool ezAsmProcedure::search_unresolved(string label) {
+  bool found = false;
+  for (list<string>::iterator it = m_unresolved.begin();
+       it != m_unresolved.end(); it++) {
+    if (*it == label) {
+      found = true;
+      break;
+    }
+  }
+  return found;
+}
+
 size_t ezAsmProcedure::label2index(string label) {
-  if (!m_carousel->jmptbl.exist(label))
+  if (!m_carousel->jmptbl.exist(label)) {
+    if (!search_unresolved(label))
+      m_unresolved.push_back(label);
     m_carousel->jmptbl.add(label, 0);
+  }
   return m_carousel->jmptbl[label];
 }
 
 void ezAsmProcedure::label(string name, size_t offset) {
+  if (search_unresolved(name))
+    m_unresolved.remove(name);
   m_carousel->jmptbl.add(name, offset);
 }
 
-void ezAsmProcedure::append_instruction(ezAsmInstruction* instr) {
-  m_carousel->instruction.insert(m_carousel->instruction.end(), instr->m_instruction.begin(), instr->m_instruction.end());
+void ezAsmProcedure::append_instruction(ezAsmInstruction *instr) {
+  m_carousel->instruction.insert(m_carousel->instruction.end(),
+                                 instr->m_instruction.begin(),
+                                 instr->m_instruction.end());
+}
+
+void ezAsmProcedure::validate(void) {
+  if (m_unresolved.size())
+    throw runtime_error("unresolved label exists");
 }
