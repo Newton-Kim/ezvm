@@ -69,13 +69,14 @@ size_t ezAsmProcedure::label2index(string label) {
 void ezAsmProcedure::label(string name, size_t offset) {
   if (search_unresolved(name))
     m_unresolved.remove(name);
-  m_carousel->jmptbl.add(name, offset);
+  m_carousel->jmptbl.add(name, m_carousel->instruction.size() + offset);
 }
 
 void ezAsmProcedure::append_instruction(ezAsmInstruction *instr) {
   m_carousel->instruction.insert(m_carousel->instruction.end(),
                                  instr->m_instruction.begin(),
                                  instr->m_instruction.end());
+  instr->m_instruction.clear();
 }
 
 void ezAsmProcedure::validate(void) {
