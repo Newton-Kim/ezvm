@@ -164,6 +164,7 @@ static vector<ezAddress> s_args_var;
 static size_t s_memories = 0;
 static int s_scope = -1;
 static int s_scpkey = -1;
+static bool s_is_void = false;
 %}
 
 %token PROC ENTRY IMPORT
@@ -172,7 +173,7 @@ static int s_scpkey = -1;
 
 %type <s_value> PROC ENTRY CALL LD LSL LSR MV SYMBOL STRING NEWLINE LABEL
 %type <i_value> INTEGER COMPLEX proc_meta
-%type <a_value> ADDRESS fname var
+%type <a_value> ADDRESS fname var ret_addr
 %type <b_value> BOOLEAN
 
 %union {
@@ -292,7 +293,17 @@ bne : BNE var SYMBOL {s_instr_current->bne(ezAddress($2.segment, $2.offset), s_p
 
 bra : BRA SYMBOL {s_instr_current->bra(s_proc_current->label2index($2));}
 
-call : CALL fname '(' vars ')' addrs {s_instr_current->call(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr); s_args_addr.clear(); s_args_var.clear();};
+ret_addr : %empty {s_is_void = true;} | ADDRESS {s_is_void = false; $$ = $1;}
+
+call : CALL fname '(' vars ')' ret_addr {
+		if (s_is_void) {
+			s_instr_current->call(ezAddress($2.segment, $2.offset), s_args_var);
+		} else {
+			ezAddress ret = ezAddress($2.segment, $2.offset);
+			s_instr_current->call(ezAddress($2.segment, $2.offset), s_args_var, ret);
+		}
+		s_args_var.clear();
+	};
 
 cmp : CMP var ',' var var {s_instr_current->cmp(ezAddress($2.segment, $2.offset), ezAddress($4.segment, $4.offset), ezAddress($5.segment, $5.offset));}
 
@@ -363,7 +374,16 @@ sub : SUB var ',' var var {
 		s_instr_current->sub(ezAddress($2.segment, $2.offset), ezAddress($3.segment, $3.offset), ezAddress($5.segment, $5.offset), ezAddress($6.segment, $6.offset));
 	};
 
-thd : THD fname '(' vars ';' addrs ')' ADDRESS{s_instr_current->thd(ezAddress($2.segment, $2.offset), s_args_var, s_args_addr, ezAddress($8.segment, $8.offset)); s_args_addr.clear(); s_args_var.clear();};
+thd : THD fname '(' vars ';' ret_addr ')' ADDRESS{
+		if(s_is_void) {
+			s_instr_current->thd(ezAddress($2.segment, $2.offset), s_args_var, ezAddress($8.segment, $8.offset));
+		} else {
+			ezAddress ret = ezAddress($6.segment, $6.offset);
+			s_instr_current->thd(ezAddress($2.segment, $2.offset), s_args_var, ret, ezAddress($8.segment, $8.offset));
+		}
+		s_args_var.clear();
+
+	};
 
 wait : WAIT ADDRESS {
 		s_instr_current->wait(ezAddress($2.segment, $2.offset));

@@ -4,5 +4,6 @@
 
 .proc _main (0)
 	.memories 2
-	call _strs() r0 r1
-	call _stdout ( r0 " " r1)
+	call _strs() r0
+	mv r1 r2, r0
+	call _stdout ( r1 " " r2)

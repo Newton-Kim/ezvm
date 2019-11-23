@@ -12,8 +12,10 @@ libezvm_la_SOURCES=ezgc.cc \
 		   object/ezobj_function.cc \
 		   object/ezobj_condition.cc \
 		   object/ezobj_nil.cc \
+		   object/ezobj_array.cc \
 		   value/ezval.cc \
-		   utility/ezfile.cc
+		   utility/ezfile.cc \
+		   utility/ezlog.cc
 
 includedir=$(prefix)/include/ezvm
 
@@ -33,5 +35,5 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezfunc.h \
 		../../include/ezvm/ezvm.h
 
-AM_CPPFLAGS=-I../../include -std=c++11 -gstabs
+AM_CPPFLAGS=-I../../include -std=c++11 -gstabs -UEZ_LOG_ENABLED
 libezvm_la_LDFLAGS=-version-info 1:0:0

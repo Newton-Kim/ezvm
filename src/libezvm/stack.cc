@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  *
  */
+#include "ezvm/ezlog.h"
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezstack.h"
@@ -29,7 +30,26 @@
 #include <stdexcept>
 
 ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
-                           vector<ezAddress> &rets,
+                           ezAddress &ret, ezStackFrameCallback *callback)
+    : m_pc(0), m_local(crsl->local_memory()),
+      m_scope(crsl->scope_memory()), m_return(NULL), m_carousel(crsl),
+      m_callback(callback) {
+  if (!m_callback)
+    throw runtime_error("callback is null.");
+  size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
+  for (size_t i = 0; i < min_args; i++)
+    (*m_local)[i] = args[i];
+  m_return_dest = ret;
+  for (size_t i = 0; i < m_carousel->ntemps; i++)
+    m_temporary.push_back(ezNull::instance());
+  m_memory.push_back(&(ezMemory::instance().globals().to_vector()));
+  m_memory.push_back(&ezMemory::instance().constants());
+  m_memory.push_back(m_local);
+  m_memory.push_back(&m_temporary);
+  m_memory.push_back(m_scope);
+}
+
+ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                            ezStackFrameCallback *callback)
     : m_pc(0), m_local(m_carousel->local_memory()),
       m_scope(m_carousel->scope_memory()), m_carousel(crsl),
@@ -39,8 +59,6 @@ ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
   for (size_t i = 0; i < min_args; i++)
     (*m_local)[i] = args[i];
-  for (size_t i = 0; i < rets.size(); i++)
-    m_return_dest.push_back(rets[i]);
   for (size_t i = 0; i < m_carousel->ntemps; i++)
     m_temporary.push_back(ezNull::instance());
   m_memory.push_back(&(ezMemory::instance().globals().to_vector()));
@@ -426,12 +444,18 @@ void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
-  ezObject *v = NULL;
-  for (size_t i = 0; i < srcs.size(); i++) {
-    v = addr2val(srcs[i]);
-    m_returns.push_back(v);
+  if (srcs.size() == 1) {
+    m_return = addr2val(srcs[0]);
+  } else {
+    ezObject *v = NULL;
+    ezArray *array = new ezArray;
+    for (size_t i = 0; i < srcs.size(); i++) {
+      v = addr2val(srcs[i]);
+      array->data.push_back(v);
+    }
+    m_return = array;
   }
-  m_callback->end(m_return_dest, m_returns);
+  m_callback->end(m_return_dest, m_return);
 }
 
 void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
@@ -451,16 +475,33 @@ void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
 }
 
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
-                        vector<ezAddress> &rets) {
+                        ezAddress &ret) {
   ezObject *proc = addr2val(func);
   vector<ezObject *> vargs;
   addr2val(vargs, args);
   switch (proc->type) {
   case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
-    call((ezUserDefinedFunction *)proc, vargs, rets);
+    call((ezUserDefinedFunction *)proc, vargs, ret);
     break;
   case EZ_OBJECT_TYPE_FUNCTION:
-    call((ezFunction *)proc, vargs, rets);
+    call((ezFunction *)proc, vargs, ret);
+    break;
+  default:
+    throw runtime_error("function is not executable");
+    break;
+  }
+}
+
+void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args) {
+  ezObject *proc = addr2val(func);
+  vector<ezObject *> vargs;
+  addr2val(vargs, args);
+  switch (proc->type) {
+  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
+    call((ezUserDefinedFunction *)proc, vargs);
+    break;
+  case EZ_OBJECT_TYPE_FUNCTION:
+    call((ezFunction *)proc, vargs);
     break;
   default:
     throw runtime_error("function is not executable");
@@ -469,26 +510,43 @@ void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
 }
 
 void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args,
-                        vector<ezAddress> &rets) {
+                        ezAddress &ret) {
   ezGC::instance().pause();
-  ezStackFrame *callee = new ezStackFrame(func, args, rets, m_callback);
+  ezStackFrame *callee = new ezStackFrame(func, args, ret, m_callback);
+  m_callback->call(callee);
+  ezGC::instance().resume();
+}
+
+void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args) {
+  ezGC::instance().pause();
+  ezStackFrame *callee = new ezStackFrame(func, args, m_callback);
   m_callback->call(callee);
   ezGC::instance().resume();
 }
 
 void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args,
-                        vector<ezAddress> &rets) {
-  vector<ezObject *> vrets;
-  func->run(args, vrets);
-  if (rets.size())
-    val2addr(rets, vrets);
+                        ezAddress &ret) {
+  ezObject *vret = func->run(args);
+  if (vret) val2addr(ret, vret);
+}
+
+void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args) {
+  func->run(args);
+}
+
+void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
+                       ezAddress &handle) {
+  vector<ezObject *> vargs;
+  addr2val(vargs, args);
+  size_t hthd = m_callback->thd(func, vargs, ret, this);
+  val2addr(handle, new ezHandle(hthd));
 }
 
 void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args,
-                       vector<ezAddress> &rets, ezAddress &handle) {
+                       ezAddress &handle) {
   vector<ezObject *> vargs;
   addr2val(vargs, args);
-  size_t hthd = m_callback->thd(func, vargs, rets, this);
+  size_t hthd = m_callback->thd(func, vargs, this);
   val2addr(handle, new ezHandle(hthd));
 }
 
@@ -499,13 +557,13 @@ void ezStackFrame::wait(ezAddress &handle) {
   m_callback->wait(((ezHandle *)v)->id);
 }
 
-void ezStackFrame::update(vector<ezAddress> &dests, vector<ezObject *> &vals) {
-  val2addr(dests, vals);
+void ezStackFrame::update(ezAddress &dest, ezObject *val) {
+  if(val) val2addr(dest, val);
 }
 
 void ezStackFrame::step(void) {
   if (m_pc >= m_carousel->instruction.size()) {
-    m_callback->end(m_return_dest, m_returns);
+    m_callback->end(m_return_dest, m_return);
     return;
   }
   ezInstruction *inst = m_carousel->instruction[m_pc++];
@@ -513,12 +571,19 @@ void ezStackFrame::step(void) {
 }
 
 void ezStackFrame::on_mark(void) {
+  EZ_INFO("start");
+  EZ_INFO("m_local size: %d", m_local->size());
   for (vector<ezObject *>::iterator it = m_local->begin(); it != m_local->end();
-       it++)
-    (*it)->mark();
-  for (vector<ezObject *>::iterator it = m_returns.begin();
-       it != m_returns.end(); it++)
-    (*it)->mark();
+       it++) {
+    ezObject* obj = *it;
+    EZ_INFO("visiting 0x%x", obj);
+    if(obj) obj->mark();
+  }
+  if(m_return) {
+    EZ_INFO("marking return value of 0x%x", m_return);
+    m_return->mark();
+  }
+  EZ_INFO("end");
 }
 
 void ezStackFrame::dump(ezFile &sink) {
@@ -527,13 +592,15 @@ void ezStackFrame::dump(ezFile &sink) {
   sink.print("      context:0x%x\n", m_carousel);
   sink.print("      .local memory:\n");
   size_t i = 0;
-  for(vector<ezObject*>::iterator it = m_local->begin() ; it != m_local->end() ; it++) {
+  for (vector<ezObject *>::iterator it = m_local->begin(); it != m_local->end();
+       it++) {
     sink.print("        [%d]:", i++);
     (*it)->dump(sink);
   }
   sink.print("      .temporary memory:\n");
   i = 0;
-  for(vector<ezObject*>::iterator it = m_temporary.begin() ; it != m_temporary.end() ; it++) {
+  for (vector<ezObject *>::iterator it = m_temporary.begin();
+       it != m_temporary.end(); it++) {
     sink.print("        [%d]:", i++);
     (*it)->dump(sink);
   }

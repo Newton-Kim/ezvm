@@ -54,7 +54,7 @@ public:
   ezUserDefinedFunction();
   virtual ~ezUserDefinedFunction() {}
 
-  virtual void run(vector<ezObject *> &args, vector<ezObject *> &rets) = 0;
+  virtual ezObject* run(vector<ezObject *> &args) = 0;
   void dump(ezFile &sink) {sink.print("0x%x(native)\n", this);}
 };
 

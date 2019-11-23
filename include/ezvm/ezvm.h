@@ -27,6 +27,7 @@
 #include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
+
 #include <list>
 #include <string>
 
@@ -48,8 +49,8 @@ public:
   void run(void);
   ezASM &assembler(void);
   void on_mark(void);
-  size_t thd(ezAddress &func, vector<ezObject *> &args, vector<ezAddress> &rets,
-             ezStackFrame *caller);
+  size_t thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret, ezStackFrame *caller);
+  size_t thd(ezAddress &func, vector<ezObject *> &args, ezStackFrame *caller);
   bool exist(size_t handle);
   void dump(string path);
 };

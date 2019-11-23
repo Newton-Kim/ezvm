@@ -37,6 +37,4 @@ ezNull *ezNull::instance() {
   return &null;
 }
 
-void ezNull::dump(ezFile &sink) {
-  sink.print("nil\n");
-}
+void ezNull::dump(ezFile &sink) { sink.print("nil\n"); }

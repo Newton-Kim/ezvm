@@ -32,6 +32,7 @@ enum ezObjectType {
   EZ_OBJECT_TYPE_FUNCTION,
   EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION,
   EZ_OBJECT_TYPE_HANDLE,
+  EZ_OBJECT_TYPE_ARRAY,
   EZ_OBJECT_TYPE_VALUE,
   EZ_OBJECT_TYPE_MAX
 };
@@ -56,5 +57,13 @@ public:
   unsigned int id;
   ezHandle(unsigned int identifier);
   virtual ~ezHandle(){};
+  void dump(ezFile &sink);
+};
+
+class ezArray : public ezObject {
+public:
+  vector<ezObject*> data;
+  ezArray();
+  ~ezArray(){};
   void dump(ezFile &sink);
 };

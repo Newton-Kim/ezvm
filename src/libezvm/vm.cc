@@ -23,6 +23,7 @@
  *
  */
 #include "ezvm/ezgc.h"
+#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezvm.h"
 #include <algorithm>
@@ -52,9 +53,9 @@ ezVM::~ezVM() {
 
 void ezVM::run(void) {
   vector<ezObject *> args;
-  vector<ezAddress> rets;
+  ezAddress ret;
   ezGC::instance().pause();
-  ezThread *thread = new ezThread(m_entry, args, rets, this);
+  ezThread *thread = new ezThread(m_entry, args, ret, this);
   m_threads.push_back(thread);
   ezGC::instance().resume();
   while (!m_threads.empty()) {
@@ -87,11 +88,21 @@ void ezVM::on_mark(void) {
     (*it)->on_mark();
 }
 
-size_t ezVM::thd(ezAddress &func, vector<ezObject *> &args,
-                 vector<ezAddress> &rets, ezStackFrame *caller) {
+size_t ezVM::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,
+                 ezStackFrame *caller) {
   ezGC::instance().pause();
   ezThread *thread =
-      new ezThread(func, args, rets, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
+      new ezThread(func, args, ret, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
+  m_threads.push_back(thread);
+  ezGC::instance().resume();
+  return (size_t)thread;
+}
+
+size_t ezVM::thd(ezAddress &func, vector<ezObject *> &args,
+                 ezStackFrame *caller) {
+  ezGC::instance().pause();
+  ezThread *thread =
+      new ezThread(func, args, this, EZ_THREAD_SCHED_ROUNDROBIN, caller);
   m_threads.push_back(thread);
   ezGC::instance().resume();
   return (size_t)thread;
@@ -103,18 +114,21 @@ bool ezVM::exist(size_t handle) {
 }
 
 void ezVM::dump(string path) {
+  EZ_INFO("start");
   ezFile sink(path, "wb");
   sink.print(".entry: ");
   m_entry.dump(sink);
   sink.print("\n");
   sink.print("\n.global memory:\n");
-  ezTable<string, ezObject*> globals = ezMemory::instance().globals();
+  ezTable<string, ezObject *> globals = ezMemory::instance().globals();
   size_t sz = globals.size();
   sink.print("  .size:%d\n", sz);
   for (size_t i = 0; i < sz; i++) {
     sink.print("[%lu]=", i);
-    if(globals[i]) globals[i]->dump(sink);
-    else sink.print("null\n");
+    if (globals[i])
+      globals[i]->dump(sink);
+    else
+      sink.print("null\n");
   }
   sink.print("\n");
   sink.print(".global symtab:\n");
@@ -136,5 +150,5 @@ void ezVM::dump(string path) {
   for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
        it++)
     (*it)->dump(sink);
+  EZ_INFO("end");
 }
-

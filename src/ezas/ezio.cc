@@ -35,13 +35,12 @@ private:
 
 public:
   ezIoPrint(ostream &io);
-  void run(vector<ezObject *> &args, vector<ezObject *> &rets);
+  ezObject* run(vector<ezObject *> &args);
 };
 
 ezIoPrint::ezIoPrint(ostream &io) : ezUserDefinedFunction(), m_io(io) {}
 
-void ezIoPrint::run(vector<ezObject *> &args, vector<ezObject *> &rets) {
-  rets.clear();
+ezObject* ezIoPrint::run(vector<ezObject *> &args) {
   stringstream ss;
   size_t len = args.size();
   for (size_t i = 0; i < len; i++) {
@@ -73,6 +72,7 @@ void ezIoPrint::run(vector<ezObject *> &args, vector<ezObject *> &rets) {
   }
   ss << endl;
   m_io << ss.str();
+  return NULL;
 }
 
 void ezIO::load(char ***symtab, ezObject ***constants) {

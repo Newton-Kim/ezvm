@@ -127,7 +127,7 @@ void ezAsmInstruction::beq(const ezAddress cond, size_t offset) {
       sink.print("beq");
       m_cond.dump(sink);
       sink.print(" %lu\n", m_offset);
-   }
+    }
   };
   m_instruction.push_back(new ezInstrBeq(cond, offset));
 }
@@ -206,37 +206,59 @@ void ezAsmInstruction::bra(size_t offset) {
 }
 
 void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args,
-                            vector<ezAddress> &rets) {
+                            ezAddress &ret) {
   class ezInstrCall : public ezInstruction {
   private:
     ezAddress m_func;
     vector<ezAddress> m_args;
-    vector<ezAddress> m_rets;
+    ezAddress m_ret;
 
   public:
-    ezInstrCall(const ezAddress &func, vector<ezAddress> &args,
-                vector<ezAddress> &rets)
-        : m_func(func), m_args(args), m_rets(rets) {}
-    void process(ezStackFrame &stk) { stk.call(m_func, m_args, m_rets); }
+    ezInstrCall(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret)
+        : m_func(func), m_args(args), m_ret(ret) {}
+    void process(ezStackFrame &stk) { stk.call(m_func, m_args, m_ret); }
     void dump(ezFile &sink) {
       sink.print("call");
       m_func.dump(sink);
       sink.print(",");
-      if(m_args.empty())
+      if (m_args.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_args.begin() ; it != m_args.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_args.begin();
+             it != m_args.end(); it++)
           (*it).dump(sink);
       sink.print(",");
-      if(m_rets.empty())
-        sink.print(" null");
-      else
-        for(vector<ezAddress>::iterator it = m_rets.begin() ; it != m_rets.end() ; it++)
-          (*it).dump(sink);
+      m_ret.dump(sink);
       sink.print("\n");
     }
   };
-  m_instruction.push_back(new ezInstrCall(func, args, rets));
+  m_instruction.push_back(new ezInstrCall(func, args, ret));
+}
+
+void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args) {
+  class ezInstrCall : public ezInstruction {
+  private:
+    ezAddress m_func;
+    vector<ezAddress> m_args;
+
+  public:
+    ezInstrCall(const ezAddress &func, vector<ezAddress> &args)
+        : m_func(func), m_args(args) {}
+    void process(ezStackFrame &stk) { stk.call(m_func, m_args); }
+    void dump(ezFile &sink) {
+      sink.print("call");
+      m_func.dump(sink);
+      sink.print(",");
+      if (m_args.empty())
+        sink.print(" null");
+      else
+        for (vector<ezAddress>::iterator it = m_args.begin();
+             it != m_args.end(); it++)
+          (*it).dump(sink);
+      sink.print(", null\n");
+    }
+  };
+  m_instruction.push_back(new ezInstrCall(func, args));
 }
 
 void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,
@@ -550,16 +572,18 @@ void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
     void dump(ezFile &sink) {
       sink.print("mv");
-      if(m_dest.empty())
+      if (m_dest.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_dest.begin() ; it != m_dest.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_dest.begin();
+             it != m_dest.end(); it++)
           (*it).dump(sink);
       sink.print(",");
-      if(m_src.empty())
+      if (m_src.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_src.begin() ; it != m_src.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_src.begin(); it != m_src.end();
+             it++)
           (*it).dump(sink);
       sink.print("\n");
     }
@@ -581,16 +605,18 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
     void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
     void dump(ezFile &sink) {
       sink.print("mv");
-      if(m_dest.empty())
+      if (m_dest.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_dest.begin() ; it != m_dest.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_dest.begin();
+             it != m_dest.end(); it++)
           (*it).dump(sink);
       sink.print(",");
-      if(m_src.empty())
+      if (m_src.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_src.begin() ; it != m_src.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_src.begin(); it != m_src.end();
+             it++)
           (*it).dump(sink);
       sink.print("\n");
     }
@@ -818,10 +844,11 @@ void ezAsmInstruction::ret(vector<ezAddress> &src) {
     void process(ezStackFrame &stk) { stk.ret(m_rets); }
     void dump(ezFile &sink) {
       sink.print("ret");
-      if(m_rets.empty())
+      if (m_rets.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_rets.begin() ; it != m_rets.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_rets.begin();
+             it != m_rets.end(); it++)
           (*it).dump(sink);
       sink.print("\n");
     }
@@ -932,40 +959,67 @@ void ezAsmInstruction::tge(const ezAddress dest, const ezAddress cond,
 */
 
 void ezAsmInstruction::thd(const ezAddress &func, vector<ezAddress> &args,
-                           vector<ezAddress> &rets, const ezAddress &handle) {
+                           ezAddress &ret, const ezAddress &handle) {
   class ezInstrThd : public ezInstruction {
   private:
     ezAddress m_func;
     vector<ezAddress> m_args;
-    vector<ezAddress> m_rets;
+    ezAddress m_ret;
     ezAddress m_handle;
 
   public:
-    ezInstrThd(const ezAddress &func, vector<ezAddress> &args,
-               vector<ezAddress> &rets, const ezAddress &handle)
-        : m_func(func), m_args(args), m_rets(rets), m_handle(handle) {}
+    ezInstrThd(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
+               const ezAddress &handle)
+        : m_func(func), m_args(args), m_ret(ret), m_handle(handle) {}
     void process(ezStackFrame &stk) {
-      stk.thd(m_func, m_args, m_rets, m_handle);
+      stk.thd(m_func, m_args, m_ret, m_handle);
     }
     void dump(ezFile &sink) {
       sink.print("thd");
       m_func.dump(sink);
-      if(m_args.empty())
+      if (m_args.empty())
         sink.print(" null");
       else
-        for(vector<ezAddress>::iterator it = m_args.begin() ; it != m_args.end() ; it++)
+        for (vector<ezAddress>::iterator it = m_args.begin();
+             it != m_args.end(); it++)
           (*it).dump(sink);
       sink.print(",");
-      if(m_rets.empty())
-        sink.print(" null");
-      else
-        for(vector<ezAddress>::iterator it = m_rets.begin() ; it != m_rets.end() ; it++)
-          (*it).dump(sink);
+      m_ret.dump(sink);
       m_handle.dump(sink);
       sink.print("\n");
     }
   };
-  m_instruction.push_back(new ezInstrThd(func, args, rets, handle));
+  m_instruction.push_back(new ezInstrThd(func, args, ret, handle));
+}
+
+void ezAsmInstruction::thd(const ezAddress &func, vector<ezAddress> &args,
+                           const ezAddress &handle) {
+  class ezInstrThd : public ezInstruction {
+  private:
+    ezAddress m_func;
+    vector<ezAddress> m_args;
+    ezAddress m_handle;
+
+  public:
+    ezInstrThd(const ezAddress &func, vector<ezAddress> &args,
+               const ezAddress &handle)
+        : m_func(func), m_args(args), m_handle(handle) {}
+    void process(ezStackFrame &stk) { stk.thd(m_func, m_args, m_handle); }
+    void dump(ezFile &sink) {
+      sink.print("thd");
+      m_func.dump(sink);
+      if (m_args.empty())
+        sink.print(" null");
+      else
+        for (vector<ezAddress>::iterator it = m_args.begin();
+             it != m_args.end(); it++)
+          (*it).dump(sink);
+      sink.print(", null, ");
+      m_handle.dump(sink);
+      sink.print("\n");
+    }
+  };
+  m_instruction.push_back(new ezInstrThd(func, args, handle));
 }
 
 /*

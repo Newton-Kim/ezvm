@@ -137,8 +137,9 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezgc.lo asm/ezasm.lo asm/ezasm_proc.lo \
 	asm/ezasm_instr.lo stack.lo thread.lo ezmemory.lo vm.lo \
 	object/ezobj.lo object/ezobj_function.lo \
-	object/ezobj_condition.lo object/ezobj_nil.lo value/ezval.lo \
-	utility/ezfile.lo
+	object/ezobj_condition.lo object/ezobj_nil.lo \
+	object/ezobj_array.lo value/ezval.lo utility/ezfile.lo \
+	utility/ezlog.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -166,11 +167,11 @@ am__depfiles_remade = ./$(DEPDIR)/ezgc.Plo ./$(DEPDIR)/ezmemory.Plo \
 	./$(DEPDIR)/stack.Plo ./$(DEPDIR)/thread.Plo \
 	./$(DEPDIR)/vm.Plo asm/$(DEPDIR)/ezasm.Plo \
 	asm/$(DEPDIR)/ezasm_instr.Plo asm/$(DEPDIR)/ezasm_proc.Plo \
-	object/$(DEPDIR)/ezobj.Plo \
+	object/$(DEPDIR)/ezobj.Plo object/$(DEPDIR)/ezobj_array.Plo \
 	object/$(DEPDIR)/ezobj_condition.Plo \
 	object/$(DEPDIR)/ezobj_function.Plo \
 	object/$(DEPDIR)/ezobj_nil.Plo utility/$(DEPDIR)/ezfile.Plo \
-	value/$(DEPDIR)/ezval.Plo
+	utility/$(DEPDIR)/ezlog.Plo value/$(DEPDIR)/ezval.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -359,8 +360,10 @@ libezvm_la_SOURCES = ezgc.cc \
 		   object/ezobj_function.cc \
 		   object/ezobj_condition.cc \
 		   object/ezobj_nil.cc \
+		   object/ezobj_array.cc \
 		   value/ezval.cc \
-		   utility/ezfile.cc
+		   utility/ezfile.cc \
+		   utility/ezlog.cc
 
 nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
@@ -378,7 +381,7 @@ nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezfunc.h \
 		../../include/ezvm/ezvm.h
 
-AM_CPPFLAGS = -I../../include -std=c++11 -gstabs
+AM_CPPFLAGS = -I../../include -std=c++11 -gstabs -UEZ_LOG_ENABLED
 libezvm_la_LDFLAGS = -version-info 1:0:0
 all: all-am
 
@@ -393,9 +396,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/libezvm/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/libezvm/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/libezvm/Makefile
+	  $(AUTOMAKE) --foreign src/libezvm/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -473,6 +476,8 @@ object/ezobj_condition.lo: object/$(am__dirstamp) \
 	object/$(DEPDIR)/$(am__dirstamp)
 object/ezobj_nil.lo: object/$(am__dirstamp) \
 	object/$(DEPDIR)/$(am__dirstamp)
+object/ezobj_array.lo: object/$(am__dirstamp) \
+	object/$(DEPDIR)/$(am__dirstamp)
 value/$(am__dirstamp):
 	@$(MKDIR_P) value
 	@: > value/$(am__dirstamp)
@@ -487,6 +492,8 @@ utility/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) utility/$(DEPDIR)
 	@: > utility/$(DEPDIR)/$(am__dirstamp)
 utility/ezfile.lo: utility/$(am__dirstamp) \
+	utility/$(DEPDIR)/$(am__dirstamp)
+utility/ezlog.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
 
 libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_DEPENDENCIES) 
@@ -515,10 +522,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_instr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_proc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_array.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_condition.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_function.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_nil.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezfile.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@utility/$(DEPDIR)/ezlog.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/ezval.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -730,10 +739,12 @@ distclean: distclean-am
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
+	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
 	-rm -f object/$(DEPDIR)/ezobj_function.Plo
 	-rm -f object/$(DEPDIR)/ezobj_nil.Plo
 	-rm -f utility/$(DEPDIR)/ezfile.Plo
+	-rm -f utility/$(DEPDIR)/ezlog.Plo
 	-rm -f value/$(DEPDIR)/ezval.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -789,10 +800,12 @@ maintainer-clean: maintainer-clean-am
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
+	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
 	-rm -f object/$(DEPDIR)/ezobj_function.Plo
 	-rm -f object/$(DEPDIR)/ezobj_nil.Plo
 	-rm -f utility/$(DEPDIR)/ezfile.Plo
+	-rm -f utility/$(DEPDIR)/ezlog.Plo
 	-rm -f value/$(DEPDIR)/ezval.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

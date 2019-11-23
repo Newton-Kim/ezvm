@@ -361,7 +361,7 @@ ezas_SOURCES = ezas.cc \
 ezas_LDADD = ../libezvm/libezvm.la -lfl
 AM_CPPFLAGS = -I../../include -std=c++11
 BUILT_SOURCES = parse.hh
-AM_YFLAGS = -d --warning=all
+AM_YFLAGS = -Wno-yacc -d --warning=all
 CLEANFILES = parse.cc scan.cc parse.hh parse.output
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -377,9 +377,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/ezas/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/ezas/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/ezas/Makefile
+	  $(AUTOMAKE) --foreign src/ezas/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \

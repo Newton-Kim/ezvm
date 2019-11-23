@@ -23,8 +23,10 @@
  *
  */
 #pragma once
+
 #include <list>
 #include <vector>
+
 #define EZGC_THRESHOLD (20 * 1024)
 
 using namespace std;

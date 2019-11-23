@@ -22,14 +22,15 @@
  * THE SOFTWARE.
  *
  */
-
 #include "ezvm/ezobject.h"
 
-ezObject::ezObject(ezObjectType tp) : type(tp) {}
+ezArray::ezArray() : ezObject(EZ_OBJECT_TYPE_ARRAY) { m_size = sizeof(*this); }
 
-void ezObject::dump(ezFile &sink) { sink.print("(unknown)"); }
-
-ezHandle::ezHandle(unsigned int identifier)
-    : ezObject(EZ_OBJECT_TYPE_HANDLE), id(identifier) {}
-
-void ezHandle::dump(ezFile &sink) { sink.print("H(%d)\n", id); }
+void ezArray::dump(ezFile &sink) {
+  sink.print("[");
+  for (vector<ezObject *>::iterator it = data.begin(); it != data.end(); it++) {
+    (*it)->dump(sink);
+    sink.print(",");
+  }
+  sink.print("]\n");
+}

@@ -122,10 +122,16 @@ public:
    *
    * @param func An address of a function to call
    * @param args Arguments which are passed to the function
-   * @param rets Addresses which the return values of the function are stored.
+   * @param ret Addresses which the return value of the function is stored.
    */
-  void call(const ezAddress &func, vector<ezAddress> &args,
-            vector<ezAddress> &rets);
+  void call(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret);
+  /**
+   * @brief creates a call instruction. See call of ezas.
+   *
+   * @param func An address of a function to call
+   * @param args Arguments which are passed to the function
+   */
+  void call(const ezAddress &func, vector<ezAddress> &args);
   void cmp(const ezAddress &cond, const ezAddress &larg, const ezAddress &rarg);
   /**
    * @brief creates a mv instruction. See mv of ezas.
@@ -297,8 +303,8 @@ public:
    * @param rets An address to the handle (1st arguemtn) and addresses which the
    * return values of the function are stored.
    */
-  void thd(const ezAddress &func, vector<ezAddress> &args,
-           vector<ezAddress> &rets, const ezAddress &handle);
+  void thd(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret, const ezAddress &handle);
+  void thd(const ezAddress &func, vector<ezAddress> &args, const ezAddress &handle);
   void tlt(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tlt(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);

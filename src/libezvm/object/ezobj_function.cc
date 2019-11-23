@@ -86,8 +86,7 @@ void ezFunction::dump(ezFile &sink) {
   sink.print("  .jump symbol table:\n");
   vector<string> symbols;
   jmptbl.symbols(symbols);
-  for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
-       it++)
+  for (vector<string>::iterator it = symbols.begin(); it != symbols.end(); it++)
     sink.print("    [%s]=%lu\n", (*it).c_str(), jmptbl[*it]);
   ezAddress addr;
   string op;

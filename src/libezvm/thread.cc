@@ -22,15 +22,16 @@
  * THE SOFTWARE.
  *
  */
+#include "ezvm/ezlog.h"
 #include "ezvm/ezgc.h"
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezthread.h"
 #include <stdexcept>
 
-ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
-                   vector<ezAddress> &rets, ezThreadCallback *callback,
-                   ezThreadScheduler sched, ezStackFrame *caller)
+ezThread::ezThread(ezAddress entry, vector<ezObject *> &args, ezAddress &ret,
+                   ezThreadCallback *callback, ezThreadScheduler sched,
+                   ezStackFrame *caller)
     : m_entry(entry), m_scheduler(sched), m_wait(0), m_callback(callback),
       m_caller(caller) {
   if (!callback)
@@ -38,15 +39,38 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
   ezObject *v = addr2val(entry);
   switch (v->type) {
   case EZ_OBJECT_TYPE_FUNCTION: {
-    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, rets, this);
+    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, ret, this);
+    EZ_INFO("stack push 0x%x", sf);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
   } break;
   case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION: {
-    vector<ezObject *> vrets;
-    ((ezUserDefinedFunction *)v)->run(args, vrets);
-    if (caller)
-      caller->update(rets, vrets);
+    ezObject *vret = ((ezUserDefinedFunction *)v)->run(args);
+    if (caller && vret)
+      caller->update(ret, vret);
+  } break;
+  default:
+    throw("invalid value type");
+    break;
+  }
+}
+
+ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
+                   ezThreadCallback *callback, ezThreadScheduler sched,
+                   ezStackFrame *caller)
+    : m_entry(entry), m_scheduler(sched), m_wait(0), m_callback(callback),
+      m_caller(caller) {
+  if (!callback)
+    throw runtime_error("callback is missing.");
+  ezObject *v = addr2val(entry);
+  switch (v->type) {
+  case EZ_OBJECT_TYPE_FUNCTION: {
+    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, this);
+    m_stack.push_back(sf);
+    ezGC::instance().add(sf);
+  } break;
+  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION: {
+    ((ezUserDefinedFunction *)v)->run(args);
   } break;
   default:
     throw("invalid value type");
@@ -91,6 +115,7 @@ void ezThread::run(void) {
 void ezThread::on_mark(void) {
   for (vector<ezStackFrame *>::iterator it = m_stack.begin();
        it != m_stack.end(); it++) {
+    EZ_INFO("visiting 0x%x", *it);
     (*it)->mark();
     (*it)->on_mark();
   }
@@ -102,33 +127,38 @@ void ezThread::call(ezStackFrame *sf) {
   m_stack.push_back(sf);
 }
 
-void ezThread::end(vector<ezAddress> &dests, vector<ezObject *> &vals) {
+void ezThread::end(ezAddress &dest, ezObject *val) {
   ezStackFrame *callee = m_stack.back();
+  EZ_INFO("stack pop 0x%x", callee);
   m_stack.pop_back();
   if (m_stack.empty())
     return;
   ezStackFrame *caller = m_stack.back();
-  caller->update(dests, vals);
+  caller->update(dest, val);
+}
+
+size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,
+                     ezStackFrame *caller) {
+  return m_callback->thd(func, args, ret, caller);
 }
 
 size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args,
-                     vector<ezAddress> &rets, ezStackFrame *caller) {
-  return m_callback->thd(func, args, rets, caller);
+                     ezStackFrame *caller) {
+  return m_callback->thd(func, args, caller);
 }
 
 void ezThread::wait(size_t handle) { m_wait = handle; }
 
-
 void ezThread::dump(ezFile &sink) {
   sink.print("  .thd_0x%x\n", this);
   sink.print("    scheduler:");
-  switch(m_scheduler) {
-    case EZ_THREAD_SCHED_ROUNDROBIN:
-      sink.print("ROUNDROBIN");
-      break;
-    case EZ_THREAD_SCHED_REALTIME:
-      sink.print("REALTIME");
-      break;
+  switch (m_scheduler) {
+  case EZ_THREAD_SCHED_ROUNDROBIN:
+    sink.print("ROUNDROBIN");
+    break;
+  case EZ_THREAD_SCHED_REALTIME:
+    sink.print("REALTIME");
+    break;
   }
   sink.print("\n");
   for (vector<ezStackFrame *>::iterator it = m_stack.begin();

@@ -23,6 +23,8 @@
  *
  */
 #include "ezvm/ezgc.h"
+#include "ezvm/ezlog.h"
+
 #include <iostream>
 
 ezGC::ezGC() : m_size(0), m_prev_size(0), m_pause_count(0) {}
@@ -32,6 +34,7 @@ ezGC::~ezGC() {}
 void ezGC::collect(void) {
   if (m_pause_count > 0)
     return;
+  EZ_INFO("GC start");
   for (typename vector<ezGCClient *>::iterator it = m_clients.begin();
        it != m_clients.end(); it++) {
     (*it)->on_mark();
