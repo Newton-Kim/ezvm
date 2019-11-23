@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezlog.h"
 #include "ezvm/ezinstruction.h"
+#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezstack.h"
 #include <iostream>
@@ -31,9 +31,8 @@
 
 ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                            ezAddress &ret, ezStackFrameCallback *callback)
-    : m_pc(0), m_local(crsl->local_memory()),
-      m_scope(crsl->scope_memory()), m_return(NULL), m_carousel(crsl),
-      m_callback(callback) {
+    : m_pc(0), m_local(crsl->local_memory()), m_scope(crsl->scope_memory()),
+      m_return(NULL), m_carousel(crsl), m_callback(callback) {
   if (!m_callback)
     throw runtime_error("callback is null.");
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
@@ -527,7 +526,8 @@ void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args) {
 void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args,
                         ezAddress &ret) {
   ezObject *vret = func->run(args);
-  if (vret) val2addr(ret, vret);
+  if (vret)
+    val2addr(ret, vret);
 }
 
 void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args) {
@@ -558,7 +558,8 @@ void ezStackFrame::wait(ezAddress &handle) {
 }
 
 void ezStackFrame::update(ezAddress &dest, ezObject *val) {
-  if(val) val2addr(dest, val);
+  if (val)
+    val2addr(dest, val);
 }
 
 void ezStackFrame::step(void) {
@@ -575,11 +576,12 @@ void ezStackFrame::on_mark(void) {
   EZ_INFO("m_local size: %d", m_local->size());
   for (vector<ezObject *>::iterator it = m_local->begin(); it != m_local->end();
        it++) {
-    ezObject* obj = *it;
+    ezObject *obj = *it;
     EZ_INFO("visiting 0x%x", obj);
-    if(obj) obj->mark();
+    if (obj)
+      obj->mark();
   }
-  if(m_return) {
+  if (m_return) {
     EZ_INFO("marking return value of 0x%x", m_return);
     m_return->mark();
   }

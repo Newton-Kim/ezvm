@@ -303,8 +303,10 @@ public:
    * @param rets An address to the handle (1st arguemtn) and addresses which the
    * return values of the function are stored.
    */
-  void thd(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret, const ezAddress &handle);
-  void thd(const ezAddress &func, vector<ezAddress> &args, const ezAddress &handle);
+  void thd(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
+           const ezAddress &handle);
+  void thd(const ezAddress &func, vector<ezAddress> &args,
+           const ezAddress &handle);
   void tlt(const ezAddress dest, const ezAddress &lsrc, const ezAddress &rsrc);
   void tlt(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);

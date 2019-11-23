@@ -9,10 +9,18 @@ enum ezLogLevel {
 };
 
 #ifdef EZ_LOG_ENABLED
-#define EZ_INFO(format...) ezLog::instance()->log(EZ_LOG_INFO, __PRETTY_FUNCTION__, __FILE__, __LINE__, format)
-#define EZ_DEBUG(format...) ezLog::instance()->log(EZ_LOG_DEBUG, __PRETTY_FUNCTION__, __FILE__, __LINE__, format)
-#define EZ_WARN(format...) ezLog::instance()->log(EZ_LOG_WARNING, __PRETTY_FUNCTION__, __FILE__, __LINE__, format)
-#define EZ_ERROR(format...) ezLog::instance()->log(EZ_LOG_ERROR, __PRETTY_FUNCTION__, __FILE__, __LINE__, format)
+#define EZ_INFO(format...)                                                     \
+  ezLog::instance()->log(EZ_LOG_INFO, __PRETTY_FUNCTION__, __FILE__, __LINE__, \
+                         format)
+#define EZ_DEBUG(format...)                                                    \
+  ezLog::instance()->log(EZ_LOG_DEBUG, __PRETTY_FUNCTION__, __FILE__,          \
+                         __LINE__, format)
+#define EZ_WARN(format...)                                                     \
+  ezLog::instance()->log(EZ_LOG_WARNING, __PRETTY_FUNCTION__, __FILE__,        \
+                         __LINE__, format)
+#define EZ_ERROR(format...)                                                    \
+  ezLog::instance()->log(EZ_LOG_ERROR, __PRETTY_FUNCTION__, __FILE__,          \
+                         __LINE__, format)
 #else
 #define EZ_INFO
 #define EZ_WARN
@@ -22,7 +30,9 @@ enum ezLogLevel {
 
 class ezLog {
 public:
-  static ezLog* instance(void);
+  static ezLog *instance(void);
   virtual void set_log_level(ezLogLevel level) = 0;
-  virtual void log(const ezLogLevel level, const char* function, const char* file, const int line, const char* format, ...) = 0;
+  virtual void log(const ezLogLevel level, const char *function,
+                   const char *file, const int line, const char *format,
+                   ...) = 0;
 };

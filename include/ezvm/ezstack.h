@@ -37,8 +37,8 @@ class ezStackFrameCallback {
 public:
   virtual void call(ezStackFrame *sf) = 0;
   virtual void end(ezAddress &dests, ezObject *val) = 0;
-  virtual size_t thd(ezAddress &func, vector<ezObject *> &args,
-                     ezAddress &ret, ezStackFrame *caller) = 0;
+  virtual size_t thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,
+                     ezStackFrame *caller) = 0;
   virtual size_t thd(ezAddress &func, vector<ezObject *> &args,
                      ezStackFrame *caller) = 0;
   virtual void wait(size_t handle) = 0;
@@ -72,7 +72,7 @@ private:
   /**
    * @brief is a collection of return values.
    */
-  ezObject * m_return;
+  ezObject *m_return;
   /**
    * @brief is a collection of addresses where the result values place.
    */
@@ -109,7 +109,8 @@ private:
    * @param args is a number of arguments which follows the func.
    * @param ret is a number of return addresses which follows the arguments.
    */
-  void call(ezUserDefinedFunction *func, vector<ezObject *> &args, ezAddress &ret);
+  void call(ezUserDefinedFunction *func, vector<ezObject *> &args,
+            ezAddress &ret);
   /**
    * @brief invokes a native carousel.
    *
@@ -197,7 +198,8 @@ public:
   void ret(vector<ezAddress> &srcs);
   void call(ezAddress &func, vector<ezAddress> &args, ezAddress &ret);
   void call(ezAddress &func, vector<ezAddress> &args);
-  void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &ret, ezAddress &handle);
+  void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
+           ezAddress &handle);
   void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &handle);
   void wait(ezAddress &handle);
   void fgc(void);
@@ -211,14 +213,16 @@ public:
    *
    * @param crsl is a pointer to a carousel.
    */
-  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args, ezAddress &ret, ezStackFrameCallback *callback);
-  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args, ezStackFrameCallback *callback);
+  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args, ezAddress &ret,
+               ezStackFrameCallback *callback);
+  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
+               ezStackFrameCallback *callback);
   /**
    * @brief is a destructor.
    */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
-  void update(ezAddress &dests, ezObject * vals);
+  void update(ezAddress &dests, ezObject *vals);
   void on_mark(void);
   void dump(ezFile &sink);
 };

@@ -35,12 +35,12 @@ private:
 
 public:
   ezIoPrint(ostream &io);
-  ezObject* run(vector<ezObject *> &args);
+  ezObject *run(vector<ezObject *> &args);
 };
 
 ezIoPrint::ezIoPrint(ostream &io) : ezUserDefinedFunction(), m_io(io) {}
 
-ezObject* ezIoPrint::run(vector<ezObject *> &args) {
+ezObject *ezIoPrint::run(vector<ezObject *> &args) {
   stringstream ss;
   size_t len = args.size();
   for (size_t i = 0; i < len; i++) {

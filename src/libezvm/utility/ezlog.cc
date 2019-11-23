@@ -9,31 +9,40 @@ private:
 
 public:
   ezLogImplemented();
-  ezLog* instance(void);
+  ezLog *instance(void);
   void set_log_level(ezLogLevel level);
-  void log(const ezLogLevel level, const char* function, const char* file, const int line, const char* format, ...);
+  void log(const ezLogLevel level, const char *function, const char *file,
+           const int line, const char *format, ...);
 };
 
-ezLogImplemented::ezLogImplemented() : m_level(EZ_LOG_INFO){
-}
+ezLogImplemented::ezLogImplemented() : m_level(EZ_LOG_INFO) {}
 
-ezLog* ezLog::instance(void) {
+ezLog *ezLog::instance(void) {
   static ezLogImplemented s_log;
   return &s_log;
 }
 
-void ezLogImplemented::set_log_level(ezLogLevel level) {
-  m_level = level;
-}
+void ezLogImplemented::set_log_level(ezLogLevel level) { m_level = level; }
 
-void ezLogImplemented::log(const ezLogLevel level, const char* function, const char* file, const int line, const char* format, ...) {
-  if(level > m_level) return;
-  const char* lvl_str = "U";
+void ezLogImplemented::log(const ezLogLevel level, const char *function,
+                           const char *file, const int line, const char *format,
+                           ...) {
+  if (level > m_level)
+    return;
+  const char *lvl_str = "U";
   switch (level) {
-    case EZ_LOG_INFO: lvl_str = "I"; break;
-    case EZ_LOG_DEBUG: lvl_str = "D"; break;
-    case EZ_LOG_WARNING: lvl_str = "W"; break;
-    case EZ_LOG_ERROR: lvl_str = "E"; break;
+  case EZ_LOG_INFO:
+    lvl_str = "I";
+    break;
+  case EZ_LOG_DEBUG:
+    lvl_str = "D";
+    break;
+  case EZ_LOG_WARNING:
+    lvl_str = "W";
+    break;
+  case EZ_LOG_ERROR:
+    lvl_str = "E";
+    break;
   }
   fprintf(stderr, "[%s:%d] %s %s :: ", file, line, function, lvl_str);
   va_list ap;

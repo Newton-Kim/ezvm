@@ -23,8 +23,8 @@
  *
  */
 #pragma once
-#include "ezgc.h"
 #include "ezfile.h"
+#include "ezgc.h"
 
 enum ezObjectType {
   EZ_OBJECT_TYPE_NULL = 0,
@@ -62,7 +62,7 @@ public:
 
 class ezArray : public ezObject {
 public:
-  vector<ezObject*> data;
+  vector<ezObject *> data;
   ezArray();
   ~ezArray(){};
   void dump(ezFile &sink);

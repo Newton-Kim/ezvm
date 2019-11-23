@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  *
  */
-#include "ezvm/ezlog.h"
 #include "ezvm/ezgc.h"
 #include "ezvm/ezinstruction.h"
+#include "ezvm/ezlog.h"
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezthread.h"
 #include <stdexcept>
