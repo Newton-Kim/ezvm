@@ -3,7 +3,7 @@
 	ret "hello" "world"
 
 .proc _main (0)
-	.memories 2
+	.memories 3
 	call _strs() r0
 	mv r1 r2, r0
 	call _stdout ( r1 " " r2)

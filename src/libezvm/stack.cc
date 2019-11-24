@@ -443,7 +443,9 @@ void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
-  if (srcs.size() == 1) {
+  if (srcs.size() == 0) {
+    m_return = NULL;
+  } else if (srcs.size() == 1) {
     m_return = addr2val(srcs[0]);
   } else {
     ezObject *v = NULL;
@@ -453,6 +455,7 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
       array->data.push_back(v);
     }
     m_return = array;
+    ezGC::instance().add(m_return);
   }
   m_callback->end(m_return_dest, m_return);
 }
@@ -464,7 +467,14 @@ void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
   vector<ezObject *> q;
   addr2val(q, srcs);
   for (i = 0; i < cnt; i++) {
-    val2addr(dests[i], q[i]);
+    if(q[i]->type == EZ_OBJECT_TYPE_ARRAY) {
+      size_t j = 0;
+      ezArray* arr = (ezArray*) q[i];
+      for(j = 0; i < cnt && j < arr->data.size(); i++, j++)
+        val2addr(dests[i], arr->data[j]);
+    } else {
+      val2addr(dests[i], q[i]);
+    }
   }
   if (dests.size() > srcs.size()) {
     for (i = cnt; i < dests.size(); i++) {

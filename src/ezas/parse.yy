@@ -299,7 +299,7 @@ call : CALL fname '(' vars ')' ret_addr {
 		if (s_is_void) {
 			s_instr_current->call(ezAddress($2.segment, $2.offset), s_args_var);
 		} else {
-			ezAddress ret = ezAddress($2.segment, $2.offset);
+			ezAddress ret = ezAddress($6.segment, $6.offset);
 			s_instr_current->call(ezAddress($2.segment, $2.offset), s_args_var, ret);
 		}
 		s_args_var.clear();
