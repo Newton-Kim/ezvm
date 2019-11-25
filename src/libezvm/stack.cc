@@ -451,6 +451,7 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
     ezObject *v = NULL;
     ezArray *array = new ezArray;
     for (size_t i = 0; i < srcs.size(); i++) {
+      EZ_INFO("0x%x<-0x%x[%d]", array, srcs, i);
       v = addr2val(srcs[i]);
       array->data.push_back(v);
     }
@@ -461,26 +462,25 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
 }
 
 void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
-  size_t cnt = (dests.size() > srcs.size()) ? srcs.size() : dests.size();
+  size_t cnt = dests.size();
   ezObject *v = NULL;
   size_t i = 0;
   vector<ezObject *> q;
   addr2val(q, srcs);
   for (i = 0; i < cnt; i++) {
     if(q[i]->type == EZ_OBJECT_TYPE_ARRAY) {
+      EZ_INFO("array is detected");
       size_t j = 0;
       ezArray* arr = (ezArray*) q[i];
-      for(j = 0; i < cnt && j < arr->data.size(); i++, j++)
+      for(j = 0; i < cnt && j < arr->data.size(); i++, j++) {
+        EZ_INFO("dest[%d](%d:%d)<-0x%x[%d]", i, dests[i].segment, dests[i].offset, arr, j);
         val2addr(dests[i], arr->data[j]);
+      }
     } else {
       val2addr(dests[i], q[i]);
     }
   }
-  if (dests.size() > srcs.size()) {
-    for (i = cnt; i < dests.size(); i++) {
-      val2addr(dests[i], ezNull::instance());
-    }
-  }
+  while (i < cnt) val2addr(dests[i++], ezNull::instance());
 }
 
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
