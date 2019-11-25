@@ -73,8 +73,16 @@ ezStackFrame::~ezStackFrame() {
 }
 
 void ezStackFrame::addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr) {
-  for (size_t i = 0; i < addr.size(); i++)
-    vals.push_back(addr2val(addr[i]));
+  for (size_t i = 0; i < addr.size(); i++) {
+    ezObject *v = addr2val(addr[i]);
+    if(v->type == EZ_OBJECT_TYPE_ARRAY) {
+      ezArray * arr = (ezArray*) v;
+      for(size_t j = 0; j < arr->data.size(); j++)
+        vals.push_back(arr->data[j]);
+    } else {
+      vals.push_back(v);
+    }
+  }
 }
 
 ezObject *ezStackFrame::addr2val(ezAddress addr) {
@@ -468,17 +476,7 @@ void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
   vector<ezObject *> q;
   addr2val(q, srcs);
   for (i = 0; i < cnt; i++) {
-    if(q[i]->type == EZ_OBJECT_TYPE_ARRAY) {
-      EZ_INFO("array is detected");
-      size_t j = 0;
-      ezArray* arr = (ezArray*) q[i];
-      for(j = 0; i < cnt && j < arr->data.size(); i++, j++) {
-        EZ_INFO("dest[%d](%d:%d)<-0x%x[%d]", i, dests[i].segment, dests[i].offset, arr, j);
-        val2addr(dests[i], arr->data[j]);
-      }
-    } else {
-      val2addr(dests[i], q[i]);
-    }
+    val2addr(dests[i], q[i]);
   }
   while (i < cnt) val2addr(dests[i++], ezNull::instance());
 }
