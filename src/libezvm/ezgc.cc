@@ -51,6 +51,7 @@ void ezGC::collect(void) {
       it++;
       m_size -= value->size();
       m_memories.erase(oit);
+      EZ_INFO("0x%x removed", value);
       delete value;
     }
   }
@@ -62,6 +63,7 @@ void ezGC::add(ezGCObject *v) {
     return;
   v->unmark();
   m_size += v->size();
+  EZ_INFO("0x%x added", v);
   m_memories.push_back(v);
   if (m_size > m_prev_size * 2 && m_size > EZGC_THRESHOLD)
     collect();

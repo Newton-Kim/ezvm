@@ -475,10 +475,14 @@ void ezStackFrame::mv(vector<ezAddress> &dests, vector<ezAddress> &srcs) {
   size_t i = 0;
   vector<ezObject *> q;
   addr2val(q, srcs);
-  for (i = 0; i < cnt; i++) {
+  for (i = 0; i < cnt && i < q.size(); i++) {
+    EZ_INFO("%d:%d <= 0x%x", dests[i].segment, dests[i].offset, q[i]);
     val2addr(dests[i], q[i]);
   }
-  while (i < cnt) val2addr(dests[i++], ezNull::instance());
+  while (i < cnt) {
+    EZ_INFO("%d:%d <== 0x%x", dests[i].segment, dests[i].offset, ezNull::instance());
+    val2addr(dests[i++], ezNull::instance());
+  }
 }
 
 void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
