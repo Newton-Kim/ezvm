@@ -105,11 +105,13 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_ezas_OBJECTS = ezas.$(OBJEXT) ezio.$(OBJEXT) parse.$(OBJEXT) \
-	scan.$(OBJEXT) value/eaval.$(OBJEXT) \
-	value/eaval_bool.$(OBJEXT) value/eaval_complex.$(OBJEXT) \
-	value/eaval_float.$(OBJEXT) value/eaval_integer.$(OBJEXT) \
-	value/eaval_string.$(OBJEXT)
+am_ezas_OBJECTS = ezas.$(OBJEXT) ezio.$(OBJEXT) alu/eaalu.$(OBJEXT) \
+	alu/eabool.$(OBJEXT) alu/eacplx.$(OBJEXT) \
+	alu/eafloat.$(OBJEXT) alu/eaint.$(OBJEXT) \
+	alu/eastring.$(OBJEXT) parse.$(OBJEXT) scan.$(OBJEXT) \
+	value/eaval.$(OBJEXT) value/eaval_bool.$(OBJEXT) \
+	value/eaval_complex.$(OBJEXT) value/eaval_float.$(OBJEXT) \
+	value/eaval_integer.$(OBJEXT) value/eaval_string.$(OBJEXT)
 ezas_OBJECTS = $(am_ezas_OBJECTS)
 ezas_DEPENDENCIES = ../libezvm/libezvm.la
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -133,6 +135,9 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ezas.Po ./$(DEPDIR)/ezio.Po \
 	./$(DEPDIR)/parse.Po ./$(DEPDIR)/scan.Po \
+	alu/$(DEPDIR)/eaalu.Po alu/$(DEPDIR)/eabool.Po \
+	alu/$(DEPDIR)/eacplx.Po alu/$(DEPDIR)/eafloat.Po \
+	alu/$(DEPDIR)/eaint.Po alu/$(DEPDIR)/eastring.Po \
 	value/$(DEPDIR)/eaval.Po value/$(DEPDIR)/eaval_bool.Po \
 	value/$(DEPDIR)/eaval_complex.Po \
 	value/$(DEPDIR)/eaval_float.Po \
@@ -349,6 +354,12 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ezas_SOURCES = ezas.cc \
 		ezio.cc \
+		alu/eaalu.cc \
+		alu/eabool.cc \
+		alu/eacplx.cc \
+		alu/eafloat.cc \
+		alu/eaint.cc \
+		alu/eastring.cc \
 		parse.yy \
 		scan.ll \
 		value/eaval.cc \
@@ -377,9 +388,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/ezas/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/ezas/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/ezas/Makefile
+	  $(AUTOMAKE) --gnu src/ezas/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -446,6 +457,22 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
+alu/$(am__dirstamp):
+	@$(MKDIR_P) alu
+	@: > alu/$(am__dirstamp)
+alu/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) alu/$(DEPDIR)
+	@: > alu/$(DEPDIR)/$(am__dirstamp)
+alu/eaalu.$(OBJEXT): alu/$(am__dirstamp) alu/$(DEPDIR)/$(am__dirstamp)
+alu/eabool.$(OBJEXT): alu/$(am__dirstamp) \
+	alu/$(DEPDIR)/$(am__dirstamp)
+alu/eacplx.$(OBJEXT): alu/$(am__dirstamp) \
+	alu/$(DEPDIR)/$(am__dirstamp)
+alu/eafloat.$(OBJEXT): alu/$(am__dirstamp) \
+	alu/$(DEPDIR)/$(am__dirstamp)
+alu/eaint.$(OBJEXT): alu/$(am__dirstamp) alu/$(DEPDIR)/$(am__dirstamp)
+alu/eastring.$(OBJEXT): alu/$(am__dirstamp) \
+	alu/$(DEPDIR)/$(am__dirstamp)
 parse.hh: parse.cc
 	@if test ! -f $@; then rm -f parse.cc; else :; fi
 	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) parse.cc; else :; fi
@@ -474,6 +501,7 @@ ezas$(EXEEXT): $(ezas_OBJECTS) $(ezas_DEPENDENCIES) $(EXTRA_ezas_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f alu/*.$(OBJEXT)
 	-rm -f value/*.$(OBJEXT)
 
 distclean-compile:
@@ -483,6 +511,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezio.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eaalu.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eabool.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eacplx.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eafloat.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eaint.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eastring.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_bool.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@value/$(DEPDIR)/eaval_complex.Po@am__quote@ # am--include-marker
@@ -653,6 +687,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f alu/$(DEPDIR)/$(am__dirstamp)
+	-rm -f alu/$(am__dirstamp)
 	-rm -f value/$(DEPDIR)/$(am__dirstamp)
 	-rm -f value/$(am__dirstamp)
 
@@ -672,6 +708,12 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ezio.Po
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
+	-rm -f alu/$(DEPDIR)/eaalu.Po
+	-rm -f alu/$(DEPDIR)/eabool.Po
+	-rm -f alu/$(DEPDIR)/eacplx.Po
+	-rm -f alu/$(DEPDIR)/eafloat.Po
+	-rm -f alu/$(DEPDIR)/eaint.Po
+	-rm -f alu/$(DEPDIR)/eastring.Po
 	-rm -f value/$(DEPDIR)/eaval.Po
 	-rm -f value/$(DEPDIR)/eaval_bool.Po
 	-rm -f value/$(DEPDIR)/eaval_complex.Po
@@ -727,6 +769,12 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ezio.Po
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
+	-rm -f alu/$(DEPDIR)/eaalu.Po
+	-rm -f alu/$(DEPDIR)/eabool.Po
+	-rm -f alu/$(DEPDIR)/eacplx.Po
+	-rm -f alu/$(DEPDIR)/eafloat.Po
+	-rm -f alu/$(DEPDIR)/eaint.Po
+	-rm -f alu/$(DEPDIR)/eastring.Po
 	-rm -f value/$(DEPDIR)/eaval.Po
 	-rm -f value/$(DEPDIR)/eaval_bool.Po
 	-rm -f value/$(DEPDIR)/eaval_complex.Po

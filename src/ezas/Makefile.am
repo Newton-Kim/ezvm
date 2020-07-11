@@ -1,6 +1,12 @@
 bin_PROGRAMS=ezas
 ezas_SOURCES=ezas.cc \
 		ezio.cc \
+		alu/eaalu.cc \
+		alu/eabool.cc \
+		alu/eacplx.cc \
+		alu/eafloat.cc \
+		alu/eaint.cc \
+		alu/eastring.cc \
 		parse.yy \
 		scan.ll \
 		value/eaval.cc \

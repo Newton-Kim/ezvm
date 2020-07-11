@@ -26,6 +26,7 @@
 #include "ezvm/ezvm.h"
 #include "ezio.h"
 #include "eaval.h"
+#include "eaalu.h"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -155,7 +156,8 @@ int yylex();
 void yyerror (char const *s);
 
 using namespace std;
-static ezVM s_vm;
+static eaALU alu;
+static ezVM s_vm(&alu);
 static ezAsmProcedure* s_proc_current = NULL;
 static ezAsmInstruction* s_instr_current = NULL;
 static map<string, unsigned int> s_global;

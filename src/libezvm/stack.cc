@@ -32,7 +32,7 @@
 ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                            ezAddress &ret, ezStackFrameCallback *callback)
     : m_pc(0), m_local(crsl->local_memory()), m_scope(crsl->scope_memory()),
-      m_return(NULL), m_carousel(crsl), m_callback(callback) {
+      m_return(NULL), m_carousel(crsl), m_callback(callback), m_alu(NULL) {
   if (!m_callback)
     throw runtime_error("callback is null.");
   size_t min_args = (crsl->nargs > args.size()) ? args.size() : crsl->nargs;
@@ -46,6 +46,8 @@ ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
   m_memory.push_back(m_local);
   m_memory.push_back(&m_temporary);
   m_memory.push_back(m_scope);
+  m_alu = ezALUImplementor::instance()->get_alu();
+  if(!m_alu) throw runtime_error("ALU is missing");
 }
 
 ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
@@ -111,72 +113,72 @@ void ezStackFrame::val2addr(ezAddress addr, ezObject *v) {
 }
 
 void ezStackFrame::add(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->add(vr) : vr->add(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->add(vl, vr);
   });
 }
 
 void ezStackFrame::add(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->add(vr) : vr->add(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->add(vl, vr);
       });
 }
 
 void ezStackFrame::sub(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->subtract(vr) : vr->subtract(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->subtract(vl, vr);
   });
 }
 
 void ezStackFrame::sub(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->subtract(vr) : vr->subtract(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->subtract(vl, vr);
       });
 }
 
 void ezStackFrame::mul(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->multiply(vr) : vr->multiply(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->multiply(vl, vr);
   });
 }
 
 void ezStackFrame::mul(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->multiply(vr) : vr->multiply(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->multiply(vl, vr);
       });
 }
 
 void ezStackFrame::div(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->divide(vr) : vr->divide(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->divide(vl, vr);
   });
 }
 
 void ezStackFrame::div(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->divide(vr) : vr->divide(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->divide(vl, vr);
       });
 }
 
 void ezStackFrame::mod(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->modulate(vr) : vr->modulate(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->modulate(vl, vr);
   });
 }
 
 void ezStackFrame::mod(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->modulate(vr) : vr->modulate(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->modulate(vl, vr);
       });
 }
 
@@ -185,94 +187,91 @@ void ezStackFrame::cmp(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   ezObject *rst = NULL;
   vl = (ezValue *)addr2val(src1);
   vr = (ezValue *)addr2val(src2);
-  rst = vl->compare(vr);
+  rst = m_alu->compare(vl, vr);
   val2addr(dest, rst);
 }
 
 void ezStackFrame::pwr(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->power(vr) : vr->power(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->power(vl, vr);
   });
 }
 
 void ezStackFrame::pwr(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->power(vr) : vr->power(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->power(vl, vr);
       });
 }
 
 void ezStackFrame::b_and(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->bitwise_and(vr) : vr->bitwise_and(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->bitwise_and(vl, vr);
   });
 }
 
 void ezStackFrame::b_and(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                          ezAddress &src2) {
   calculate_binary(dest, cond, src1, src2,
-                   [](ezValue *vl, ezValue *vr) -> ezValue * {
-                     return (vl->id >= vr->id) ? vl->bitwise_and(vr)
-                                               : vr->bitwise_and(vl, true);
+                   [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+                     return alu->bitwise_and(vl, vr);
                    });
 }
 
 void ezStackFrame::b_or(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->bitwise_or(vr) : vr->bitwise_or(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->bitwise_or(vl, vr);
   });
 }
 
 void ezStackFrame::b_or(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                         ezAddress &src2) {
   calculate_binary(dest, cond, src1, src2,
-                   [](ezValue *vl, ezValue *vr) -> ezValue * {
-                     return (vl->id >= vr->id) ? vl->bitwise_or(vr)
-                                               : vr->bitwise_or(vl, true);
+                   [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+                     return alu->bitwise_or(vl, vr);
                    });
 }
 
 void ezStackFrame::b_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->bitwise_xor(vr) : vr->bitwise_xor(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->bitwise_xor(vl, vr);
   });
 }
 
 void ezStackFrame::b_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                          ezAddress &src2) {
   calculate_binary(dest, cond, src1, src2,
-                   [](ezValue *vl, ezValue *vr) -> ezValue * {
-                     return (vl->id >= vr->id) ? vl->bitwise_xor(vr)
-                                               : vr->bitwise_xor(vl, true);
+                   [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+                     return alu->bitwise_xor(vl, vr);
                    });
 }
 
 void ezStackFrame::lsl(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->lsl(vr) : vr->lsl(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->lsl(vl, vr);
   });
 }
 
 void ezStackFrame::lsl(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->lsl(vr) : vr->lsl(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsl(vl, vr);
       });
 }
 
 void ezStackFrame::lsr(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-    return (vl->id >= vr->id) ? vl->lsr(vr) : vr->lsr(vl, true);
+  calculate_binary(dest, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+    return alu->lsr(vl, vr);
   });
 }
 
 void ezStackFrame::lsr(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                        ezAddress &src2) {
   calculate_binary(
-      dest, cond, src1, src2, [](ezValue *vl, ezValue *vr) -> ezValue * {
-        return (vl->id >= vr->id) ? vl->lsr(vr) : vr->lsr(vl, true);
+      dest, cond, src1, src2, [](ezALU * alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsr(vl, vr);
       });
 }
 
@@ -316,7 +315,7 @@ void ezStackFrame::test_equality(ezAddress &rst, ezAddress &lsrc,
   ezValue *vr = NULL, *vl = NULL;
   vl = (ezValue *)addr2val(lsrc);
   vr = (ezValue *)addr2val(rsrc);
-  ezObject *cond = vl->compare(vr);
+  ezObject *cond = m_alu->compare(vl, vr);
   val2addr(rst, func((ezCondition *)cond));
   delete cond;
 }
@@ -327,7 +326,7 @@ void ezStackFrame::test_equality(ezAddress &rst, ezAddress &cond,
   ezValue *vr = NULL, *vl = NULL;
   vl = (ezValue *)addr2val(lsrc);
   vr = (ezValue *)addr2val(rsrc);
-  ezObject *vcond = vl->compare(vr);
+  ezObject *vcond = m_alu->compare(vl, vr);
   val2addr(rst, func((ezCondition *)vcond));
   val2addr(cond, vcond);
 }
@@ -390,61 +389,61 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
 
 void ezStackFrame::calculate_binary(
     ezAddress &dest, ezAddress &src1, ezAddress &src2,
-    function<ezValue *(ezValue *, ezValue *)> func) {
+    function<ezValue *(ezALU *, ezValue *, ezValue *)> func) {
   ezValue *vl = NULL, *vr = NULL, *rst = NULL;
   vl = (ezValue *)addr2val(src1);
   vr = (ezValue *)addr2val(src2);
-  rst = func(vl, vr);
+  rst = func(m_alu, vl, vr);
   val2addr(dest, rst);
 }
 
 void ezStackFrame::calculate_binary(
     ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2,
-    function<ezValue *(ezValue *, ezValue *)> func) {
+    function<ezValue *(ezALU *, ezValue *, ezValue *)> func) {
   ezValue *vl = NULL, *vr = NULL, *rst = NULL;
   vl = (ezValue *)addr2val(src1);
   vr = (ezValue *)addr2val(src2);
-  rst = func(vl, vr);
+  rst = func(m_alu, vl, vr);
   val2addr(dest, rst);
   val2addr(cond, rst->condition());
 }
 
 void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &src,
-                                   function<ezValue *(ezValue *)> func) {
+                                   function<ezValue *(ezALU*, ezValue *)> func) {
   ezValue *v = NULL, *rst = NULL;
   v = (ezValue *)addr2val(src);
-  rst = func(v);
+  rst = func(m_alu, v);
   val2addr(dest, rst);
 }
 
 void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &cond,
                                    ezAddress &src,
-                                   function<ezValue *(ezValue *)> func) {
+                                   function<ezValue *(ezALU*, ezValue *)> func) {
   ezValue *v = NULL, *rst = NULL;
   v = (ezValue *)addr2val(src);
-  rst = func(v);
+  rst = func(m_alu, v);
   val2addr(dest, rst);
   val2addr(cond, rst->condition());
 }
 
 void ezStackFrame::negate(ezAddress &dest, ezAddress &src) {
   calculate_unary(dest, src,
-                  [](ezValue *v) -> ezValue * { return v->negate(); });
+                  [](ezALU* alu, ezValue *v) -> ezValue * { return alu->negate(v); });
 }
 
 void ezStackFrame::negate(ezAddress &dest, ezAddress &cond, ezAddress &src) {
   calculate_unary(dest, cond, src,
-                  [](ezValue *v) -> ezValue * { return v->negate(); });
+                  [](ezALU* alu, ezValue *v) -> ezValue * { return alu->negate(v); });
 }
 
 void ezStackFrame::b_not(ezAddress &dest, ezAddress &src) {
   calculate_unary(dest, src,
-                  [](ezValue *v) -> ezValue * { return v->bitwise_not(); });
+                  [](ezALU* alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); });
 }
 
 void ezStackFrame::b_not(ezAddress &dest, ezAddress &cond, ezAddress &src) {
   calculate_unary(dest, cond, src,
-                  [](ezValue *v) -> ezValue * { return v->bitwise_not(); });
+                  [](ezALU* alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); });
 }
 
 void ezStackFrame::fgc(void) { ezGC::instance().force(); }

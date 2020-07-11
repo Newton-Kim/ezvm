@@ -46,7 +46,6 @@ string ezInteger::to_string(void) {
 
 ezValue *ezInteger::add(ezValue *v, bool flip) {
   return new ezInteger(value + ((eaValue *)v)->to_int());
-  throw runtime_error("unable to add this type");
 }
 
 ezValue *ezInteger::subtract(ezValue *v, bool flip) {
@@ -118,7 +117,7 @@ ezObject *ezInteger::condition(void) {
 }
 
 bool ezInteger::is_equal(ezValue *v) {
-  if (EZ_VALUE_TYPE_INTEGER != v->id)
+ if (EZ_VALUE_TYPE_INTEGER != v->id)
     return false;
   if (value != ((ezInteger *)v)->value)
     return false;

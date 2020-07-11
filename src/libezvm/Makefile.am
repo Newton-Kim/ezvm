@@ -1,6 +1,7 @@
 lib_LTLIBRARIES=libezvm.la
 
 libezvm_la_SOURCES=ezgc.cc \
+		   ezalu.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \

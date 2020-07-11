@@ -27,6 +27,7 @@
 #include "ezaddr.h"
 #include "ezfunc.h"
 #include "ezval.h"
+#include "ezalu.h"
 #include <functional>
 #include <stack>
 #include <vector>
@@ -79,6 +80,7 @@ private:
   ezAddress m_return_dest;
   ezStackFrameCallback *m_callback;
   vector<vector<ezObject *> *> m_memory;
+  ezALU* m_alu;
   void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
    * @brief fetches a value from an address.
@@ -140,14 +142,14 @@ private:
   void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
                      ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
   void calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2,
-                        function<ezValue *(ezValue *, ezValue *)> func);
+                        function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
   void calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1,
                         ezAddress &src2,
-                        function<ezValue *(ezValue *, ezValue *)> func);
+                        function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
   void calculate_unary(ezAddress &dest, ezAddress &src,
-                       function<ezValue *(ezValue *)> func);
+                       function<ezValue *(ezALU *, ezValue *)> func);
   void calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src,
-                       function<ezValue *(ezValue *)> func);
+                       function<ezValue *(ezALU *, ezValue *)> func);
 
 public:
   void negate(ezAddress &dest, ezAddress &src);
