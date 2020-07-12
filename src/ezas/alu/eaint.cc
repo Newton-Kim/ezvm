@@ -52,6 +52,10 @@ ezObject* eaALUInteger::compare(eaValue* argl, eaValue* argr) {
                          (diff < 0) ? true : false, false, false);
 }
 
+ezObject* eaALUInteger::condition(eaValue* arg) {
+  return new ezCondition(0 == arg->to_int(), (arg->to_int() < 0) ? true : false, false, false);
+}
+
 bool eaALUInteger::is_equal(eaValue* argl, eaValue* argr) {
   if (EZ_VALUE_TYPE_INTEGER != argl->id || EZ_VALUE_TYPE_INTEGER != argr->id)
     return false;

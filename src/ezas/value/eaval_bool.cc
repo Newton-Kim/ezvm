@@ -32,26 +32,7 @@ ezBool::ezBool(bool val) : eaValue(EZ_VALUE_TYPE_BOOL), value(val) {
   m_size = sizeof(*this);
 }
 
-ezValue *ezBool::bitwise_not(void) { return new ezBool(!value); }
-
-ezObject *ezBool::compare(ezValue *v, bool flip) {
-  return new ezCondition(!(value ^ ((eaValue *)v)->to_bool()), false, false,
-                         false);
-}
-
-ezObject *ezBool::condition(void) {
-  return new ezCondition(!value, false, false, false);
-}
-
 bool ezBool::to_bool(void) { return value; }
-
-bool ezBool::is_equal(ezValue *v) {
-  if (EZ_VALUE_TYPE_BOOL != v->id)
-    return false;
-  if (value != ((ezBool *)v)->value)
-    return false;
-  return true;
-}
 
 void ezBool::dump(ezFile &sink) {
   if (value == true)

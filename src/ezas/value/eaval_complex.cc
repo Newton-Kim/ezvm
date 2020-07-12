@@ -44,53 +44,6 @@ string ezComplex::to_string(void) {
   return ss.str();
 }
 
-ezValue *ezComplex::add(ezValue *v, bool flip) {
-  return new ezComplex(value + ((eaValue *)v)->to_complex());
-}
-
-ezValue *ezComplex::subtract(ezValue *v, bool flip) {
-  complex<double> ret = (flip) ? ((eaValue *)v)->to_complex() - value
-                               : value - ((eaValue *)v)->to_complex();
-  return new ezComplex(ret);
-}
-
-ezValue *ezComplex::multiply(ezValue *v, bool flip) {
-  return new ezComplex(value * ((eaValue *)v)->to_complex());
-}
-
-ezValue *ezComplex::divide(ezValue *v, bool flip) {
-  complex<double> ret = (flip) ? ((eaValue *)v)->to_complex() / value
-                               : value / ((eaValue *)v)->to_complex();
-  return new ezComplex(ret);
-}
-
-ezValue *ezComplex::power(ezValue *v, bool flip) {
-  complex<double> ret = (flip) ? pow(((eaValue *)v)->to_complex(), value)
-                               : pow(value, ((eaValue *)v)->to_complex());
-  return new ezComplex(ret);
-}
-
-ezObject *ezComplex::compare(ezValue *v, bool flip) {
-  return new ezCondition(v->id == EZ_VALUE_TYPE_COMPLEX &&
-                             value == ((eaValue *)v)->to_complex(),
-                         false, false, false);
-}
-
-ezValue *ezComplex::negate(void) { return new ezComplex(-value); }
-
-ezObject *ezComplex::condition(void) {
-  return new ezCondition(abs(value) ? false : true,
-                         (abs(value) < 0) ? true : false, false, false);
-}
-
-bool ezComplex::is_equal(ezValue *v) {
-  if (EZ_VALUE_TYPE_COMPLEX != v->id)
-    return false;
-  if (value != ((ezComplex *)v)->value)
-    return false;
-  return true;
-}
-
 void ezComplex::dump(ezFile &sink) {
   double cr = value.real();
   double ci = value.imag();

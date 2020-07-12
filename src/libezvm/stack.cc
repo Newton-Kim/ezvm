@@ -405,7 +405,7 @@ void ezStackFrame::calculate_binary(
   vr = (ezValue *)addr2val(src2);
   rst = func(m_alu, vl, vr);
   val2addr(dest, rst);
-  val2addr(cond, rst->condition());
+  val2addr(cond, m_alu->condition(rst));
 }
 
 void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &src,
@@ -423,7 +423,7 @@ void ezStackFrame::calculate_unary(ezAddress &dest, ezAddress &cond,
   v = (ezValue *)addr2val(src);
   rst = func(m_alu, v);
   val2addr(dest, rst);
-  val2addr(cond, rst->condition());
+  val2addr(cond, m_alu->condition(rst));
 }
 
 void ezStackFrame::negate(ezAddress &dest, ezAddress &src) {

@@ -104,10 +104,10 @@ size_t ezASM::constant_null(void) {
   return idx;
 }
 
-size_t ezASM::constant(ezValue *arg) {
+size_t ezASM::constant(ezALU* alu, ezValue *arg) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezObject *v = m_constants[i];
-    if (v->type == EZ_OBJECT_TYPE_VALUE && ((ezValue *)v)->is_equal(arg))
+    if (v->type == EZ_OBJECT_TYPE_VALUE && alu->is_equal((ezValue *)v, arg))
       return i;
   }
   size_t idx = m_constants.size();

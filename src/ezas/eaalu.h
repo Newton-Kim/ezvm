@@ -2,7 +2,7 @@
 
 #include "ezvm/ezvm.h"
 #include "eaval.h"
-#include "eaalu_state.h"
+#include "alu/eaalu_state.h"
 
 class eaALU : public ezALU {
 	private:
@@ -25,6 +25,7 @@ class eaALU : public ezALU {
 		ezValue* lsl(ezValue* argl, ezValue* argr);
 		ezValue* lsr(ezValue* argl, ezValue* argr);
 		ezObject* compare(ezValue* argl, ezValue* argr);
+		ezObject* condition(ezValue* arg);
 		bool is_equal(ezValue* argl, ezValue* argr);
 		ezValue* negate(ezValue* arg);
 		ezValue* bitwise_not(ezValue* arg);

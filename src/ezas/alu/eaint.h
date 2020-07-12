@@ -16,6 +16,7 @@ class eaALUInteger : public eaALUState {
 		eaValue* lsl(eaValue* argl, eaValue* argr);
 		eaValue* lsr(eaValue* argl, eaValue* argr);
 		ezObject* compare(eaValue* argl, eaValue* argr);
+		ezObject* condition(eaValue* arg);
 		bool is_equal(eaValue* argl, eaValue* argr);
 		eaValue* negate(eaValue* arg);
 		eaValue* bitwise_not(eaValue* arg);

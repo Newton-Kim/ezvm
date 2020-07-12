@@ -12,6 +12,11 @@ ezObject* eaALUString::compare(eaValue* argl, eaValue* argr) {
                          false, false, false);
 }
 
+ezObject* eaALUString::condition(eaValue* arg) {
+  return new ezCondition(arg->to_string().empty(),
+                         false, false, false);
+}
+
 bool eaALUString::is_equal(eaValue* argl, eaValue* argr) {
   if (EZ_VALUE_TYPE_STRING != argl->id || EZ_VALUE_TYPE_STRING != argr->id)
     return false;

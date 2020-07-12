@@ -29,6 +29,7 @@
 #include "ezvm/ezgc.h"
 #include "ezvm/ezobject.h"
 #include "ezvm/eztable.h"
+#include "ezvm/ezalu.h"
 #include <cstddef>
 #include <map>
 #include <string>
@@ -128,5 +129,5 @@ public:
    *
    * @return is an offset in a constant segment.
    */
-  size_t constant(ezValue *value);
+  size_t constant(ezALU* alu, ezValue *value);
 };

@@ -28,6 +28,11 @@ ezObject* eaALUComplex::compare(eaValue* argl, eaValue* argr) {
                          false, false, false);
 }
 
+ezObject* eaALUComplex::condition(eaValue* arg) {
+  return new ezCondition(abs(arg->to_complex()) ? false : true,
+                         false, false, false);
+}
+
 bool eaALUComplex::is_equal(eaValue* argl, eaValue* argr) {
   if (EZ_VALUE_TYPE_COMPLEX != argl->id || EZ_VALUE_TYPE_COMPLEX != argr->id)
     return false;

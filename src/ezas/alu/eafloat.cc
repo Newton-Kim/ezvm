@@ -30,6 +30,11 @@ ezObject* eaALUFloat::compare(eaValue* argl, eaValue* argr) {
 
 }
 
+ezObject* eaALUFloat::condition(eaValue* arg) {
+  return new ezCondition(0 == arg->to_float(), (arg->to_float() < 0) ? true : false, false, false);
+
+}
+
 bool eaALUFloat::is_equal(eaValue* argl, eaValue* argr) {
   if (EZ_VALUE_TYPE_FLOAT != argl->id || EZ_VALUE_TYPE_FLOAT != argr->id)
     return false;

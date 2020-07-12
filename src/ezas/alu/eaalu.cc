@@ -79,6 +79,10 @@ ezObject* eaALU::compare(ezValue* argl, ezValue* argr) {
 	return m_state[id]->compare((eaValue*)argl, (eaValue*)argr);
 }
 
+ezObject* eaALU::condition(ezValue* arg) {
+	return m_state[((eaValue*)arg)->id]->condition((eaValue*)arg);
+}
+
 bool eaALU::is_equal(ezValue* argl, ezValue* argr) {
 	int id = max_id((eaValue*)argl, (eaValue*)argr);
 	return m_state[id]->is_equal((eaValue*)argl, (eaValue*)argr);

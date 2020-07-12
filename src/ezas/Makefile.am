@@ -1,6 +1,7 @@
 bin_PROGRAMS=ezas
 ezas_SOURCES=ezas.cc \
 		ezio.cc \
+		alu/eaalu_state.cc \
 		alu/eaalu.cc \
 		alu/eabool.cc \
 		alu/eacplx.cc \

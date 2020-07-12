@@ -105,7 +105,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_ezas_OBJECTS = ezas.$(OBJEXT) ezio.$(OBJEXT) alu/eaalu.$(OBJEXT) \
+am_ezas_OBJECTS = ezas.$(OBJEXT) ezio.$(OBJEXT) \
+	alu/eaalu_state.$(OBJEXT) alu/eaalu.$(OBJEXT) \
 	alu/eabool.$(OBJEXT) alu/eacplx.$(OBJEXT) \
 	alu/eafloat.$(OBJEXT) alu/eaint.$(OBJEXT) \
 	alu/eastring.$(OBJEXT) parse.$(OBJEXT) scan.$(OBJEXT) \
@@ -135,11 +136,11 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ezas.Po ./$(DEPDIR)/ezio.Po \
 	./$(DEPDIR)/parse.Po ./$(DEPDIR)/scan.Po \
-	alu/$(DEPDIR)/eaalu.Po alu/$(DEPDIR)/eabool.Po \
-	alu/$(DEPDIR)/eacplx.Po alu/$(DEPDIR)/eafloat.Po \
-	alu/$(DEPDIR)/eaint.Po alu/$(DEPDIR)/eastring.Po \
-	value/$(DEPDIR)/eaval.Po value/$(DEPDIR)/eaval_bool.Po \
-	value/$(DEPDIR)/eaval_complex.Po \
+	alu/$(DEPDIR)/eaalu.Po alu/$(DEPDIR)/eaalu_state.Po \
+	alu/$(DEPDIR)/eabool.Po alu/$(DEPDIR)/eacplx.Po \
+	alu/$(DEPDIR)/eafloat.Po alu/$(DEPDIR)/eaint.Po \
+	alu/$(DEPDIR)/eastring.Po value/$(DEPDIR)/eaval.Po \
+	value/$(DEPDIR)/eaval_bool.Po value/$(DEPDIR)/eaval_complex.Po \
 	value/$(DEPDIR)/eaval_float.Po \
 	value/$(DEPDIR)/eaval_integer.Po \
 	value/$(DEPDIR)/eaval_string.Po
@@ -354,6 +355,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ezas_SOURCES = ezas.cc \
 		ezio.cc \
+		alu/eaalu_state.cc \
 		alu/eaalu.cc \
 		alu/eabool.cc \
 		alu/eacplx.cc \
@@ -463,6 +465,8 @@ alu/$(am__dirstamp):
 alu/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) alu/$(DEPDIR)
 	@: > alu/$(DEPDIR)/$(am__dirstamp)
+alu/eaalu_state.$(OBJEXT): alu/$(am__dirstamp) \
+	alu/$(DEPDIR)/$(am__dirstamp)
 alu/eaalu.$(OBJEXT): alu/$(am__dirstamp) alu/$(DEPDIR)/$(am__dirstamp)
 alu/eabool.$(OBJEXT): alu/$(am__dirstamp) \
 	alu/$(DEPDIR)/$(am__dirstamp)
@@ -512,6 +516,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eaalu.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eaalu_state.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eabool.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eacplx.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@alu/$(DEPDIR)/eafloat.Po@am__quote@ # am--include-marker
@@ -709,6 +714,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f alu/$(DEPDIR)/eaalu.Po
+	-rm -f alu/$(DEPDIR)/eaalu_state.Po
 	-rm -f alu/$(DEPDIR)/eabool.Po
 	-rm -f alu/$(DEPDIR)/eacplx.Po
 	-rm -f alu/$(DEPDIR)/eafloat.Po
@@ -770,6 +776,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/parse.Po
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f alu/$(DEPDIR)/eaalu.Po
+	-rm -f alu/$(DEPDIR)/eaalu_state.Po
 	-rm -f alu/$(DEPDIR)/eabool.Po
 	-rm -f alu/$(DEPDIR)/eacplx.Po
 	-rm -f alu/$(DEPDIR)/eafloat.Po
