@@ -1,4 +1,5 @@
 #pragma once
+#include "ezval.h"
 
 class ezALU {
 public:

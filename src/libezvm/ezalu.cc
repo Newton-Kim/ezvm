@@ -1,5 +1,4 @@
 #include "ezvm/ezalu.h"
-#include "ezvm/ezval.h"
 
 ezValue *ezALU::add(ezValue *argl, ezValue *argr) {
   throw runtime_error("addition is not defined");
