@@ -78,7 +78,13 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
   }
 }
 
-ezThread::~ezThread() {}
+ezThread::~ezThread() {
+  for (vector<ezStackFrame *>::iterator it = m_stack.begin();
+      it != m_stack.end(); it++) {
+    delete *it;
+  }
+ 
+}
 
 ezObject *ezThread::addr2val(ezAddress addr) {
   ezObject *v = NULL;
@@ -135,6 +141,7 @@ void ezThread::end(ezAddress &dest, ezObject *val) {
     return;
   ezStackFrame *caller = m_stack.back();
   caller->update(dest, val);
+  delete callee;
 }
 
 size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,
