@@ -5,6 +5,7 @@ libezvm_la_SOURCES=ezgc.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
+		   ezsegment.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \

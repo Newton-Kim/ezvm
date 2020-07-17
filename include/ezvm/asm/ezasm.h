@@ -26,10 +26,10 @@
 
 #include "ezasm_proc.h"
 #include "ezvm/ezaddr.h"
+#include "ezvm/ezalu.h"
 #include "ezvm/ezgc.h"
 #include "ezvm/ezobject.h"
 #include "ezvm/eztable.h"
-#include "ezvm/ezalu.h"
 #include <cstddef>
 #include <map>
 #include <string>
@@ -104,7 +104,7 @@ public:
    *
    * @return is a pointer to the assember.
    */
-  ezAsmProcedure *new_proc(const string name, int scope, int scpkey);
+  ezAsmProcedure *new_proc(const string name, bool scope);
   /**
    * @brief finds the offset of a global segment whose name is value.
    *
@@ -129,5 +129,5 @@ public:
    *
    * @return is an offset in a constant segment.
    */
-  size_t constant(ezALU* alu, ezValue *value);
+  size_t constant(ezALU *alu, ezValue *value);
 };

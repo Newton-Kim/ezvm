@@ -25,9 +25,10 @@
 #pragma once
 
 #include "ezaddr.h"
-#include "ezfunc.h"
-#include "ezval.h"
 #include "ezalu.h"
+#include "ezfunc.h"
+#include "ezsegment.h"
+#include "ezval.h"
 #include <functional>
 #include <stack>
 #include <vector>
@@ -61,7 +62,7 @@ private:
   /**
    * @brief is a local segment.
    */
-  vector<ezObject *> *m_local;
+  ezMemSegment *m_local;
   /**
    * @brief is a temporary segment.
    */
@@ -69,7 +70,7 @@ private:
   /**
    * @brief is a scope segment.
    */
-  vector<ezObject *> *m_scope;
+  ezMemSegment *m_scope;
   /**
    * @brief is a collection of return values.
    */
@@ -80,7 +81,8 @@ private:
   ezAddress m_return_dest;
   ezStackFrameCallback *m_callback;
   vector<vector<ezObject *> *> m_memory;
-  ezALU* m_alu;
+  ezALU *m_alu;
+  void initialise(ezStackFrame *caller, vector<ezObject *> &args);
   void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
    * @brief fetches a value from an address.
@@ -141,11 +143,13 @@ private:
                      function<ezValue *(ezCondition *)> func);
   void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
                      ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
-  void calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2,
-                        function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
-  void calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                        ezAddress &src2,
-                        function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
+  void
+  calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2,
+                   function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
+  void
+  calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1,
+                   ezAddress &src2,
+                   function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
   void calculate_unary(ezAddress &dest, ezAddress &src,
                        function<ezValue *(ezALU *, ezValue *)> func);
   void calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src,
@@ -216,8 +220,8 @@ public:
    * @param crsl is a pointer to a carousel.
    */
   ezStackFrame(ezFunction *crsl, vector<ezObject *> &args, ezAddress &ret,
-               ezStackFrameCallback *callback);
-  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
+               ezStackFrame *caller, ezStackFrameCallback *callback);
+  ezStackFrame(ezFunction *crsl, vector<ezObject *> &args, ezStackFrame *caller,
                ezStackFrameCallback *callback);
   /**
    * @brief is a destructor.

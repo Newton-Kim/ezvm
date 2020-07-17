@@ -51,28 +51,8 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 void ezASM::reset(const string name) { m_globals.reset(name); }
 
-ezAsmProcedure *ezASM::new_proc(const string name, int scpkey, int scope) {
-  ezTable<string, ezObject *> *p_scope = NULL, *p_scpkey = NULL;
-  if (m_globals.exist(name) && !m_globals.is_null(name))
-    throw runtime_error("global symbol " + name + " already exists");
-  stringstream ss;
-  if (scope >= 0) {
-    if (m_scopes.end() == m_scopes.find(scope)) {
-      ss << "scope[" << scope << "] doesn't exist";
-      throw runtime_error(ss.str());
-    }
-    p_scope = m_scopes[scope];
-  }
-  if (scpkey >= 0) {
-    if (m_scopes.end() != m_scopes.find(scpkey)) {
-      ss << "scope[" << scpkey << "] already exist";
-      throw runtime_error(ss.str());
-    }
-    m_scopes[scpkey] = new ezTable<string, ezObject *>;
-    m_gc.add((ezGCObject *)m_scopes[scpkey]);
-    p_scpkey = m_scopes[scpkey];
-  }
-  ezFunction *carousel = new ezFunction(p_scpkey, p_scope);
+ezAsmProcedure *ezASM::new_proc(const string name, bool scope) {
+  ezFunction *carousel = new ezFunction(scope);
   size_t offset = m_globals.add(name, carousel);
   m_gc.add((ezGCObject *)carousel);
   if (name == m_entry_string) {
@@ -104,7 +84,7 @@ size_t ezASM::constant_null(void) {
   return idx;
 }
 
-size_t ezASM::constant(ezALU* alu, ezValue *arg) {
+size_t ezASM::constant(ezALU *alu, ezValue *arg) {
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezObject *v = m_constants[i];
     if (v->type == EZ_OBJECT_TYPE_VALUE && alu->is_equal((ezValue *)v, arg))

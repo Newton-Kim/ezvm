@@ -24,10 +24,10 @@
  */
 #pragma once
 #include "asm/ezasm.h"
+#include "ezalu.h"
 #include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
-#include "ezalu.h"
 
 #include <list>
 #include <string>
@@ -45,7 +45,7 @@ private:
   list<ezThread *> m_threads;
 
 public:
-  ezVM(ezALU* alu);
+  ezVM(ezALU *alu);
   ~ezVM();
   void run(void);
   ezASM &assembler(void);

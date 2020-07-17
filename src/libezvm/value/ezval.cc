@@ -33,4 +33,3 @@ ezValue::ezValue(const unsigned int tp)
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}
-

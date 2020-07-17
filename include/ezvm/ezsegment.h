@@ -23,43 +23,20 @@
  *
  */
 #pragma once
-#include "ezaddr.h"
-#include "ezinstruction.h"
+
+#include "ezgc.h"
 #include "ezobject.h"
-#include "eztable.h"
+#include <vector>
 
-class ezFunction : public ezObject {
+using std::vector;
+
+class ezMemSegment : public ezGCObject, ezGCClient {
 private:
-  bool m_scope;
+  vector<ezObject *> m_memory;
 
 public:
-  uint8_t nargs;
-  size_t nmems;
-  size_t ntemps;
-  ezFunction(bool scope);
-  ~ezFunction();
-  vector<ezInstruction *> instruction;
-  ezTable<string, size_t> jmptbl;
+  ezMemSegment(size_t size);
+  ~ezMemSegment();
   void on_mark(void);
-  bool is_scoped(void) { return m_scope; }
-  void dump(ezFile &sink);
-};
-
-class ezUserDefinedFunction : public ezObject {
-public:
-  ezUserDefinedFunction();
-  virtual ~ezUserDefinedFunction() {}
-
-  virtual ezObject *run(vector<ezObject *> &args) = 0;
-  void dump(ezFile &sink) { sink.print("0x%x(native)\n", this); }
-};
-
-class ezCondition : public ezObject {
-public:
-  const bool zero;
-  const bool negative;
-  const bool overflow;
-  const bool carry;
-  ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
-  void dump(ezFile &sink);
+  vector<ezObject *> *to_vector(void) { return &m_memory; }
 };

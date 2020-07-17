@@ -29,6 +29,7 @@
 #include "ezvm/ezthread.h"
 #include <stdexcept>
 
+// TODO:starting thread with a scoped function
 ezThread::ezThread(ezAddress entry, vector<ezObject *> &args, ezAddress &ret,
                    ezThreadCallback *callback, ezThreadScheduler sched,
                    ezStackFrame *caller)
@@ -39,7 +40,8 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args, ezAddress &ret,
   ezObject *v = addr2val(entry);
   switch (v->type) {
   case EZ_OBJECT_TYPE_FUNCTION: {
-    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, ret, this);
+    ezStackFrame *sf =
+        new ezStackFrame((ezFunction *)v, args, ret, caller, this);
     EZ_INFO("stack push 0x%x", sf);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
@@ -65,7 +67,7 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
   ezObject *v = addr2val(entry);
   switch (v->type) {
   case EZ_OBJECT_TYPE_FUNCTION: {
-    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, this);
+    ezStackFrame *sf = new ezStackFrame((ezFunction *)v, args, caller, this);
     m_stack.push_back(sf);
     ezGC::instance().add(sf);
   } break;
@@ -80,10 +82,9 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
 
 ezThread::~ezThread() {
   for (vector<ezStackFrame *>::iterator it = m_stack.begin();
-      it != m_stack.end(); it++) {
+       it != m_stack.end(); it++) {
     delete *it;
   }
- 
 }
 
 ezObject *ezThread::addr2val(ezAddress addr) {

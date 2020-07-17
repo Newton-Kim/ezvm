@@ -135,11 +135,11 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libezvm_la_OBJECTS = ezgc.lo ezalu.lo asm/ezasm.lo \
-	asm/ezasm_proc.lo asm/ezasm_instr.lo stack.lo thread.lo \
-	ezmemory.lo vm.lo object/ezobj.lo object/ezobj_function.lo \
-	object/ezobj_condition.lo object/ezobj_nil.lo \
-	object/ezobj_array.lo value/ezval.lo utility/ezfile.lo \
-	utility/ezlog.lo
+	asm/ezasm_proc.lo asm/ezasm_instr.lo ezsegment.lo stack.lo \
+	thread.lo ezmemory.lo vm.lo object/ezobj.lo \
+	object/ezobj_function.lo object/ezobj_condition.lo \
+	object/ezobj_nil.lo object/ezobj_array.lo value/ezval.lo \
+	utility/ezfile.lo utility/ezlog.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -164,11 +164,11 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ezalu.Plo ./$(DEPDIR)/ezgc.Plo \
-	./$(DEPDIR)/ezmemory.Plo ./$(DEPDIR)/stack.Plo \
-	./$(DEPDIR)/thread.Plo ./$(DEPDIR)/vm.Plo \
-	asm/$(DEPDIR)/ezasm.Plo asm/$(DEPDIR)/ezasm_instr.Plo \
-	asm/$(DEPDIR)/ezasm_proc.Plo object/$(DEPDIR)/ezobj.Plo \
-	object/$(DEPDIR)/ezobj_array.Plo \
+	./$(DEPDIR)/ezmemory.Plo ./$(DEPDIR)/ezsegment.Plo \
+	./$(DEPDIR)/stack.Plo ./$(DEPDIR)/thread.Plo \
+	./$(DEPDIR)/vm.Plo asm/$(DEPDIR)/ezasm.Plo \
+	asm/$(DEPDIR)/ezasm_instr.Plo asm/$(DEPDIR)/ezasm_proc.Plo \
+	object/$(DEPDIR)/ezobj.Plo object/$(DEPDIR)/ezobj_array.Plo \
 	object/$(DEPDIR)/ezobj_condition.Plo \
 	object/$(DEPDIR)/ezobj_function.Plo \
 	object/$(DEPDIR)/ezobj_nil.Plo utility/$(DEPDIR)/ezfile.Plo \
@@ -354,6 +354,7 @@ libezvm_la_SOURCES = ezgc.cc \
 		   asm/ezasm.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
+		   ezsegment.cc \
 		   stack.cc \
 		   thread.cc \
 		   ezmemory.cc \
@@ -518,6 +519,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezalu.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezgc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezmemory.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ezsegment.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Plo@am__quote@ # am--include-marker
@@ -736,6 +738,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ezalu.Plo
 	-rm -f ./$(DEPDIR)/ezgc.Plo
 	-rm -f ./$(DEPDIR)/ezmemory.Plo
+	-rm -f ./$(DEPDIR)/ezsegment.Plo
 	-rm -f ./$(DEPDIR)/stack.Plo
 	-rm -f ./$(DEPDIR)/thread.Plo
 	-rm -f ./$(DEPDIR)/vm.Plo
@@ -798,6 +801,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ezalu.Plo
 	-rm -f ./$(DEPDIR)/ezgc.Plo
 	-rm -f ./$(DEPDIR)/ezmemory.Plo
+	-rm -f ./$(DEPDIR)/ezsegment.Plo
 	-rm -f ./$(DEPDIR)/stack.Plo
 	-rm -f ./$(DEPDIR)/thread.Plo
 	-rm -f ./$(DEPDIR)/vm.Plo

@@ -27,10 +27,9 @@
 #include <sstream>
 #include <stdexcept>
 
-ezFunction::ezFunction(ezTable<string, ezObject *> *local,
-                       ezTable<string, ezObject *> *scope)
+ezFunction::ezFunction(bool scope)
     : ezObject(EZ_OBJECT_TYPE_FUNCTION), nargs(0), nmems(0), ntemps(0),
-      m_local(local), m_scope(scope) {
+      m_scope(scope) {
   m_size = sizeof(*this);
 }
 ezFunction::~ezFunction() {
@@ -42,30 +41,7 @@ ezUserDefinedFunction::ezUserDefinedFunction()
     : ezObject(EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION) {
   m_size = sizeof(*this);
 }
-void ezFunction::on_mark(void) {
-  if (m_scope)
-    m_scope->mark();
-  if (m_local)
-    m_local->mark();
-}
-
-vector<ezObject *> *ezFunction::local_memory(void) {
-  vector<ezObject *> *ret = NULL;
-  size_t memories = (nmems > nargs) ? nmems : nargs;
-  if (m_local) {
-    if (0 == m_local->size()) {
-      // TODO:refactoring is required
-      for (size_t i = 0; i < memories; i++)
-        m_local->push_back(ezNull::instance()); // TODO:using stl APIs
-    }
-    ret = &m_local->to_vector();
-  } else {
-    ret = new vector<ezObject *>;
-    for (size_t i = 0; i < memories; i++)
-      ret->push_back(ezNull::instance()); // TODO:using stl APIs
-  }
-  return ret;
-}
+void ezFunction::on_mark(void) {}
 
 /*
 map<string, size_t> &ezFunction::local_symtab(void) {
@@ -73,12 +49,9 @@ map<string, size_t> &ezFunction::local_symtab(void) {
 }
 */
 
-vector<ezObject *> *ezFunction::scope_memory(void) {
-  return (m_scope) ? &m_scope->to_vector() : NULL;
-}
-
 void ezFunction::dump(ezFile &sink) {
   sink.print("0x%x(%d)\n", this, nargs);
+  sink.print("  .scoped: %s\n", m_scope ? "true" : "false");
   sink.print("  .memsize: %lu\n", nmems);
   sink.print("  .jump table:\n");
   for (size_t i = 0; i < jmptbl.size(); i++)

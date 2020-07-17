@@ -255,7 +255,8 @@ void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args) {
         for (vector<ezAddress>::iterator it = m_args.begin();
              it != m_args.end(); it++)
           (*it).dump(sink);
-      sink.print(", null\n");
+      sink.print(", null");
+      sink.print("\n");
     }
   };
   m_instruction.push_back(new ezInstrCall(func, args));
