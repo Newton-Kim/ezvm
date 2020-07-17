@@ -592,6 +592,13 @@ void ezStackFrame::on_mark(void) {
     if (obj)
       obj->mark();
   }
+  for (vector<ezObject *>::iterator it = m_temporary.begin(); it != m_temporary.end();
+       it++) {
+    ezObject *obj = *it;
+    EZ_INFO("visiting 0x%x", obj);
+    if (obj)
+      obj->mark();
+  }
   if (m_return) {
     EZ_INFO("marking return value of 0x%x", m_return);
     m_return->mark();
