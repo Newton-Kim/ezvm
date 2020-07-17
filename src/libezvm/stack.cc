@@ -546,6 +546,7 @@ void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args,
   ezGC::instance().pause();
   ezStackFrame *callee = new ezStackFrame(func, args, ret, this, m_callback);
   m_callback->call(callee);
+  ezGC::instance().add((ezGCObject *)callee);
   ezGC::instance().resume();
 }
 
@@ -553,6 +554,7 @@ void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args) {
   ezGC::instance().pause();
   ezStackFrame *callee = new ezStackFrame(func, args, this, m_callback);
   m_callback->call(callee);
+  ezGC::instance().add((ezGCObject *)callee);
   ezGC::instance().resume();
 }
 
