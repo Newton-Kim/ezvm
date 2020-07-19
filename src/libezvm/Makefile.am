@@ -27,6 +27,8 @@ nobase_include_HEADERS=../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm.h \
 		../../include/ezvm/ezfile.h \
 		../../include/ezvm/ezgc.h \
+		../../include/ezvm/ezalu.h \
+		../../include/ezvm/ezsegment.h \
 		../../include/ezvm/ezinstruction.h \
 		../../include/ezvm/ezmemory.h \
 		../../include/ezvm/ezstack.h \
