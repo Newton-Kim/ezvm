@@ -28,8 +28,10 @@
 
 using namespace std;
 
-ezAsmProcedure::ezAsmProcedure(ezFunction *carousel)
-    : m_carousel(carousel), m_local_index(0) {}
+ezAsmProcedure::ezAsmProcedure(ezFunction *carousel, ezAsmProcedure *parent)
+    : m_carousel(carousel), m_local_index(0), m_scope(NULL) {
+  if (parent) m_scope = &parent->m_locals;
+}
 
 void ezAsmProcedure::args(size_t args) { m_carousel->nargs = args; }
 

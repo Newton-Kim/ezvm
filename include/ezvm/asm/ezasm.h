@@ -104,7 +104,7 @@ public:
    *
    * @return is a pointer to the assember.
    */
-  ezAsmProcedure *new_proc(const string name, bool scope);
+  ezAsmProcedure *new_proc(const string name, ezAsmProcedure *parent);
   /**
    * @brief finds the offset of a global segment whose name is value.
    *

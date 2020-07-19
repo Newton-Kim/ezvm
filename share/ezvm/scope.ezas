@@ -7,7 +7,7 @@
 	call _stdout ( r0 "," r1)
 
 .proc _subf (0)
-	.scope true
+	.scope _main
 	.memories 2
 	add s0, s0 1
 

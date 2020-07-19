@@ -45,6 +45,7 @@ private:
   ezFunction *m_carousel;
   size_t m_local_index;
   map<string, size_t> m_locals;
+  map<string, size_t> *m_scope;
   list<string> m_unresolved;
 
   bool search_unresolved(string label);
@@ -55,7 +56,7 @@ public:
    *
    * @param carousel is a pointer to a carousel.
    */
-  ezAsmProcedure(ezFunction *carousel);
+  ezAsmProcedure(ezFunction *carousel, ezAsmProcedure *parent);
   void args(size_t args);
   /**
    * @brief mems the local memory.

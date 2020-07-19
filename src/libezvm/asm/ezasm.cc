@@ -51,15 +51,15 @@ void ezASM::entry(const string entry) { m_entry_string = entry; }
 
 void ezASM::reset(const string name) { m_globals.reset(name); }
 
-ezAsmProcedure *ezASM::new_proc(const string name, bool scope) {
-  ezFunction *carousel = new ezFunction(scope);
+ezAsmProcedure *ezASM::new_proc(const string name, ezAsmProcedure *parent) {
+  ezFunction *carousel = new ezFunction((parent) ? true : false);
   size_t offset = m_globals.add(name, carousel);
   m_gc.add((ezGCObject *)carousel);
   if (name == m_entry_string) {
     m_entry.segment = EZ_ASM_SEGMENT_GLOBAL;
     m_entry.offset = offset;
   }
-  return new ezAsmProcedure(carousel);
+  return new ezAsmProcedure(carousel, parent);
 }
 
 size_t ezASM::global(const string value) {

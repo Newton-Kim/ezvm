@@ -160,11 +160,11 @@ static eaALU s_alu;
 static ezVM s_vm(&s_alu);
 static ezAsmProcedure* s_proc_current = NULL;
 static ezAsmInstruction* s_instr_current = NULL;
-static map<string, unsigned int> s_global;
+static map<string, ezAsmProcedure *> s_global;
 static vector<ezAddress> s_args_addr;
 static vector<ezAddress> s_args_var;
 static size_t s_memories = 0;
-static bool s_scope = false;
+static ezAsmProcedure *s_scope = NULL;
 static bool s_is_void = false;
 %}
 
@@ -214,7 +214,7 @@ procs : proc
 
 proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 		s_memories = 0;
-		s_scope = false;
+		s_scope = NULL;
 	} proc_meta {
 		if(s_proc_current) {
 			if(s_instr_current) {
@@ -228,13 +228,18 @@ proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 		s_proc_current = s_vm.assembler().new_proc($2, s_scope);
 		s_proc_current->args($4);
 		s_proc_current->mems(s_memories);
+		s_global[$2] = s_proc_current;
 		s_memories = 0;
-		s_scope = false;
+		s_scope = NULL;
 	}
 	codes {/*s_proc_current = NULL;*/};
 
 proc_meta : %empty {$$ = 0;}
-	| proc_meta SCOPE BOOLEAN NEWLINE {s_scope = $3;}
+	| proc_meta SCOPE SYMBOL NEWLINE {
+		map<string, ezAsmProcedure *>::iterator it = s_global.find($3);
+		if(s_global.end() == it) throw runtime_error("function does not exist");
+		s_scope = it->second;
+	}
 	| proc_meta MEMORIES INTEGER NEWLINE {s_memories = $3;};
 
 codes : line NEWLINE | codes line NEWLINE;
