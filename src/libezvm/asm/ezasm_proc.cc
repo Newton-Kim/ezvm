@@ -39,12 +39,19 @@ void ezAsmProcedure::mems(size_t mems) { m_carousel->nmems = mems; }
 
 void ezAsmProcedure::temps(size_t temps) { m_carousel->ntemps = temps; }
 
-size_t ezAsmProcedure::local(const string value) {
+ezAddress ezAsmProcedure::local(const string value) {
+  ezAddress addr;
+  if (m_scope && (m_scope->end() != m_scope->find(value))) {
+    addr.segment = EZ_ASM_SEGMENT_SCOPE;
+    addr.offset = (*m_scope)[value];
+  }
   if (m_locals.end() == m_locals.find(value))
     m_locals[value] = m_local_index++;
   if (m_carousel->nmems < m_local_index)
     m_carousel->nmems = m_local_index;
-  return m_locals[value];
+  addr.segment = EZ_ASM_SEGMENT_LOCAL;
+  addr.offset = m_locals[value];
+  return addr;
 }
 
 bool ezAsmProcedure::search_unresolved(string label) {

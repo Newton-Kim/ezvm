@@ -72,7 +72,7 @@ public:
    * temps. the size is not changed.
    */
   void temps(size_t temps);
-  size_t local(const string value);
+  ezAddress local(const string value);
   /**
    * @brief tags the address with the name.
    *
