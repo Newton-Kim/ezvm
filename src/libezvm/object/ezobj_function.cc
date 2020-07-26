@@ -52,7 +52,9 @@ map<string, size_t> &ezFunction::local_symtab(void) {
 void ezFunction::dump(ezFile &sink) {
   sink.print("0x%x(%d)\n", this, nargs);
   sink.print("  .scoped: %s\n", m_scope ? "true" : "false");
-  sink.print("  .memsize: %lu\n", nmems);
+  sink.print("  .args: %lu\n", nmems);
+  sink.print("  .mems: %lu\n", nargs);
+  sink.print("  .temps: %lu\n", ntemps);
   sink.print("  .jump table:\n");
   for (size_t i = 0; i < jmptbl.size(); i++)
     sink.print("    [%lu]=%lu\n", i, jmptbl[i]);

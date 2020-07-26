@@ -49,9 +49,7 @@ ezStackFrame::~ezStackFrame() {}
 
 void ezStackFrame::initialise(ezStackFrame *caller, vector<ezObject *> &args) {
   {
-    size_t memories = (m_carousel->nmems > m_carousel->nargs)
-                          ? m_carousel->nmems
-                          : m_carousel->nargs;
+    size_t memories = m_carousel->nmems + m_carousel->nargs;
     m_local = new ezMemSegment(memories);
     ezGC::instance().add((ezGCObject *)m_local);
   }
