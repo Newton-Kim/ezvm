@@ -15,7 +15,7 @@ public:
            const int line, const char *format, ...);
 };
 
-ezLogImplemented::ezLogImplemented() : m_level(EZ_LOG_INFO) {}
+ezLogImplemented::ezLogImplemented() : m_level(EZ_LOG_NONE) {}
 
 ezLog *ezLog::instance(void) {
   static ezLogImplemented s_log;
@@ -27,7 +27,7 @@ void ezLogImplemented::set_log_level(ezLogLevel level) { m_level = level; }
 void ezLogImplemented::log(const ezLogLevel level, const char *function,
                            const char *file, const int line, const char *format,
                            ...) {
-  if (level > m_level)
+  if (level < m_level)
     return;
   const char *lvl_str = "U";
   switch (level) {

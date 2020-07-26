@@ -384,6 +384,7 @@ nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/ezval.h \
 		../../include/ezvm/ezobject.h \
 		../../include/ezvm/ezfunc.h \
+		../../include/ezvm/ezlog.h \
 		../../include/ezvm/ezvm.h
 
 AM_CPPFLAGS = -I../../include -std=c++11 -gstabs -UEZ_LOG_ENABLED
