@@ -1,11 +1,12 @@
 #pragma once
 
 enum ezLogLevel {
-  EZ_LOG_NONE,
+  EZ_LOG_ALL,
   EZ_LOG_INFO,
   EZ_LOG_DEBUG,
   EZ_LOG_WARNING,
-  EZ_LOG_ERROR
+  EZ_LOG_ERROR,
+  EZ_LOG_NONE
 };
 
 #ifdef EZ_LOG_ENABLED
