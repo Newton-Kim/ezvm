@@ -118,84 +118,6 @@ void ezStackFrame::bra(size_t index) {
   m_pc = m_carousel->jmptbl[index];
 }
 
-/*
-void ezStackFrame::test_equality(ezAddress &rst, ezAddress &lsrc,
-                                 ezAddress &rsrc,
-                                 function<ezValue *(ezCondition *)> func) {
-  ezValue *vr = NULL, *vl = NULL;
-  vl = (ezValue *)addr2val(lsrc);
-  vr = (ezValue *)addr2val(rsrc);
-  ezObject *cond = m_alu->compare(vl, vr);
-  val2addr(rst, func((ezCondition *)cond));
-  delete cond;
-}
-
-void ezStackFrame::test_equality(ezAddress &rst, ezAddress &cond,
-                                 ezAddress &lsrc, ezAddress &rsrc,
-                                 function<ezValue *(ezCondition *)> func) {
-  ezValue *vr = NULL, *vl = NULL;
-  vl = (ezValue *)addr2val(lsrc);
-  vr = (ezValue *)addr2val(rsrc);
-  ezObject *vcond = m_alu->compare(vl, vr);
-  val2addr(rst, func((ezCondition *)vcond));
-  val2addr(cond, vcond);
-}
-
-void ezStackFrame::teq(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (cond->zero) ? new ezBool(true) : new ezBool(false);
-  });
-}
-
-void ezStackFrame::teq(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                       ezAddress &src2) {
-  test_equality(dest, cond, src1, src2, [](ezCondition *cond) {
-    return (cond->zero) ? new ezBool(true) : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tge(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (cond->zero || !cond->negative) ? new ezBool(true)
-                                           : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tge(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                       ezAddress &src2) {
-  test_equality(dest, cond, src1, src2, [](ezCondition *cond) {
-    return (cond->zero || !cond->negative) ? new ezBool(true)
-                                           : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tlt(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (cond->negative) ? new ezBool(true) : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tlt(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                       ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (cond->negative) ? new ezBool(true) : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tne(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (!cond->zero) ? new ezBool(true) : new ezBool(false);
-  });
-}
-
-void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                       ezAddress &src2) {
-  test_equality(dest, src1, src2, [](ezCondition *cond) {
-    return (!cond->zero) ? new ezBool(true) : new ezBool(false);
-  });
-}
-*/
-
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
   if (srcs.size() == 0) {
@@ -216,41 +138,6 @@ void ezStackFrame::ret(vector<ezAddress> &srcs) {
   m_callback->end(m_return_dest, m_return);
 }
 
-void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args,
-                        ezAddress &ret) {
-  ezObject *proc = addr2val(func);
-  vector<ezObject *> vargs;
-  addr2val(vargs, args);
-  switch (proc->type) {
-  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
-    call((ezUserDefinedFunction *)proc, vargs, ret);
-    break;
-  case EZ_OBJECT_TYPE_FUNCTION:
-    call((ezFunction *)proc, vargs, ret);
-    break;
-  default:
-    throw runtime_error("function is not executable");
-    break;
-  }
-}
-
-void ezStackFrame::call(ezAddress &func, vector<ezAddress> &args) {
-  ezObject *proc = addr2val(func);
-  vector<ezObject *> vargs;
-  addr2val(vargs, args);
-  switch (proc->type) {
-  case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
-    call((ezUserDefinedFunction *)proc, vargs);
-    break;
-  case EZ_OBJECT_TYPE_FUNCTION:
-    call((ezFunction *)proc, vargs);
-    break;
-  default:
-    throw runtime_error("function is not executable");
-    break;
-  }
-}
-
 void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args,
                         ezAddress &ret) {
   ezGC::instance().pause();
@@ -266,17 +153,6 @@ void ezStackFrame::call(ezFunction *func, vector<ezObject *> &args) {
   m_callback->call(callee);
   ezGC::instance().add((ezGCObject *)callee);
   ezGC::instance().resume();
-}
-
-void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args,
-                        ezAddress &ret) {
-  ezObject *vret = func->run(args);
-  if (vret)
-    val2addr(ret, vret);
-}
-
-void ezStackFrame::call(ezUserDefinedFunction *func, vector<ezObject *> &args) {
-  func->run(args);
 }
 
 void ezStackFrame::thd(ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
@@ -300,11 +176,6 @@ void ezStackFrame::wait(ezAddress &handle) {
   if (v->type != EZ_OBJECT_TYPE_HANDLE)
     throw runtime_error("invalid handle");
   m_callback->wait(((ezHandle *)v)->id);
-}
-
-void ezStackFrame::update(ezAddress &dest, ezObject *val) {
-  if (val)
-    val2addr(dest, val);
 }
 
 void ezStackFrame::step(void) {

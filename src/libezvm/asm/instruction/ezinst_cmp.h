@@ -1,3 +1,4 @@
+#pragma once
 #include "ezvm/ezalu.h"
 #include "ezvm/ezinstruction.h"
 

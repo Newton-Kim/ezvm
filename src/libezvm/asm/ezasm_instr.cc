@@ -6,6 +6,7 @@
 #include "asm/instruction/ezinst_unary_operation.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_cmp.h"
+#include "asm/instruction/ezinst_call.h"
 #include "asm/instruction/ezinst_conditional_bra.h"
 
 using namespace std;
@@ -88,59 +89,11 @@ void ezAsmInstruction::bra(size_t offset) {
 
 void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args,
                             ezAddress &ret) {
-  class ezInstrCall : public ezInstruction {
-  private:
-    ezAddress m_func;
-    vector<ezAddress> m_args;
-    ezAddress m_ret;
-
-  public:
-    ezInstrCall(const ezAddress &func, vector<ezAddress> &args, ezAddress &ret)
-        : m_func(func), m_args(args), m_ret(ret) {}
-    void process(ezStackFrame &stk) { stk.call(m_func, m_args, m_ret); }
-    void dump(ezFile &sink) {
-      sink.print("call");
-      m_func.dump(sink);
-      sink.print(",");
-      if (m_args.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_args.begin();
-             it != m_args.end(); it++)
-          (*it).dump(sink);
-      sink.print(",");
-      m_ret.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrCall(func, args, ret));
+  m_instruction.push_back(new ezInstrCallFn(func, args, ret));
 }
 
 void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args) {
-  class ezInstrCall : public ezInstruction {
-  private:
-    ezAddress m_func;
-    vector<ezAddress> m_args;
-
-  public:
-    ezInstrCall(const ezAddress &func, vector<ezAddress> &args)
-        : m_func(func), m_args(args) {}
-    void process(ezStackFrame &stk) { stk.call(m_func, m_args); }
-    void dump(ezFile &sink) {
-      sink.print("call");
-      m_func.dump(sink);
-      sink.print(",");
-      if (m_args.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_args.begin();
-             it != m_args.end(); it++)
-          (*it).dump(sink);
-      sink.print(", null");
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrCall(func, args));
+  m_instruction.push_back(new ezInstrCallVoid(func, args));
 }
 
 void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,

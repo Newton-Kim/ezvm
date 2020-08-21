@@ -49,7 +49,7 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args, ezAddress &ret,
   case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION: {
     ezObject *vret = ((ezUserDefinedFunction *)v)->run(args);
     if (caller && vret)
-      caller->update(ret, vret);
+      caller->val2addr(ret, vret);
   } break;
   default:
     throw("invalid value type");
@@ -136,7 +136,7 @@ void ezThread::end(ezAddress &dest, ezObject *val) {
   if (m_stack.empty())
     return;
   ezStackFrame *caller = m_stack.back();
-  caller->update(dest, val);
+  if(caller && val) caller->val2addr(dest, val);
 }
 
 size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,

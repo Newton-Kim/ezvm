@@ -1,3 +1,4 @@
+#pragma once
 #include "ezvm/ezinstruction.h"
 
 class ezInstrMv : public ezInstruction {

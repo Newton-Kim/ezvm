@@ -82,23 +82,7 @@ private:
   vector<vector<ezObject *> *> m_memory;
   void initialise(ezStackFrame *caller, vector<ezObject *> &args);
 
-private:
-  /**
-   * @brief invokes a native carousel.
-   *
-   * @param func is a pointer to a native carousel.
-   * @param args is a number of arguments which follows the func.
-   * @param ret is a number of return addresses which follows the arguments.
-   */
-  void call(ezUserDefinedFunction *func, vector<ezObject *> &args,
-            ezAddress &ret);
-  /**
-   * @brief invokes a native carousel.
-   *
-   * @param func is a pointer to a native carousel.
-   * @param args is a number of arguments which follows the func.
-   */
-  void call(ezUserDefinedFunction *func, vector<ezObject *> &args);
+public:
   /**
    * @brief invokes a carousel.
    *
@@ -114,14 +98,7 @@ private:
    * @param args is a number of arguments which follows the func.
    */
   void call(ezFunction *func, vector<ezObject *> &args);
-  /*
-  void test_equality(ezAddress &rst, ezAddress &lsrc, ezAddress &rsrc,
-                     function<ezValue *(ezCondition *)> func);
-  void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
-                     ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
-		     */
 
-public:
   void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
    * @brief fetches a value from an address.
@@ -146,20 +123,8 @@ public:
    */
   void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
 
-  /*
-    void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-    void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress
-    &src2); void tge(ezAddress &dest, ezAddress &src1, ezAddress &src2); void
-    tge(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-    void tlt(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-    void tlt(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress
-    &src2); void tne(ezAddress &dest, ezAddress &src1, ezAddress &src2); void
-    tne(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  */
   void bra(size_t index);
   void ret(vector<ezAddress> &srcs);
-  void call(ezAddress &func, vector<ezAddress> &args, ezAddress &ret);
-  void call(ezAddress &func, vector<ezAddress> &args);
   void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &ret,
            ezAddress &handle);
   void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &handle);
@@ -180,7 +145,6 @@ public:
    */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
-  void update(ezAddress &dests, ezObject *vals);
   void on_mark(void);
   void dump(ezFile &sink);
 };
