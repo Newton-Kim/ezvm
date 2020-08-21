@@ -15,9 +15,9 @@ private:
   ezAddress m_src;
 
 public:
-  ezInstrUnaryOperation(
-      ezALU *alu, const ezAddress dest, const ezAddress &src,
-      const string name, function<ezValue *(ezALU *, ezValue *)> func);
+  ezInstrUnaryOperation(ezALU *alu, const ezAddress dest, const ezAddress &src,
+                        const string name,
+                        function<ezValue *(ezALU *, ezValue *)> func);
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };
@@ -32,10 +32,10 @@ private:
   ezAddress m_src;
 
 public:
-  ezInstrUnaryOperationWithCond(
-      ezALU *alu, const ezAddress dest, const ezAddress cond,
-      const ezAddress &src, const string name,
-      function<ezValue *(ezALU *, ezValue *)> func);
+  ezInstrUnaryOperationWithCond(ezALU *alu, const ezAddress dest,
+                                const ezAddress cond, const ezAddress &src,
+                                const string name,
+                                function<ezValue *(ezALU *, ezValue *)> func);
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };

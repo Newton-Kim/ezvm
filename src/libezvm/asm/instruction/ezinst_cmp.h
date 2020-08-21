@@ -11,9 +11,8 @@ private:
   ezAddress m_rsrc;
 
 public:
-  ezInstrCmp(
-      ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
-      const ezAddress &rsrc);
+  ezInstrCmp(ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
+             const ezAddress &rsrc);
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };

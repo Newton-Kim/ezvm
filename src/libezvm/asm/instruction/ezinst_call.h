@@ -23,4 +23,3 @@ public:
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };
-

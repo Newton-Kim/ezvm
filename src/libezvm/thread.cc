@@ -136,7 +136,8 @@ void ezThread::end(ezAddress &dest, ezObject *val) {
   if (m_stack.empty())
     return;
   ezStackFrame *caller = m_stack.back();
-  if(caller && val) caller->val2addr(dest, val);
+  if (caller && val)
+    caller->val2addr(dest, val);
 }
 
 size_t ezThread::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,

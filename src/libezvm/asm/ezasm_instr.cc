@@ -1,13 +1,13 @@
 #include "ezvm/asm/ezasm_instr.h"
-#include "ezvm/ezstack.h"
 #include "ezvm/ezgc.h"
+#include "ezvm/ezstack.h"
 
 #include "asm/instruction/ezinst_binary_operation.h"
-#include "asm/instruction/ezinst_unary_operation.h"
-#include "asm/instruction/ezinst_mv.h"
-#include "asm/instruction/ezinst_cmp.h"
 #include "asm/instruction/ezinst_call.h"
+#include "asm/instruction/ezinst_cmp.h"
 #include "asm/instruction/ezinst_conditional_bra.h"
+#include "asm/instruction/ezinst_mv.h"
+#include "asm/instruction/ezinst_unary_operation.h"
 
 using namespace std;
 
@@ -52,23 +52,24 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress cond,
 }
 
 void ezAsmInstruction::beq(const ezAddress cond, size_t offset) {
-  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "beq",
-			  [](ezCondition *v) -> bool { return v->zero; }));
+  m_instruction.push_back(new ezInstrConditionalBra(
+      cond, offset, "beq", [](ezCondition *v) -> bool { return v->zero; }));
 }
 
 void ezAsmInstruction::bge(const ezAddress cond, size_t offset) {
-  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "bge",
-			  [](ezCondition *v) -> bool { return (v->zero || !v->negative); }));
+  m_instruction.push_back(new ezInstrConditionalBra(
+      cond, offset, "bge",
+      [](ezCondition *v) -> bool { return (v->zero || !v->negative); }));
 }
 
 void ezAsmInstruction::blt(const ezAddress cond, size_t offset) {
-  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "blt",
-			  [](ezCondition *v) -> bool { return v->negative; }));
+  m_instruction.push_back(new ezInstrConditionalBra(
+      cond, offset, "blt", [](ezCondition *v) -> bool { return v->negative; }));
 }
 
 void ezAsmInstruction::bne(const ezAddress cond, size_t offset) {
-  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "beq",
-			  [](ezCondition *v) -> bool { return !v->zero; }));
+  m_instruction.push_back(new ezInstrConditionalBra(
+      cond, offset, "beq", [](ezCondition *v) -> bool { return !v->zero; }));
 }
 
 void ezAsmInstruction::bra(size_t offset) {
@@ -212,35 +213,27 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperation(
       m_alu, dest, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * {
-        return alu->negate(v);
-      }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->negate(v); }));
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
                            const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperationWithCond(
       m_alu, dest, cond, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * {
-        return alu->negate(v);
-      }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->negate(v); }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperation(
       m_alu, dest, org, "not",
-      [](ezALU *alu, ezValue *v) -> ezValue * {
-        return alu->bitwise_not(v);
-      }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
                                    const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperationWithCond(
       m_alu, dest, cond, org, "not",
-      [](ezALU *alu, ezValue *v) -> ezValue * {
-        return alu->bitwise_not(v);
-      }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); }));
 }
 
 void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,

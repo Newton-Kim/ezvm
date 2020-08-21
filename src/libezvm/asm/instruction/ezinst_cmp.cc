@@ -2,11 +2,9 @@
 #include "ezvm/ezlog.h"
 #include "ezvm/ezstack.h"
 
-ezInstrCmp::ezInstrCmp(
-    ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
-    const ezAddress &rsrc)
-    : m_alu(alu), m_dest(dest), m_lsrc(lsrc),
-      m_rsrc(rsrc) {}
+ezInstrCmp::ezInstrCmp(ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
+                       const ezAddress &rsrc)
+    : m_alu(alu), m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
 
 void ezInstrCmp::process(ezStackFrame &stk) {
   ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
@@ -23,4 +21,3 @@ void ezInstrCmp::dump(ezFile &sink) {
   m_rsrc.dump(sink);
   sink.print("\n");
 }
-

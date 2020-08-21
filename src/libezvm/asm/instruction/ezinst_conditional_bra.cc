@@ -2,10 +2,10 @@
 #include "ezvm/ezlog.h"
 #include "ezvm/ezstack.h"
 
-ezInstrConditionalBra::ezInstrConditionalBra(
-    const ezAddress &cond, const size_t index,
-    const string name,
-    function<bool (ezCondition *)> func)
+ezInstrConditionalBra::ezInstrConditionalBra(const ezAddress &cond,
+                                             const size_t index,
+                                             const string name,
+                                             function<bool(ezCondition *)> func)
     : m_func(func), m_name(name), m_cond(cond), m_index(index) {}
 
 void ezInstrConditionalBra::process(ezStackFrame &stk) {
@@ -21,4 +21,3 @@ void ezInstrConditionalBra::dump(ezFile &sink) {
   m_cond.dump(sink);
   sink.print(" %lu\n", m_index);
 }
-

@@ -3,8 +3,7 @@
 #include "ezvm/ezstack.h"
 
 ezInstrUnaryOperation::ezInstrUnaryOperation(
-    ezALU *alu, const ezAddress dest, const ezAddress &src,
-    const string name,
+    ezALU *alu, const ezAddress dest, const ezAddress &src, const string name,
     function<ezValue *(ezALU *, ezValue *)> func)
     : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_src(src) {}
 
