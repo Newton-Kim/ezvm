@@ -134,12 +134,13 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libezvm_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_libezvm_la_OBJECTS = ezgc.lo ezalu.lo asm/ezasm.lo \
-	asm/ezasm_proc.lo asm/ezasm_instr.lo ezsegment.lo stack.lo \
+am_libezvm_la_OBJECTS = ezgc.lo ezalu.lo ezsegment.lo stack.lo \
 	thread.lo ezmemory.lo vm.lo object/ezobj.lo \
 	object/ezobj_function.lo object/ezobj_condition.lo \
 	object/ezobj_nil.lo object/ezobj_array.lo value/ezval.lo \
-	utility/ezfile.lo utility/ezlog.lo
+	utility/ezfile.lo utility/ezlog.lo asm/ezasm.lo \
+	asm/ezasm_proc.lo asm/ezasm_instr.lo \
+	asm/instruction/ezinst_mv.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -168,6 +169,7 @@ am__depfiles_remade = ./$(DEPDIR)/ezalu.Plo ./$(DEPDIR)/ezgc.Plo \
 	./$(DEPDIR)/stack.Plo ./$(DEPDIR)/thread.Plo \
 	./$(DEPDIR)/vm.Plo asm/$(DEPDIR)/ezasm.Plo \
 	asm/$(DEPDIR)/ezasm_instr.Plo asm/$(DEPDIR)/ezasm_proc.Plo \
+	asm/instruction/$(DEPDIR)/ezinst_mv.Plo \
 	object/$(DEPDIR)/ezobj.Plo object/$(DEPDIR)/ezobj_array.Plo \
 	object/$(DEPDIR)/ezobj_condition.Plo \
 	object/$(DEPDIR)/ezobj_function.Plo \
@@ -351,9 +353,6 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libezvm.la
 libezvm_la_SOURCES = ezgc.cc \
 		   ezalu.cc \
-		   asm/ezasm.cc \
-		   asm/ezasm_proc.cc \
-		   asm/ezasm_instr.cc \
 		   ezsegment.cc \
 		   stack.cc \
 		   thread.cc \
@@ -366,7 +365,11 @@ libezvm_la_SOURCES = ezgc.cc \
 		   object/ezobj_array.cc \
 		   value/ezval.cc \
 		   utility/ezfile.cc \
-		   utility/ezlog.cc
+		   utility/ezlog.cc \
+		   asm/ezasm.cc \
+		   asm/ezasm_proc.cc \
+		   asm/ezasm_instr.cc \
+		   asm/instruction/ezinst_mv.cc
 
 nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
 		../../include/ezvm/asm/ezasm_instr.h \
@@ -459,15 +462,6 @@ clean-libLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
-asm/$(am__dirstamp):
-	@$(MKDIR_P) asm
-	@: > asm/$(am__dirstamp)
-asm/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) asm/$(DEPDIR)
-	@: > asm/$(DEPDIR)/$(am__dirstamp)
-asm/ezasm.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
-asm/ezasm_proc.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
-asm/ezasm_instr.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
 object/$(am__dirstamp):
 	@$(MKDIR_P) object
 	@: > object/$(am__dirstamp)
@@ -501,6 +495,23 @@ utility/ezfile.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
 utility/ezlog.lo: utility/$(am__dirstamp) \
 	utility/$(DEPDIR)/$(am__dirstamp)
+asm/$(am__dirstamp):
+	@$(MKDIR_P) asm
+	@: > asm/$(am__dirstamp)
+asm/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) asm/$(DEPDIR)
+	@: > asm/$(DEPDIR)/$(am__dirstamp)
+asm/ezasm.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
+asm/ezasm_proc.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
+asm/ezasm_instr.lo: asm/$(am__dirstamp) asm/$(DEPDIR)/$(am__dirstamp)
+asm/instruction/$(am__dirstamp):
+	@$(MKDIR_P) asm/instruction
+	@: > asm/instruction/$(am__dirstamp)
+asm/instruction/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) asm/instruction/$(DEPDIR)
+	@: > asm/instruction/$(DEPDIR)/$(am__dirstamp)
+asm/instruction/ezinst_mv.lo: asm/instruction/$(am__dirstamp) \
+	asm/instruction/$(DEPDIR)/$(am__dirstamp)
 
 libezvm.la: $(libezvm_la_OBJECTS) $(libezvm_la_DEPENDENCIES) $(EXTRA_libezvm_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libezvm_la_LINK) -rpath $(libdir) $(libezvm_la_OBJECTS) $(libezvm_la_LIBADD) $(LIBS)
@@ -509,6 +520,8 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f asm/*.$(OBJEXT)
 	-rm -f asm/*.lo
+	-rm -f asm/instruction/*.$(OBJEXT)
+	-rm -f asm/instruction/*.lo
 	-rm -f object/*.$(OBJEXT)
 	-rm -f object/*.lo
 	-rm -f utility/*.$(OBJEXT)
@@ -529,6 +542,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_instr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/$(DEPDIR)/ezasm_proc.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@asm/instruction/$(DEPDIR)/ezinst_mv.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_array.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_condition.Plo@am__quote@ # am--include-marker
@@ -574,6 +588,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf asm/.libs asm/_libs
+	-rm -rf asm/instruction/.libs asm/instruction/_libs
 	-rm -rf object/.libs object/_libs
 	-rm -rf utility/.libs utility/_libs
 	-rm -rf value/.libs value/_libs
@@ -722,6 +737,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f asm/$(DEPDIR)/$(am__dirstamp)
 	-rm -f asm/$(am__dirstamp)
+	-rm -f asm/instruction/$(DEPDIR)/$(am__dirstamp)
+	-rm -f asm/instruction/$(am__dirstamp)
 	-rm -f object/$(DEPDIR)/$(am__dirstamp)
 	-rm -f object/$(am__dirstamp)
 	-rm -f utility/$(DEPDIR)/$(am__dirstamp)
@@ -748,6 +765,7 @@ distclean: distclean-am
 	-rm -f asm/$(DEPDIR)/ezasm.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
+	-rm -f asm/instruction/$(DEPDIR)/ezinst_mv.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
 	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
@@ -811,6 +829,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f asm/$(DEPDIR)/ezasm.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_instr.Plo
 	-rm -f asm/$(DEPDIR)/ezasm_proc.Plo
+	-rm -f asm/instruction/$(DEPDIR)/ezinst_mv.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
 	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo

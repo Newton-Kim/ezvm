@@ -83,6 +83,7 @@ private:
   vector<vector<ezObject *> *> m_memory;
   ezALU *m_alu;
   void initialise(ezStackFrame *caller, vector<ezObject *> &args);
+public:
   void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
    * @brief fetches a value from an address.
@@ -106,6 +107,7 @@ private:
    * @param v is an array of values.
    */
   void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
+private:
   /**
    * @brief invokes a native carousel.
    *
@@ -200,7 +202,6 @@ public:
   void blt(ezAddress &cond, size_t index);
   void bne(ezAddress &cond, size_t index);
   void bra(size_t index);
-  void mv(vector<ezAddress> &dests, vector<ezAddress> &srcs);
   void ret(vector<ezAddress> &srcs);
   void call(ezAddress &func, vector<ezAddress> &args, ezAddress &ret);
   void call(ezAddress &func, vector<ezAddress> &args);

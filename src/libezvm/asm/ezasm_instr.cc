@@ -1,6 +1,8 @@
 #include "ezvm/asm/ezasm_instr.h"
 #include "ezvm/ezstack.h"
 
+#include "asm/instruction/ezinst_mv.h"
+
 using namespace std;
 
 ezAsmInstruction::ezAsmInstruction() {}
@@ -562,66 +564,10 @@ void ezAsmInstruction::mul(const ezAddress dest, const ezAddress cond,
 }
 
 void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
-  class ezInstrMv : public ezInstruction {
-  private:
-    vector<ezAddress> m_dest;
-    vector<ezAddress> m_src;
-
-  public:
-    ezInstrMv(vector<ezAddress> &dest, vector<ezAddress> &src)
-        : m_dest(dest), m_src(src) {}
-    void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
-    void dump(ezFile &sink) {
-      sink.print("mv");
-      if (m_dest.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_dest.begin();
-             it != m_dest.end(); it++)
-          (*it).dump(sink);
-      sink.print(",");
-      if (m_src.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_src.begin(); it != m_src.end();
-             it++)
-          (*it).dump(sink);
-      sink.print("\n");
-    }
-  };
   m_instruction.push_back(new ezInstrMv(dest, src));
 }
 
 void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
-  class ezInstrMv : public ezInstruction {
-  private:
-    vector<ezAddress> m_dest;
-    vector<ezAddress> m_src;
-
-  public:
-    ezInstrMv(ezAddress &dest, ezAddress &src) {
-      m_dest.push_back(dest);
-      m_src.push_back(src);
-    }
-    void process(ezStackFrame &stk) { stk.mv(m_dest, m_src); }
-    void dump(ezFile &sink) {
-      sink.print("mv");
-      if (m_dest.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_dest.begin();
-             it != m_dest.end(); it++)
-          (*it).dump(sink);
-      sink.print(",");
-      if (m_src.empty())
-        sink.print(" null");
-      else
-        for (vector<ezAddress>::iterator it = m_src.begin(); it != m_src.end();
-             it++)
-          (*it).dump(sink);
-      sink.print("\n");
-    }
-  };
   m_instruction.push_back(new ezInstrMv(dest, src));
 }
 

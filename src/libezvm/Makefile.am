@@ -2,9 +2,6 @@ lib_LTLIBRARIES=libezvm.la
 
 libezvm_la_SOURCES=ezgc.cc \
 		   ezalu.cc \
-		   asm/ezasm.cc \
-		   asm/ezasm_proc.cc \
-		   asm/ezasm_instr.cc \
 		   ezsegment.cc \
 		   stack.cc \
 		   thread.cc \
@@ -17,7 +14,11 @@ libezvm_la_SOURCES=ezgc.cc \
 		   object/ezobj_array.cc \
 		   value/ezval.cc \
 		   utility/ezfile.cc \
-		   utility/ezlog.cc
+		   utility/ezlog.cc \
+		   asm/ezasm.cc \
+		   asm/ezasm_proc.cc \
+		   asm/ezasm_instr.cc \
+		   asm/instruction/ezinst_mv.cc
 
 includedir=$(prefix)/include/ezvm
 
