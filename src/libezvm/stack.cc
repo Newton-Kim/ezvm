@@ -227,49 +227,6 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
 }
 */
 
-void ezStackFrame::calculate_unary(
-    ezAddress &dest, ezAddress &src,
-    function<ezValue *(ezALU *, ezValue *)> func) {
-  ezValue *v = NULL, *rst = NULL;
-  v = (ezValue *)addr2val(src);
-  rst = func(m_alu, v);
-  val2addr(dest, rst);
-}
-
-void ezStackFrame::calculate_unary(
-    ezAddress &dest, ezAddress &cond, ezAddress &src,
-    function<ezValue *(ezALU *, ezValue *)> func) {
-  ezValue *v = NULL, *rst = NULL;
-  v = (ezValue *)addr2val(src);
-  rst = func(m_alu, v);
-  val2addr(dest, rst);
-  val2addr(cond, m_alu->condition(rst));
-}
-
-void ezStackFrame::negate(ezAddress &dest, ezAddress &src) {
-  calculate_unary(dest, src, [](ezALU *alu, ezValue *v) -> ezValue * {
-    return alu->negate(v);
-  });
-}
-
-void ezStackFrame::negate(ezAddress &dest, ezAddress &cond, ezAddress &src) {
-  calculate_unary(dest, cond, src, [](ezALU *alu, ezValue *v) -> ezValue * {
-    return alu->negate(v);
-  });
-}
-
-void ezStackFrame::b_not(ezAddress &dest, ezAddress &src) {
-  calculate_unary(dest, src, [](ezALU *alu, ezValue *v) -> ezValue * {
-    return alu->bitwise_not(v);
-  });
-}
-
-void ezStackFrame::b_not(ezAddress &dest, ezAddress &cond, ezAddress &src) {
-  calculate_unary(dest, cond, src, [](ezALU *alu, ezValue *v) -> ezValue * {
-    return alu->bitwise_not(v);
-  });
-}
-
 void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {

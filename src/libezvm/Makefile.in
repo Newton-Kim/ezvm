@@ -141,6 +141,7 @@ am_libezvm_la_OBJECTS = ezgc.lo ezalu.lo ezsegment.lo stack.lo \
 	utility/ezfile.lo utility/ezlog.lo asm/ezasm.lo \
 	asm/ezasm_proc.lo asm/ezasm_instr.lo \
 	asm/instruction/ezinst_mv.lo asm/instruction/ezinst_cmp.lo \
+	asm/instruction/ezinst_unary_operation.lo \
 	asm/instruction/ezinst_binary_operation.lo
 libezvm_la_OBJECTS = $(am_libezvm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -173,6 +174,7 @@ am__depfiles_remade = ./$(DEPDIR)/ezalu.Plo ./$(DEPDIR)/ezgc.Plo \
 	asm/instruction/$(DEPDIR)/ezinst_binary_operation.Plo \
 	asm/instruction/$(DEPDIR)/ezinst_cmp.Plo \
 	asm/instruction/$(DEPDIR)/ezinst_mv.Plo \
+	asm/instruction/$(DEPDIR)/ezinst_unary_operation.Plo \
 	object/$(DEPDIR)/ezobj.Plo object/$(DEPDIR)/ezobj_array.Plo \
 	object/$(DEPDIR)/ezobj_condition.Plo \
 	object/$(DEPDIR)/ezobj_function.Plo \
@@ -374,6 +376,7 @@ libezvm_la_SOURCES = ezgc.cc \
 		   asm/ezasm_instr.cc \
 		   asm/instruction/ezinst_mv.cc \
 		   asm/instruction/ezinst_cmp.cc \
+		   asm/instruction/ezinst_unary_operation.cc \
 		   asm/instruction/ezinst_binary_operation.cc
 
 nobase_include_HEADERS = ../../include/ezvm/ezaddr.h \
@@ -519,6 +522,9 @@ asm/instruction/ezinst_mv.lo: asm/instruction/$(am__dirstamp) \
 	asm/instruction/$(DEPDIR)/$(am__dirstamp)
 asm/instruction/ezinst_cmp.lo: asm/instruction/$(am__dirstamp) \
 	asm/instruction/$(DEPDIR)/$(am__dirstamp)
+asm/instruction/ezinst_unary_operation.lo:  \
+	asm/instruction/$(am__dirstamp) \
+	asm/instruction/$(DEPDIR)/$(am__dirstamp)
 asm/instruction/ezinst_binary_operation.lo:  \
 	asm/instruction/$(am__dirstamp) \
 	asm/instruction/$(DEPDIR)/$(am__dirstamp)
@@ -555,6 +561,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@asm/instruction/$(DEPDIR)/ezinst_binary_operation.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/instruction/$(DEPDIR)/ezinst_cmp.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@asm/instruction/$(DEPDIR)/ezinst_mv.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@asm/instruction/$(DEPDIR)/ezinst_unary_operation.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_array.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@object/$(DEPDIR)/ezobj_condition.Plo@am__quote@ # am--include-marker
@@ -780,6 +787,7 @@ distclean: distclean-am
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_binary_operation.Plo
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_cmp.Plo
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_mv.Plo
+	-rm -f asm/instruction/$(DEPDIR)/ezinst_unary_operation.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
 	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo
@@ -846,6 +854,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_binary_operation.Plo
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_cmp.Plo
 	-rm -f asm/instruction/$(DEPDIR)/ezinst_mv.Plo
+	-rm -f asm/instruction/$(DEPDIR)/ezinst_unary_operation.Plo
 	-rm -f object/$(DEPDIR)/ezobj.Plo
 	-rm -f object/$(DEPDIR)/ezobj_array.Plo
 	-rm -f object/$(DEPDIR)/ezobj_condition.Plo

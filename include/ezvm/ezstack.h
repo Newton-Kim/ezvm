@@ -149,16 +149,8 @@ private:
   void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
                      ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
 		     */
-  void calculate_unary(ezAddress &dest, ezAddress &src,
-                       function<ezValue *(ezALU *, ezValue *)> func);
-  void calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src,
-                       function<ezValue *(ezALU *, ezValue *)> func);
 
 public:
-  void negate(ezAddress &dest, ezAddress &src);
-  void negate(ezAddress &dest, ezAddress &cond, ezAddress &src);
-  void b_not(ezAddress &dest, ezAddress &src);
-  void b_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
   /*
     void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
     void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress

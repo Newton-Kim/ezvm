@@ -2,6 +2,7 @@
 #include "ezvm/ezstack.h"
 
 #include "asm/instruction/ezinst_binary_operation.h"
+#include "asm/instruction/ezinst_unary_operation.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_cmp.h"
 
@@ -310,93 +311,37 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
-  class ezInstrNeg : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_org;
-
-  public:
-    ezInstrNeg(const ezAddress dest, const ezAddress org)
-        : m_dest(dest), m_org(org) {}
-    void process(ezStackFrame &stk) { stk.negate(m_dest, m_org); }
-    void dump(ezFile &sink) {
-      sink.print("neg");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_org.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrNeg(dest, org));
+  m_instruction.push_back(new ezInstrUnaryOperation(
+      m_alu, dest, org, "neg",
+      [](ezALU *alu, ezValue *v) -> ezValue * {
+        return alu->negate(v);
+      }));
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
                            const ezAddress org) {
-  class ezInstrNeg : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_org;
-
-  public:
-    ezInstrNeg(const ezAddress dest, const ezAddress cond, const ezAddress org)
-        : m_dest(dest), m_cond(cond), m_org(org) {}
-    void process(ezStackFrame &stk) { stk.negate(m_dest, m_cond, m_org); }
-    void dump(ezFile &sink) {
-      sink.print("neg");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_org.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrNeg(dest, cond, org));
+  m_instruction.push_back(new ezInstrUnaryOperationWithCond(
+      m_alu, dest, cond, org, "neg",
+      [](ezALU *alu, ezValue *v) -> ezValue * {
+        return alu->negate(v);
+      }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {
-  class ezInstrNot : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_org;
-
-  public:
-    ezInstrNot(const ezAddress dest, const ezAddress org)
-        : m_dest(dest), m_org(org) {}
-    void process(ezStackFrame &stk) { stk.b_not(m_dest, m_org); }
-    void dump(ezFile &sink) {
-      sink.print("not");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_org.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrNot(dest, org));
+  m_instruction.push_back(new ezInstrUnaryOperation(
+      m_alu, dest, org, "not",
+      [](ezALU *alu, ezValue *v) -> ezValue * {
+        return alu->bitwise_not(v);
+      }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
                                    const ezAddress org) {
-  class ezInstrNot : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_org;
-
-  public:
-    ezInstrNot(const ezAddress dest, const ezAddress cond, const ezAddress org)
-        : m_dest(dest), m_cond(cond), m_org(org) {}
-    void process(ezStackFrame &stk) { stk.b_not(m_dest, m_cond, m_org); }
-    void dump(ezFile &sink) {
-      sink.print("not");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_org.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrNot(dest, cond, org));
+  m_instruction.push_back(new ezInstrUnaryOperationWithCond(
+      m_alu, dest, cond, org, "not",
+      [](ezALU *alu, ezValue *v) -> ezValue * {
+        return alu->bitwise_not(v);
+      }));
 }
 
 void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
