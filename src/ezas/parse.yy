@@ -224,7 +224,7 @@ proc : PROC SYMBOL '(' INTEGER ')' NEWLINE {
 			s_proc_current->validate();
 			delete s_proc_current;
 		}
-		s_instr_current = new ezAsmInstruction;
+		s_instr_current = new ezAsmInstruction(&s_alu);
 		s_proc_current = s_vm.assembler().new_proc($2, s_scope);
 		s_proc_current->args($4);
 		s_proc_current->mems(s_memories);

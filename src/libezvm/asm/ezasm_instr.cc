@@ -2,62 +2,21 @@
 #include "ezvm/ezstack.h"
 
 #include "asm/instruction/ezinst_mv.h"
+#include "asm/instruction/ezinst_add.h"
 
 using namespace std;
 
-ezAsmInstruction::ezAsmInstruction() {}
+ezAsmInstruction::ezAsmInstruction(ezALU *alu):m_alu(alu) {}
 ezAsmInstruction::~ezAsmInstruction() {}
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  class ezInstrAdd : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrAdd(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.add(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("add");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrAdd(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrAdd(m_alu, dest, lsrc, rsrc));
 }
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrAddWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrAddWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.add(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("add");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrAddWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrAddWithCond(m_alu, dest, cond, lsrc, rsrc));
 }
 
 void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress &lsrc,

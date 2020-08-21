@@ -162,8 +162,6 @@ public:
   void negate(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void b_not(ezAddress &dest, ezAddress &src);
   void b_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
-  void add(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void add(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void sub(ezAddress &dest, ezAddress &src1, ezAddress &src2);
   void sub(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   void mul(ezAddress &dest, ezAddress &src1, ezAddress &src2);

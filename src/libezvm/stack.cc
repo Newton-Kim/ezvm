@@ -115,21 +115,6 @@ void ezStackFrame::val2addr(ezAddress addr, ezObject *v) {
   ezGC::instance().add((ezGCObject *)v);
 }
 
-void ezStackFrame::add(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
-  calculate_binary(dest, src1, src2,
-                   [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-                     return alu->add(vl, vr);
-                   });
-}
-
-void ezStackFrame::add(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                       ezAddress &src2) {
-  calculate_binary(dest, cond, src1, src2,
-                   [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-                     return alu->add(vl, vr);
-                   });
-}
-
 void ezStackFrame::sub(ezAddress &dest, ezAddress &src1, ezAddress &src2) {
   calculate_binary(dest, src1, src2,
                    [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {

@@ -28,6 +28,7 @@
 #include "ezvm/ezfile.h"
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezval.h"
+#include "ezvm/ezalu.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -38,10 +39,11 @@ class ezAsmInstruction {
   friend class ezAsmProcedure;
 
 private:
+  ezALU *m_alu;
   vector<ezInstruction *> m_instruction;
 
 public:
-  ezAsmInstruction();
+  ezAsmInstruction(ezALU *alu);
   virtual ~ezAsmInstruction();
   /**
    * @brief creates an add instruction. See add of ezas.
