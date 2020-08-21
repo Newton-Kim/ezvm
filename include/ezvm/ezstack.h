@@ -83,6 +83,7 @@ private:
   vector<vector<ezObject *> *> m_memory;
   ezALU *m_alu;
   void initialise(ezStackFrame *caller, vector<ezObject *> &args);
+
 public:
   void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
   /**
@@ -107,6 +108,7 @@ public:
    * @param v is an array of values.
    */
   void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
+
 private:
   /**
    * @brief invokes a native carousel.
@@ -141,17 +143,12 @@ private:
   void call(ezFunction *func, vector<ezObject *> &args);
   void conditional_bra(ezAddress &cond, size_t index,
                        function<bool(ezCondition *)> func);
+  /*
   void test_equality(ezAddress &rst, ezAddress &lsrc, ezAddress &rsrc,
                      function<ezValue *(ezCondition *)> func);
   void test_equality(ezAddress &rst, ezAddress &cond, ezAddress &lsrc,
                      ezAddress &rsrc, function<ezValue *(ezCondition *)> func);
-  void
-  calculate_binary(ezAddress &dest, ezAddress &src1, ezAddress &src2,
-                   function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
-  void
-  calculate_binary(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-                   ezAddress &src2,
-                   function<ezValue *(ezALU *, ezValue *, ezValue *)> func);
+		     */
   void calculate_unary(ezAddress &dest, ezAddress &src,
                        function<ezValue *(ezALU *, ezValue *)> func);
   void calculate_unary(ezAddress &dest, ezAddress &cond, ezAddress &src,
@@ -162,29 +159,6 @@ public:
   void negate(ezAddress &dest, ezAddress &cond, ezAddress &src);
   void b_not(ezAddress &dest, ezAddress &src);
   void b_not(ezAddress &dest, ezAddress &cond, ezAddress &src);
-  void sub(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void sub(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void mul(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void mul(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void div(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void div(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void mod(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void mod(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void cmp(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void pwr(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void pwr(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void b_and(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void b_and(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-             ezAddress &src2);
-  void b_or(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void b_or(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void b_xor(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void b_xor(ezAddress &dest, ezAddress &cond, ezAddress &src1,
-             ezAddress &src2);
-  void lsl(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void lsl(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
-  void lsr(ezAddress &dest, ezAddress &src1, ezAddress &src2);
-  void lsr(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   /*
     void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
     void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress

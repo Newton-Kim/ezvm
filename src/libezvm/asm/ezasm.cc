@@ -85,7 +85,7 @@ size_t ezASM::constant_null(void) {
 }
 
 size_t ezASM::constant(ezValue *arg) {
-  ezALU* alu = ezALUImplementor::instance()->get_alu();
+  ezALU *alu = ezALUImplementor::instance()->get_alu();
   for (size_t i = 0; i < m_constants.size(); i++) {
     ezObject *v = m_constants[i];
     if (v->type == EZ_OBJECT_TYPE_VALUE && alu->is_equal((ezValue *)v, arg))

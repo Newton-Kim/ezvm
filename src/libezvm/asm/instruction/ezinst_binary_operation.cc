@@ -1,11 +1,13 @@
 #include "ezinst_binary_operation.h"
-#include "ezvm/ezstack.h"
 #include "ezvm/ezlog.h"
+#include "ezvm/ezstack.h"
 
-ezInstrBinaryOperation::ezInstrBinaryOperation(ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc, const string name,
-	       function<ezValue *(ezALU *, ezValue *, ezValue *)> func)
-        : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
+ezInstrBinaryOperation::ezInstrBinaryOperation(
+    ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
+    const ezAddress &rsrc, const string name,
+    function<ezValue *(ezALU *, ezValue *, ezValue *)> func)
+    : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_lsrc(lsrc),
+      m_rsrc(rsrc) {}
 
 void ezInstrBinaryOperation::process(ezStackFrame &stk) {
   ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
@@ -15,18 +17,20 @@ void ezInstrBinaryOperation::process(ezStackFrame &stk) {
 }
 
 void ezInstrBinaryOperation::dump(ezFile &sink) {
-      sink.print(m_name.c_str());
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
+  sink.print(m_name.c_str());
+  m_dest.dump(sink);
+  sink.print(",");
+  m_lsrc.dump(sink);
+  m_rsrc.dump(sink);
+  sink.print("\n");
 }
 
-ezInstrBinaryOperationWithCond::ezInstrBinaryOperationWithCond(ezALU *alu, const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc, const string name,
-	               function<ezValue *(ezALU *, ezValue *, ezValue *)> func)
-        : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
+ezInstrBinaryOperationWithCond::ezInstrBinaryOperationWithCond(
+    ezALU *alu, const ezAddress dest, const ezAddress cond,
+    const ezAddress &lsrc, const ezAddress &rsrc, const string name,
+    function<ezValue *(ezALU *, ezValue *, ezValue *)> func)
+    : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_cond(cond),
+      m_lsrc(lsrc), m_rsrc(rsrc) {}
 
 void ezInstrBinaryOperationWithCond::process(ezStackFrame &stk) {
   ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
@@ -37,12 +41,11 @@ void ezInstrBinaryOperationWithCond::process(ezStackFrame &stk) {
 }
 
 void ezInstrBinaryOperationWithCond::dump(ezFile &sink) {
-      sink.print(m_name.c_str());
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
+  sink.print(m_name.c_str());
+  m_dest.dump(sink);
+  m_cond.dump(sink);
+  sink.print(",");
+  m_lsrc.dump(sink);
+  m_rsrc.dump(sink);
+  sink.print("\n");
 }
-

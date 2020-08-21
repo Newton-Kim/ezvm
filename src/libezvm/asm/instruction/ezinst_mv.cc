@@ -1,6 +1,6 @@
 #include "ezinst_mv.h"
-#include "ezvm/ezstack.h"
 #include "ezvm/ezlog.h"
+#include "ezvm/ezstack.h"
 
 ezInstrMv::ezInstrMv(vector<ezAddress> &dest, vector<ezAddress> &src)
     : m_dest(dest), m_src(src) {}

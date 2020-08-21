@@ -19,6 +19,7 @@ libezvm_la_SOURCES=ezgc.cc \
 		   asm/ezasm_proc.cc \
 		   asm/ezasm_instr.cc \
 		   asm/instruction/ezinst_mv.cc \
+		   asm/instruction/ezinst_cmp.cc \
 		   asm/instruction/ezinst_binary_operation.cc
 
 includedir=$(prefix)/include/ezvm

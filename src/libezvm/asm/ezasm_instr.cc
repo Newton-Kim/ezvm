@@ -1,77 +1,50 @@
 #include "ezvm/asm/ezasm_instr.h"
 #include "ezvm/ezstack.h"
 
-#include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_binary_operation.h"
+#include "asm/instruction/ezinst_mv.h"
+#include "asm/instruction/ezinst_cmp.h"
 
 using namespace std;
 
-ezAsmInstruction::ezAsmInstruction(ezALU *alu):m_alu(alu) {}
+ezAsmInstruction::ezAsmInstruction(ezALU *alu) : m_alu(alu) {}
 ezAsmInstruction::~ezAsmInstruction() {}
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  m_instruction.push_back(new ezInstrBinaryOperation(m_alu, dest, lsrc, rsrc, "add", [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue *{return alu->add(vl, vr); }));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "add",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->add(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  m_instruction.push_back(new ezInstrBinaryOperationWithCond(m_alu, dest, cond, lsrc, rsrc, "add", [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue *{return alu->add(vl, vr); }));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "add",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->add(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress &lsrc,
                                    const ezAddress &rsrc) {
-  class ezInstrAnd : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrAnd(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.b_and(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("and");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrAnd(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "and",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_and(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress cond,
                                    const ezAddress &lsrc,
                                    const ezAddress &rsrc) {
-  class ezInstrAndWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrAndWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) {
-      stk.b_and(m_dest, m_cond, m_lsrc, m_rsrc);
-    }
-    void dump(ezFile &sink) {
-      sink.print("and");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrAndWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "and",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_and(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::beq(const ezAddress cond, size_t offset) {
@@ -225,79 +198,25 @@ void ezAsmInstruction::call(const ezAddress &func, vector<ezAddress> &args) {
 
 void ezAsmInstruction::cmp(const ezAddress &cond, const ezAddress &larg,
                            const ezAddress &rarg) {
-  class ezInstrCmp : public ezInstruction {
-  private:
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrCmp(const ezAddress cond, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.cmp(m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("cmp");
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrCmp(cond, larg, rarg));
+  m_instruction.push_back(new ezInstrCmp(m_alu, cond, larg, rarg));
 }
 
 void ezAsmInstruction::div(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  class ezInstrDiv : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrDiv(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.div(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("div");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrDiv(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "div",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->divide(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::div(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrDivWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrDivWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.div(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("div");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrDivWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "div",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->divide(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::fgc(void) {
@@ -312,214 +231,74 @@ void ezAsmInstruction::fgc(void) {
 
 void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress obj,
                            const ezAddress offset) {
-  class ezInstrLsl : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_obj;
-    ezAddress m_offset;
-
-  public:
-    ezInstrLsl(const ezAddress dest, const ezAddress &obj,
-               const ezAddress &offset)
-        : m_dest(dest), m_obj(obj), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.lsl(m_dest, m_obj, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("lsl");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_obj.dump(sink);
-      m_offset.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrLsl(dest, obj, offset));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, obj, offset, "lsl",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsl(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress cond,
                            const ezAddress obj, const ezAddress offset) {
-  class ezInstrLslWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_obj;
-    ezAddress m_offset;
-
-  public:
-    ezInstrLslWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &obj, const ezAddress &offset)
-        : m_dest(dest), m_cond(cond), m_obj(obj), m_offset(offset) {}
-    void process(ezStackFrame &stk) {
-      stk.lsl(m_dest, m_cond, m_obj, m_offset);
-    }
-    void dump(ezFile &sink) {
-      sink.print("lsl");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_obj.dump(sink);
-      m_offset.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrLslWithCond(dest, cond, obj, offset));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, obj, offset, "lsl",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsl(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress obj,
                            const ezAddress offset) {
-  class ezInstrLsr : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_obj;
-    ezAddress m_offset;
-
-  public:
-    ezInstrLsr(const ezAddress dest, const ezAddress &obj,
-               const ezAddress &offset)
-        : m_dest(dest), m_obj(obj), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.lsr(m_dest, m_obj, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("lsr");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_obj.dump(sink);
-      m_offset.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrLsr(dest, obj, offset));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, obj, offset, "lsr",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsr(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress cond,
                            const ezAddress obj, const ezAddress offset) {
-  class ezInstrLsrWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_obj;
-    ezAddress m_offset;
-
-  public:
-    ezInstrLsrWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &obj, const ezAddress &offset)
-        : m_dest(dest), m_cond(cond), m_obj(obj), m_offset(offset) {}
-    void process(ezStackFrame &stk) {
-      stk.lsr(m_dest, m_cond, m_obj, m_offset);
-    }
-    void dump(ezFile &sink) {
-      sink.print("lsr");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_obj.dump(sink);
-      m_offset.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrLsrWithCond(dest, cond, obj, offset));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, obj, offset, "lsr",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->lsr(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::mod(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  class ezInstrMod : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrMod(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.mod(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("mod");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrMod(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "mod",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->modulate(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::mod(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrModWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrModWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.mod(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("mod");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrModWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "mod",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->modulate(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::mul(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  class ezInstrMul : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrMul(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.mul(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("mul");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrMul(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "mul",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->multiply(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::mul(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrMulWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrMulWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.mul(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("mul");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrMulWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "mul",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->multiply(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
@@ -622,109 +401,39 @@ void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
 
 void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
                                   const ezAddress &rsrc) {
-  class ezInstrOr : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrOr(const ezAddress dest, const ezAddress &lsrc,
-              const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.b_or(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("or");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrOr(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "or",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_or(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress cond,
                                   const ezAddress &lsrc,
                                   const ezAddress &rsrc) {
-  class ezInstrOrWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrOrWithCond(const ezAddress dest, const ezAddress cond,
-                      const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) {
-      stk.b_or(m_dest, m_cond, m_lsrc, m_rsrc);
-    }
-    void dump(ezFile &sink) {
-      sink.print("or");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrOrWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "or",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_or(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::powv(const ezAddress dest, const ezAddress &lsrc,
                             const ezAddress &rsrc) {
-  class ezInstrPow : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrPow(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.pwr(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("pow");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrPow(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "pow",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->power(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::powv(const ezAddress dest, const ezAddress cond,
                             const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrPowWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrPowWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.pwr(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("pow");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrPowWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "pow",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->power(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::ret(void) {
@@ -764,54 +473,20 @@ void ezAsmInstruction::ret(vector<ezAddress> &src) {
 
 void ezAsmInstruction::sub(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  class ezInstrSub : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrSub(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.sub(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("sub");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrSub(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "sub",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->subtract(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::sub(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  class ezInstrSubWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrSubWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.sub(m_dest, m_cond, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("sub");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrSubWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "sub",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->subtract(vl, vr);
+      }));
 }
 
 /*
@@ -997,57 +672,21 @@ void ezAsmInstruction::wait(const ezAddress &handle) {
 
 void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress &lsrc,
                                    const ezAddress &rsrc) {
-  class ezInstrXor : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrXor(const ezAddress dest, const ezAddress &lsrc,
-               const ezAddress &rsrc)
-        : m_dest(dest), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) { stk.b_xor(m_dest, m_lsrc, m_rsrc); }
-    void dump(ezFile &sink) {
-      sink.print("xor");
-      m_dest.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrXor(dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(
+      m_alu, dest, lsrc, rsrc, "xor",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_xor(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress cond,
                                    const ezAddress &lsrc,
                                    const ezAddress &rsrc) {
-  class ezInstrXorWithCond : public ezInstruction {
-  private:
-    ezAddress m_dest;
-    ezAddress m_cond;
-    ezAddress m_lsrc;
-    ezAddress m_rsrc;
-
-  public:
-    ezInstrXorWithCond(const ezAddress dest, const ezAddress cond,
-                       const ezAddress &lsrc, const ezAddress &rsrc)
-        : m_dest(dest), m_cond(cond), m_lsrc(lsrc), m_rsrc(rsrc) {}
-    void process(ezStackFrame &stk) {
-      stk.b_xor(m_dest, m_cond, m_lsrc, m_rsrc);
-    }
-    void dump(ezFile &sink) {
-      sink.print("xor");
-      m_dest.dump(sink);
-      m_cond.dump(sink);
-      sink.print(",");
-      m_lsrc.dump(sink);
-      m_rsrc.dump(sink);
-      sink.print("\n");
-    }
-  };
-  m_instruction.push_back(new ezInstrXorWithCond(dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(
+      m_alu, dest, cond, lsrc, rsrc, "xor",
+      [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
+        return alu->bitwise_xor(vl, vr);
+      }));
 }
 
 void ezAsmInstruction::user_command(ezInstruction *inst) {

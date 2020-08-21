@@ -25,10 +25,10 @@
 #pragma once
 
 #include "ezvm/ezaddr.h"
+#include "ezvm/ezalu.h"
 #include "ezvm/ezfile.h"
 #include "ezvm/ezinstruction.h"
 #include "ezvm/ezval.h"
-#include "ezvm/ezalu.h"
 #include <map>
 #include <string>
 #include <vector>

@@ -80,8 +80,7 @@ ezThread::ezThread(ezAddress entry, vector<ezObject *> &args,
   }
 }
 
-ezThread::~ezThread() {
-}
+ezThread::~ezThread() {}
 
 ezObject *ezThread::addr2val(ezAddress addr) {
   ezObject *v = NULL;
