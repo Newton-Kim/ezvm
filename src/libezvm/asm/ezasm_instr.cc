@@ -2,7 +2,7 @@
 #include "ezvm/ezstack.h"
 
 #include "asm/instruction/ezinst_mv.h"
-#include "asm/instruction/ezinst_add.h"
+#include "asm/instruction/ezinst_binary_operation.h"
 
 using namespace std;
 
@@ -11,12 +11,12 @@ ezAsmInstruction::~ezAsmInstruction() {}
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress &lsrc,
                            const ezAddress &rsrc) {
-  m_instruction.push_back(new ezInstrAdd(m_alu, dest, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperation(m_alu, dest, lsrc, rsrc, "add", [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue *{return alu->add(vl, vr); }));
 }
 
 void ezAsmInstruction::add(const ezAddress dest, const ezAddress cond,
                            const ezAddress &lsrc, const ezAddress &rsrc) {
-  m_instruction.push_back(new ezInstrAddWithCond(m_alu, dest, cond, lsrc, rsrc));
+  m_instruction.push_back(new ezInstrBinaryOperationWithCond(m_alu, dest, cond, lsrc, rsrc, "add", [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue *{return alu->add(vl, vr); }));
 }
 
 void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress &lsrc,
