@@ -1,10 +1,12 @@
 #include "ezvm/asm/ezasm_instr.h"
 #include "ezvm/ezstack.h"
+#include "ezvm/ezgc.h"
 
 #include "asm/instruction/ezinst_binary_operation.h"
 #include "asm/instruction/ezinst_unary_operation.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_cmp.h"
+#include "asm/instruction/ezinst_conditional_bra.h"
 
 using namespace std;
 
@@ -49,79 +51,23 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress cond,
 }
 
 void ezAsmInstruction::beq(const ezAddress cond, size_t offset) {
-  class ezInstrBeq : public ezInstruction {
-  private:
-    ezAddress m_cond;
-    size_t m_offset;
-
-  public:
-    ezInstrBeq(const ezAddress cond, size_t offset)
-        : m_cond(cond), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.beq(m_cond, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("beq");
-      m_cond.dump(sink);
-      sink.print(" %lu\n", m_offset);
-    }
-  };
-  m_instruction.push_back(new ezInstrBeq(cond, offset));
+  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "beq",
+			  [](ezCondition *v) -> bool { return v->zero; }));
 }
 
 void ezAsmInstruction::bge(const ezAddress cond, size_t offset) {
-  class ezInstrBge : public ezInstruction {
-  private:
-    ezAddress m_cond;
-    size_t m_offset;
-
-  public:
-    ezInstrBge(const ezAddress cond, size_t offset)
-        : m_cond(cond), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.bge(m_cond, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("bge");
-      m_cond.dump(sink);
-      sink.print(" %lu\n", m_offset);
-    }
-  };
-  m_instruction.push_back(new ezInstrBge(cond, offset));
+  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "bge",
+			  [](ezCondition *v) -> bool { return (v->zero || !v->negative); }));
 }
 
 void ezAsmInstruction::blt(const ezAddress cond, size_t offset) {
-  class ezInstrBlt : public ezInstruction {
-  private:
-    ezAddress m_cond;
-    size_t m_offset;
-
-  public:
-    ezInstrBlt(const ezAddress cond, size_t offset)
-        : m_cond(cond), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.blt(m_cond, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("blt");
-      m_cond.dump(sink);
-      sink.print(" %lu\n", m_offset);
-    }
-  };
-  m_instruction.push_back(new ezInstrBlt(cond, offset));
+  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "blt",
+			  [](ezCondition *v) -> bool { return v->negative; }));
 }
 
 void ezAsmInstruction::bne(const ezAddress cond, size_t offset) {
-  class ezInstrBlt : public ezInstruction {
-  private:
-    ezAddress m_cond;
-    size_t m_offset;
-
-  public:
-    ezInstrBlt(const ezAddress cond, size_t offset)
-        : m_cond(cond), m_offset(offset) {}
-    void process(ezStackFrame &stk) { stk.bne(m_cond, m_offset); }
-    void dump(ezFile &sink) {
-      sink.print("bne");
-      m_cond.dump(sink);
-      sink.print(" %lu\n", m_offset);
-    }
-  };
-  m_instruction.push_back(new ezInstrBlt(cond, offset));
+  m_instruction.push_back(new ezInstrConditionalBra( cond, offset, "beq",
+			  [](ezCondition *v) -> bool { return !v->zero; }));
 }
 
 void ezAsmInstruction::bra(size_t offset) {
@@ -224,7 +170,7 @@ void ezAsmInstruction::fgc(void) {
   class ezInstrFgc : public ezInstruction {
   public:
     ezInstrFgc() {}
-    void process(ezStackFrame &stk) { stk.fgc(); }
+    void process(ezStackFrame &stk) { ezGC::instance().force(); }
     void dump(ezFile &sink) { sink.print("fgc\n"); }
   };
   m_instruction.push_back(new ezInstrFgc());

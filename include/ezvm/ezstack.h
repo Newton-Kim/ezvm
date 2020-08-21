@@ -25,7 +25,6 @@
 #pragma once
 
 #include "ezaddr.h"
-#include "ezalu.h"
 #include "ezfunc.h"
 #include "ezsegment.h"
 #include "ezval.h"
@@ -81,33 +80,7 @@ private:
   ezAddress m_return_dest;
   ezStackFrameCallback *m_callback;
   vector<vector<ezObject *> *> m_memory;
-  ezALU *m_alu;
   void initialise(ezStackFrame *caller, vector<ezObject *> &args);
-
-public:
-  void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
-  /**
-   * @brief fetches a value from an address.
-   *
-   * @param addr is an address.
-   *
-   * @return A value.
-   */
-  ezObject *addr2val(ezAddress addr);
-  /**
-   * @brief places a value at an address.
-   *
-   * @param addr is an address to place v.
-   * @param v is a value.
-   */
-  void val2addr(ezAddress addr, ezObject *v);
-  /**
-   * @brief places values at respective addresses.
-   *
-   * @param addr is an array of addresses.
-   * @param v is an array of values.
-   */
-  void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
 
 private:
   /**
@@ -141,8 +114,6 @@ private:
    * @param args is a number of arguments which follows the func.
    */
   void call(ezFunction *func, vector<ezObject *> &args);
-  void conditional_bra(ezAddress &cond, size_t index,
-                       function<bool(ezCondition *)> func);
   /*
   void test_equality(ezAddress &rst, ezAddress &lsrc, ezAddress &rsrc,
                      function<ezValue *(ezCondition *)> func);
@@ -151,6 +122,30 @@ private:
 		     */
 
 public:
+  void addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr);
+  /**
+   * @brief fetches a value from an address.
+   *
+   * @param addr is an address.
+   *
+   * @return A value.
+   */
+  ezObject *addr2val(ezAddress addr);
+  /**
+   * @brief places a value at an address.
+   *
+   * @param addr is an address to place v.
+   * @param v is a value.
+   */
+  void val2addr(ezAddress addr, ezObject *v);
+  /**
+   * @brief places values at respective addresses.
+   *
+   * @param addr is an array of addresses.
+   * @param v is an array of values.
+   */
+  void val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals);
+
   /*
     void teq(ezAddress &dest, ezAddress &src1, ezAddress &src2);
     void teq(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress
@@ -161,10 +156,6 @@ public:
     &src2); void tne(ezAddress &dest, ezAddress &src1, ezAddress &src2); void
     tne(ezAddress &dest, ezAddress &cond, ezAddress &src1, ezAddress &src2);
   */
-  void beq(ezAddress &cond, size_t index);
-  void bge(ezAddress &cond, size_t index);
-  void blt(ezAddress &cond, size_t index);
-  void bne(ezAddress &cond, size_t index);
   void bra(size_t index);
   void ret(vector<ezAddress> &srcs);
   void call(ezAddress &func, vector<ezAddress> &args, ezAddress &ret);
@@ -173,10 +164,6 @@ public:
            ezAddress &handle);
   void thd(ezAddress &func, vector<ezAddress> &args, ezAddress &handle);
   void wait(ezAddress &handle);
-  void fgc(void);
-
-private:
-  void lsr(uint8_t ndests, uint8_t nsrcs, uint8_t offsets);
 
 public:
   /**

@@ -33,7 +33,7 @@ ezStackFrame::ezStackFrame(ezFunction *crsl, vector<ezObject *> &args,
                            ezAddress &ret, ezStackFrame *caller,
                            ezStackFrameCallback *callback)
     : m_pc(0), m_local(NULL), m_scope(NULL), m_return(NULL), m_carousel(crsl),
-      m_callback(callback), m_alu(NULL) {
+      m_callback(callback) {
   initialise(caller, args);
   m_return_dest = ret;
 }
@@ -72,9 +72,6 @@ void ezStackFrame::initialise(ezStackFrame *caller, vector<ezObject *> &args) {
   m_memory.push_back(&m_temporary);
   if (m_scope)
     m_memory.push_back(m_scope->to_vector());
-  m_alu = ezALUImplementor::instance()->get_alu();
-  if (!m_alu)
-    throw runtime_error("ALU is missing");
 }
 
 void ezStackFrame::addr2val(vector<ezObject *> &vals, vector<ezAddress> &addr) {
@@ -113,34 +110,6 @@ void ezStackFrame::val2addr(vector<ezAddress> &addr, vector<ezObject *> &vals) {
 void ezStackFrame::val2addr(ezAddress addr, ezObject *v) {
   m_memory[addr.segment]->operator[](addr.offset) = v;
   ezGC::instance().add((ezGCObject *)v);
-}
-
-void ezStackFrame::conditional_bra(ezAddress &cond, size_t index,
-                                   function<bool(ezCondition *)> func) {
-  ezObject *vcond = addr2val(cond);
-  if (vcond->type != EZ_OBJECT_TYPE_CONDITION)
-    throw runtime_error("The operation doesn't see condition");
-  if (func((ezCondition *)vcond))
-    bra(index);
-}
-
-void ezStackFrame::beq(ezAddress &cond, size_t index) {
-  conditional_bra(cond, index, [](ezCondition *cond) { return cond->zero; });
-}
-
-void ezStackFrame::bge(ezAddress &cond, size_t index) {
-  conditional_bra(cond, index, [](ezCondition *cond) {
-    return (cond->zero || !cond->negative);
-  });
-}
-
-void ezStackFrame::blt(ezAddress &cond, size_t index) {
-  conditional_bra(cond, index,
-                  [](ezCondition *cond) { return cond->negative; });
-}
-
-void ezStackFrame::bne(ezAddress &cond, size_t index) {
-  conditional_bra(cond, index, [](ezCondition *cond) { return !cond->zero; });
 }
 
 void ezStackFrame::bra(size_t index) {
@@ -226,8 +195,6 @@ void ezStackFrame::tne(ezAddress &dest, ezAddress &cond, ezAddress &src1,
   });
 }
 */
-
-void ezStackFrame::fgc(void) { ezGC::instance().force(); }
 
 void ezStackFrame::ret(vector<ezAddress> &srcs) {
   ezAddress dest, addr, cond;
