@@ -64,26 +64,3 @@ ezValue *ezALU::bitwise_not(ezValue *arg) {
   throw runtime_error("bitwise not is not defined");
 }
 
-class ezALUImplementorConcrete : public ezALUImplementor {
-private:
-  ezALU *m_alu;
-
-public:
-  ezALUImplementorConcrete();
-  ~ezALUImplementorConcrete();
-  void set_alu(ezALU *alu);
-  ezALU *get_alu(void);
-};
-
-ezALUImplementorConcrete::ezALUImplementorConcrete() : m_alu(NULL) {}
-
-ezALUImplementorConcrete::~ezALUImplementorConcrete() {}
-
-void ezALUImplementorConcrete::set_alu(ezALU *alu) { m_alu = alu; }
-
-ezALU *ezALUImplementorConcrete::get_alu(void) { return m_alu; }
-
-ezALUImplementor *ezALUImplementor::instance(void) {
-  static ezALUImplementorConcrete s_alu_impl;
-  return &s_alu_impl;
-}

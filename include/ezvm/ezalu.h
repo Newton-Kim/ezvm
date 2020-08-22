@@ -21,9 +21,3 @@ public:
   virtual ezValue *bitwise_not(ezValue *arg);
 };
 
-class ezALUImplementor {
-public:
-  static ezALUImplementor *instance(void);
-  virtual void set_alu(ezALU *alu) = 0;
-  virtual ezALU *get_alu(void) = 0;
-};

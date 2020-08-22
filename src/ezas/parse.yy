@@ -157,7 +157,7 @@ void yyerror (char const *s);
 
 using namespace std;
 static eaALU s_alu;
-static ezVM s_vm(&s_alu);
+static ezVM s_vm;
 static ezAsmProcedure* s_proc_current = NULL;
 static ezAsmInstruction* s_instr_current = NULL;
 static map<string, ezAsmProcedure *> s_global;
@@ -408,11 +408,11 @@ addrs : %empty | addrs ADDRESS {s_args_addr.push_back(ezAddress($2.segment, $2.o
 
 vars : %empty | vars var {s_args_var.push_back(ezAddress($2.segment, $2.offset));};
 
-var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezString($1));}
+var : STRING {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezString($1), &s_alu);}
 	| SYMBOL {$$.segment = EZ_ASM_SEGMENT_GLOBAL; $$.offset = s_vm.assembler().global($1);}
-	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezInteger($1));}
-	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezComplex(complex<double>(0, $1)));}
-	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezBool($1));}
+	| INTEGER {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezInteger($1), &s_alu);}
+	| COMPLEX {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezComplex(complex<double>(0, $1)), &s_alu);}
+	| BOOLEAN {$$.segment = EZ_ASM_SEGMENT_CONSTANT; $$.offset = s_vm.assembler().constant(new ezBool($1), &s_alu);}
 	| ADDRESS {$$ = $1;};
 %%
 

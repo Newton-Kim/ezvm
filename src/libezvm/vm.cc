@@ -32,9 +32,7 @@
 
 using namespace std;
 
-ezVM::ezVM(ezALU *alu) : m_pasm(NULL) {
-  ezALUImplementor *alu_impl = ezALUImplementor::instance();
-  alu_impl->set_alu(alu);
+ezVM::ezVM() : m_pasm(NULL) {
   ezGC::instance().subscribe(this);
   ezGC::instance().subscribe(&ezMemory::instance());
 }

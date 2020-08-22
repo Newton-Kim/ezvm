@@ -129,5 +129,5 @@ public:
    *
    * @return is an offset in a constant segment.
    */
-  size_t constant(ezValue *value);
+  size_t constant(ezValue *value, ezALU *alu);
 };
