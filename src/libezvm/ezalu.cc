@@ -64,19 +64,18 @@ ezValue *ezALU::bitwise_not(ezValue *arg) {
   throw runtime_error("bitwise not is not defined");
 }
 
-ezValue *ezALU::get(ezValue *ctn, ezValue* mbr) {
+ezValue *ezALU::get(ezValue *ctn, ezValue *mbr) {
   throw runtime_error("get is not defined");
 }
 
-ezValue *ezALU::get(ezValue *ctn, vector<ezValue*> mbr) {
+ezValue *ezALU::get(ezValue *ctn, vector<ezValue *> mbr) {
   throw runtime_error("get is not defined");
 }
 
-void ezALU::set(ezValue *ctn, ezValue* mbr, ezValue* val) {
+void ezALU::set(ezValue *ctn, ezValue *mbr, ezValue *val) {
   throw runtime_error("set is not defined");
 }
 
-void ezALU::set(ezValue *ctn, vector<ezValue*> mbr, ezValue* val) {
+void ezALU::set(ezValue *ctn, vector<ezValue *> mbr, ezValue *val) {
   throw runtime_error("set is not defined");
 }
-

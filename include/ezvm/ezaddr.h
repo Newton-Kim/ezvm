@@ -106,4 +106,7 @@ public:
   }
 };
 
-inline bool operator < (const ezAddress larg, const ezAddress rarg) { return (larg.segment < rarg.segment && larg.offset < rarg.offset) ? true : false; };
+inline bool operator<(const ezAddress larg, const ezAddress rarg) {
+  return (larg.segment < rarg.segment && larg.offset < rarg.offset) ? true
+                                                                    : false;
+};

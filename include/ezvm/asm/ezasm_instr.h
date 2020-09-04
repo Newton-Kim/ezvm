@@ -336,8 +336,12 @@ public:
                    const ezAddress &lsrc, const ezAddress &rsrc);
   void user_command(ezInstruction *inst);
   size_t size(void) { return m_instruction.size(); }
-  void get(const ezAddress dest, const ezAddress container, const ezAddress member);
-  void get(const ezAddress dest, const ezAddress container, vector<ezAddress> member);
-  void set(const ezAddress container, const ezAddress member, const ezAddress val);
-  void set(const ezAddress container, vector<ezAddress> member, const ezAddress val);
+  void get(const ezAddress dest, const ezAddress container,
+           const ezAddress member);
+  void get(const ezAddress dest, const ezAddress container,
+           vector<ezAddress> member);
+  void set(const ezAddress container, const ezAddress member,
+           const ezAddress val);
+  void set(const ezAddress container, vector<ezAddress> member,
+           const ezAddress val);
 };

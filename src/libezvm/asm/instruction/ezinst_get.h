@@ -10,9 +10,8 @@ private:
   ezAddress m_member;
 
 public:
-  ezInstrGet(
-      ezALU *alu, const ezAddress dest, const ezAddress &container,
-      const ezAddress &member);
+  ezInstrGet(ezALU *alu, const ezAddress dest, const ezAddress &container,
+             const ezAddress &member);
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };
@@ -25,10 +24,8 @@ private:
   vector<ezAddress> m_member;
 
 public:
-  ezInstrGetByArray(
-      ezALU *alu, const ezAddress dest, const ezAddress &container,
-      vector<ezAddress> &member);
+  ezInstrGetByArray(ezALU *alu, const ezAddress dest,
+                    const ezAddress &container, vector<ezAddress> &member);
   void process(ezStackFrame &stk);
   void dump(ezFile &sink);
 };
-

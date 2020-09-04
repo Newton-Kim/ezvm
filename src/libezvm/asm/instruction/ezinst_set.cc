@@ -1,11 +1,9 @@
 #include "ezinst_set.h"
 #include "ezvm/ezstack.h"
 
-ezInstrSet::ezInstrSet(
-    ezALU *alu, const ezAddress &container,
-    const ezAddress &member, const ezAddress val)
-    : m_alu(alu), m_container(container), m_member(member), m_val(val) {
-}
+ezInstrSet::ezInstrSet(ezALU *alu, const ezAddress &container,
+                       const ezAddress &member, const ezAddress val)
+    : m_alu(alu), m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSet::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
@@ -24,17 +22,18 @@ void ezInstrSet::dump(ezFile &sink) {
   sink.print("\n");
 }
 
-ezInstrSetByArray::ezInstrSetByArray(
-    ezALU *alu, const ezAddress &container,
-    vector<ezAddress> &member, const ezAddress val)
+ezInstrSetByArray::ezInstrSetByArray(ezALU *alu, const ezAddress &container,
+                                     vector<ezAddress> &member,
+                                     const ezAddress val)
     : m_alu(alu), m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSetByArray::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
-  vector<ezValue*>vm;
+  vector<ezValue *> vm;
   ezValue *vme = NULL;
-  for(vector<ezAddress>::iterator it = m_member.begin() ; it != m_member.end(); it++) {
-    vme = (ezValue*)stk.addr2val(*it);
+  for (vector<ezAddress>::iterator it = m_member.begin(); it != m_member.end();
+       it++) {
+    vme = (ezValue *)stk.addr2val(*it);
     vm.push_back(vme);
   }
   ezValue *vv = (ezValue *)stk.addr2val(m_val);
@@ -52,5 +51,3 @@ void ezInstrSetByArray::dump(ezFile &sink) {
   m_val.dump(sink);
   sink.print("\n");
 }
-
-
