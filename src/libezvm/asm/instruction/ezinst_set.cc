@@ -31,8 +31,12 @@ ezInstrSetByArray::ezInstrSetByArray(
 
 void ezInstrSetByArray::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
-  vector<ezObject *>vm;
-  stk.addr2val(vm, m_member);
+  vector<ezValue*>vm;
+  ezValue *vme = NULL;
+  for(vector<ezAddress>::iterator it = m_member.begin() ; it != m_member.end(); it++) {
+    vme = (ezValue*)stk.addr2val(*it);
+    vm.push_back(vme);
+  }
   ezValue *vv = (ezValue *)stk.addr2val(m_val);
   m_alu->set(vc, vm, vv);
 }

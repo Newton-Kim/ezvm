@@ -31,8 +31,12 @@ ezInstrGetByArray::ezInstrGetByArray(
 
 void ezInstrGetByArray::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
-  vector<ezObject*>vm;
-  stk.addr2val(vm, m_member);
+  ezValue *vme = NULL;
+  vector<ezValue*>vm;
+  for(vector<ezAddress>::iterator it = m_member.begin() ; it != m_member.end(); it++) {
+    vme = (ezValue *)stk.addr2val(*it);
+    vm.push_back(vme);
+  }
   ezValue *rst = m_alu->get(vc, vm);
   stk.val2addr(m_dest, rst);
 }

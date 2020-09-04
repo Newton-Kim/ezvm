@@ -20,8 +20,8 @@ public:
   virtual ezValue *negate(ezValue *arg);
   virtual ezValue *bitwise_not(ezValue *arg);
   virtual ezValue *get(ezValue *ctn, ezValue* mbr);
-  virtual ezValue *get(ezValue *ctn, vector<ezObject*> mbr);
+  virtual ezValue *get(ezValue *ctn, vector<ezValue*> mbr);
   virtual void set(ezValue *ctn, ezValue* mbr, ezValue* val);
-  virtual void set(ezValue *ctn, vector<ezObject*> mbr, ezValue* val);
+  virtual void set(ezValue *ctn, vector<ezValue*> mbr, ezValue* val);
 };
 
