@@ -21,6 +21,8 @@ libezvm_la_SOURCES=ezgc.cc \
 		   asm/instruction/ezinst_mv.cc \
 		   asm/instruction/ezinst_cmp.cc \
 		   asm/instruction/ezinst_call.cc \
+		   asm/instruction/ezinst_get.cc \
+		   asm/instruction/ezinst_set.cc \
 		   asm/instruction/ezinst_conditional_bra.cc \
 		   asm/instruction/ezinst_unary_operation.cc \
 		   asm/instruction/ezinst_binary_operation.cc

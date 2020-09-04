@@ -19,5 +19,9 @@ public:
   virtual bool is_equal(ezValue *argl, ezValue *argr);
   virtual ezValue *negate(ezValue *arg);
   virtual ezValue *bitwise_not(ezValue *arg);
+  virtual ezValue *get(ezValue *ctn, ezValue* mbr);
+  virtual ezValue *get(ezValue *ctn, vector<ezObject*> mbr);
+  virtual void set(ezValue *ctn, ezValue* mbr, ezValue* val);
+  virtual void set(ezValue *ctn, vector<ezObject*> mbr, ezValue* val);
 };
 

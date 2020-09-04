@@ -105,3 +105,5 @@ public:
     sink.print("%u", offset);
   }
 };
+
+inline bool operator < (const ezAddress larg, const ezAddress rarg) { return (larg.segment < rarg.segment && larg.offset < rarg.offset) ? true : false; };

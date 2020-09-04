@@ -8,6 +8,8 @@
 #include "asm/instruction/ezinst_conditional_bra.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_unary_operation.h"
+#include "asm/instruction/ezinst_get.h"
+#include "asm/instruction/ezinst_set.h"
 
 using namespace std;
 
@@ -529,3 +531,20 @@ void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress cond,
 void ezAsmInstruction::user_command(ezInstruction *inst) {
   m_instruction.push_back(inst);
 }
+
+void ezAsmInstruction::get(const ezAddress dest, const ezAddress container, const ezAddress member) {
+  m_instruction.push_back(new ezInstrGet(m_alu, dest, container, member));
+}
+
+void ezAsmInstruction::get(const ezAddress dest, const ezAddress container, vector<ezAddress> member) {
+  m_instruction.push_back(new ezInstrGetByArray(m_alu, dest, container, member));
+}
+
+void ezAsmInstruction::set(const ezAddress container, const ezAddress member, const ezAddress val) {
+  m_instruction.push_back(new ezInstrSet(m_alu, container, member, val));
+}
+
+void ezAsmInstruction::set(const ezAddress container, vector<ezAddress> member, const ezAddress val) {
+  m_instruction.push_back(new ezInstrSetByArray(m_alu, container, member, val));
+}
+
