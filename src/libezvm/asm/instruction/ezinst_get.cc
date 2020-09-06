@@ -8,7 +8,7 @@ ezInstrGet::ezInstrGet(ezALU *alu, const ezAddress dest,
 void ezInstrGet::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
   ezValue *vm = (ezValue *)stk.addr2val(m_member);
-  ezValue *rst = m_alu->get(vc, vm);
+  ezObject *rst = m_alu->get(vc, vm);
   stk.val2addr(m_dest, rst);
 }
 
@@ -36,7 +36,7 @@ void ezInstrGetByArray::process(ezStackFrame &stk) {
     vme = (ezValue *)stk.addr2val(*it);
     vm.push_back(vme);
   }
-  ezValue *rst = m_alu->get(vc, vm);
+  ezObject *rst = m_alu->get(vc, vm);
   stk.val2addr(m_dest, rst);
 }
 

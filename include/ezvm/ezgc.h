@@ -31,6 +31,7 @@
 
 using namespace std;
 
+//TODO: what about merging ezGCClient and ezGCObject?
 /**
  * @brief ezGCClient is an abtract object which contains ezGCObject.
  */
