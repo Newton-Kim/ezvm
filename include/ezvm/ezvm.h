@@ -24,10 +24,10 @@
  */
 #pragma once
 #include "asm/ezasm.h"
+#include "ezlog.h"
 #include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
-#include "ezlog.h"
 
 #include <list>
 #include <string>

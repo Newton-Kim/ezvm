@@ -47,7 +47,7 @@ private:
 
 protected:
   size_t m_size;
-  virtual void on_mark(void) {};
+  virtual void on_mark(void){};
 
 public:
   ezGCObject() : m_state(EZGC_OBJECT_STATE_GRAY) {}
@@ -62,7 +62,10 @@ public:
   /**
    * @brief sets the mark true.
    */
-  inline void mark(void) { on_mark(); m_state = EZGC_OBJECT_STATE_MARKED; }
+  inline void mark(void) {
+    on_mark();
+    m_state = EZGC_OBJECT_STATE_MARKED;
+  }
   /**
    * @brief sets the mark false.
    */
