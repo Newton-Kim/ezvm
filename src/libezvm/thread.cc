@@ -119,7 +119,6 @@ void ezThread::on_mark(void) {
        it != m_stack.end(); it++) {
     EZ_INFO("visiting 0x%x", *it);
     (*it)->mark();
-    (*it)->on_mark();
   }
 }
 

@@ -85,7 +85,7 @@ ezASM &ezVM::assembler(void) {
 void ezVM::on_mark(void) {
   for (list<ezThread *>::iterator it = m_threads.begin(); it != m_threads.end();
        it++)
-    (*it)->on_mark();
+    (*it)->mark();
 }
 
 size_t ezVM::thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,

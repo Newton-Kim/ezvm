@@ -31,16 +31,6 @@
 
 using namespace std;
 
-//TODO: what about merging ezGCClient and ezGCObject?
-/**
- * @brief ezGCClient is an abtract object which contains ezGCObject.
- */
-class ezGCClient {
-public:
-  virtual ~ezGCClient(){};
-  virtual void on_mark(void) = 0;
-};
-
 enum ezGCObjectState {
   EZGC_OBJECT_STATE_CLEARED = 0,
   EZGC_OBJECT_STATE_MARKED,
@@ -57,6 +47,7 @@ private:
 
 protected:
   size_t m_size;
+  virtual void on_mark(void) {};
 
 public:
   ezGCObject() : m_state(EZGC_OBJECT_STATE_GRAY) {}
@@ -71,7 +62,7 @@ public:
   /**
    * @brief sets the mark true.
    */
-  inline void mark(void) { m_state = EZGC_OBJECT_STATE_MARKED; }
+  inline void mark(void) { on_mark(); m_state = EZGC_OBJECT_STATE_MARKED; }
   /**
    * @brief sets the mark false.
    */
@@ -90,9 +81,9 @@ public:
 class ezGC {
 private:
   /**
-   * @brief m_clients is an array of ezGCClients.
+   * @brief m_clients is an array of ezGCObjects.
    */
-  vector<ezGCClient *> m_clients;
+  vector<ezGCObject *> m_clients;
   /**
    * @brief m+memories is an array of ezGCObjects.
    */
@@ -112,11 +103,11 @@ public:
    */
   void add(ezGCObject *v);
   /**
-   * @brief adds an instance of ezGCClient.
+   * @brief adds an instance of ezGCObject.
    *
-   * @param t is an instance of ezGCClient.
+   * @param t is an instance of ezGCObject.
    */
-  void subscribe(ezGCClient *t);
+  void subscribe(ezGCObject *t);
   /**
    * @brief forces to collect the garbage.
    */

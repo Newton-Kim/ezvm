@@ -27,6 +27,7 @@
 #include "ezobject.h"
 #include "eztable.h"
 #include "ezthread.h"
+#include "ezlog.h"
 
 #include <list>
 #include <string>
@@ -36,19 +37,21 @@ using namespace std;
 /**
  * @brief ezVM is the VM class
  */
-class ezVM : public ezGCClient, ezThreadCallback {
+class ezVM : public ezGCObject, ezThreadCallback {
 private:
   ezAddress m_entry;
   ezASM *m_pasm;
   // TODO:user defined dump should be pluggable.
   list<ezThread *> m_threads;
 
+protected:
+  void on_mark(void);
+
 public:
   ezVM();
   ~ezVM();
   void run(void);
   ezASM &assembler(void);
-  void on_mark(void);
   size_t thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,
              ezStackFrame *caller);
   size_t thd(ezAddress &func, vector<ezObject *> &args, ezStackFrame *caller);

@@ -49,7 +49,7 @@ public:
 /**
  * @brief ezThread is a stack of the instances of ezStackFrame.
  */
-class ezThread : public ezStackFrameCallback {
+class ezThread : public ezGCObject, ezStackFrameCallback {
 private:
   /**
    * @brief A procedure entry point
@@ -71,6 +71,9 @@ private:
    */
   ezStackFrame *m_caller;
   ezObject *addr2val(ezAddress addr);
+
+protected:
+  void on_mark(void);
 
 public:
   /**
@@ -99,7 +102,6 @@ public:
    * @return is a state which indicates if there is an instruction to run.
    */
   void run(void);
-  void on_mark(void);
   void call(ezStackFrame *sf);
   void end(ezAddress &dest, ezObject *vals);
   size_t thd(ezAddress &func, vector<ezObject *> &args, ezAddress &ret,

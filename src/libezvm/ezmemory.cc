@@ -37,7 +37,7 @@ void ezMemory::on_mark(void) {
       continue;
     (*it)->mark();
     if ((*it)->type == EZ_OBJECT_TYPE_FUNCTION)
-      ((ezFunction *)(*it))->on_mark();
+      ((ezFunction *)(*it))->mark();
   }
   for (vector<ezObject *>::iterator it = m_constants.begin();
        it != m_constants.end(); it++)

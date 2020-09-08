@@ -30,13 +30,15 @@
 
 using std::vector;
 
-class ezMemSegment : public ezGCObject, ezGCClient {
+class ezMemSegment : public ezGCObject {
 private:
   vector<ezObject *> m_memory;
+
+protected:
+  void on_mark(void);
 
 public:
   ezMemSegment(size_t size);
   ~ezMemSegment();
-  void on_mark(void);
   vector<ezObject *> *to_vector(void) { return &m_memory; }
 };

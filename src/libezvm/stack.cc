@@ -190,10 +190,8 @@ void ezStackFrame::step(void) {
 void ezStackFrame::on_mark(void) {
   EZ_INFO("start");
   m_local->mark();
-  m_local->on_mark();
   if (m_scope) {
     m_scope->mark();
-    m_scope->on_mark();
   }
   for (vector<ezObject *>::iterator it = m_temporary.begin();
        it != m_temporary.end(); it++) {

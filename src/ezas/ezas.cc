@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
         cerr << "error: logging target is missing" << endl;
         return 0;
       }
+      ezLog::instance()->set_log_level(EZ_LOG_ALL);
       break;
     case 'd':
       if (!optarg) {

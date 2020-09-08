@@ -32,6 +32,9 @@ class ezFunction : public ezObject {
 private:
   bool m_scope;
 
+protected:
+  void on_mark(void);
+
 public:
   uint8_t nargs;
   size_t nmems;
@@ -40,7 +43,6 @@ public:
   ~ezFunction();
   vector<ezInstruction *> instruction;
   ezTable<string, size_t> jmptbl;
-  void on_mark(void);
   bool is_scoped(void) { return m_scope; }
   void dump(ezFile &sink);
 };

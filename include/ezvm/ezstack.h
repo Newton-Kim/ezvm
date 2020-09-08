@@ -82,6 +82,9 @@ private:
   vector<vector<ezObject *> *> m_memory;
   void initialise(ezStackFrame *caller, vector<ezObject *> &args);
 
+protected:
+  void on_mark(void);
+
 public:
   /**
    * @brief invokes a carousel.
@@ -145,6 +148,5 @@ public:
    */
   ~ezStackFrame();
   void step(void); // the arguments are temporary ones.
-  void on_mark(void);
   void dump(ezFile &sink);
 };

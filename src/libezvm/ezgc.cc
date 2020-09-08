@@ -35,9 +35,9 @@ void ezGC::collect(void) {
   if (m_pause_count > 0)
     return;
   EZ_INFO("GC start");
-  for (typename vector<ezGCClient *>::iterator it = m_clients.begin();
+  for (typename vector<ezGCObject *>::iterator it = m_clients.begin();
        it != m_clients.end(); it++) {
-    (*it)->on_mark();
+    (*it)->mark();
   }
 
   typename list<ezGCObject *>::iterator it = m_memories.begin();
@@ -69,7 +69,7 @@ void ezGC::add(ezGCObject *v) {
     collect();
 }
 
-void ezGC::subscribe(ezGCClient *t) { m_clients.push_back(t); }
+void ezGC::subscribe(ezGCObject *t) { m_clients.push_back(t); }
 
 void ezGC::force(void) { collect(); }
 

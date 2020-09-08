@@ -28,14 +28,16 @@
 #include <ezvm/ezobject.h>
 #include <ezvm/eztable.h>
 
-class ezMemory : public ezGCClient {
+class ezMemory : public ezGCObject {
 private:
   ezTable<string, ezObject *> m_globals;
   vector<ezObject *> m_constants;
+
+protected:
+  void on_mark(void);
 
 public:
   static ezMemory &instance(void);
   ezTable<string, ezObject *> &globals(void) { return m_globals; }
   vector<ezObject *> &constants(void) { return m_constants; }
-  void on_mark(void);
 };
