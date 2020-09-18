@@ -69,7 +69,7 @@ public:
   complex<double> to_complex(void);
   string to_string(void);
   void dump(ezFile &sink);
-  ezValue* negate(void);
+  ezValue *negate(void);
 };
 
 class ezFloat : public eaValue {
@@ -81,7 +81,7 @@ public:
   complex<double> to_complex(void);
   string to_string(void);
   void dump(ezFile &sink);
-  ezValue* negate(void);
+  ezValue *negate(void);
 };
 
 class ezComplex : public eaValue {
@@ -91,7 +91,7 @@ public:
   complex<double> to_complex(void);
   string to_string(void);
   void dump(ezFile &sink);
-  ezValue* negate(void);
+  ezValue *negate(void);
 };
 
 class ezString : public eaValue {

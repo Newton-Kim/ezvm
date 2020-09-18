@@ -44,8 +44,6 @@ string ezInteger::to_string(void) {
   return ss.str();
 }
 
-ezValue* ezInteger::negate(void) {
-  return new ezInteger(-value);
-}
+ezValue *ezInteger::negate(void) { return new ezInteger(-value); }
 
 void ezInteger::dump(ezFile &sink) { sink.print("%d\n", value); }

@@ -50,6 +50,4 @@ void ezComplex::dump(ezFile &sink) {
   sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
 }
 
-ezValue* ezComplex::negate(void) {
-  return new ezComplex(-value);
-}
+ezValue *ezComplex::negate(void) { return new ezComplex(-value); }

@@ -33,5 +33,5 @@ public:
   const unsigned int id;
   ezValue(const unsigned int id);
   virtual ~ezValue();
-  virtual ezValue* negate(void);
+  virtual ezValue *negate(void);
 };

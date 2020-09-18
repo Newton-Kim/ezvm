@@ -63,4 +63,3 @@ ezMemory *ezMemory::instance(void) {
   static ezMemoryImpl s_memory;
   return &s_memory;
 }
-
