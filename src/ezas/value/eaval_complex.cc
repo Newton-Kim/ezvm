@@ -49,3 +49,7 @@ void ezComplex::dump(ezFile &sink) {
   double ci = value.imag();
   sink.print("%f %s %fj\n", cr, (ci > 0 ? "+" : "-"), ci);
 }
+
+ezValue* ezComplex::negate(void) {
+  return new ezComplex(-value);
+}

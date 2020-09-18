@@ -66,8 +66,8 @@ void ezStackFrame::initialise(ezStackFrame *caller, vector<ezObject *> &args) {
     (*m_local->to_vector())[i] = args[i];
   for (size_t i = 0; i < m_carousel->ntemps; i++)
     m_temporary.push_back(ezNull::instance());
-  m_memory.push_back(&(ezMemory::instance().globals().to_vector()));
-  m_memory.push_back(&ezMemory::instance().constants());
+  m_memory.push_back(&(ezMemory::instance()->globals().to_vector()));
+  m_memory.push_back(&ezMemory::instance()->constants());
   m_memory.push_back(m_local->to_vector());
   m_memory.push_back(&m_temporary);
   if (m_scope)

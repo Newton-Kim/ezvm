@@ -44,4 +44,8 @@ string ezFloat::to_string(void) {
   return ss.str();
 }
 
+ezValue* ezFloat::negate(void) {
+  return new ezFloat(-value);
+}
+
 void ezFloat::dump(ezFile &sink) {}

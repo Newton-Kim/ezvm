@@ -25,12 +25,27 @@
 #include "ezvm/ezmemory.h"
 #include "ezvm/ezfunc.h"
 
-ezMemory &ezMemory::instance(void) {
-  static ezMemory s_memory;
-  return s_memory;
-}
+class ezMemoryImpl : public ezMemory {
+private:
+  ezTable<string, ezObject *> m_globals;
+  vector<ezObject *> m_constants;
 
-void ezMemory::on_mark(void) {
+protected:
+  void on_mark(void);
+
+public:
+  ezMemoryImpl();
+  ezTable<string, ezObject *> &globals(void);
+  vector<ezObject *> &constants(void);
+};
+
+ezMemoryImpl::ezMemoryImpl() : m_globals(ezNull::instance()) {}
+
+ezTable<string, ezObject *> &ezMemoryImpl::globals(void) { return m_globals; }
+
+vector<ezObject *> &ezMemoryImpl::constants(void) { return m_constants; }
+
+void ezMemoryImpl::on_mark(void) {
   for (vector<ezObject *>::iterator it = m_globals.to_vector().begin();
        it != m_globals.to_vector().end(); it++) {
     if (*it == NULL)
@@ -43,3 +58,9 @@ void ezMemory::on_mark(void) {
        it != m_constants.end(); it++)
     (*it)->mark();
 }
+
+ezMemory *ezMemory::instance(void) {
+  static ezMemoryImpl s_memory;
+  return &s_memory;
+}
+

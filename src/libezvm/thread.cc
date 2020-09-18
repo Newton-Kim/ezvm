@@ -86,9 +86,9 @@ ezObject *ezThread::addr2val(ezAddress addr) {
   ezObject *v = NULL;
   if (addr.segment != EZ_ASM_SEGMENT_GLOBAL)
     throw runtime_error("invalid segment");
-  if (addr.offset >= ezMemory::instance().globals().size())
+  if (addr.offset >= ezMemory::instance()->globals().size())
     throw runtime_error("global memory access violation");
-  return ezMemory::instance().globals()[addr.offset];
+  return ezMemory::instance()->globals()[addr.offset];
 }
 
 void ezThread::run(void) {

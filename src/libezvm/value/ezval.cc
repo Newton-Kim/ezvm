@@ -33,3 +33,9 @@ ezValue::ezValue(const unsigned int tp)
   m_size = sizeof(*this);
 }
 ezValue::~ezValue() {}
+
+ezValue* ezValue::negate(void) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be negated";
+  throw runtime_error(ss.str());
+}

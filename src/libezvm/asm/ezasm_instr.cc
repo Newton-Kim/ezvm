@@ -215,14 +215,14 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperation(
       m_alu, dest, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->negate(v); }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return v->negate(); }));
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
                            const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperationWithCond(
       m_alu, dest, cond, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->negate(v); }));
+      [](ezALU *alu, ezValue *v) -> ezValue * { return v->negate(); }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {

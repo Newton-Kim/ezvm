@@ -34,7 +34,7 @@ using namespace std;
 
 ezVM::ezVM() : m_pasm(NULL) {
   ezGC::instance().subscribe(this);
-  ezGC::instance().subscribe(&ezMemory::instance());
+  ezGC::instance().subscribe(ezMemory::instance());
 }
 
 /** \page thread-model Threading model
@@ -120,7 +120,7 @@ void ezVM::dump(string path) {
   m_entry.dump(sink);
   sink.print("\n");
   sink.print("\n.global memory:\n");
-  ezTable<string, ezObject *> globals = ezMemory::instance().globals();
+  ezTable<string, ezObject *> globals = ezMemory::instance()->globals();
   size_t sz = globals.size();
   sink.print("  .size:%d\n", sz);
   for (size_t i = 0; i < sz; i++) {
@@ -133,17 +133,17 @@ void ezVM::dump(string path) {
   sink.print("\n");
   sink.print(".global symtab:\n");
   vector<string> symbols;
-  ezMemory::instance().globals().symbols(symbols);
+  ezMemory::instance()->globals().symbols(symbols);
   for (vector<string>::iterator it = symbols.begin(); it != symbols.end();
        it++) {
     sink.print("[_%s]=%lu\n", (*it).c_str(),
-               ezMemory::instance().globals()[*it]);
+               ezMemory::instance()->globals()[*it]);
   }
   sink.print("\n");
   sink.print(".constant:\n");
-  for (size_t i = 0; i < ezMemory::instance().constants().size(); i++) {
+  for (size_t i = 0; i < ezMemory::instance()->constants().size(); i++) {
     sink.print("[%lu]=", i);
-    sink, ezMemory::instance().constants()[i]->dump(sink);
+    sink, ezMemory::instance()->constants()[i]->dump(sink);
   }
   sink.print("\n");
   sink.print(".call stack:\n");

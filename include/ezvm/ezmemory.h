@@ -29,15 +29,8 @@
 #include <ezvm/eztable.h>
 
 class ezMemory : public ezGCObject {
-private:
-  ezTable<string, ezObject *> m_globals;
-  vector<ezObject *> m_constants;
-
-protected:
-  void on_mark(void);
-
 public:
-  static ezMemory &instance(void);
-  ezTable<string, ezObject *> &globals(void) { return m_globals; }
-  vector<ezObject *> &constants(void) { return m_constants; }
+  static ezMemory *instance(void);
+  virtual ezTable<string, ezObject *> &globals(void) = 0;
+  virtual vector<ezObject *> &constants(void) = 0;
 };

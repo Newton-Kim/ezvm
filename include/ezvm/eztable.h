@@ -36,8 +36,10 @@ template <class K, class V> class ezTable : public ezGCObject {
 private:
   map<K, size_t> m_symtab;
   vector<V> m_memory;
+  V m_nil;
 
 public:
+  ezTable(V nil);
   void reset(K key);
   size_t add(K key, V value);
   void push_back(V value);
@@ -49,6 +51,9 @@ public:
   vector<V> &to_vector(void) { return m_memory; }
   void symbols(vector<K> &arr);
 };
+
+template <class K, class V> ezTable<K, V>::ezTable(V nil) : m_nil(nil) {
+}
 
 template <class K, class V> void ezTable<K, V>::reset(K key) {
   if (m_symtab.end() == m_symtab.find(key)) {
@@ -69,10 +74,8 @@ template <class K, class V> size_t ezTable<K, V>::add(K key, V value) {
     return offset;
   }
   offset = m_symtab[key];
-  if (!m_memory[offset])
-    m_memory[offset] = value;
-  else
-    throw runtime_error("value already exists");
+  if(m_nil == m_memory[offset]) m_memory[offset] = value;
+  else throw runtime_error("value already exists");
   return offset;
 }
 

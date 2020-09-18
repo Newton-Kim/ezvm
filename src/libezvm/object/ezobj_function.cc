@@ -29,7 +29,7 @@
 
 ezFunction::ezFunction(bool scope)
     : ezObject(EZ_OBJECT_TYPE_FUNCTION), nargs(0), nmems(0), ntemps(0),
-      m_scope(scope) {
+      m_scope(scope), jmptbl(0) {
   m_size = sizeof(*this);
 }
 ezFunction::~ezFunction() {

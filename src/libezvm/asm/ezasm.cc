@@ -31,8 +31,8 @@
 using namespace std;
 
 ezASM::ezASM(ezAddress &entry)
-    : m_entry(entry), m_constants(ezMemory::instance().constants()),
-      m_globals(ezMemory::instance().globals()), m_gc(ezGC::instance()) {}
+    : m_entry(entry), m_constants(ezMemory::instance()->constants()),
+      m_globals(ezMemory::instance()->globals()), m_gc(ezGC::instance()) {}
 
 ezASM::~ezASM() {}
 
