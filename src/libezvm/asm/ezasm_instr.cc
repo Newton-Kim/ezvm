@@ -6,6 +6,7 @@
 #include "asm/instruction/ezinst_call.h"
 #include "asm/instruction/ezinst_cmp.h"
 #include "asm/instruction/ezinst_conditional_bra.h"
+#include "asm/instruction/ezinst_dup.h"
 #include "asm/instruction/ezinst_get.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_set.h"
@@ -550,4 +551,8 @@ void ezAsmInstruction::set(const ezAddress container, const ezAddress member,
 void ezAsmInstruction::set(const ezAddress container, vector<ezAddress> member,
                            const ezAddress val) {
   m_instruction.push_back(new ezInstrSetByArray(container, member, val));
+}
+
+void ezAsmInstruction::dup(const ezAddress dest, const ezAddress src) {
+  m_instruction.push_back(new ezInstrDup(dest, src));
 }

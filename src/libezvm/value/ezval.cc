@@ -105,3 +105,9 @@ void ezValue::set(vector<ezValue *> mbr, ezObject *val) {
   ss << "Type " << id << " is not container. So cannot set";
   throw runtime_error(ss.str());
 }
+
+ezValue *ezValue::duplicate(void) {
+  stringstream ss;
+  ss << "Type " << id << " does not be duplicated";
+  throw runtime_error(ss.str());
+}

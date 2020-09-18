@@ -45,4 +45,5 @@ public:
   virtual ezObject *get(vector<ezValue *> mbr);
   virtual void set(ezValue *mbr, ezObject *val);
   virtual void set(vector<ezValue *> mbr, ezObject *val);
+  virtual ezValue *duplicate(void);
 };
