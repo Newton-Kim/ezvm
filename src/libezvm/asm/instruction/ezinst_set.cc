@@ -1,15 +1,15 @@
 #include "ezinst_set.h"
 #include "ezvm/ezstack.h"
 
-ezInstrSet::ezInstrSet(ezALU *alu, const ezAddress &container,
-                       const ezAddress &member, const ezAddress val)
-    : m_alu(alu), m_container(container), m_member(member), m_val(val) {}
+ezInstrSet::ezInstrSet(const ezAddress &container, const ezAddress &member,
+                       const ezAddress val)
+    : m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSet::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
   ezValue *vm = (ezValue *)stk.addr2val(m_member);
   ezObject *vv = stk.addr2val(m_val);
-  m_alu->set(vc, vm, vv);
+  vc->set(vm, vv);
 }
 
 void ezInstrSet::dump(ezFile &sink) {
@@ -22,10 +22,10 @@ void ezInstrSet::dump(ezFile &sink) {
   sink.print("\n");
 }
 
-ezInstrSetByArray::ezInstrSetByArray(ezALU *alu, const ezAddress &container,
+ezInstrSetByArray::ezInstrSetByArray(const ezAddress &container,
                                      vector<ezAddress> &member,
                                      const ezAddress val)
-    : m_alu(alu), m_container(container), m_member(member), m_val(val) {}
+    : m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSetByArray::process(ezStackFrame &stk) {
   ezValue *vc = (ezValue *)stk.addr2val(m_container);
@@ -37,7 +37,7 @@ void ezInstrSetByArray::process(ezStackFrame &stk) {
     vm.push_back(vme);
   }
   ezObject *vv = stk.addr2val(m_val);
-  m_alu->set(vc, vm, vv);
+  vc->set(vm, vv);
 }
 
 void ezInstrSetByArray::dump(ezFile &sink) {

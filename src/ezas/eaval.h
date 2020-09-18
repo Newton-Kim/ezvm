@@ -58,6 +58,10 @@ public:
   ezBool(bool val);
   bool to_bool(void);
   void dump(ezFile &sink);
+  ezObject *compare(ezValue *arg);
+  ezObject *condition(void);
+  ezValue *bitwise_not(void);
+  bool is_equal(ezValue *arg);
 };
 
 class ezInteger : public eaValue {
@@ -70,6 +74,13 @@ public:
   string to_string(void);
   void dump(ezFile &sink);
   ezValue *negate(void);
+  ezValue *bitwise_not(void);
+  virtual ezValue *power(ezValue *arg);
+  virtual ezValue *lsl(ezValue *arg);
+  virtual ezValue *lsr(ezValue *arg);
+  virtual ezObject *compare(ezValue *arg);
+  virtual ezObject *condition(void);
+  virtual bool is_equal(ezValue *arg);
 };
 
 class ezFloat : public eaValue {
@@ -82,6 +93,10 @@ public:
   string to_string(void);
   void dump(ezFile &sink);
   ezValue *negate(void);
+  ezValue *power(ezValue *arg);
+  ezObject *compare(ezValue *arg);
+  ezObject *condition(void);
+  bool is_equal(ezValue *arg);
 };
 
 class ezComplex : public eaValue {
@@ -92,6 +107,10 @@ public:
   string to_string(void);
   void dump(ezFile &sink);
   ezValue *negate(void);
+  ezValue *power(ezValue *arg);
+  ezObject *compare(ezValue *arg);
+  ezObject *condition(void);
+  bool is_equal(ezValue *arg);
 };
 
 class ezString : public eaValue {
@@ -100,4 +119,7 @@ public:
   ezString(const string val);
   string to_string(void);
   void dump(ezFile &sink);
+  virtual ezObject *compare(ezValue *arg);
+  virtual ezObject *condition(void);
+  virtual bool is_equal(ezValue *arg);
 };

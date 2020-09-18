@@ -33,5 +33,16 @@ public:
   const unsigned int id;
   ezValue(const unsigned int id);
   virtual ~ezValue();
+  virtual ezValue *power(ezValue *arg);
   virtual ezValue *negate(void);
+  virtual ezValue *bitwise_not(void);
+  virtual ezValue *lsl(ezValue *arg);
+  virtual ezValue *lsr(ezValue *arg);
+  virtual ezObject *compare(ezValue *arg);
+  virtual ezObject *condition(void);
+  virtual bool is_equal(ezValue *arg);
+  virtual ezObject *get(ezValue *mbr);
+  virtual ezObject *get(vector<ezValue *> mbr);
+  virtual void set(ezValue *mbr, ezObject *val);
+  virtual void set(vector<ezValue *> mbr, ezObject *val);
 };

@@ -51,3 +51,25 @@ void ezComplex::dump(ezFile &sink) {
 }
 
 ezValue *ezComplex::negate(void) { return new ezComplex(-value); }
+
+ezValue *ezComplex::power(ezValue *arg) {
+  return new ezComplex(pow(value, ((eaValue *)arg)->to_complex()));
+}
+
+ezObject *ezComplex::compare(ezValue *arg) {
+  return new ezCondition(arg->id == EZ_VALUE_TYPE_COMPLEX &&
+                             value == ((eaValue *)arg)->to_complex(),
+                         false, false, false);
+}
+
+ezObject *ezComplex::condition(void) {
+  return new ezCondition(abs(value) ? false : true, false, false, false);
+}
+
+bool ezComplex::is_equal(ezValue *arg) {
+  if (EZ_VALUE_TYPE_COMPLEX != arg->id)
+    return false;
+  if (value != ((eaValue *)arg)->to_complex())
+    return false;
+  return true;
+}

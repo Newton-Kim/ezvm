@@ -137,7 +137,7 @@ void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress obj,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, obj, offset, "lsl",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->lsl(vl, vr);
+        return vl->lsl(vr);
       }));
 }
 
@@ -146,7 +146,7 @@ void ezAsmInstruction::lsl(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, obj, offset, "lsl",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->lsl(vl, vr);
+        return vl->lsl(vr);
       }));
 }
 
@@ -155,7 +155,7 @@ void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress obj,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, obj, offset, "lsr",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->lsr(vl, vr);
+        return vl->lsr(vr);
       }));
 }
 
@@ -164,7 +164,7 @@ void ezAsmInstruction::lsr(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, obj, offset, "lsr",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->lsr(vl, vr);
+        return vl->lsr(vr);
       }));
 }
 
@@ -214,28 +214,28 @@ void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperation(
-      m_alu, dest, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return v->negate(); }));
+      dest, org, "neg", [](ezValue *v) -> ezValue * { return v->negate(); }));
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress cond,
                            const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperationWithCond(
-      m_alu, dest, cond, org, "neg",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return v->negate(); }));
+      dest, cond, org, "neg",
+      [](ezValue *v) -> ezValue * { return v->negate(); }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress org) {
-  m_instruction.push_back(new ezInstrUnaryOperation(
-      m_alu, dest, org, "not",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); }));
+  m_instruction.push_back(
+      new ezInstrUnaryOperation(dest, org, "not", [](ezValue *v) -> ezValue * {
+        return v->bitwise_not();
+      }));
 }
 
 void ezAsmInstruction::bitwise_not(const ezAddress dest, const ezAddress cond,
                                    const ezAddress org) {
   m_instruction.push_back(new ezInstrUnaryOperationWithCond(
-      m_alu, dest, cond, org, "not",
-      [](ezALU *alu, ezValue *v) -> ezValue * { return alu->bitwise_not(v); }));
+      dest, cond, org, "not",
+      [](ezValue *v) -> ezValue * { return v->bitwise_not(); }));
 }
 
 void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
@@ -262,7 +262,7 @@ void ezAsmInstruction::powv(const ezAddress dest, const ezAddress &lsrc,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, lsrc, rsrc, "pow",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->power(vl, vr);
+        return vl->power(vr);
       }));
 }
 
@@ -271,7 +271,7 @@ void ezAsmInstruction::powv(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, lsrc, rsrc, "pow",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->power(vl, vr);
+        return vl->power(vr);
       }));
 }
 
@@ -534,21 +534,20 @@ void ezAsmInstruction::user_command(ezInstruction *inst) {
 
 void ezAsmInstruction::get(const ezAddress dest, const ezAddress container,
                            const ezAddress member) {
-  m_instruction.push_back(new ezInstrGet(m_alu, dest, container, member));
+  m_instruction.push_back(new ezInstrGet(dest, container, member));
 }
 
 void ezAsmInstruction::get(const ezAddress dest, const ezAddress container,
                            vector<ezAddress> member) {
-  m_instruction.push_back(
-      new ezInstrGetByArray(m_alu, dest, container, member));
+  m_instruction.push_back(new ezInstrGetByArray(dest, container, member));
 }
 
 void ezAsmInstruction::set(const ezAddress container, const ezAddress member,
                            const ezAddress val) {
-  m_instruction.push_back(new ezInstrSet(m_alu, container, member, val));
+  m_instruction.push_back(new ezInstrSet(container, member, val));
 }
 
 void ezAsmInstruction::set(const ezAddress container, vector<ezAddress> member,
                            const ezAddress val) {
-  m_instruction.push_back(new ezInstrSetByArray(m_alu, container, member, val));
+  m_instruction.push_back(new ezInstrSetByArray(container, member, val));
 }

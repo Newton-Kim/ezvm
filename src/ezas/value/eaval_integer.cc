@@ -44,6 +44,38 @@ string ezInteger::to_string(void) {
   return ss.str();
 }
 
+ezValue *ezInteger::bitwise_not(void) { return new ezInteger(~value); }
+
 ezValue *ezInteger::negate(void) { return new ezInteger(-value); }
 
 void ezInteger::dump(ezFile &sink) { sink.print("%d\n", value); }
+
+ezValue *ezInteger::power(ezValue *arg) {
+  return new ezInteger(pow(value, ((eaValue *)arg)->to_int()));
+}
+
+ezValue *ezInteger::lsl(ezValue *arg) {
+  return new ezInteger(value << ((eaValue *)arg)->to_int());
+}
+
+ezValue *ezInteger::lsr(ezValue *arg) {
+  return new ezInteger(value >> ((eaValue *)arg)->to_int());
+}
+
+ezObject *ezInteger::compare(ezValue *arg) {
+  int diff = value - ((eaValue *)arg)->to_int();
+  return new ezCondition(arg->id == EZ_VALUE_TYPE_INTEGER && 0 == diff,
+                         (diff < 0) ? true : false, false, false);
+}
+
+ezObject *ezInteger::condition(void) {
+  return new ezCondition(0 == value, (value < 0) ? true : false, false, false);
+}
+
+bool ezInteger::is_equal(ezValue *arg) {
+  if (EZ_VALUE_TYPE_INTEGER != arg->id)
+    return false;
+  if (value != ((eaValue *)arg)->to_int())
+    return false;
+  return true;
+}

@@ -3,13 +3,13 @@
 #include "ezvm/ezstack.h"
 
 ezInstrUnaryOperation::ezInstrUnaryOperation(
-    ezALU *alu, const ezAddress dest, const ezAddress &src, const string name,
-    function<ezValue *(ezALU *, ezValue *)> func)
-    : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_src(src) {}
+    const ezAddress dest, const ezAddress &src, const string name,
+    function<ezValue *(ezValue *)> func)
+    : m_func(func), m_name(name), m_dest(dest), m_src(src) {}
 
 void ezInstrUnaryOperation::process(ezStackFrame &stk) {
   ezValue *v = (ezValue *)stk.addr2val(m_src);
-  ezValue *rst = m_func(m_alu, v);
+  ezValue *rst = m_func(v);
   stk.val2addr(m_dest, rst);
 }
 
@@ -22,17 +22,15 @@ void ezInstrUnaryOperation::dump(ezFile &sink) {
 }
 
 ezInstrUnaryOperationWithCond::ezInstrUnaryOperationWithCond(
-    ezALU *alu, const ezAddress dest, const ezAddress cond,
-    const ezAddress &src, const string name,
-    function<ezValue *(ezALU *, ezValue *)> func)
-    : m_alu(alu), m_func(func), m_name(name), m_dest(dest), m_cond(cond),
-      m_src(src) {}
+    const ezAddress dest, const ezAddress cond, const ezAddress &src,
+    const string name, function<ezValue *(ezValue *)> func)
+    : m_func(func), m_name(name), m_dest(dest), m_cond(cond), m_src(src) {}
 
 void ezInstrUnaryOperationWithCond::process(ezStackFrame &stk) {
   ezValue *v = (ezValue *)stk.addr2val(m_src);
-  ezValue *rst = m_func(m_alu, v);
+  ezValue *rst = m_func(v);
   stk.val2addr(m_dest, rst);
-  stk.val2addr(m_cond, m_alu->condition(rst));
+  stk.val2addr(m_cond, rst->condition());
 }
 
 void ezInstrUnaryOperationWithCond::dump(ezFile &sink) {

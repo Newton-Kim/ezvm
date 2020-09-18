@@ -8,9 +8,4 @@ public:
   eaValue *subtract(eaValue *argl, eaValue *argr);
   eaValue *multiply(eaValue *argl, eaValue *argr);
   eaValue *divide(eaValue *argl, eaValue *argr);
-  eaValue *power(eaValue *argl, eaValue *argr);
-  ezObject *compare(eaValue *argl, eaValue *argr);
-  ezObject *condition(eaValue *arg);
-  bool is_equal(eaValue *argl, eaValue *argr);
-  eaValue *negate(eaValue *arg);
 };

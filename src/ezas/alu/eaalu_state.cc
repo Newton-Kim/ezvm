@@ -55,11 +55,3 @@ ezObject *eaALUState::condition(eaValue *arg) {
 bool eaALUState::is_equal(eaValue *argl, eaValue *argr) {
   throw runtime_error("testing equality is not defined");
 }
-
-eaValue *eaALUState::negate(eaValue *arg) {
-  throw runtime_error("negation is not defined");
-}
-
-eaValue *eaALUState::bitwise_not(eaValue *arg) {
-  throw runtime_error("bitwise not is not defined");
-}

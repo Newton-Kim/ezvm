@@ -9,7 +9,7 @@ ezInstrCmp::ezInstrCmp(ezALU *alu, const ezAddress dest, const ezAddress &lsrc,
 void ezInstrCmp::process(ezStackFrame &stk) {
   ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
   ezValue *vr = (ezValue *)stk.addr2val(m_rsrc);
-  ezObject *rst = m_alu->compare(vl, vr);
+  ezObject *rst = vl->compare(vr);
   stk.val2addr(m_dest, rst);
 }
 

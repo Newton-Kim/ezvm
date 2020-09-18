@@ -36,3 +36,21 @@ ezString::ezString(const string val)
 string ezString::to_string(void) { return value; }
 
 void ezString::dump(ezFile &sink) { sink.print("\"%s\"\n", value.c_str()); }
+
+ezObject *ezString::compare(ezValue *arg) {
+  return new ezCondition(arg->id == EZ_VALUE_TYPE_STRING &&
+                             value == ((eaValue *)arg)->to_string(),
+                         false, false, false);
+}
+
+ezObject *ezString::condition(void) {
+  return new ezCondition(value.empty(), false, false, false);
+}
+
+bool ezString::is_equal(ezValue *arg) {
+  if (EZ_VALUE_TYPE_STRING != arg->id)
+    return false;
+  if (value != ((eaValue *)arg)->to_string())
+    return false;
+  return true;
+}

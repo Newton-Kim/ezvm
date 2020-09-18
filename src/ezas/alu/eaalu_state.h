@@ -18,6 +18,4 @@ public:
   virtual ezObject *compare(eaValue *argl, eaValue *argr);
   virtual ezObject *condition(eaValue *arg);
   virtual bool is_equal(eaValue *argl, eaValue *argr);
-  virtual eaValue *negate(eaValue *arg);
-  virtual eaValue *bitwise_not(eaValue *arg);
 };

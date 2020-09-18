@@ -34,8 +34,74 @@ ezValue::ezValue(const unsigned int tp)
 }
 ezValue::~ezValue() {}
 
+ezValue *ezValue::power(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be powered";
+  throw runtime_error(ss.str());
+}
+
 ezValue *ezValue::negate(void) {
   stringstream ss;
   ss << "Type " << id << " cannot be negated";
+  throw runtime_error(ss.str());
+}
+
+ezValue *ezValue::bitwise_not(void) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be bitwise not";
+  throw runtime_error(ss.str());
+}
+
+ezValue *ezValue::lsl(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be shifted left";
+  throw runtime_error(ss.str());
+}
+
+ezValue *ezValue::lsr(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be shifted right";
+  throw runtime_error(ss.str());
+}
+
+ezObject *ezValue::compare(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be compared";
+  throw runtime_error(ss.str());
+}
+
+ezObject *ezValue::condition(void) {
+  stringstream ss;
+  ss << "Type " << id << " does not provide condition";
+  throw runtime_error(ss.str());
+}
+
+bool ezValue::is_equal(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot test equality";
+  throw runtime_error(ss.str());
+}
+
+ezObject *ezValue::get(ezValue *mbr) {
+  stringstream ss;
+  ss << "Type " << id << " is not container. So cannot get";
+  throw runtime_error(ss.str());
+}
+
+ezObject *ezValue::get(vector<ezValue *> mbr) {
+  stringstream ss;
+  ss << "Type " << id << " is not container. So cannot get";
+  throw runtime_error(ss.str());
+}
+
+void ezValue::set(ezValue *mbr, ezObject *val) {
+  stringstream ss;
+  ss << "Type " << id << " is not container. So cannot set";
+  throw runtime_error(ss.str());
+}
+
+void ezValue::set(vector<ezValue *> mbr, ezObject *val) {
+  stringstream ss;
+  ss << "Type " << id << " is not container. So cannot set";
   throw runtime_error(ss.str());
 }

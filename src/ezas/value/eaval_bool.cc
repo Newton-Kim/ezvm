@@ -34,6 +34,25 @@ ezBool::ezBool(bool val) : eaValue(EZ_VALUE_TYPE_BOOL), value(val) {
 
 bool ezBool::to_bool(void) { return value; }
 
+ezValue *ezBool::bitwise_not(void) { return new ezBool(!value); }
+
+ezObject *ezBool::compare(ezValue *arg) {
+  return new ezCondition(!(value ^ ((eaValue *)arg)->to_bool()), false, false,
+                         false);
+}
+
+ezObject *ezBool::condition(void) {
+  return new ezCondition(!value, false, false, false);
+}
+
+bool ezBool::is_equal(ezValue *arg) {
+  if (EZ_VALUE_TYPE_BOOL != arg->id)
+    return false;
+  if (value != ((eaValue *)arg)->to_bool())
+    return false;
+  return true;
+}
+
 void ezBool::dump(ezFile &sink) {
   if (value == true)
     sink.print("true");

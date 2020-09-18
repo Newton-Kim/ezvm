@@ -37,7 +37,7 @@ void ezInstrBinaryOperationWithCond::process(ezStackFrame &stk) {
   ezValue *vr = (ezValue *)stk.addr2val(m_rsrc);
   ezValue *rst = m_func(m_alu, vl, vr);
   stk.val2addr(m_dest, rst);
-  stk.val2addr(m_cond, m_alu->condition(rst));
+  stk.val2addr(m_cond, rst->condition());
 }
 
 void ezInstrBinaryOperationWithCond::dump(ezFile &sink) {

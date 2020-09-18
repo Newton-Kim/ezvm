@@ -44,11 +44,6 @@ ezValue *eaALU::modulate(ezValue *argl, ezValue *argr) {
   return m_state[id]->modulate((eaValue *)argl, (eaValue *)argr);
 }
 
-ezValue *eaALU::power(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->power((eaValue *)argl, (eaValue *)argr);
-}
-
 ezValue *eaALU::bitwise_and(ezValue *argl, ezValue *argr) {
   int id = max_id((eaValue *)argl, (eaValue *)argr);
   return m_state[id]->bitwise_and((eaValue *)argl, (eaValue *)argr);
@@ -62,36 +57,4 @@ ezValue *eaALU::bitwise_or(ezValue *argl, ezValue *argr) {
 ezValue *eaALU::bitwise_xor(ezValue *argl, ezValue *argr) {
   int id = max_id((eaValue *)argl, (eaValue *)argr);
   return m_state[id]->bitwise_xor((eaValue *)argl, (eaValue *)argr);
-}
-
-ezValue *eaALU::lsl(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->lsl((eaValue *)argl, (eaValue *)argr);
-}
-
-ezValue *eaALU::lsr(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->lsr((eaValue *)argl, (eaValue *)argr);
-}
-
-ezObject *eaALU::compare(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->compare((eaValue *)argl, (eaValue *)argr);
-}
-
-ezObject *eaALU::condition(ezValue *arg) {
-  return m_state[((eaValue *)arg)->id]->condition((eaValue *)arg);
-}
-
-bool eaALU::is_equal(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->is_equal((eaValue *)argl, (eaValue *)argr);
-}
-
-ezValue *eaALU::negate(ezValue *arg) {
-  return m_state[((eaValue *)arg)->id]->negate((eaValue *)arg);
-}
-
-ezValue *eaALU::bitwise_not(ezValue *arg) {
-  return m_state[((eaValue *)arg)->id]->bitwise_not((eaValue *)arg);
 }

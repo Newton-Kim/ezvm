@@ -47,3 +47,25 @@ string ezFloat::to_string(void) {
 ezValue *ezFloat::negate(void) { return new ezFloat(-value); }
 
 void ezFloat::dump(ezFile &sink) {}
+
+ezValue *ezFloat::power(ezValue *arg) {
+  return new ezFloat(pow(value, ((eaValue *)arg)->to_float()));
+}
+
+ezObject *ezFloat::compare(ezValue *arg) {
+  double diff = value - ((eaValue *)arg)->to_float();
+  return new ezCondition(arg->id == EZ_VALUE_TYPE_FLOAT && 0 == diff,
+                         (diff < 0) ? true : false, false, false);
+}
+
+ezObject *ezFloat::condition() {
+  return new ezCondition(0 == value, (value < 0) ? true : false, false, false);
+}
+
+bool ezFloat::is_equal(ezValue *arg) {
+  if (EZ_VALUE_TYPE_FLOAT != arg->id)
+    return false;
+  if (value != ((eaValue *)arg)->to_float())
+    return false;
+  return true;
+}
