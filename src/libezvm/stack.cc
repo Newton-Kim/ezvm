@@ -183,6 +183,7 @@ void ezStackFrame::step(void) {
     m_callback->end(m_return_dest, m_return);
     return;
   }
+  EZ_INFO("PC:%d\n", m_pc);
   ezInstruction *inst = m_carousel->instruction[m_pc++];
   inst->process(*this);
 }
@@ -209,7 +210,7 @@ void ezStackFrame::on_mark(void) {
 
 void ezStackFrame::dump(ezFile &sink) {
   sink.print("    .stk_0x%x:\n", this);
-  sink.print("      PC:%lu\n", m_pc);
+  sink.print("      PC:%lu\n", m_pc - 1);
   sink.print("      context:0x%x\n", m_carousel);
   sink.print("      .local memory:\n");
   size_t i = 0;
