@@ -42,8 +42,8 @@ public:
   virtual ezObject *condition(void);
   virtual bool is_equal(ezValue *arg);
   virtual ezObject *get(ezValue *mbr);
-  virtual ezObject *get(vector<ezValue *> mbr);
+  virtual ezObject *get(vector<ezValue *> &mbr);
   virtual void set(ezValue *mbr, ezObject *val);
-  virtual void set(vector<ezValue *> mbr, ezObject *val);
+  virtual void set(vector<ezValue *> &mbr, ezObject *val);
   virtual ezValue *duplicate(void);
 };

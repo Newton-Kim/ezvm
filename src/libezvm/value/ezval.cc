@@ -84,25 +84,25 @@ bool ezValue::is_equal(ezValue *arg) {
 
 ezObject *ezValue::get(ezValue *mbr) {
   stringstream ss;
-  ss << "Type " << id << " is not container. So cannot get";
+  ss << "Type " << id << " is not container. So cannot get a member";
   throw runtime_error(ss.str());
 }
 
-ezObject *ezValue::get(vector<ezValue *> mbr) {
+ezObject *ezValue::get(vector<ezValue *> &mbr) {
   stringstream ss;
-  ss << "Type " << id << " is not container. So cannot get";
+  ss << "Type " << id << " is not container. So cannot get from an array";
   throw runtime_error(ss.str());
 }
 
 void ezValue::set(ezValue *mbr, ezObject *val) {
   stringstream ss;
-  ss << "Type " << id << " is not container. So cannot set";
+  ss << "Type " << id << " is not container. So cannot set to a member";
   throw runtime_error(ss.str());
 }
 
-void ezValue::set(vector<ezValue *> mbr, ezObject *val) {
+void ezValue::set(vector<ezValue *> &mbr, ezObject *val) {
   stringstream ss;
-  ss << "Type " << id << " is not container. So cannot set";
+  ss << "Type " << id << " is not container. So cannot set to an array";
   throw runtime_error(ss.str());
 }
 
