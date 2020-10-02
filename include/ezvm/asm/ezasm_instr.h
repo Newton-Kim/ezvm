@@ -209,8 +209,8 @@ public:
    */
   void mul(const ezAddress dest, const ezAddress cond, const ezAddress &lsrc,
            const ezAddress &rsrc);
-  void mv(vector<ezAddress> &dest, vector<ezAddress> &src);
-  void mv(ezAddress &dest, ezAddress &src);
+  void mv(vector<ezAddress> &dest, vector<ezAddress> &src, char op = '=');
+  void mv(ezAddress &dest, ezAddress &src, char op = '=');
   /**
    * @brief creates a neg instruction. See neg of ezas.
    *
