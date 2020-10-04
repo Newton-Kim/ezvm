@@ -6,8 +6,8 @@ ezInstrSet::ezInstrSet(const ezAddress &container, const ezAddress &member,
     : m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSet::process(ezStackFrame &stk) {
-  ezValue *vc = (ezValue *)stk.addr2val(m_container);
-  ezValue *vm = (ezValue *)stk.addr2val(m_member);
+  ezValue *vc = ezValue::cast(stk.addr2val(m_container));
+  ezValue *vm = ezValue::cast(stk.addr2val(m_member));
   ezObject *vv = stk.addr2val(m_val);
   vc->set(vm, vv);
 }
@@ -28,12 +28,12 @@ ezInstrSetByArray::ezInstrSetByArray(const ezAddress &container,
     : m_container(container), m_member(member), m_val(val) {}
 
 void ezInstrSetByArray::process(ezStackFrame &stk) {
-  ezValue *vc = (ezValue *)stk.addr2val(m_container);
+  ezValue *vc = ezValue::cast(stk.addr2val(m_container));
   vector<ezValue *> vm;
   ezValue *vme = NULL;
   for (vector<ezAddress>::iterator it = m_member.begin(); it != m_member.end();
        it++) {
-    vme = (ezValue *)stk.addr2val(*it);
+    vme = ezValue::cast(stk.addr2val(*it));
     vm.push_back(vme);
   }
   ezObject *vv = stk.addr2val(m_val);

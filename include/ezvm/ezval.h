@@ -46,4 +46,14 @@ public:
   virtual void set(ezValue *mbr, ezObject *val);
   virtual void set(vector<ezValue *> &mbr, ezObject *val);
   virtual ezValue *duplicate(void);
+  static inline ezValue* cast(ezObject* obj);
 };
+
+ezValue* ezValue::cast(ezObject* obj) {
+  if (obj->type != EZ_OBJECT_TYPE_VALUE) {
+    stringstream ss;
+    ss << "received object type " << obj->type_string() << " is not value";
+    throw runtime_error(ss.str());
+  }
+  return (ezValue*) obj;
+}

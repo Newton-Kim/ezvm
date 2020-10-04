@@ -8,7 +8,7 @@ ezInstrUnaryOperation::ezInstrUnaryOperation(
     : m_func(func), m_name(name), m_dest(dest), m_src(src) {}
 
 void ezInstrUnaryOperation::process(ezStackFrame &stk) {
-  ezValue *v = (ezValue *)stk.addr2val(m_src);
+  ezValue *v = ezValue::cast(stk.addr2val(m_src));
   ezValue *rst = m_func(v);
   stk.val2addr(m_dest, rst);
 }
@@ -27,7 +27,7 @@ ezInstrUnaryOperationWithCond::ezInstrUnaryOperationWithCond(
     : m_func(func), m_name(name), m_dest(dest), m_cond(cond), m_src(src) {}
 
 void ezInstrUnaryOperationWithCond::process(ezStackFrame &stk) {
-  ezValue *v = (ezValue *)stk.addr2val(m_src);
+  ezValue *v = ezValue::cast(stk.addr2val(m_src));
   ezValue *rst = m_func(v);
   stk.val2addr(m_dest, rst);
   stk.val2addr(m_cond, rst->condition());

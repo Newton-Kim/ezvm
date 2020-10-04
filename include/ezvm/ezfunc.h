@@ -64,4 +64,15 @@ public:
   const bool carry;
   ezCondition(const bool zr, const bool neg, const bool ovf, const bool cry);
   void dump(ezFile &sink);
+  static inline ezCondition* cast(ezObject* obj);
 };
+
+ezCondition* ezCondition::cast(ezObject* obj) {
+  if (obj->type != EZ_OBJECT_TYPE_CONDITION) {
+    stringstream ss;
+    ss << "received object type " << obj->type_string() << " is not condition";
+    throw runtime_error(ss.str());
+  }
+  return (ezCondition*) obj;
+}
+

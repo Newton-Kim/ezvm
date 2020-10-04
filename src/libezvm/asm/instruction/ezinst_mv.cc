@@ -12,7 +12,7 @@ ezInstrMv::ezInstrMv(ezALU* alu, ezAddress &dest, ezAddress &src, char op) : m_a
 
 void ezInstrMv::process(ezStackFrame &stk) {
   size_t cnt = m_dest.size();
-  ezValue *v = NULL, *r = NULL;
+  ezValue *v = NULL, *l = NULL, *r = NULL;
   size_t i = 0;
   vector<ezObject *> q;
   stk.addr2val(q, m_src);
@@ -21,37 +21,38 @@ void ezInstrMv::process(ezStackFrame &stk) {
     if(m_op == '=') {
       stk.val2addr(m_dest[i], q[i]);
     } else {
-      v = (ezValue*) stk.addr2val(m_dest[i]);
+      v = ezValue::cast(stk.addr2val(m_dest[i]));
+      l = ezValue::cast(q[i]);
       switch (m_op) {
       case '+':
-        r = m_alu->add(v, (ezValue*)q[i]);
+        r = m_alu->add(v, l);
         break;
       case '-':
-        r = m_alu->subtract(v, (ezValue*)q[i]);
+        r = m_alu->subtract(v, l);
         break;
       case '*':
-        r = m_alu->multiply(v, (ezValue*)q[i]);
+        r = m_alu->multiply(v, l);
         break;
       case '/':
-        r = m_alu->divide(v, (ezValue*)q[i]);
+        r = m_alu->divide(v, l);
         break;
       case '%':
-        r = m_alu->modulate(v, (ezValue*)q[i]);
+        r = m_alu->modulate(v, l);
         break;
       case '&':
-        r = m_alu->bitwise_and(v, (ezValue*)q[i]);
+        r = m_alu->bitwise_and(v, l);
         break;
       case '>':
-        r = v->lsr((ezValue*)q[i]);
+        r = v->lsr(l);
         break;
       case '<':
-        r = v->lsl((ezValue*)q[i]);
+        r = v->lsl(l);
         break;
       case '|':
-        r = m_alu->bitwise_or(v, (ezValue*)q[i]);
+        r = m_alu->bitwise_or(v, l);
         break;
       case '^':
-        r = m_alu->bitwise_xor(v, (ezValue*)q[i]);
+        r = m_alu->bitwise_xor(v, l);
         break;
       default:
         throw runtime_error("invalid operator");

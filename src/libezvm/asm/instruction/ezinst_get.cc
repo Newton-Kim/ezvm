@@ -28,12 +28,12 @@ ezInstrGetByArray::ezInstrGetByArray(const ezAddress dest,
     : m_dest(dest), m_container(container), m_member(member) {}
 
 void ezInstrGetByArray::process(ezStackFrame &stk) {
-  ezValue *vc = (ezValue *)stk.addr2val(m_container);
+  ezValue *vc = ezValue::cast(stk.addr2val(m_container));
   ezValue *vme = NULL;
   vector<ezValue *> vm;
   for (vector<ezAddress>::iterator it = m_member.begin(); it != m_member.end();
        it++) {
-    vme = (ezValue *)stk.addr2val(*it);
+    vme = ezValue::cast(stk.addr2val(*it));
     vm.push_back(vme);
   }
   ezObject *rst = vc->get(vm);

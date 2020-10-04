@@ -9,11 +9,8 @@ ezInstrConditionalBra::ezInstrConditionalBra(const ezAddress &cond,
     : m_func(func), m_name(name), m_cond(cond), m_index(index) {}
 
 void ezInstrConditionalBra::process(ezStackFrame &stk) {
-  ezObject *vcond = (ezValue *)stk.addr2val(m_cond);
-  if (vcond->type != EZ_OBJECT_TYPE_CONDITION)
-    throw runtime_error("The operation doesn't see condition");
-  if (m_func((ezCondition *)vcond))
-    stk.bra(m_index);
+  ezCondition *vcond = ezCondition::cast(stk.addr2val(m_cond));
+  if (m_func(vcond)) stk.bra(m_index);
 }
 
 void ezInstrConditionalBra::dump(ezFile &sink) {

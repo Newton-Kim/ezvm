@@ -40,6 +40,7 @@ enum ezObjectType {
 class ezObject : public ezGCObject {
 public:
   const ezObjectType type;
+  const char* type_string(void);
   ezObject(ezObjectType type);
   virtual ~ezObject(){};
   virtual void dump(ezFile &sink);

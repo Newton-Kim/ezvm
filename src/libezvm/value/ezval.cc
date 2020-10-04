@@ -111,3 +111,4 @@ ezValue *ezValue::duplicate(void) {
   ss << "Type " << id << " does not be duplicated";
   throw runtime_error(ss.str());
 }
+

@@ -10,8 +10,8 @@ ezInstrBinaryOperation::ezInstrBinaryOperation(
       m_rsrc(rsrc) {}
 
 void ezInstrBinaryOperation::process(ezStackFrame &stk) {
-  ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
-  ezValue *vr = (ezValue *)stk.addr2val(m_rsrc);
+  ezValue *vl = ezValue::cast(stk.addr2val(m_lsrc));
+  ezValue *vr = ezValue::cast(stk.addr2val(m_rsrc));
   ezValue *rst = m_func(m_alu, vl, vr);
   stk.val2addr(m_dest, rst);
 }
@@ -33,8 +33,8 @@ ezInstrBinaryOperationWithCond::ezInstrBinaryOperationWithCond(
       m_lsrc(lsrc), m_rsrc(rsrc) {}
 
 void ezInstrBinaryOperationWithCond::process(ezStackFrame &stk) {
-  ezValue *vl = (ezValue *)stk.addr2val(m_lsrc);
-  ezValue *vr = (ezValue *)stk.addr2val(m_rsrc);
+  ezValue *vl = ezValue::cast(stk.addr2val(m_lsrc));
+  ezValue *vr = ezValue::cast(stk.addr2val(m_rsrc));
   ezValue *rst = m_func(m_alu, vl, vr);
   stk.val2addr(m_dest, rst);
   stk.val2addr(m_cond, rst->condition());

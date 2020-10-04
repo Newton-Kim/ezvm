@@ -6,7 +6,7 @@ ezInstrDup::ezInstrDup(const ezAddress dest, const ezAddress &src)
     : m_dest(dest), m_src(src) {}
 
 void ezInstrDup::process(ezStackFrame &stk) {
-  ezValue *v = (ezValue *)stk.addr2val(m_src);
+  ezValue *v = ezValue::cast(stk.addr2val(m_src));
   ezObject *rst = v->duplicate();
   stk.val2addr(m_dest, rst);
 }

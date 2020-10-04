@@ -27,6 +27,34 @@
 
 ezObject::ezObject(ezObjectType tp) : type(tp) {}
 
+const char* ezObject::type_string(void) {
+  const char* ret = "unknown";
+  switch(type) {
+    case EZ_OBJECT_TYPE_NULL:
+      ret = "nil";
+      break;
+    case EZ_OBJECT_TYPE_CONDITION:
+      ret = "condition";
+      break;
+    case EZ_OBJECT_TYPE_FUNCTION:
+      ret = "function";
+      break;
+    case EZ_OBJECT_TYPE_USER_DEFINED_FUNCTION:
+      ret = "user defined function";
+      break;
+    case EZ_OBJECT_TYPE_HANDLE:
+      ret = "handle";
+      break;
+    case EZ_OBJECT_TYPE_ARRAY:
+      ret = "array";
+      break;
+    case EZ_OBJECT_TYPE_VALUE:
+      ret = "value";
+      break;
+  }
+  return ret;
+}
+
 void ezObject::dump(ezFile &sink) { sink.print("(unknown)"); }
 
 ezHandle::ezHandle(unsigned int identifier)

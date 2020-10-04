@@ -37,3 +37,4 @@ ezCondition::ezCondition(const bool zr, const bool neg, const bool ovf,
 void ezCondition::dump(ezFile &sink) {
   sink.print("C{z:%d, n:%d, o:%d, c:%d}\n", zero, negative, overflow, carry);
 }
+
