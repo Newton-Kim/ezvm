@@ -41,7 +41,7 @@ void ezInstrGetByArray::process(ezStackFrame &stk) {
 }
 
 void ezInstrGetByArray::dump(ezFile &sink) {
-  sink.print("get");
+  sink.print("gta");
   m_dest.dump(sink);
   sink.print(",");
   m_container.dump(sink);

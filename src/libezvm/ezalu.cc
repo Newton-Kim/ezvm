@@ -20,14 +20,3 @@ ezValue *ezALU::modulate(ezValue *argl, ezValue *argr) {
   throw runtime_error("modulation is not defined");
 }
 
-ezValue *ezALU::bitwise_and(ezValue *argl, ezValue *argr) {
-  throw runtime_error("bitwise and is not defined");
-}
-
-ezValue *ezALU::bitwise_or(ezValue *argl, ezValue *argr) {
-  throw runtime_error("bitwise or is not defined");
-}
-
-ezValue *ezALU::bitwise_xor(ezValue *argl, ezValue *argr) {
-  throw runtime_error("bitwise xor is not defined");
-}

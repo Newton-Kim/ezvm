@@ -64,6 +64,24 @@ ezValue *ezValue::lsr(ezValue *arg) {
   throw runtime_error(ss.str());
 }
 
+ezValue *ezValue::bitwise_and(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be calculated bitwise and";
+  throw runtime_error(ss.str());
+}
+
+ezValue *ezValue::bitwise_or(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be calculated bitwise or";
+  throw runtime_error(ss.str());
+}
+
+ezValue *ezValue::bitwise_xor(ezValue *arg) {
+  stringstream ss;
+  ss << "Type " << id << " cannot be calculated bitwise xor";
+  throw runtime_error(ss.str());
+}
+
 ezObject *ezValue::compare(ezValue *arg) {
   stringstream ss;
   ss << "Type " << id << " cannot be compared";

@@ -40,7 +40,7 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress &lsrc,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, lsrc, rsrc, "and",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_and(vl, vr);
+        return vl->bitwise_and(vr);
       }));
 }
 
@@ -50,7 +50,7 @@ void ezAsmInstruction::bitwise_and(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, lsrc, rsrc, "and",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_and(vl, vr);
+        return vl->bitwise_and(vr);
       }));
 }
 
@@ -244,7 +244,7 @@ void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress &lsrc,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, lsrc, rsrc, "or",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_or(vl, vr);
+        return vl->bitwise_or(vr);
       }));
 }
 
@@ -254,7 +254,7 @@ void ezAsmInstruction::bitwise_or(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, lsrc, rsrc, "or",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_or(vl, vr);
+        return vl->bitwise_or(vr);
       }));
 }
 
@@ -515,7 +515,7 @@ void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress &lsrc,
   m_instruction.push_back(new ezInstrBinaryOperation(
       m_alu, dest, lsrc, rsrc, "xor",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_xor(vl, vr);
+        return vl->bitwise_xor(vr);
       }));
 }
 
@@ -525,7 +525,7 @@ void ezAsmInstruction::bitwise_xor(const ezAddress dest, const ezAddress cond,
   m_instruction.push_back(new ezInstrBinaryOperationWithCond(
       m_alu, dest, cond, lsrc, rsrc, "xor",
       [](ezALU *alu, ezValue *vl, ezValue *vr) -> ezValue * {
-        return alu->bitwise_xor(vl, vr);
+        return vl->bitwise_xor(vr);
       }));
 }
 

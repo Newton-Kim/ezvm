@@ -19,7 +19,4 @@ public:
   ezValue *multiply(ezValue *argl, ezValue *argr);
   ezValue *divide(ezValue *argl, ezValue *argr);
   ezValue *modulate(ezValue *argl, ezValue *argr);
-  ezValue *bitwise_and(ezValue *argl, ezValue *argr);
-  ezValue *bitwise_or(ezValue *argl, ezValue *argr);
-  ezValue *bitwise_xor(ezValue *argl, ezValue *argr);
 };

@@ -78,6 +78,9 @@ public:
   virtual ezValue *power(ezValue *arg);
   virtual ezValue *lsl(ezValue *arg);
   virtual ezValue *lsr(ezValue *arg);
+  virtual ezValue *bitwise_and(ezValue *arg);
+  virtual ezValue *bitwise_or(ezValue *arg);
+  virtual ezValue *bitwise_xor(ezValue *arg);
   virtual ezObject *compare(ezValue *arg);
   virtual ezObject *condition(void);
   virtual bool is_equal(ezValue *arg);

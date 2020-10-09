@@ -44,17 +44,3 @@ ezValue *eaALU::modulate(ezValue *argl, ezValue *argr) {
   return m_state[id]->modulate((eaValue *)argl, (eaValue *)argr);
 }
 
-ezValue *eaALU::bitwise_and(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->bitwise_and((eaValue *)argl, (eaValue *)argr);
-}
-
-ezValue *eaALU::bitwise_or(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->bitwise_or((eaValue *)argl, (eaValue *)argr);
-}
-
-ezValue *eaALU::bitwise_xor(ezValue *argl, ezValue *argr) {
-  int id = max_id((eaValue *)argl, (eaValue *)argr);
-  return m_state[id]->bitwise_xor((eaValue *)argl, (eaValue *)argr);
-}

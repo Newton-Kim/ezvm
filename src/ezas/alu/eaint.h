@@ -9,7 +9,4 @@ public:
   eaValue *multiply(eaValue *argl, eaValue *argr);
   eaValue *divide(eaValue *argl, eaValue *argr);
   eaValue *modulate(eaValue *argl, eaValue *argr);
-  eaValue *bitwise_and(eaValue *argl, eaValue *argr);
-  eaValue *bitwise_or(eaValue *argl, eaValue *argr);
-  eaValue *bitwise_xor(eaValue *argl, eaValue *argr);
 };

@@ -24,18 +24,6 @@ eaValue *eaALUState::power(eaValue *argl, eaValue *argr) {
   throw runtime_error("power operation is not defined");
 }
 
-eaValue *eaALUState::bitwise_and(eaValue *argl, eaValue *argr) {
-  throw runtime_error("bitwise and is not defined");
-}
-
-eaValue *eaALUState::bitwise_or(eaValue *argl, eaValue *argr) {
-  throw runtime_error("bitwise or is not defined");
-}
-
-eaValue *eaALUState::bitwise_xor(eaValue *argl, eaValue *argr) {
-  throw runtime_error("bitwise xor is not defined");
-}
-
 eaValue *eaALUState::lsl(eaValue *argl, eaValue *argr) {
   throw runtime_error("lsl is not defined");
 }

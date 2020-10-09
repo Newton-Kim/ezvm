@@ -8,7 +8,4 @@ public:
   virtual ezValue *multiply(ezValue *argl, ezValue *argr);
   virtual ezValue *divide(ezValue *argl, ezValue *argr);
   virtual ezValue *modulate(ezValue *argl, ezValue *argr);
-  virtual ezValue *bitwise_and(ezValue *argl, ezValue *argr);
-  virtual ezValue *bitwise_or(ezValue *argl, ezValue *argr);
-  virtual ezValue *bitwise_xor(ezValue *argl, ezValue *argr);
 };

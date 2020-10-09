@@ -40,7 +40,7 @@ void ezInstrMv::process(ezStackFrame &stk) {
         r = m_alu->modulate(v, l);
         break;
       case '&':
-        r = m_alu->bitwise_and(v, l);
+        r = v->bitwise_and(l);
         break;
       case '>':
         r = v->lsr(l);
@@ -49,10 +49,10 @@ void ezInstrMv::process(ezStackFrame &stk) {
         r = v->lsl(l);
         break;
       case '|':
-        r = m_alu->bitwise_or(v, l);
+        r = v->bitwise_or(l);
         break;
       case '^':
-        r = m_alu->bitwise_xor(v, l);
+        r = v->bitwise_xor(l);
         break;
       default:
         throw runtime_error("invalid operator");

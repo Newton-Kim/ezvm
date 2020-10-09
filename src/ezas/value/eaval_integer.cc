@@ -62,6 +62,18 @@ ezValue *ezInteger::lsr(ezValue *arg) {
   return new ezInteger(value >> ((eaValue *)arg)->to_int());
 }
 
+ezValue *ezInteger::bitwise_and(ezValue *arg) {
+  return new ezInteger(value & ((eaValue *)arg)->to_int());
+}
+
+ezValue *ezInteger::bitwise_or(ezValue *arg) {
+  return new ezInteger(value | ((eaValue *)arg)->to_int());
+}
+
+ezValue *ezInteger::bitwise_xor(ezValue *arg) {
+  return new ezInteger(value ^ ((eaValue *)arg)->to_int());
+}
+
 ezObject *ezInteger::compare(ezValue *arg) {
   int diff = value - ((eaValue *)arg)->to_int();
   return new ezCondition(arg->id == EZ_VALUE_TYPE_INTEGER && 0 == diff,
