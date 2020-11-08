@@ -69,7 +69,7 @@ void ezInstrMv::process(ezStackFrame &stk) {
 }
 
 void ezInstrMv::dump(ezFile &sink) {
-  sink.print("mv");
+  sink.print("mv, %c,", m_op);
   if (m_dest.empty())
     sink.print(" null");
   else
