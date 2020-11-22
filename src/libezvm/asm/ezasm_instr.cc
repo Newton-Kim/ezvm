@@ -205,12 +205,20 @@ void ezAsmInstruction::mul(const ezAddress dest, const ezAddress cond,
       }));
 }
 
-void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src, char op) {
-  m_instruction.push_back(new ezInstrMv(m_alu, dest, src, op));
+void ezAsmInstruction::mv(vector<ezAddress> &dest, vector<ezAddress> &src) {
+  m_instruction.push_back(new ezInstrMv(dest, src));
 }
 
-void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src, char op) {
-  m_instruction.push_back(new ezInstrMv(m_alu, dest, src, op));
+void ezAsmInstruction::mv(ezAddress &dest, ezAddress &src) {
+  m_instruction.push_back(new ezInstrMv(dest, src));
+}
+
+void ezAsmInstruction::mvo(vector<ezAddress> &dest, vector<ezAddress> &src, char op, function<ezValue *(ezALU *, ezValue *, ezValue *)> func) {
+  m_instruction.push_back(new ezInstrMvWithOp(m_alu, dest, src, op, func));
+}
+
+void ezAsmInstruction::mvo(ezAddress &dest, ezAddress &src, char op, function<ezValue *(ezALU *, ezValue *, ezValue *)> func) {
+  m_instruction.push_back(new ezInstrMvWithOp(m_alu, dest, src, op, func));
 }
 
 void ezAsmInstruction::neg(const ezAddress dest, const ezAddress org) {
