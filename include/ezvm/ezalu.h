@@ -8,4 +8,5 @@ public:
   virtual ezValue *multiply(ezValue *argl, ezValue *argr);
   virtual ezValue *divide(ezValue *argl, ezValue *argr);
   virtual ezValue *modulate(ezValue *argl, ezValue *argr);
+  virtual ezValue *coerc(ezValue *arg, int type);
 };

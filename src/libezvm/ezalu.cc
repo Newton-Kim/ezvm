@@ -20,3 +20,6 @@ ezValue *ezALU::modulate(ezValue *argl, ezValue *argr) {
   throw runtime_error("modulation is not defined");
 }
 
+ezValue *ezALU::coerc(ezValue *arg, int type) {
+  throw runtime_error("coerction is not defined");
+}

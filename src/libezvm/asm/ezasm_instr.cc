@@ -10,6 +10,7 @@
 #include "asm/instruction/ezinst_get.h"
 #include "asm/instruction/ezinst_mv.h"
 #include "asm/instruction/ezinst_set.h"
+#include "asm/instruction/ezinst_coerc.h"
 #include "asm/instruction/ezinst_unary_operation.h"
 
 using namespace std;
@@ -563,4 +564,12 @@ void ezAsmInstruction::set(const ezAddress container, vector<ezAddress> member,
 
 void ezAsmInstruction::dup(const ezAddress dest, const ezAddress src) {
   m_instruction.push_back(new ezInstrDup(dest, src));
+}
+
+void ezAsmInstruction::coc(const ezAddress dest, const ezAddress src, const int type) {
+  m_instruction.push_back(new ezInstrCoerc(m_alu, dest, src, type));
+}
+
+void ezAsmInstruction::coc(const ezAddress dest, const ezAddress cond, const ezAddress src, const int type) {
+  m_instruction.push_back(new ezInstrCoercWithCond(m_alu, dest, cond, src, type));
 }

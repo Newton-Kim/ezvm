@@ -347,4 +347,6 @@ public:
   void set(const ezAddress container, vector<ezAddress> member,
            const ezAddress val);
   void dup(const ezAddress dest, const ezAddress src);
+  void coc(const ezAddress dest, const ezAddress src, const int type);
+  void coc(const ezAddress dest, const ezAddress cond, const ezAddress src, const int type);
 };
